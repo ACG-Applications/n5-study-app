@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Listening Practice · N5 Japanese</title>
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/listening.css">
+  <link rel="stylesheet" href="css/kana-helper.css">
+<link rel="stylesheet" href="css/kanji-helper.css">
+</head>
+<body>
+<div class="listening-container">
+  
+  <!-- Header -->
+  <div class="listening-header">
+    <h1>🎧 Listening Practice · N5 Japanese</h1>
+    <a href="index.html" class="back-button">← Back to Main Menu</a>
+  </div>
+  
+  <!-- Controls Bar -->
+  <div class="listening-controls">
+    <div class="control-group">
+      <label>⚡ Speed:</label>
+      <button id="speed075Btn" class="small-btn">0.75x</button>
+      <button id="speed100Btn" class="small-btn active">1.0x</button>
+    </div>
+    <div class="control-group">
+      <button id="furiToggleBtn" class="small-btn">🔤 Furigana On</button>
+    </div>
+    <div class="control-group">
+      <button id="resetWatchedBtn" class="small-btn" style="background: #ffc107; color: #333;">🔄 Reset Watched</button>
+    </div>
+    <div class="progress-indicator">
+      <span id="watchedCount">0</span>/<span id="totalCount">0</span> watched
+    </div>
+  </div>
+  
+  <!-- Main Layout: Video Player + Sidebar -->
+  <div class="listening-main">
+    
+    <!-- Left Column: Video Player -->
+    <div class="video-player-section">
+      <div class="video-container">
+        <video id="mainVideo" controls preload="metadata">
+          <source src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      
+      <!-- Video Info & Transcript Toggle -->
+      <div class="video-info">
+        <h2 id="videoTitle">Select a video from the list</h2>
+        <div class="video-actions">
+          <button id="showAnswerBtn" class="action-btn" style="display: none;">💡 Reveal Answer</button>
+          <button id="toggleTranscriptBtn" class="action-btn" style="display: none;">📖 Show Transcript</button>
+        </div>
+      </div>
+      
+      <!-- Transcript Panel -->
+      <div id="transcriptPanel" class="transcript-panel" style="display: none;">
+        <div class="transcript-header">
+          <h3>📝 Transcript</h3>
+          <button id="closeTranscriptBtn" class="small-btn">✖ Close</button>
+        </div>
+        <div id="transcriptContent" class="transcript-content">
+          <p>Select a video to view the transcript.</p>
+        </div>
+      </div>
+      
+      <!-- Answer Panel -->
+      <div id="answerPanel" class="answer-panel" style="display: none;">
+        <div class="answer-header">
+          <h3>💡 Answer</h3>
+          <button id="closeAnswerBtn" class="small-btn">✖ Close</button>
+        </div>
+        <div id="answerContent" class="answer-content"></div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Video Carousel / Playlist -->
+    <div class="playlist-section">
+      <div class="playlist-header">
+        <h3>📺 Video Library</h3>
+        <p>Click any video to start practicing</p>
+      </div>
+      <div id="playlist" class="playlist">
+        <!-- Videos will be dynamically inserted here -->
+        <div class="loading-message">Loading videos...</div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- Watched Questions Panel (Mastered) -->
+  <div class="watched-panel">
+    <div class="watched-header">
+      <h3>🏆 Watched Videos</h3>
+      <button id="clearWatchedBtn" class="small-btn" style="background: #dc3545; color: white;">Clear All</button>
+    </div>
+    <div id="watchedList" class="watched-list">
+      <p class="empty-message">No videos watched yet. Watch a video to track your progress!</p>
+    </div>
+  </div>
+  
+</div>
+
+<script src="js/data/video_list.js"></script>
+<script src="js/utils/furigana.js"></script>
+<script src="js/modules/listening.js"></script>
+<script src="js/utils/kanaHelper.js"></script>
+<script src="js/modules/kanji-stroke.js"></script>
+<script src="js/modules/kanji-helper.js"></script>
+</body>
+</html>

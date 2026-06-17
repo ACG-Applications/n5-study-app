@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>JLPT N5 Practice Test</title>
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/practice-test.css">
+  <link rel="stylesheet" href="css/kana-helper.css">
+  <link rel="stylesheet" href="css/kanji-helper.css">
+</head>
+<body>
+<div class="practice-container">
+  
+  <!-- Header -->
+  <div class="practice-header">
+    <h1>📝 JLPT N5 Practice Test</h1>
+    <a href="index.html" class="back-button">← Back to Main Menu</a>
+  </div>
+  
+  <!-- Controls Bar -->
+  <div class="practice-controls">
+    <div class="control-group">
+      <label>Section:</label>
+      <select id="sectionSelect">
+        <option value="all">Full Test (All Sections)</option>
+        <option value="vocabulary">Vocabulary (文字・語彙)</option>
+        <option value="grammar">Grammar (文法)</option>
+        <option value="reading">Reading (読解)</option>
+        <option value="listening">Listening (聴解)</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Questions:</label>
+      <select id="quizCountSelect">
+        <option value="5">5 questions</option>
+        <option value="10" selected>10 questions</option>
+        <option value="20">20 questions</option>
+        <option value="50">50 questions</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Timer:</label>
+      <button id="timerToggle" class="small-btn">⏱️ Timer Off</button>
+    </div>
+    <div class="control-group">
+      <label>TTS:</label>
+      <button id="ttsToggle" class="small-btn">🔊 TTS Off</button>
+    </div>
+    <div class="control-group">
+      <button id="resetProgressBtn" class="small-btn" style="background: #dc3545; color: white;">🗑️ Reset Progress</button>
+    </div>
+    <div class="progress-indicator">
+      <span id="masteredCount">0</span>/<span id="totalCount">0</span> mastered
+    </div>
+  </div>
+  
+  <!-- Timer Display -->
+  <div id="timerDisplay" class="timer-display" style="display: none;">
+    ⏱️ Time: <span id="timerMinutes">00</span>:<span id="timerSeconds">00</span>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="practice-content">
+    
+    <!-- Quiz Area -->
+    <div id="quizArea" class="quiz-area">
+      <p class="quiz-welcome">Select section and number of questions, then click "Start Test"</p>
+    </div>
+    
+    <!-- Start Button -->
+<div class="start-button-container">
+    <button id="startQuizBtn" class="action-btn">▶ Start Test</button>
+</div>
+    
+    <!-- Results Area -->
+    <div id="quizResults" class="results-area" style="display: none;"></div>
+    
+  </div>
+  
+</div>
+
+<script src="js/data/sprints.js"></script>
+<script src="js/data/sentences.js"></script>
+<script src="js/data/practiceTestData.js"></script>
+<script src="js/data/kanjiData.js"></script>
+<script src="js/utils/helpers.js"></script>
+<script src="js/utils/furigana.js"></script>
+<script src="js/utils/tooltips.js"></script>
+<script src="js/modules/audio.js"></script>
+<script src="js/modules/practiceTest.js"></script>
+<script src="js/utils/kanaHelper.js"></script>
+<script src="js/modules/kanji-stroke.js"></script>
+<script src="js/modules/kanji-helper.js"></script>
+</body>
+</html>

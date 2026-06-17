@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>N5 Japanese Study App</title>
+  <!-- 1️⃣ Global variables -->
+  <link rel="stylesheet" href="css/variables.css">
+  <!-- 2️⃣ Main styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 3️⃣ Page-specific styles -->
+  <link rel="stylesheet" href="css/listening.css">
+  <link rel="stylesheet" href="css/kana-helper.css">
+  <link rel="stylesheet" href="css/kanji-helper.css">
+</head>
+<body>
+<div class="app-container">
+  
+  <!-- Header -->
+  <div class="app-header">
+    <h1>📚 N5 Japanese Study App</h1>
+  </div>
+  
+  <!-- Sprint Selection & Mastered Controls -->
+  <div class="control-panel">
+    <div class="control-group">
+      <label>Sprint:</label>
+      <select id="sprintSelect"></select>
+    </div>
+    <div class="control-group">
+      <label>Mastered:</label>
+      <button id="showMasteredBtn" class="small-btn">👁️ Show</button>
+      <button id="hideMasteredBtn" class="small-btn">✅ Hide</button>
+      <button id="resetMasteredBtn" class="small-btn">⟳ Reset</button>
+      <button id="exportMasteredBtn" class="small-btn">📤 Export</button>
+      <button id="importMasteredBtn" class="small-btn">📥 Import</button>
+    </div>
+  </div>
+  
+  <!-- Main Action Buttons -->
+  <div class="action-buttons">
+    <button id="flashcardBtn" class="action-btn">📇 Flashcards</button>
+    <button id="storyModeBtn" class="action-btn">📖 Story Mode</button>
+    <button id="printBtn" class="action-btn">🖨️ Print</button>
+    <button id="csvBtn" class="action-btn">📥 CSV</button>
+  </div>
+  
+  <div class="future-buttons">
+    <a href="particles.html" class="action-btn">🔘 Particles</a>
+    <a href="verbs.html" class="action-btn">🔤 Verbs</a>
+    <a href="adjectives.html" class="action-btn">📝 Adjectives</a>
+    <a href="adverbs.html" class="action-btn">💨 Adverbs</a>
+    <a href="grammar.html" class="action-btn">📚 Grammar</a>
+    <a href="kanji.html" class="action-btn">📖 Kanji</a>
+    <a href="listening.html" class="action-btn">🎧 Listening</a>
+    <a href="practice-test.html" class="action-btn">📝 Practice Test</a>
+  </div>
+  
+  <!-- Progress Bar -->
+  <div class="progress-section">
+    <div class="progress-label">
+      <span>Progress:</span>
+      <span id="progressText">0 / 250 (0%)</span>
+    </div>
+    <div class="progress-bar-container">
+      <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+    </div>
+  </div>
+  
+  <div id="contentArea"></div>
+  
+</div>
+
+<!-- Story Mode Modal -->
+<div id="storyModal" class="modal">
+  <div class="modal-card">
+    <h3>📖 <span id="storyTitle">N5 Story</span></h3>
+    <div id="storyContent" class="story-content">
+      <div id="storyJapaneseBlock" class="story-japanese-block"></div>
+      <div id="storyEnglishBlock" class="story-english-block" style="display: none;"></div>
+    </div>
+    <div class="flash-controls">
+      <button id="storyPrevSprintBtn" class="small-btn">◀ Prev</button>
+      <button id="storyNextSprintBtn" class="small-btn">Next ▶</button>
+      <button id="storyFuriToggleBtn" class="small-btn">🔤 Furigana Off</button>
+      <button id="storyTransToggleBtn" class="small-btn">🌎 Translation Off</button>
+      <button id="storyBlockToggleBtn" class="small-btn">📄 Sentence Mode</button>
+      <button id="storyAudioBtn" class="small-btn">📖 Read</button>
+      <button id="storyStopBtn" class="small-btn">⏹️ Stop</button>
+      <button id="storySpeed075Btn" class="small-btn">🐢 0.75x</button>
+      <button id="storySpeed100Btn" class="small-btn">⚡ 1.0x</button>
+      <button id="closeStoryBtn" class="small-btn">Close</button>
+    </div>
+    <p><span id="storySprintNum">1</span> / <span id="storyTotalSprints">10</span></p>
+  </div>
+</div>
+
+<!-- Flashcard Modal -->
+<div id="flashcardModal" class="modal">
+  <div class="modal-card">
+    <h3 id="flashcardTitle">📇 N5 Flashcards</h3>
+    <div id="flashJp" class="flash-jp"></div>
+    <div id="flashTranslation" class="flash-translation">???</div>
+    <div class="flash-controls">
+      <button id="prevFlashBtn" class="small-btn">◀ Prev</button>
+      <button id="revealTransBtn" class="small-btn">🔎 Reveal</button>
+      <button id="nextFlashBtn" class="small-btn">Next ▶</button>
+      <button id="flashAudioBtn" class="small-btn">🔊 Read</button>
+      <button id="flashShuffleBtn" class="small-btn">🎲 Shuffle</button>
+      <button id="flashResetOrderBtn" class="small-btn">🔄 Reset</button>
+      <button id="flashFuriToggleBtn" class="small-btn">🔤 Furigana Off</button>
+      <button id="flashSpeed075Btn" class="small-btn">🐢 0.75x</button>
+      <button id="flashSpeed100Btn" class="small-btn">⚡ 1.0x</button>
+      <button id="closeFlashBtn" class="small-btn">Close</button>
+    </div>
+    <p><span id="flashIndex">0</span> / <span id="flashTotal">0</span></p>
+  </div>
+</div>
+
+<!-- Print Modal -->
+<div id="printModal" class="modal">
+  <div class="modal-card" style="max-width: 400px;">
+    <h3>🖨️ Print Options</h3>
+    <div class="print-options">
+      <button id="printKanjiOnlyBtn" class="action-btn" style="width: 100%; margin-bottom: 10px;">📝 Kanji Only</button>
+      <button id="printWithFuriganaBtn" class="action-btn" style="width: 100%; margin-bottom: 10px;">📖 With Furigana</button>
+      <button id="printWithTranslationBtn" class="action-btn" style="width: 100%;">🌎 With Translation</button>
+    </div>
+    <button id="closePrintBtn" class="small-btn" style="margin-top: 20px;">Cancel</button>
+  </div>
+</div>
+
+<script src="js/data/sprints.js"></script>
+<script src="js/data/sentences.js"></script>
+<script src="js/data/stories.js"></script>
+<script src="js/data/wordDict.js"></script>
+<script src="js/utils/helpers.js"></script>
+<script src="js/utils/furigana.js"></script>
+<script src="js/utils/tooltips.js"></script>
+<script src="js/modules/audio.js"></script>
+<script src="js/modules/mastered.js"></script>
+<script src="js/modules/flashcards.js"></script>
+<script src="js/modules/storyMode.js"></script>
+<script src="js/modules/print.js"></script>
+<script src="js/modules/ui.js"></script>
+<script src="js/utils/kanaHelper.js"></script>
+<script src="js/modules/kanji-stroke.js"></script>
+<script src="js/modules/kanji-helper.js"></script>
+</body>
+</html>

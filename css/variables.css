@@ -1,0 +1,205 @@
+/* ==================== CSS VARIABLES ==================== */
+/* This file controls the look and feel of the ENTIRE app */
+/* Add this to EVERY HTML page BEFORE other CSS files */
+/* Change values here and ALL pages update automatically */
+
+:root {
+    /* ===== COLOR PALETTE ===== */
+    
+    /* Primary Colors (Green theme) */
+    --primary: #6c8b6b;
+    --primary-dark: #5a7a59;
+    --primary-light: #8aae8a;
+    --primary-bg: #e8f0e7;
+    --primary-border: #6c8b6b;
+    
+    /* Secondary Colors (Blue theme - for some modules) */
+    --secondary: #1a2b4c;
+    --secondary-dark: #0f1f3a;
+    --secondary-light: #2a3b5c;
+    --secondary-bg: #e8f0fe;
+    
+    /* Accent Colors */
+    --accent: #c45d1e;
+    --accent-dark: #a84d18;
+    --accent-light: #e8a87c;
+    --accent-bg: #fff1e0;
+    
+    /* Status Colors */
+    --success: #4caf50;
+    --success-dark: #388e3c;
+    --success-light: #d4edda;
+    --error: #dc3545;
+    --error-dark: #c82333;
+    --error-light: #f8d7da;
+    --warning: #ffc107;
+    --warning-dark: #e0a800;
+    --warning-light: #fff3cd;
+    --info: #2196f3;
+    --info-dark: #0d47a1;
+    --info-light: #e3f2fd;
+    
+    /* Background Colors */
+    --bg-main: #f5f0eb;
+    --bg-card: #ffffff;
+    --bg-alt: #faf8f5;
+    --bg-hover: #f0ebe4;
+    --bg-dark: #2c3e2f;
+    
+    /* Text Colors */
+    --text-dark: #2c3e2f;
+    --text-medium: #4a6741;
+    --text-light: #8a7b6e;
+    --text-white: #ffffff;
+    --text-muted: #999999;
+    
+    /* Border Colors */
+    --border-light: #e8e0d5;
+    --border-medium: #d4cbbc;
+    --border-dark: #c4b8a8;
+    
+    /* Shadow Colors */
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+    --shadow-xl: 0 10px 40px rgba(0,0,0,0.2);
+    
+    /* ===== TYPOGRAPHY ===== */
+    
+    /* Font Families */
+    --font-family: 'Segoe UI', Roboto, 'Noto Sans', system-ui, -apple-system, sans-serif;
+    --font-family-jp: 'Hiragino Kaku Gothic Pro', 'Noto Sans JP', 'MS PGothic', sans-serif;
+    
+    /* Font Sizes */
+    --font-h1: 1.8rem;
+    --font-h2: 1.5rem;
+    --font-h3: 1.3rem;
+    --font-h4: 1.1rem;
+    --font-base: 1rem;
+    --font-small: 0.9rem;
+    --font-tiny: 0.75rem;
+    --font-micro: 0.65rem;
+    
+    /* Font Weights */
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    
+    /* ===== SPACING ===== */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-xxl: 24px;
+    --spacing-xxxl: 32px;
+    
+    /* ===== BORDER RADIUS ===== */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-xxl: 24px;
+    --radius-round: 40px;
+    --radius-circle: 50%;
+    
+    /* ===== TRANSITIONS ===== */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease;
+    --transition-slow: 0.3s ease;
+    
+    /* ===== Z-INDEX LAYERS ===== */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 1000;
+    --z-popup: 2000;
+    --z-tooltip: 3000;
+    
+    /* ===== CONTAINER WIDTHS ===== */
+    --container-sm: 800px;
+    --container-md: 1000px;
+    --container-lg: 1200px;
+    --container-xl: 1400px;
+    
+    /* ===== SPECIFIC COMPONENT VARIABLES ===== */
+    
+    /* Cards */
+    --card-bg: var(--bg-card);
+    --card-border: none;
+    --card-border-left: 4px solid var(--primary);
+    --card-shadow: var(--shadow-md);
+    --card-padding: var(--spacing-xl);
+    --card-radius: var(--radius-lg);
+    
+    /* Buttons */
+    --btn-bg: var(--primary);
+    --btn-color: var(--text-white);
+    --btn-padding: 10px 24px;
+    --btn-radius: var(--radius-round);
+    --btn-hover-bg: var(--primary-dark);
+    
+    /* Tabs */
+    --tab-bg: transparent;
+    --tab-active-bg: var(--primary);
+    --tab-color: var(--text-light);
+    --tab-active-color: var(--text-white);
+    --tab-padding: 10px 24px;
+    --tab-radius: var(--radius-round);
+    
+    /* Inputs */
+    --input-bg: var(--bg-card);
+    --input-border: 1px solid var(--border-medium);
+    --input-radius: var(--radius-round);
+    --input-padding: 8px 16px;
+    --input-focus-border: var(--primary);
+    
+    /* Modals */
+    --modal-bg: var(--bg-card);
+    --modal-radius: var(--radius-xxl);
+    --modal-padding: var(--spacing-xxl);
+    --modal-overlay: rgba(0,0,0,0.6);
+    --modal-shadow: var(--shadow-xl);
+}
+
+/* ===== DARK MODE READY (future enhancement) ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark mode colors would go here */
+        /* Currently not active - keeping light mode */
+    }
+}
+
+/* ===== UTILITY CLASSES USING VARIABLES ===== */
+.bg-primary { background: var(--primary); }
+.bg-accent { background: var(--accent); }
+.bg-success { background: var(--success); }
+.bg-error { background: var(--error); }
+.bg-warning { background: var(--warning); }
+
+.text-primary { color: var(--primary); }
+.text-accent { color: var(--accent); }
+.text-success { color: var(--success); }
+.text-error { color: var(--error); }
+.text-light { color: var(--text-light); }
+.text-dark { color: var(--text-dark); }
+
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
+
+.radius-sm { border-radius: var(--radius-sm); }
+.radius-md { border-radius: var(--radius-md); }
+.radius-lg { border-radius: var(--radius-lg); }
+.radius-round { border-radius: var(--radius-round); }
+
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }

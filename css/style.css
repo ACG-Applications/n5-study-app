@@ -1,0 +1,444 @@
+/* ===== GLOBAL STYLES ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(135deg, #faf8f5 0%, #f0ebe4 100%);
+    font-family: 'Segoe UI', Roboto, 'Noto Sans', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    color: #2c3e2f;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.app-header h1 {
+    font-size: 2rem;
+    color: #2c3e2f;
+    margin: 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== CONTROL PANEL ===== */
+.control-panel {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.control-group label {
+    font-weight: bold;
+    color: #4a6741;
+}
+
+/* ===== ACTION BUTTONS (Top row) ===== */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+/* ===== FUTURE BUTTONS (Study modules grid) ===== */
+.future-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* ===== BASE BUTTON STYLES - NO UNDERLINES ===== */
+.action-btn {
+    background: #6c8b6b;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: inherit;
+}
+
+.action-btn:hover {
+    background: #5a7a59;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none !important;
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+/* Future buttons (study modules) - now same color as main buttons */
+.future-buttons .action-btn {
+    background: #6c8b6b;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+}
+
+.future-buttons .action-btn:hover {
+    background: #5a7a59;
+}
+
+/* FORCE remove underlines from ALL links */
+a {
+    text-decoration: none !important;
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+.future-buttons a,
+.action-buttons a,
+.action-btn,
+a.action-btn,
+button.action-btn {
+    text-decoration: none !important;
+    text-underline-offset: none !important;
+}
+
+.future-buttons a:hover,
+.action-buttons a:hover,
+.action-btn:hover {
+    text-decoration: none !important;
+}
+
+/* ===== PROGRESS SECTION ===== */
+.progress-section {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #4a6741;
+}
+
+.progress-bar-container {
+    background: #e8e0d5;
+    border-radius: 20px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: #6c8b6b;
+    height: 100%;
+    width: 0%;
+    border-radius: 20px;
+    transition: width 0.3s ease;
+}
+
+/* ===== SMALL BUTTONS ===== */
+.small-btn {
+    background: #e8e0d5;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    color: #2c3e2f;
+}
+
+.small-btn:hover {
+    background: #d4cbbc;
+    transform: translateY(-1px);
+}
+
+/* ===== MODAL STYLES ===== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-card {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    max-width: 90%;
+    width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal card headings */
+.modal-card h3 {
+    color: #2c3e2f;
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+}
+
+/* Flashcard specific */
+.flash-jp {
+    font-size: 1.8rem;
+    margin: 20px 0;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.flash-translation {
+    font-size: 1.2rem;
+    color: #6c8b6b;
+    text-align: center;
+    margin: 20px 0;
+    min-height: 60px;
+}
+
+.flash-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Story mode specific */
+.story-content {
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.story-japanese-block {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.story-english-block {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Print options */
+.print-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+/* ===== RESPONSIVE: TABLET (iPad, Lenovo, Samsung) ===== */
+@media (max-width: 1024px) {
+    .app-container {
+        padding: 16px;
+    }
+    
+    .app-header h1 {
+        font-size: 1.8rem;
+        padding: 16px;
+    }
+    
+    .action-btn {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+    
+    .future-buttons {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+}
+
+/* ===== RESPONSIVE: MOBILE & SMALL TABLET ===== */
+@media (max-width: 768px) {
+    .app-container {
+        padding: 12px;
+    }
+    
+    .app-header h1 {
+        font-size: 1.5rem;
+        padding: 12px;
+    }
+    
+    .action-btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    /* 2 pills per line on tablet */
+    .future-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .future-buttons .action-btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .control-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .control-group {
+        justify-content: space-between;
+    }
+    
+    .modal-card {
+        width: 95%;
+        padding: 16px;
+    }
+    
+    .flash-jp {
+        font-size: 1.4rem;
+    }
+}
+
+/* ===== RESPONSIVE: PHONE ===== */
+@media (max-width: 480px) {
+    /* 1 pill per line on phone */
+    .future-buttons {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        width: 100%;
+    }
+    
+    .flash-controls {
+        gap: 8px;
+    }
+    
+    .small-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e8e0d5;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #6c8b6b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5a7a59;
+}
+
+/* Furigana (ruby) hide/show for flashcards and story mode */
+.hide-furigana rt {
+    display: none;
+}
+
+/* Tooltip styles - meaning hidden until hover */
+.word-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.word-tooltip .tooltip-text {
+    display: none;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.word-tooltip:hover .tooltip-text {
+    display: block;
+}
+
+/* Long press support for mobile tooltips - visual feedback */
+.word-tooltip.long-press .tooltip-text {
+    display: block;
+}

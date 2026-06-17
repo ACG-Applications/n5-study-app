@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Grammar Guide · N5 Japanese</title>
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/grammar.css">
+  <link rel="stylesheet" href="css/kana-helper.css">
+  <link rel="stylesheet" href="css/kanji-helper.css">
+</head>
+<body>
+<div class="grammar-container">
+  
+  <!-- Header -->
+  <div class="grammar-header">
+    <h1>📚 Grammar Guide · N5 Japanese</h1>
+    <a href="index.html" class="back-button">← Back to Main Menu</a>
+  </div>
+  
+  <!-- Controls Bar -->
+  <div class="grammar-controls">
+    <div class="control-group">
+      <label>Search:</label>
+      <input type="text" id="grammarSearchInput" placeholder="Search pattern or meaning...">
+    </div>
+    <div class="control-group">
+      <button id="furiToggleBtn" class="small-btn">🔤 Furigana Off</button>
+    </div>
+    <div class="control-group">
+      <button id="resetMasteredOnlyBtn" class="small-btn" style="background: #ffc107; color: #333;">🔄 Reset Mastered Only</button>
+    </div>
+    <div class="control-group">
+      <button id="resetAllProgressBtn" class="small-btn" style="background: #dc3545; color: white;">🗑️ Reset All Progress</button>
+    </div>
+    <div class="progress-indicator">
+      <span id="masteredCount">0</span>/<span id="totalCount">0</span> grammar points mastered
+    </div>
+  </div>
+  
+  <!-- Tab Navigation -->
+  <div class="tab-bar">
+    <button id="tabListBtn" class="tab-btn active">📖 Grammar Points</button>
+    <button id="tabQuizBtn" class="tab-btn">❓ Quiz</button>
+    <button id="tabMasteredBtn" class="tab-btn">🏆 Mastered</button>
+  </div>
+  
+  <!-- Tab 1: Grammar List -->
+  <div id="tabList" class="tab-content active">
+    <div id="grammarList" class="grammar-list"></div>
+  </div>
+  
+  <!-- Tab 2: Quiz -->
+  <div id="tabQuiz" class="tab-content">
+    <div class="quiz-container">
+      
+      <!-- Stats Panel -->
+      <div class="quiz-stats-panel" id="quizStatsPanel">
+        <div class="stat-item">
+          <span class="stat-label">📊 Score:</span>
+          <span class="stat-value" id="quizRunningScore">0.0</span>
+          <span class="stat-label">/ <span id="quizTotalPossible">0</span></span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">🏆 Mastered:</span>
+          <span class="stat-value" id="quizMasteredCount">0</span>
+          <span class="stat-label">/ <span id="quizTotalGrammar">0</span></span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">📚 Attempted:</span>
+          <span class="stat-value" id="quizAttemptedCount">0</span>
+          <span class="stat-label">/ <span id="quizTotalGrammar2">0</span></span>
+        </div>
+        <div class="stat-help-icon" id="statHelpIcon">ⓘ</div>
+      </div>
+      
+      <!-- Stats Explanation -->
+      <div id="quizStatsExplanation" class="stats-explanation" style="display: none;">
+        <h4>📖 How Scoring Works</h4>
+        <ul>
+          <li><strong>✓ 1st attempt correct</strong> → +1 point & grammar point mastered</li>
+          <li><strong>✓ 2nd attempt correct</strong> → +0.5 points (no mastery)</li>
+          <li><strong>📖 Used "Show Answer"</strong> → 0 points (no mastery)</li>
+          <li><strong>❌ Wrong both attempts</strong> → 0 points (no mastery)</li>
+        </ul>
+        <button id="closeStatsHelp" class="small-btn">Got it</button>
+      </div>
+      
+      <!-- Quiz Header -->
+      <div class="quiz-header">
+        <h3>📝 JLPT N5 Grammar Quiz</h3>
+        <div class="quiz-instructions">
+          <p><strong>Practice:</strong> Choose the correct particle or grammar pattern to complete the sentence.</p>
+          <p>Based on official JLPT N5 practice questions.</p>
+        </div>
+        
+        <!-- FIXED: Quiz Settings with proper spacing -->
+<div class="quiz-settings">
+    <div class="quiz-settings-row">
+        <div class="setting-item">
+            <label>Questions:</label>
+            <select id="quizCountSelect">
+                <option value="5">5 questions</option>
+                <option value="10" selected>10 questions</option>
+                <option value="15">15 questions</option>
+                <option value="20">20 questions</option>
+            </select>
+        </div>
+        <button id="startQuizBtn" class="action-btn start-quiz-btn">Start New Quiz</button>
+    </div>
+</div>
+      </div>
+      
+      <!-- Quiz Area -->
+      <div id="quizArea" class="quiz-area">
+        <p class="quiz-welcome">Select number of questions, then click "Start New Quiz"</p>
+      </div>
+      
+      <!-- Quiz Results -->
+      <div id="quizResults" class="quiz-results" style="display: none;"></div>
+      
+    </div>
+  </div>
+  
+  <!-- Tab 3: Mastered Grammar -->
+  <div id="tabMastered" class="tab-content">
+    <div id="masteredList" class="mastered-list">
+      <p class="empty-message">No grammar points mastered yet. Complete a quiz to master them!</p>
+    </div>
+  </div>
+  
+</div>
+
+<script src="js/data/sprints.js"></script>
+<script src="js/data/sentences.js"></script>
+<script src="js/data/grammarData.js"></script>
+<script src="js/utils/helpers.js"></script>
+<script src="js/utils/furigana.js"></script>
+<script src="js/utils/tooltips.js"></script>
+<script src="js/modules/audio.js"></script>
+<script src="js/modules/grammar.js"></script>
+<script src="js/utils/kanaHelper.js"></script>
+<script src="js/modules/kanji-stroke.js"></script>
+<script src="js/modules/kanji-helper.js"></script>
+</body>
+</html>
