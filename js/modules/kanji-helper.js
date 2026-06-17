@@ -11,7 +11,7 @@ let helperPanel = null;
 
 // Get Unicode hex for a kanji character
 function getKanjiUnicodeHex(kanji) {
-    return kanji.codePointAt(0).toString(16).padStart(5, '0');
+    return kanji.codePointAt(0).toString(16).padStart(5, '0').toUpperCase(); // ← UPPERCASE
 }
 
 // Find kanji data from kanjiData

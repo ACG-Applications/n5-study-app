@@ -10,8 +10,8 @@ function getSvgPaths(unicode) {
     const padded4 = unicode;                 // e.g., "65e5"
     const padded5 = unicode.padStart(5, '0'); // e.g., "065e5"
     return {
-        primary: `images/kanji-strokes/${padded5}.svg`,   // try 5‑digit first
-        fallback: `images/kanji-strokes/${padded4}.svg`
+        primary: `images/kanji-strokes/${padded5.toUpperCase()}.svg`,   // ← UPPERCASE
+        fallback: `images/kanji-strokes/${padded4.toUpperCase()}.svg`    // ← UPPERCASE
     };
 }
 

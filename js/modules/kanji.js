@@ -28,7 +28,7 @@ function speakText(text, lang = 'ja-JP') {
 
 // Helper: Get Unicode hex for a kanji character
 function getUnicodeHex(kanji) {
-    return kanji.codePointAt(0).toString(16);
+    return kanji.codePointAt(0).toString(16).toUpperCase(); // ← UPPERCASE
 }
 
 // Find example sentences from sentencesData containing this kanji
