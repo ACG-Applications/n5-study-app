@@ -12,6 +12,17 @@
   <link rel="stylesheet" href="css/listening.css">
   <link rel="stylesheet" href="css/kana-helper.css">
   <link rel="stylesheet" href="css/kanji-helper.css">
+  <!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Theme color for mobile browsers -->
+<meta name="theme-color" content="#1a73e8">
+
+<!-- Apple Touch Icon (for iOS home screen) -->
+<link rel="apple-touch-icon" href="images/icons/icon-192x19202.png">
+
+<!-- Mobile viewport -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 </head>
 <body>
 <div class="app-container">
@@ -146,5 +157,19 @@
 <script src="js/utils/kanaHelper.js"></script>
 <script src="js/modules/kanji-stroke.js"></script>
 <script src="js/modules/kanji-helper.js"></script>
+<script>
+  // Register Service Worker for PWA offline support
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+    });
+  }
+</script>
 </body>
 </html>
