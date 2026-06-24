@@ -1,47 +1,14 @@
 // ==================== FURIGANA FUNCTIONS ====================
+
+// Fixed: Better furigana parsing - no suffix splitting (was causing duplication bugs)
 function splitIntoWordsWithFurigana(jpText) {
   let segments = jpText.split(/\s+/);
   const result = [];
   
   for (let seg of segments) {
     let cleanWord = seg.replace(/（[^）]+）/g, '');
-    const suffixes = ['好き', '嫌い', '欲しい', '楽しい', '悲しい', '嬉しい', '怖い', '痛い', '辛い', '甘い', '美味しい', '忙しい', '難しい'];
-    
-    let splitHappened = false;
-    
-    for (let suffix of suffixes) {
-      if (cleanWord.endsWith(suffix) && cleanWord.length > suffix.length) {
-        const firstPart = cleanWord.slice(0, -suffix.length);
-        const secondPart = suffix;
-        
-        let firstOriginal = seg;
-        let secondOriginal = suffix;
-        const suffixPattern = suffix;
-        let matchIndex = -1;
-        
-        for (let i = 0; i <= seg.length - suffixPattern.length; i++) {
-          let testStr = seg.substr(i, suffixPattern.length).replace(/（[^）]+）/g, '');
-          if (testStr === suffixPattern) {
-            matchIndex = i;
-            break;
-          }
-        }
-        
-        if (matchIndex > 0) {
-          firstOriginal = seg.substring(0, matchIndex);
-          secondOriginal = seg.substring(matchIndex);
-        }
-        
-        result.push({ original: firstOriginal, clean: firstPart });
-        result.push({ original: secondOriginal, clean: secondPart });
-        splitHappened = true;
-        break;
-      }
-    }
-    
-    if (!splitHappened) {
-      result.push({ original: seg, clean: cleanWord });
-    }
+    // Keep the original segment as-is, no splitting
+    result.push({ original: seg, clean: cleanWord });
   }
   return result;
 }
@@ -76,9 +43,38 @@ function injectWordMeanings() {
   }
 }
 
+// ============================================================
+// VERSION 1: Simple - Handles single furigana + trailing kana
+// Example: 好（す）き → <ruby>好<rt>す</rt></ruby>き
+// ============================================================
 function buildRubyHTML(text) {
-  return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`);
+  // Pattern: kanji + (furigana) + optional trailing kana
+  return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）([\u3040-\u30FF]*)/g, (_, kanji, furigana, trailing) => 
+    `<ruby>${kanji}<rt>${furigana}</rt></ruby>${trailing}`
+  );
 }
+
+// ============================================================
+// VERSION 2: Robust - Handles multiple furigana in one string
+// Example: 一番（いちばん）好（す）き → 
+//          <ruby>一番<rt>いちばん</rt></ruby><ruby>好<rt>す</rt></ruby>き
+// ============================================================
+/*
+function buildRubyHTML(text) {
+  // First pass: Handle all furigana with trailing kana
+  // This handles: 好（す）き, 楽（たの）しい, 食（た）べて, etc.
+  let result = text.replace(
+    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）([\u3040-\u30FF]*)/g,
+    (_, kanji, furigana, trailing) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>${trailing}`
+  );
+  // Second pass: Handle any remaining simple furigana (kanji without trailing kana)
+  result = result.replace(
+    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+    (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+  );
+  return result;
+}
+*/
 
 function wrapWordsWithTooltips(sentence) {
   const words = sentence.splitWords;
