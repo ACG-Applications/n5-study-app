@@ -39,6 +39,7 @@ const wordDict = {
   "です": { reading: "です", meaning: "is / am / are" },
   "母": { reading: "はは", meaning: "mother" },
   "野菜": { reading: "やさい", meaning: "vegetables" },
+  "ながら": { reading: "ながら", meaning: "while" }
   "切りながら": { reading: "きりながら", meaning: "while cutting" },
   "料理します": { reading: "りょうりします", meaning: "cook" },
   "公園": { reading: "こうえん", meaning: "park" },
