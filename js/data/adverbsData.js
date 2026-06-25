@@ -9,7 +9,7 @@ const adverbsData = [
         reading: "ちょっと",
         meaning: "a little",
         examples: [
-            { sentence: "この料理（りょうり）はちょっと辛（から）いです", reading: "このりょうりはちょっとからいです", english: "This dish is a little spicy" }
+            { sentence: "この 料理（りょうり） は ちょっと 辛（から）い です", reading: "この りょうり は ちょっと からい です", english: "This dish is a little spicy" }
         ]
     },
     {
@@ -19,7 +19,7 @@ const adverbsData = [
         reading: "ちょうど",
         meaning: "exactly",
         examples: [
-            { sentence: "丁度（ちょうど）一（いち）万（まん）円（えん）です", reading: "ちょうどいちまんえんです", english: "It's exactly 10,000 yen" }
+            { sentence: "丁度（ちょうど） 一（いち）万（まん） 円（えん） です", reading: "ちょうど いちまん えん です", english: "It's exactly 10,000 yen" }
         ]
     },
     {
@@ -29,7 +29,7 @@ const adverbsData = [
         reading: "だいじょうぶ",
         meaning: "OK, alright",
         examples: [
-            { sentence: "大丈夫（だいじょうぶ）ですか", reading: "だいじょうぶですか", english: "Are you OK?" }
+            { sentence: "大丈夫（だいじょうぶ） です か", reading: "だいじょうぶ です か", english: "Are you OK?" }
         ]
     },
     {
@@ -39,7 +39,7 @@ const adverbsData = [
         reading: "だんだん",
         meaning: "gradually",
         examples: [
-            { sentence: "天気（てんき）が段々（だんだん）良（よ）くなってきました", reading: "てんきがだんだんよくなってきました", english: "The weather has gradually gotten better" }
+            { sentence: "天気（てんき） が 段々（だんだん） 良（よ）く なって きました", reading: "てんき が だんだん よく なって きました", english: "The weather has gradually gotten better" }
         ]
     },
     {
@@ -49,7 +49,7 @@ const adverbsData = [
         reading: "どう",
         meaning: "how",
         examples: [
-            { sentence: "どうですか", reading: "どうですか", english: "How is it?" }
+            { sentence: "どう です か", reading: "どう です か", english: "How is it?" }
         ]
     },
     {
@@ -59,7 +59,7 @@ const adverbsData = [
         reading: "どうも",
         meaning: "very much (thanks), very (sorry)",
         examples: [
-            { sentence: "どうもありがとう", reading: "どうもありがとう", english: "Thank you very much" }
+            { sentence: "どうも ありがとう", reading: "どうも ありがとう", english: "Thank you very much" }
         ]
     },
     {
@@ -69,7 +69,7 @@ const adverbsData = [
         reading: "どうして",
         meaning: "why",
         examples: [
-            { sentence: "どうして来（こ）なかったの", reading: "どうしてこなかったの", english: "Why didn't you come?" }
+            { sentence: "どうして 来（こ）なかった の", reading: "どうして こなかった の", english: "Why didn't you come?" }
         ]
     },
     {
@@ -79,7 +79,7 @@ const adverbsData = [
         reading: "どうぞ",
         meaning: "please",
         examples: [
-            { sentence: "どうぞお召（め）し上（あ）がりください", reading: "どうぞおめしあがりください", english: "Please enjoy your meal" }
+            { sentence: "どうぞ お召（め）し上（あ）がり ください", reading: "どうぞ おめしあがり ください", english: "Please enjoy your meal" }
         ]
     },
     {
@@ -89,7 +89,7 @@ const adverbsData = [
         reading: "はじめて",
         meaning: "for the first time",
         examples: [
-            { sentence: "初（はじ）めて日本（にほん）に行（い）きました", reading: "はじめてにほんにいきました", english: "I went to Japan for the first time" }
+            { sentence: "初（はじ）めて 日本（にほん） に 行（い）きました", reading: "はじめて にほん に いきました", english: "I went to Japan for the first time" }
         ]
     },
     {
@@ -99,7 +99,7 @@ const adverbsData = [
         reading: "ひとり",
         meaning: "alone, by oneself",
         examples: [
-            { sentence: "一人（ひとり）でできる限（かぎ）りやります", reading: "ひとりでできるかぎりやります", english: "I'll do as much as I can by myself" }
+            { sentence: "一人（ひとり） で できる 限（かぎ）り やります", reading: "ひとり で できる かぎり やります", english: "I'll do as much as I can by myself" }
         ]
     },
     {
@@ -109,7 +109,7 @@ const adverbsData = [
         reading: "いちばん",
         meaning: "most, best",
         examples: [
-            { sentence: "夏（なつ）はアイスクリームが一番（いちばん）好（す）きです", reading: "なつはあいすくりーむがいちばんすきです", english: "In summer, I like ice cream the most" }
+            { sentence: "夏（なつ） は アイスクリーム が 一番（いちばん） 好（す）き です", reading: "なつ は あいすくりーむ が いちばん すき です", english: "In summer, I like ice cream the most" }
         ]
     },
     {
@@ -119,7 +119,7 @@ const adverbsData = [
         reading: "いかが",
         meaning: "how about",
         examples: [
-            { sentence: "お茶（ちゃ）はいかがですか", reading: "おちゃはいかがですか", english: "How about some tea?" }
+            { sentence: "お茶（ちゃ） は いかが です か", reading: "おちゃ は いかが です か", english: "How about some tea?" }
         ]
     },
     {
@@ -129,7 +129,7 @@ const adverbsData = [
         reading: "いくら",
         meaning: "how much",
         examples: [
-            { sentence: "いくらですか", reading: "いくらですか", english: "How much is it?" }
+            { sentence: "いくら です か", reading: "いくら です か", english: "How much is it?" }
         ]
     },
     {
@@ -139,7 +139,7 @@ const adverbsData = [
         reading: "いくつ",
         meaning: "how many, how old",
         examples: [
-            { sentence: "いくつありますか", reading: "いくつありますか", english: "How many are there?" }
+            { sentence: "いくつ あります か", reading: "いくつ あります か", english: "How many are there?" }
         ]
     },
     {
@@ -149,7 +149,7 @@ const adverbsData = [
         reading: "いろいろ",
         meaning: "various",
         examples: [
-            { sentence: "色々（いろいろ）な好（この）みがあります", reading: "いろいろなこのみがあります", english: "There are various preferences" }
+            { sentence: "色々（いろいろ）な 好（この）み が あります", reading: "いろいろな このみ が あります", english: "There are various preferences" }
         ]
     },
     {
@@ -159,7 +159,7 @@ const adverbsData = [
         reading: "いっしょに",
         meaning: "together",
         examples: [
-            { sentence: "友達（ともだち）と一緒（いっしょ）にご飯（はん）を食（た）べました", reading: "ともだちといっしょにごはんをたべました", english: "I ate a meal together with my friend" }
+            { sentence: "友達（ともだち） と 一緒（いっしょ）に ご飯（はん） を 食（た）べました", reading: "ともだち と いっしょに ごはん を たべました", english: "I ate a meal together with my friend" }
         ]
     },
     {
@@ -169,7 +169,7 @@ const adverbsData = [
         reading: "いつも",
         meaning: "always, usually",
         examples: [
-            { sentence: "いつも笑顔（えがお）で話（はな）します", reading: "いつもえがおではなします", english: "I always speak with a smile" }
+            { sentence: "いつも 笑顔（えがお） で 話（はな）します", reading: "いつも えがお で はなします", english: "I always speak with a smile" }
         ]
     },
     {
@@ -179,7 +179,7 @@ const adverbsData = [
         reading: "けっこう",
         meaning: "splendid, enough",
         examples: [
-            { sentence: "結構（けっこう）です", reading: "けっこうです", english: "That's fine / No thank you" }
+            { sentence: "結構（けっこう） です", reading: "けっこう です", english: "That's fine / No thank you" }
         ]
     },
     {
@@ -189,7 +189,7 @@ const adverbsData = [
         reading: "まだ",
         meaning: "still, not yet",
         examples: [
-            { sentence: "まだ着（つ）いていないようです", reading: "まだついていないようです", english: "It seems he hasn't arrived yet" }
+            { sentence: "まだ 着（つ）いて いない ようです", reading: "まだ ついて いない ようです", english: "It seems he hasn't arrived yet" }
         ]
     },
     {
@@ -199,7 +199,7 @@ const adverbsData = [
         reading: "まえに",
         meaning: "before, in front of",
         examples: [
-            { sentence: "前（まえ）に言（い）いました", reading: "まえにいいました", english: "I said it before" }
+            { sentence: "前（まえ）に 言（い）いました", reading: "まえに いいました", english: "I said it before" }
         ]
     },
     {
@@ -209,7 +209,7 @@ const adverbsData = [
         reading: "まっすぐ",
         meaning: "straight ahead",
         examples: [
-            { sentence: "真っ直（まっす）ぐ行（い）ってください", reading: "まっすぐいってください", english: "Please go straight" }
+            { sentence: "真っ直（まっす）ぐ 行（い）って ください", reading: "まっすぐ いって ください", english: "Please go straight" }
         ]
     },
     {
@@ -219,7 +219,7 @@ const adverbsData = [
         reading: "みんな",
         meaning: "all, everyone",
         examples: [
-            { sentence: "皆（みんな）で行（い）きます", reading: "みんなでいきます", english: "Everyone goes" }
+            { sentence: "皆（みんな） で 行（い）きます", reading: "みんな で いきます", english: "Everyone goes" }
         ]
     },
     {
@@ -229,7 +229,7 @@ const adverbsData = [
         reading: "もっと",
         meaning: "more",
         examples: [
-            { sentence: "もっと安（やす）いのはありませんか", reading: "もっとやすいのはありませんか", english: "Don't you have something cheaper?" }
+            { sentence: "もっと 安（やす）い の は ありません か", reading: "もっと やすい の は ありません か", english: "Don't you have something cheaper?" }
         ]
     },
     {
@@ -239,7 +239,7 @@ const adverbsData = [
         reading: "もう",
         meaning: "already, anymore, again",
         examples: [
-            { sentence: "もう一度（いちど）言（い）ってください", reading: "もういちどいってください", english: "Please say it one more time" }
+            { sentence: "もう 一度（いちど） 言（い）って ください", reading: "もう いちど いって ください", english: "Please say it one more time" }
         ]
     },
     {
@@ -249,7 +249,7 @@ const adverbsData = [
         reading: "なぜ",
         meaning: "why",
         examples: [
-            { sentence: "何故（なぜ）来（こ）なかったの", reading: "なぜこなかったの", english: "Why didn't you come?" }
+            { sentence: "何故（なぜ） 来（こ）なかった の", reading: "なぜ こなかった の", english: "Why didn't you come?" }
         ]
     },
     {
@@ -259,7 +259,7 @@ const adverbsData = [
         reading: "おなじ",
         meaning: "same",
         examples: [
-            { sentence: "同（おな）じです", reading: "おなじです", english: "It's the same" }
+            { sentence: "同（おな）じ です", reading: "おなじ です", english: "It's the same" }
         ]
     },
     {
@@ -269,7 +269,7 @@ const adverbsData = [
         reading: "すぐに",
         meaning: "immediately",
         examples: [
-            { sentence: "直（す）ぐに行（い）きます", reading: "すぐにいきます", english: "I'll go immediately" }
+            { sentence: "直（す）ぐに 行（い）きます", reading: "すぐに いきます", english: "I'll go immediately" }
         ]
     },
     {
@@ -279,7 +279,7 @@ const adverbsData = [
         reading: "すこし",
         meaning: "a little",
         examples: [
-            { sentence: "少（すこ）し辛（から）いです", reading: "すこしからいです", english: "It's a little spicy" }
+            { sentence: "少（すこ）し 辛（から）い です", reading: "すこし からい です", english: "It's a little spicy" }
         ]
     },
     {
@@ -289,7 +289,7 @@ const adverbsData = [
         reading: "たぶん",
         meaning: "perhaps, probably",
         examples: [
-            { sentence: "多分（たぶん）雨（あめ）が降（ふ）るでしょう", reading: "たぶんあめがふるでしょう", english: "It will probably rain" }
+            { sentence: "多分（たぶん） 雨（あめ） が 降（ふ）る でしょう", reading: "たぶん あめ が ふる でしょう", english: "It will probably rain" }
         ]
     },
     {
@@ -299,7 +299,7 @@ const adverbsData = [
         reading: "たいへん",
         meaning: "very, greatly",
         examples: [
-            { sentence: "大変（たいへん）でしたね", reading: "たいへんでしたね", english: "That was tough, wasn't it?" }
+            { sentence: "大変（たいへん） でした ね", reading: "たいへん でした ね", english: "That was tough, wasn't it?" }
         ]
     },
     {
@@ -309,7 +309,7 @@ const adverbsData = [
         reading: "ときどき",
         meaning: "sometimes",
         examples: [
-            { sentence: "時々（ときどき）映画（えいが）を見（み）ます", reading: "ときどきえいがをみます", english: "I sometimes watch movies" }
+            { sentence: "時々（ときどき） 映画（えいが） を 見（み）ます", reading: "ときどき えいが を みます", english: "I sometimes watch movies" }
         ]
     },
     {
@@ -319,7 +319,7 @@ const adverbsData = [
         reading: "とても",
         meaning: "very",
         examples: [
-            { sentence: "今日（きょう）はとても暑（あつ）いです", reading: "きょうはとてもあついです", english: "Today is very hot" }
+            { sentence: "今日（きょう） は とても 暑（あつ）い です", reading: "きょう は とても あつい です", english: "Today is very hot" }
         ]
     },
     {
@@ -329,7 +329,7 @@ const adverbsData = [
         reading: "よく",
         meaning: "often, well",
         examples: [
-            { sentence: "良（よ）く音楽（おんがく）を聞（き）きながら散歩（さんぽ）します", reading: "よくおんがくをききながらさんぽします", english: "I often take a walk while listening to music" }
+            { sentence: "良（よ）く 音楽（おんがく） を 聞（き）きながら 散歩（さんぽ）します", reading: "よく おんがく を ききながら さんぽします", english: "I often take a walk while listening to music" }
         ]
     },
     {
@@ -339,7 +339,7 @@ const adverbsData = [
         reading: "ゆっくり",
         meaning: "slowly",
         examples: [
-            { sentence: "ゆっくり話（はな）してください", reading: "ゆっくりはなしてください", english: "Please speak slowly" }
+            { sentence: "ゆっくり 話（はな）して ください", reading: "ゆっくり はなして ください", english: "Please speak slowly" }
         ]
     }
 ];

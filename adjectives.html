@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Adjectives Guide · N5 Japanese</title>
-<link rel="stylesheet" href="css/variables.css">
-<link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/adjectives.css">
+  <link rel="stylesheet" href="css/learn.css">
   <link rel="stylesheet" href="css/kana-helper.css">
   <link rel="stylesheet" href="css/kanji-helper.css">
 </head>
@@ -50,6 +51,7 @@
   <!-- Tab Navigation -->
   <div class="tab-bar">
     <button id="tabConjugationBtn" class="tab-btn active">📖 Conjugation Tables</button>
+    <button id="tabLearnBtn" class="tab-btn">📖 Learn</button>
     <button id="tabQuizBtn" class="tab-btn">❓ Quiz</button>
     <button id="tabMasteredBtn" class="tab-btn">🏆 Mastered Adjectives</button>
   </div>
@@ -59,7 +61,12 @@
     <div id="adjectivesList" class="adjectives-list"></div>
   </div>
   
-  <!-- Tab 2: Quiz -->
+  <!-- Tab 2: Learn -->
+  <div id="tabLearn" class="tab-content">
+    <div id="learnContent"></div>
+  </div>
+  
+  <!-- Tab 3: Quiz -->
   <div id="tabQuiz" class="tab-content">
     <div class="quiz-container">
       
@@ -95,30 +102,30 @@
         <button id="closeStatsHelp" class="small-btn">Got it</button>
       </div>
       
-<!-- Quiz Header -->
-<div class="quiz-header">
-    <h3>📝 Adjective Conjugation Quiz</h3>
-    <div class="quiz-instructions">
-        <p><strong>Easy Mode:</strong> Choose the correct conjugation from multiple choice options.</p>
-        <p><strong>Hard Mode:</strong> Select the correct conjugation from all possible forms.</p>
-    </div>
-<div class="quiz-settings">
-    <div class="quiz-mode-selector">
-        <label>Mode:</label>
-        <button id="quizEasyModeBtn" class="mode-btn active">🎯 Easy Mode</button>
-        <button id="quizHardModeBtn" class="mode-btn">🔥 Hard Mode</button>
-    </div>
-    <div class="quiz-count-selector">
-        <label>Questions:</label>
-        <select id="quizCountSelect">
-            <option value="5">5 questions</option>
-            <option value="10" selected>10 questions</option>
-            <option value="15">15 questions</option>
-        </select>
-    </div>
-    <button id="startQuizBtn" class="action-btn">Start New Quiz</button>
-</div>
-</div>
+      <!-- Quiz Header -->
+      <div class="quiz-header">
+        <h3>📝 Adjective Conjugation Quiz</h3>
+        <div class="quiz-instructions">
+          <p><strong>Easy Mode:</strong> Choose the correct conjugation from multiple choice options.</p>
+          <p><strong>Hard Mode:</strong> Select the correct conjugation from all possible forms.</p>
+        </div>
+        <div class="quiz-settings">
+          <div class="quiz-mode-selector">
+            <label>Mode:</label>
+            <button id="quizEasyModeBtn" class="mode-btn active">🎯 Easy Mode</button>
+            <button id="quizHardModeBtn" class="mode-btn">🔥 Hard Mode</button>
+          </div>
+          <div class="quiz-count-selector">
+            <label>Questions:</label>
+            <select id="quizCountSelect">
+              <option value="5">5 questions</option>
+              <option value="10" selected>10 questions</option>
+              <option value="15">15 questions</option>
+            </select>
+          </div>
+          <button id="startQuizBtn" class="action-btn">Start New Quiz</button>
+        </div>
+      </div>
       
       <!-- Quiz Area -->
       <div id="quizArea" class="quiz-area">
@@ -131,7 +138,7 @@
     </div>
   </div>
   
-  <!-- Tab 3: Mastered Adjectives -->
+  <!-- Tab 4: Mastered Adjectives -->
   <div id="tabMastered" class="tab-content">
     <div id="masteredList" class="mastered-list">
       <p class="empty-message">No adjectives mastered yet. Complete a quiz to master adjectives!</p>
@@ -140,15 +147,21 @@
   
 </div>
 
+<!-- 1. Data -->
 <script src="js/data/sprints.js"></script>
 <script src="js/data/sentences.js"></script>
+<script src="js/data/wordDict.js"></script>
 <script src="js/data/adjectivesData.js"></script>
+
+<!-- 2. Utilities -->
 <script src="js/utils/helpers.js"></script>
 <script src="js/utils/furigana.js"></script>
 <script src="js/utils/tooltips.js"></script>
+<script src="js/utils/kanaHelper.js"></script>
+
+<!-- 3. Modules -->
 <script src="js/modules/audio.js"></script>
 <script src="js/modules/adjectives.js"></script>
-<script src="js/utils/kanaHelper.js"></script>
 <script src="js/modules/kanji-stroke.js"></script>
 <script src="js/modules/kanji-helper.js"></script>
 </body>

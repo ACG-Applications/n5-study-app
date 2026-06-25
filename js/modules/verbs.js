@@ -17,6 +17,7 @@ let currentSearchTerm = '';
 // DOM Elements
 const furiToggleBtn = document.getElementById('furiToggleBtn');
 const tabConjugationBtn = document.getElementById('tabConjugationBtn');
+const tabLearnBtn = document.getElementById('tabLearnBtn');
 const tabQuizBtn = document.getElementById('tabQuizBtn');
 const tabMasteredBtn = document.getElementById('tabMasteredBtn');
 const quizEasyModeBtn = document.getElementById('quizEasyModeBtn');
@@ -24,24 +25,57 @@ const quizHardModeBtn = document.getElementById('quizHardModeBtn');
 const groupSelect = document.getElementById('groupSelect');
 const verbSearchInput = document.getElementById('verbSearchInput');
 
+// ========== TTS FUNCTION ==========
+function speakText(text, lang = 'ja-JP') {
+    if (!text || text === '-' || text.trim() === '') return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.rate = 0.85;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+}
+
+// ========== PRINT FUNCTION ==========
+function printLesson() {
+    window.print();
+}
+
 // Add furigana to text based on toggle state
 function addFuriganaToText(text) {
     if (!text) return '';
-    // When furiganaHidden = true, remove furigana (show plain text without parentheses)
     if (furiganaHidden) {
         return text.replace(/[（(][^）)]*[）)]/g, '');
-    } else {
-        // Add ruby HTML for furigana - convert "漢字（かんじ）" to <ruby>漢字<rt>かんじ</rt></ruby>
-        return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-        });
     }
+    return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
+        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+    });
 }
 
-// Strip furigana for dropdown values (always plain text, no parentheses)
+// Strip furigana for dropdown values
 function stripFuriganaForDropdown(text) {
     if (!text) return '';
     return text.replace(/[（(][^）)]*[）)]/g, '');
+}
+
+// ===== HELPER: Display sentence with proper furigana handling =====
+function displaySentenceWithFurigana(sentence) {
+    if (!sentence) return '';
+    // First, try to use the word meanings/tooltip approach
+    if (typeof getWordMeaningsForSentence === 'function' && typeof createQuizWordTooltips === 'function') {
+        const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
+        if (wordMeanings && wordMeanings.length > 0) {
+            // If furigana is hidden, strip furigana from the sentence before creating tooltips
+            if (furiganaHidden) {
+                const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
+                const cleanWordMeanings = getWordMeaningsForSentence({ jp: cleanSentence });
+                return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
+            }
+            return createQuizWordTooltips(sentence, wordMeanings);
+        }
+    }
+    // Fallback to basic furigana
+    return addFuriganaToText(sentence);
 }
 
 // Format dictionary for display with proper furigana per kanji
@@ -49,115 +83,622 @@ function formatDictionaryForDisplay(verb) {
     const dict = verb.dictionary;
     const reading = verb.reading;
     
-    // Handle special cases with known patterns
-    // 食べる -> 食（た）べる
-    if (dict === '食べる') {
-        const displayText = '食（た）べる';
-        return addFuriganaToText(displayText);
-    }
-    // 見る -> 見（み）る
-    if (dict === '見る') {
-        const displayText = '見（み）る';
-        return addFuriganaToText(displayText);
-    }
-    // 寝る -> 寝（ね）る
-    if (dict === '寝る') {
-        const displayText = '寝（ね）る';
-        return addFuriganaToText(displayText);
-    }
-    // 起きる -> 起（お）きる
-    if (dict === '起きる') {
-        const displayText = '起（お）きる';
-        return addFuriganaToText(displayText);
-    }
-    // 教える -> 教（おし）える
-    if (dict === '教える') {
-        const displayText = '教（おし）える';
-        return addFuriganaToText(displayText);
-    }
-    // 開ける -> 開（あ）ける
-    if (dict === '開ける') {
-        const displayText = '開（あ）ける';
-        return addFuriganaToText(displayText);
-    }
-    // 会う -> 会（あ）う
-    if (dict === '会う') {
-        const displayText = '会（あ）う';
-        return addFuriganaToText(displayText);
-    }
-    // 遊ぶ -> 遊（あそ）ぶ
-    if (dict === '遊ぶ') {
-        const displayText = '遊（あそ）ぶ';
-        return addFuriganaToText(displayText);
-    }
-    // 行く -> 行（い）く
-    if (dict === '行く') {
-        const displayText = '行（い）く';
-        return addFuriganaToText(displayText);
-    }
-    // 話す -> 話（はな）す
-    if (dict === '話す') {
-        const displayText = '話（はな）す';
-        return addFuriganaToText(displayText);
-    }
-    // 読む -> 読（よ）む
-    if (dict === '読む') {
-        const displayText = '読（よ）む';
-        return addFuriganaToText(displayText);
-    }
-    // 飲む -> 飲（の）む
-    if (dict === '飲む') {
-        const displayText = '飲（の）む';
-        return addFuriganaToText(displayText);
-    }
-    // 買う -> 買（か）う
-    if (dict === '買う') {
-        const displayText = '買（か）う';
-        return addFuriganaToText(displayText);
-    }
-    // 帰る -> 帰（かえ）る
-    if (dict === '帰る') {
-        const displayText = '帰（かえ）る';
-        return addFuriganaToText(displayText);
-    }
-    // 書く -> 書（か）く
-    if (dict === '書く') {
-        const displayText = '書（か）く';
-        return addFuriganaToText(displayText);
-    }
-    // 待つ -> 待（ま）つ
-    if (dict === '待つ') {
-        const displayText = '待（ま）つ';
-        return addFuriganaToText(displayText);
-    }
-    // する
-    if (dict === 'する') {
-        return addFuriganaToText('する');
-    }
-    // 来る -> 来（く）る
-    if (dict === '来る') {
-        const displayText = '来（く）る';
-        return addFuriganaToText(displayText);
-    }
-    // 勉強する -> 勉強（べんきょう）する
-    if (dict === '勉強する') {
-        const displayText = '勉強（べんきょう）する';
-        return addFuriganaToText(displayText);
-    }
-    // 散歩する -> 散歩（さんぽ）する
-    if (dict === '散歩する') {
-        const displayText = '散歩（さんぽ）する';
-        return addFuriganaToText(displayText);
-    }
-    // 旅行する -> 旅行（りょこう）する
-    if (dict === '旅行する') {
-        const displayText = '旅行（りょこう）する';
-        return addFuriganaToText(displayText);
+    // Special cases with known patterns
+    const specialCases = {
+        '食べる': '食（た）べる',
+        '見る': '見（み）る',
+        '寝る': '寝（ね）る',
+        '起きる': '起（お）きる',
+        '教える': '教（おし）える',
+        '開ける': '開（あ）ける',
+        '会う': '会（あ）う',
+        '遊ぶ': '遊（あそ）ぶ',
+        '行く': '行（い）く',
+        '話す': '話（はな）す',
+        '読む': '読（よ）む',
+        '飲む': '飲（の）む',
+        '買う': '買（か）う',
+        '帰る': '帰（かえ）る',
+        '書く': '書（か）く',
+        '待つ': '待（ま）つ',
+        '来る': '来（く）る',
+        '勉強する': '勉強（べんきょう）する',
+        '散歩する': '散歩（さんぽ）する',
+        '旅行する': '旅行（りょこう）する'
+    };
+    
+    if (specialCases[dict]) {
+        return addFuriganaToText(specialCases[dict]);
     }
     
-    // Default fallback
     const displayText = `${dict}（${reading}）`;
     return addFuriganaToText(displayText);
+}
+
+// ===== RENDER LEARN TAB =====
+function renderLearnTab() {
+    const container = document.getElementById("learnContent");
+    if (!container) return;
+
+    const content = `
+        <div class="learn-container" style="background: #ffffff; border-radius: 20px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e8e0d5;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
+                <h2 style="color: #000000; font-weight: 700; font-size: 1.5rem; margin: 0;">📖 Understanding Verbs in Japanese</h2>
+                <button onclick="printLesson()" style="background: #6c8b6b; color: white; border: none; padding: 8px 20px; border-radius: 40px; cursor: pointer; font-size: 0.9rem; font-weight: 500; font-family: inherit; transition: background 0.2s, transform 0.1s;" onmouseover="this.style.background='#5a7a59'" onmouseout="this.style.background='#6c8b6b'">🖨️ Print Lesson</button>
+            </div>
+            <p style="color: #444444; font-weight: 400; margin-bottom: 24px;">N5 Level - Complete Guide</p>
+            
+            <!-- SECTION 1: Verb Basics -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. 動詞（どうし）の 基本 / Verb Basics</h3>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
+                    日本語（にほんご）の 動詞（どうし）は <strong>必（かなら）ず</strong> 文（ぶん）の <strong>最後（さいご）</strong> に 来（き）ます。
+                </p>
+                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
+                    <em>Japanese verbs <strong>always</strong> come at the <strong>end</strong> of the sentence.</em>
+                </p>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
+                    動詞（どうし）は <strong>3種類（しゅるい）</strong> に 分（わ）かれます：
+                </p>
+                <ul style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 12px; padding-left: 20px;">
+                    <li><strong>グループ1: 五段（ごだん）動詞（どうし）</strong> / Godan (U-verbs)</li>
+                    <li><strong>グループ2: 一段（いちだん）動詞（どうし）</strong> / Ichidan (Ru-verbs)</li>
+                    <li><strong>グループ3: 不規則（ふきそく）動詞（どうし）</strong> / Irregular Verbs</li>
+                </ul>
+                
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">特徴（とくちょう）<br><span style="font-weight: 400; font-size: 0.8rem;">Feature</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">グループ1 (五段)<br><span style="font-weight: 400; font-size: 0.8rem;">Group 1 (Godan)</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">グループ2 (一段)<br><span style="font-weight: 400; font-size: 0.8rem;">Group 2 (Ichidan)</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">グループ3 (不規則)<br><span style="font-weight: 400; font-size: 0.8rem;">Group 3 (Irregular)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">終（お）わり方（かた）<br><span style="font-size: 0.8rem;">Ending</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">う, く, す, つ, ぬ, ぶ, む, る</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">る (with い/え before)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">する, くる</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">例（れい）<br><span style="font-size: 0.8rem;">Example</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）く</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べる</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">する / 来（く）る</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">ます形（けい）<br><span style="font-size: 0.8rem;">masu form</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）きます</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べます</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">します / 来（き）ます</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て形（けい）<br><span style="font-size: 0.8rem;">te form</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）いて</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べて</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">して / 来（き）て</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 2: Sentence Patterns -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. 文（ぶん）の パターン / Sentence Patterns</h3>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">パターン1: 主語（しゅご）+ 目的語（もくてきご）+ 動詞（どうし）(SOV)</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> [Subject] は [Object] を [Verb]
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('わたし は りんご を たべます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('わたし は りんご を たべます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">私（わたし）は りんご <strong>を</strong> 食（た）べます。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I eat an apple.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">パターン2: 場所（ばしょ）+ 移動（いどう）動詞（どうし）</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> [Location] へ/に [Motion Verb]
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('わたし は がっこう へ いきます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('わたし は がっこう へ いきます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">私（わたし）は 学校（がっこう）<strong>へ</strong> 行（い）きます。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I will go to school.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">パターン3: 道具（どうぐ）/ 手段（しゅだん） + 動詞（どうし）</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> [Tool/Language] で [Verb]
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('にほんご で はなします')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('にほんご で はなします');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">日本語（にほんご）<strong>で</strong> 話（はな）します。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I speak in Japanese.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">パターン4: 時間（じかん） + 動詞（どうし）</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> [Time] に [Verb] (に is optional for relative time)
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あさ しちじ に おきます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あさ しちじ に おきます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">朝（あさ）7時（じ）<strong>に</strong> 起（お）きます。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I wake up at 7 AM.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+            </div>
+            
+            <!-- SECTION 3: Polite Forms (ます) -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. 丁寧形（ていねいけい） / Polite Forms (ます)</h3>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
+                    動詞（どうし）を 丁寧（ていねい）に する ときは <strong>ます (masu)</strong> を 使（つか）います。
+                </p>
+                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
+                    <em>To make verbs polite, use the <strong>ます (masu)</strong> form.</em>
+                </p>
+                
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形（けい）<br><span style="font-weight: 400; font-size: 0.8rem;">Form</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">パターン<br><span style="font-weight: 400; font-size: 0.8rem;">Pattern</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">現在（げんざい） / 未来（みらい）<br><span style="font-size: 0.8rem;">Present / Future</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ます</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べます</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去（かこ）<br><span style="font-size: 0.8rem;">Past</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ました</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べました</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">否定（ひてい）<br><span style="font-size: 0.8rem;">Negative</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ません</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べません</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去否定（かこひてい）<br><span style="font-size: 0.8rem;">Past Negative</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ませんでした</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べませんでした</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 4: Te-form -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. て形（けい） / Te-form</h3>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
+                    て形（けい）は <strong>非常（ひじょう）に 重要（じゅうよう）</strong> な 形（けい）です。いろいろな 場面（ばめん）で 使（つか）います。
+                </p>
+                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
+                    <em>The te-form is <strong>very important</strong>. It's used in many different situations.</em>
+                </p>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">て形（けい）の 作（つく）り方 / How to make the te-form</h4>
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">グループ<br><span style="font-weight: 400; font-size: 0.8rem;">Group</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">ルール<br><span style="font-weight: 400; font-size: 0.8rem;">Rule</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">グループ1 (五段)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">
+                                    う, つ, る → って<br>
+                                    く → いて<br>
+                                    ぐ → いで<br>
+                                    す → して<br>
+                                    ぶ, む, ぬ → んで
+                                </td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">
+                                    買う → 買って<br>
+                                    書く → 書いて<br>
+                                    泳ぐ → 泳いで<br>
+                                    話す → 話して<br>
+                                    読む → 読んで
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">グループ2 (一段)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">る → て</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べる → 食（た）べて</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">グループ3 (不規則)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">する → して<br>くる → きて</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">する → して<br>来（く）る → 来（き）て</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background: #f8d7da; border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; border-left: 4px solid #dc3545;">
+                    <div style="font-size: 0.95rem; color: #721c24; font-weight: 400;">
+                        ⚠️ <strong>例外（れいがい）！</strong> 行（い）く → 行（い）<strong>って</strong> (NOT 行いて)
+                    </div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">て形（けい）の 使（つか）い方 / Uses of the te-form</h4>
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">使（つか）い方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Use</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">パターン<br><span style="font-weight: 400; font-size: 0.8rem;">Pattern</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">丁寧（ていねい）な 命令（めいれい）<br><span style="font-size: 0.8rem;">Polite request</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て形（けい） + ください</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" onclick="if(typeof speakText==='function'){speakText('まって ください')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('まって ください');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}" style="cursor: pointer;">待（ま）って ください。🔊</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">動作（どうさ）の 接続（せつぞく）<br><span style="font-size: 0.8rem;">Connecting actions</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て形（けい） + て形（けい）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" onclick="if(typeof speakText==='function'){speakText('たべて のんで')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('たべて のんで');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}" style="cursor: pointer;">食（た）べて、飲（の）んで。🔊</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">進行形（しんこうけい）<br><span style="font-size: 0.8rem;">Progressive / Continuous</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て形（けい） + います</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" onclick="if(typeof speakText==='function'){speakText('よんで います')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('よんで います');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}" style="cursor: pointer;">読（よ）んで います。🔊</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 5: Group 1 (Godan) Verbs -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. グループ1: 五段（ごだん）動詞（どうし） / Godan (Group 1) Verbs</h3>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
+                    五段（ごだん）動詞（どうし）は <strong>あ、い、う、え、お</strong> の 五（いつ）つ の 段（だん）に 移動（いどう）します。
+                </p>
+                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
+                    <em>Godan means "five-level" - the ending shifts across all five vowel rows (a, i, u, e, o).</em>
+                </p>
+                
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">行（ぎょう）<br><span style="font-weight: 400; font-size: 0.8rem;">Row</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">終（お）わり<br><span style="font-weight: 400; font-size: 0.8rem;">Ending</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形（けい）<br><span style="font-weight: 400; font-size: 0.8rem;">Form</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">あ</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">か</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">否定（ひてい）<br><span style="font-size: 0.8rem;">Negative</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）かない</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">い</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">き</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">丁寧（ていねい）<br><span style="font-size: 0.8rem;">Polite</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）きます</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">う</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">く</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">辞書（じしょ）形（けい）<br><span style="font-size: 0.8rem;">Dictionary</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）く</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">え</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">け</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">可能（かのう）<br><span style="font-size: 0.8rem;">Potential</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）ける</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">お</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">こ</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">意志（いし）<br><span style="font-size: 0.8rem;">Volitional</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）こう</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 6: Group 2 (Ichidan) Verbs -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">6. グループ2: 一段（いちだん）動詞（どうし） / Ichidan (Group 2) Verbs</h3>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
+                    一段（いちだん）動詞（どうし）は <strong>る (ru)</strong> を <strong>取（と）る</strong> だけ です。
+                </p>
+                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
+                    <em>Ichidan means "one-level" - simply <strong>drop る (ru)</strong> and attach the ending.</em>
+                </p>
+                
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形（けい）<br><span style="font-weight: 400; font-size: 0.8rem;">Form</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">作（つく）り方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">How to make</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">辞書（じしょ）形（けい）<br><span style="font-size: 0.8rem;">Dictionary</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">—</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べる</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">丁寧（ていねい）<br><span style="font-size: 0.8rem;">Polite</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">る → ます</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べます</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">否定（ひてい）<br><span style="font-size: 0.8rem;">Negative</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">る → ない</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べない</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て形（けい）<br><span style="font-size: 0.8rem;">Te-form</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">る → て</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べて</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去（かこ）<br><span style="font-size: 0.8rem;">Past</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">る → た</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べた</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('たべる')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('たべる');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">食（た）べる → 食（た）べます / 食（た）べて / 食（た）べた</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">to eat → eat (polite) / eating (te) / ate</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+            </div>
+            
+            <!-- SECTION 7: Group 3 (Irregular) Verbs -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">7. グループ3: 不規則（ふきそく）動詞（どうし） / Irregular Verbs</h3>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
+                    不規則（ふきそく）動詞（どうし）は <strong>2つ</strong> だけ です。暗記（あんき）しましょう！
+                </p>
+                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
+                    <em>There are only <strong>two</strong> irregular verbs. Memorize them!</em>
+                </p>
+                
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形（けい）<br><span style="font-weight: 400; font-size: 0.8rem;">Form</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">する (to do)</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">来（く）る (to come)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">辞書（じしょ）形（けい）<br><span style="font-size: 0.8rem;">Dictionary</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">する</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">来（く）る</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">丁寧（ていねい）<br><span style="font-size: 0.8rem;">Polite</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">します</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">来（き）ます</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">否定（ひてい）<br><span style="font-size: 0.8rem;">Negative</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">しない</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">来（こ）ない</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て形（けい）<br><span style="font-size: 0.8rem;">Te-form</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">して</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">来（き）て</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去（かこ）<br><span style="font-size: 0.8rem;">Past</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">した</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">来（き）た</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 8: Common N5 Verbs -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">8. N5 で よく 使（つか）う 動詞（どうし） / Common N5 Verbs</h3>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">グループ1 (五段) / Group 1 (Godan)</h4>
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">動詞（どうし）<br><span style="font-weight: 400; font-size: 0.8rem;">Verb</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">会（あ）う</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">あう</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to meet</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">遊（あそ）ぶ</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">あそぶ</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to play</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">行（い）く</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">いく</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to go</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">話（はな）す</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">はなす</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to speak</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">読（よ）む</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">よむ</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to read</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">飲（の）む</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">のむ</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to drink</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">買（か）う</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">かう</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to buy</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">書（か）く</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">かく</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to write</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">待（ま）つ</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">まつ</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to wait</td></tr>
+                            <tr><td style="padding: 8px 16px; color: #000000; font-weight: 400;">帰（かえ）る</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">かえる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to return home</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">グループ2 (一段) / Group 2 (Ichidan)</h4>
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">動詞（どうし）<br><span style="font-weight: 400; font-size: 0.8rem;">Verb</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">たべる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to eat</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">見（み）る</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">みる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to see / watch</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">寝（ね）る</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">ねる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to sleep</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">起（お）きる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">おきる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to wake up</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">教（おし）える</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">おしえる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to teach</td></tr>
+                            <tr><td style="padding: 8px 16px; color: #000000; font-weight: 400;">開（あ）ける</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">あける</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to open</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">グループ3 (不規則) / Group 3 (Irregular) + する Verbs</h4>
+                <div style="overflow-x: auto; margin-bottom: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">動詞（どうし）<br><span style="font-weight: 400; font-size: 0.8rem;">Verb</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">する</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">する</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to do</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">来（く）る</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">くる</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to come</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">勉強（べんきょう）する</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">べんきょうする</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to study</td></tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;"><td style="padding: 8px 16px; color: #000000; font-weight: 400;">散歩（さんぽ）する</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">さんぽする</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to take a walk</td></tr>
+                            <tr><td style="padding: 8px 16px; color: #000000; font-weight: 400;">旅行（りょこう）する</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">りょこうする</td><td style="padding: 8px 16px; color: #000000; font-weight: 400;">to travel</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 9: Common Mistakes -->
+            <div class="learn-section" style="margin-bottom: 20px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">9. よくある 間違（まちが）い / Common Mistakes</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #e8e0d5;">
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ 間違（まちが）い<br><span style="font-weight: 400; font-size: 0.8rem;">Incorrect</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ 正（ただ）しい<br><span style="font-weight: 400; font-size: 0.8rem;">Correct</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">理（り）由（ゆう）<br><span style="font-weight: 400; font-size: 0.8rem;">Reason</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">行（い）いて</td>
+                                <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">行（い）<strong>って</strong></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">行く は 例外（れいがい）</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">来（き）ない</td>
+                                <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">来（<strong>こ</strong>）ない</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">くる の 否定形（ひていけい）は こない</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">私（わたし）は 行（い）きます 学校（がっこう）へ</td>
+                                <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">私（わたし）は 学校（がっこう）へ 行（い）きます</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">動詞（どうし）は 文（ぶん）の 最後（さいご）</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">する を 五段（ごだん）と 間違（まちが）う</td>
+                                <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">する は 不規則（ふきそく）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">する は グループ3 です</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SUMMARY BOX -->
+            <div style="background: #e8f0e7; border-radius: 16px; padding: 20px; margin-top: 24px; border-left: 4px solid #6c8b6b;">
+                <h4 style="color: #000000; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">📌 まとめ / Summary</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px;">
+                    <div style="color: #000000; font-weight: 500;">✅ グループ1 (五段)<br><span style="font-weight: 400; font-size: 0.85rem;">Group 1 (Godan)</span></div>
+                    <div style="color: #000000; font-weight: 400;">
+                        終（お）わり: う, く, す, つ, ぬ, ぶ, む, る<br>
+                        例（れい）: 書（か）く<br>
+                        ます: 書（か）きます<br>
+                        て形（けい）: 書（か）いて
+                    </div>
+                    <div style="color: #000000; font-weight: 500;">✅ グループ2 (一段)<br><span style="font-weight: 400; font-size: 0.85rem;">Group 2 (Ichidan)</span></div>
+                    <div style="color: #000000; font-weight: 400;">
+                        終（お）わり: る (with い/え before)<br>
+                        例（れい）: 食（た）べる<br>
+                        ます: 食（た）べます<br>
+                        て形（けい）: 食（た）べて
+                    </div>
+                    <div style="color: #000000; font-weight: 500;">✅ グループ3 (不規則)<br><span style="font-weight: 400; font-size: 0.85rem;">Group 3 (Irregular)</span></div>
+                    <div style="color: #000000; font-weight: 400;">
+                        する → します / して / した<br>
+                        来（く）る → 来（き）ます / 来（き）て / 来（き）た
+                    </div>
+                    <div style="color: #000000; font-weight: 500;">✅ 文（ぶん）の パターン<br><span style="font-weight: 400; font-size: 0.85rem;">Sentence Patterns</span></div>
+                    <div style="color: #000000; font-weight: 400;">
+                        SOV: 私（わたし）は りんごを 食（た）べます<br>
+                        場所（ばしょ）: 学校（がっこう）へ 行（い）きます<br>
+                        道具（どうぐ）: 日本語（にほんご）で 話（はな）します
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    `;
+
+    // Apply furigana to all Japanese text in the content
+    container.innerHTML = addFuriganaToText(content);
+
+    // Add TTS click listeners to all example elements
+    document.querySelectorAll(".example-box, .example-click").forEach((el) => {
+        if (!el.hasAttribute("data-tts-attached")) {
+            el.setAttribute("data-tts-attached", "true");
+            if (!el.hasAttribute("onclick")) {
+                const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
+                if (text) {
+                    el.addEventListener("click", function(e) {
+                        if (e.target.closest(".tooltip-text") || e.target.closest(".particle-highlight") || e.target.closest(".word-tooltip")) return;
+                        const cleanText = text.replace(/[→].*$/, "").trim();
+                        if (cleanText && typeof speakText === "function") {
+                            speakText(cleanText);
+                        }
+                    });
+                }
+            }
+        }
+    });
 }
 
 function loadMasteredVerbs() {
@@ -222,6 +763,7 @@ function applyFuriganaHide() {
         furiToggleBtn.innerText = furiganaHidden ? '🔤 Furigana On' : '🔤 Furigana Off';
     }
     renderVerbsList();
+    renderLearnTab();
     renderMasteredList();
     if (quizActive && currentQuiz.length > 0) {
         renderQuizQuestion();
@@ -269,12 +811,19 @@ function renderVerbsList() {
         for (const type of exampleTypes) {
             const ex = verb.examples[type];
             if (ex) {
-                let displayJp = addFuriganaToText(ex.sentence);
+                // ===== Use the helper that respects furigana toggle =====
+                let displayJp = displaySentenceWithFurigana(ex.sentence);
+                
+                const reading = ex.sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
+                
                 examplesHtml += `
-                    <div class="example-item" data-reading="${ex.sentence.replace(/[（(][^）)]*[）)]/g, '')}">
+                    <div class="example-item" data-reading="${reading}">
                         <div class="example-jp" style="font-size: 1rem;">${displayJp}</div>
                         <div class="example-trans" style="font-size: 0.85rem;">→ ${ex.translation}</div>
-                        <div style="font-size: 0.7rem; color: #888; margin-top: 4px;">${displayNames[type]}</div>
+                        <div style="font-size: 0.7rem; color: #888; margin-top: 4px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>${displayNames[type]}</span>
+                            <button class="small-btn example-tts-btn" style="font-size: 0.6rem; padding: 2px 10px; background: #6c8b6b; color: white; border: none; border-radius: 20px; cursor: pointer;" data-reading="${reading}">🔊</button>
+                        </div>
                     </div>
                 `;
             }
@@ -283,55 +832,55 @@ function renderVerbsList() {
         const dictDisplay = formatDictionaryForDisplay(verb);
         
         html += `
-            <div class="verb-card ${isMastered ? 'mastered' : ''}" data-verb-id="${verb.id}" style="margin-bottom: 16px; padding: 16px;">
-                <div class="verb-header" style="margin-bottom: 12px;">
+            <div class="verb-card ${isMastered ? 'mastered' : ''}" data-verb-id="${verb.id}" style="margin-bottom: 16px; padding: 16px; border: 1px solid #e8e0d5; border-radius: 16px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div class="verb-header" style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                     <div>
-                        <span class="verb-title" style="font-size: 1.3rem;">${dictDisplay}</span>
-                        ${isMastered ? '<span class="mastered-badge" style="font-size: 0.7rem;">✓ Mastered</span>' : ''}
+                        <span class="verb-title" style="font-size: 1.3rem; font-weight: bold;">${dictDisplay}</span>
+                        ${isMastered ? '<span class="mastered-badge" style="font-size: 0.7rem; background: #4caf50; color: white; padding: 2px 10px; border-radius: 20px; margin-left: 8px;">✓ Mastered</span>' : ''}
                     </div>
                     <div>
-                        <span class="verb-meaning" style="font-size: 0.9rem;">${verb.meaning}</span>
-                        <span class="group-badge ${groupClass}" style="font-size: 0.7rem;">${groupName}</span>
+                        <span class="verb-meaning" style="font-size: 0.9rem; color: #555;">${verb.meaning}</span>
+                        <span class="group-badge ${groupClass}" style="font-size: 0.7rem; background: #e8f0fe; padding: 2px 10px; border-radius: 20px; margin-left: 8px;">${groupName}</span>
                     </div>
                 </div>
                 
-                <div class="conjugation-table" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px;">
-                    <div class="conj-item" style="padding: 8px;">
-                        <div class="conj-label" style="font-size: 0.65rem;">Present</div>
+                <div class="conjugation-table" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 12px;">
+                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                        <div class="conj-label" style="font-size: 0.65rem; color: #666;">Present</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.masu)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px;">
-                        <div class="conj-label" style="font-size: 0.65rem;">Negative</div>
+                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                        <div class="conj-label" style="font-size: 0.65rem; color: #666;">Negative</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.nai)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px;">
-                        <div class="conj-label" style="font-size: 0.65rem;">Te-form</div>
+                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                        <div class="conj-label" style="font-size: 0.65rem; color: #666;">Te-form</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.te)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px;">
-                        <div class="conj-label" style="font-size: 0.65rem;">Past</div>
+                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                        <div class="conj-label" style="font-size: 0.65rem; color: #666;">Past</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.ta)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px;">
-                        <div class="conj-label" style="font-size: 0.65rem;">Potential</div>
+                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                        <div class="conj-label" style="font-size: 0.65rem; color: #666;">Potential</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.potential)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px;">
-                        <div class="conj-label" style="font-size: 0.65rem;">Volitional</div>
+                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                        <div class="conj-label" style="font-size: 0.65rem; color: #666;">Volitional</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.volitional)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px;">
-                        <div class="conj-label" style="font-size: 0.65rem;">Conditional</div>
+                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                        <div class="conj-label" style="font-size: 0.65rem; color: #666;">Conditional</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.conditional)}</div>
                     </div>
                 </div>
                 
-                <div class="verb-examples" style="margin: 12px 0; padding: 10px;">
-                    <h4 style="font-size: 0.9rem; margin-bottom: 8px;">📝 Examples</h4>
+                <div class="verb-examples" style="margin: 12px 0; padding: 10px; background: #faf8f5; border-radius: 12px;">
+                    <h4 style="font-size: 0.9rem; margin-bottom: 8px;">📝 Example Sentences <span style="font-weight:normal;font-size:0.7rem;color:#999;">(click to listen)</span></h4>
                     ${examplesHtml}
                 </div>
                 
-                <button class="small-btn mark-mastered-btn" data-verb-id="${verb.id}" style="font-size: 0.85rem; padding: 8px 16px;">
+                <button class="small-btn mark-mastered-btn" data-verb-id="${verb.id}" style="font-size: 0.85rem; padding: 6px 16px; background: #e8e0d5; border: none; border-radius: 30px; cursor: pointer;">
                     ${isMastered ? '✓ Mastered' : '✓ Mark as Mastered'}
                 </button>
             </div>
@@ -344,10 +893,34 @@ function renderVerbsList() {
     
     container.innerHTML = html;
     
+    // ===== TTS SUPPORT =====
     document.querySelectorAll('.example-item').forEach(el => {
         const reading = el.dataset.reading;
-        if (reading && typeof speakText === 'function') {
-            el.addEventListener('click', () => speakText(reading));
+        if (reading) {
+            // Click on the example item itself plays audio
+            el.addEventListener('click', (e) => {
+                if (e.target.closest('.example-tts-btn') || e.target.closest('.tooltip-text') || e.target.closest('.word-tooltip')) return;
+                console.log('TTS: Playing example sentence:', reading);
+                if (typeof speakText === 'function') {
+                    speakText(reading);
+                } else if (typeof window.speakText === 'function') {
+                    window.speakText(reading);
+                }
+            });
+            // TTS button inside the example
+            const ttsBtn = el.querySelector('.example-tts-btn');
+            if (ttsBtn) {
+                ttsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const btnReading = ttsBtn.dataset.reading || reading;
+                    console.log('TTS: Playing from button:', btnReading);
+                    if (typeof speakText === 'function') {
+                        speakText(btnReading);
+                    } else if (typeof window.speakText === 'function') {
+                        window.speakText(btnReading);
+                    }
+                });
+            }
         }
     });
     
@@ -362,6 +935,15 @@ function renderVerbsList() {
             }
         });
     });
+    
+    // ===== ATTACH TOOLTIPS =====
+    if (typeof attachQuizTooltipsGlobal === 'function') {
+        setTimeout(attachQuizTooltipsGlobal, 50);
+    } else if (typeof attachQuizTooltips === 'function') {
+        setTimeout(attachQuizTooltips, 50);
+    } else if (typeof attachTooltipLongPress === 'function') {
+        setTimeout(() => attachTooltipLongPress(container), 50);
+    }
 }
 
 function renderMasteredList() {
@@ -371,7 +953,7 @@ function renderMasteredList() {
     const masteredIds = [...masteredVerbs];
     
     if (masteredIds.length === 0) {
-        container.innerHTML = '<p class="empty-message" style="text-align: center; padding: 40px;">No verbs mastered yet. Complete a quiz to master verbs!</p>';
+        container.innerHTML = '<p class="empty-message" style="text-align: center; padding: 40px; color: #999;">No verbs mastered yet. Complete a quiz to master verbs!</p>';
         return;
     }
     
@@ -384,9 +966,9 @@ function renderMasteredList() {
                 <div class="mastered-verb-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee;">
                     <div class="mastered-verb-info" style="display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;">
                         <span class="mastered-verb-dict" style="font-size: 1rem; font-weight: bold;">${dictDisplay}</span>
-                        <span class="mastered-verb-meaning" style="font-size: 0.8rem;">${verb.meaning}</span>
+                        <span class="mastered-verb-meaning" style="font-size: 0.8rem; color: #555;">${verb.meaning}</span>
                     </div>
-                    <button class="unmaster-btn" data-verb-id="${verb.id}" style="font-size: 0.7rem; padding: 4px 10px;">Remove</button>
+                    <button class="unmaster-btn" data-verb-id="${verb.id}" style="font-size: 0.7rem; padding: 4px 12px; background: #dc3545; color: white; border: none; border-radius: 20px; cursor: pointer;">Remove</button>
                 </div>
             `;
         }
@@ -496,7 +1078,8 @@ function generateQuiz() {
             originalSentence: example.sentence,
             verbId: verb.id,
             conjugations: verb.conjugations,
-            verb: verb
+            verb: verb,
+            reading: example.sentence.replace(/[（(][^）)]*[）)]/g, '').trim()
         });
     }
     
@@ -555,6 +1138,7 @@ function renderQuizQuestion() {
     const q = currentQuiz[currentQuizIndex];
     const attemptsLeft = quizAttemptsRemaining[currentQuizIndex];
     const currentAnswer = quizAnswers[currentQuizIndex];
+    const reading = q.reading || '';
     
     const quizTitle = quizMode === 'easy' 
         ? "📝 Verb Conjugation Quiz - choose the correct verb"
@@ -562,20 +1146,24 @@ function renderQuizQuestion() {
     
     const dictDisplay = formatDictionaryForDisplay(q.verb);
     
+    // ===== Use the helper that respects furigana toggle =====
+    let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
+    
     let html = `
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <span style="font-weight: bold; font-size: 1rem; color: #1e4b6e;">${quizTitle}</span>
                 <span style="background: #e8f0fe; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem;">📚 Dictionary: ${dictDisplay} (${q.verbMeaning})</span>
             </div>
-            <div style="display: flex; gap: 16px;">
+            <div style="display: flex; gap: 16px; align-items: center;">
                 <span style="font-weight: bold; font-size: 1rem; color: #6c8b6b;">⭐ Score: ${quizScore.toFixed(1)}</span>
                 <span style="font-weight: bold; font-size: 1rem; color: #c45d1e;">❤️ ${attemptsLeft}</span>
+                ${reading ? `<button class="quiz-tts-btn" data-reading="${reading}" style="margin-left: 8px; background: #6c8b6b; color: white; border: none; padding: 4px 14px; border-radius: 30px; cursor: pointer; font-size: 0.85rem;">🔊 Listen</button>` : ''}
             </div>
         </div>
         <div id="quizFeedbackArea"></div>
         <div style="background: #f9fcff; border-radius: 20px; padding: 20px; margin-bottom: 16px;">
-            <div style="font-size: 1.4rem; text-align: center; margin: 16px 0; line-height: 1.5;">${addFuriganaToText(q.sentence)}</div>
+            <div style="font-size: 1.4rem; text-align: center; margin: 16px 0; line-height: 1.5; cursor: pointer;" class="quiz-sentence" data-reading="${reading}">${sentenceDisplay}</div>
             <div style="text-align: center; margin: 16px 0; padding: 12px; background: #e8f0fe; border-radius: 12px;">
                 <div style="font-size: 0.75rem; color: #666;">📖 English</div>
                 <div style="font-size: 1.1rem; font-weight: bold; color: #1e4b6e;">"${q.translation}"</div>
@@ -596,7 +1184,7 @@ function renderQuizQuestion() {
         }
         html += `</div>`;
     } else {
-        // HARD MODE - Create an array of conjugation objects and shuffle them randomly
+        // HARD MODE
         const conjugationButtons = [
             { type: 'Present', value: q.conjugations.masu, display: addFuriganaToText(q.conjugations.masu) },
             { type: 'Negative', value: q.conjugations.nai, display: addFuriganaToText(q.conjugations.nai) },
@@ -607,7 +1195,6 @@ function renderQuizQuestion() {
             { type: 'Conditional', value: q.conjugations.conditional, display: addFuriganaToText(q.conjugations.conditional) }
         ];
         
-        // Fisher-Yates shuffle - randomizes order every time
         for (let i = conjugationButtons.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [conjugationButtons[i], conjugationButtons[j]] = [conjugationButtons[j], conjugationButtons[i]];
@@ -643,6 +1230,60 @@ function renderQuizQuestion() {
     `;
     
     quizArea.innerHTML = html;
+    
+    // ===== TTS SUPPORT: Listen button =====
+    const ttsBtn = quizArea.querySelector('.quiz-tts-btn');
+    if (ttsBtn) {
+        const btnReading = ttsBtn.dataset.reading || reading;
+        ttsBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            console.log('TTS: Button clicked, reading:', btnReading);
+            if (btnReading) {
+                if (typeof speakText === 'function') {
+                    speakText(btnReading);
+                } else if (typeof window.speakText === 'function') {
+                    window.speakText(btnReading);
+                } else if (window.speechSynthesis) {
+                    const utterance = new SpeechSynthesisUtterance(btnReading);
+                    utterance.lang = 'ja-JP';
+                    utterance.rate = 0.85;
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+        });
+    }
+    
+    // ===== TTS: Click on sentence =====
+    const sentenceEl = quizArea.querySelector('.quiz-sentence');
+    if (sentenceEl && reading) {
+        sentenceEl.style.cursor = 'pointer';
+        sentenceEl.title = 'Click to listen';
+        sentenceEl.addEventListener('click', function(e) {
+            if (e.target.closest('.tooltip-text') || e.target.closest('.particle-highlight') || e.target.closest('.word-tooltip')) {
+                return;
+            }
+            console.log('TTS: Playing from sentence click:', reading);
+            if (typeof speakText === 'function') {
+                speakText(reading);
+            } else if (typeof window.speakText === 'function') {
+                window.speakText(reading);
+            } else if (window.speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance(reading);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        });
+    }
+    
+    // ===== ATTACH TOOLTIPS =====
+    if (typeof attachQuizTooltipsGlobal === 'function') {
+        setTimeout(attachQuizTooltipsGlobal, 50);
+    } else if (typeof attachQuizTooltips === 'function') {
+        setTimeout(attachQuizTooltips, 50);
+    } else if (typeof attachTooltipLongPress === 'function') {
+        setTimeout(() => attachTooltipLongPress(quizArea), 50);
+    }
     
     if (quizMode === 'easy') {
         document.querySelectorAll('.quiz-option-btn').forEach(btn => {
@@ -729,10 +1370,13 @@ function checkAnswer() {
         
         updateQuizStatsDisplay();
         
+        // ===== Use the helper that respects furigana toggle =====
+        let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
+        
         const feedbackHtml = `
             <div style="background: #d4edda; color: #155724; padding: 12px; border-radius: 16px; margin: 12px 0;">
                 ✅ ${isFirstAttempt ? 'Correct! +1 point' : 'Correct on 2nd try! +0.5 points'}
-                <div style="margin-top: 8px; font-size: 0.85rem;">${addFuriganaToText(q.originalSentence)} → ${q.translation}</div>
+                <div style="margin-top: 8px; font-size: 0.85rem;">${sentenceDisplay} → ${q.translation}</div>
             </div>
             <div style="text-align: center; margin-top: 12px;">
                 <button id="quizNextBtn" style="background: #1a2b4c; color: white; border: none; padding: 8px 24px; border-radius: 40px; cursor: pointer;">Next →</button>
@@ -774,10 +1418,13 @@ function checkAnswer() {
                 });
             }
         } else {
+            // ===== Use the helper that respects furigana toggle =====
+            let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
+            
             const feedbackHtml = `
                 <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 16px; margin: 12px 0;">
                     ❌ Correct: ${addFuriganaToText(q.correctAnswer)} (${q.conjugationDisplay})
-                    <div style="margin-top: 8px; font-size: 0.85rem;">${addFuriganaToText(q.originalSentence)} → ${q.translation}</div>
+                    <div style="margin-top: 8px; font-size: 0.85rem;">${sentenceDisplay} → ${q.translation}</div>
                 </div>
                 <div style="text-align: center; margin-top: 12px;">
                     <button id="quizNextBtn" style="background: #1a2b4c; color: white; border: none; padding: 8px 24px; border-radius: 40px; cursor: pointer;">Next →</button>
@@ -800,10 +1447,13 @@ function checkAnswer() {
 function showAnswer() {
     const q = currentQuiz[currentQuizIndex];
     
+    // ===== Use the helper that respects furigana toggle =====
+    let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
+    
     const feedbackHtml = `
         <div style="background: #fff3e0; color: #856404; padding: 12px; border-radius: 16px; margin: 12px 0;">
             📖 Answer: ${addFuriganaToText(q.correctAnswer)} (${q.conjugationDisplay})
-            <div style="margin-top: 8px; font-size: 0.85rem;">${addFuriganaToText(q.originalSentence)} → ${q.translation}</div>
+            <div style="margin-top: 8px; font-size: 0.85rem;">${sentenceDisplay} → ${q.translation}</div>
             <p style="margin-top: 8px; font-size: 0.7rem;">No points awarded.</p>
         </div>
         <div style="text-align: center; margin-top: 12px;">
@@ -928,7 +1578,7 @@ function resetMasteredOnly() {
 function switchTab(tabId) {
     currentVerbTab = tabId;
     
-    const tabButtons = [tabConjugationBtn, tabQuizBtn, tabMasteredBtn];
+    const tabButtons = [tabConjugationBtn, tabLearnBtn, tabQuizBtn, tabMasteredBtn];
     tabButtons.forEach(btn => {
         if (btn) btn.classList.remove('active');
     });
@@ -945,6 +1595,8 @@ function switchTab(tabId) {
     
     if (tabId === 'conjugation') {
         renderVerbsList();
+    } else if (tabId === 'learn') {
+        renderLearnTab();
     } else if (tabId === 'mastered') {
         renderMasteredList();
     } else if (tabId === 'quiz') {
@@ -1024,13 +1676,34 @@ if (resetMasteredOnlyBtn) {
     resetMasteredOnlyBtn.addEventListener('click', resetMasteredOnly);
 }
 
+// Stats help
+const statHelpIcon = document.getElementById('statHelpIcon');
+if (statHelpIcon) {
+    statHelpIcon.addEventListener('click', () => {
+        const explanation = document.getElementById('quizStatsExplanation');
+        if (explanation) {
+            explanation.style.display = explanation.style.display === 'none' ? 'block' : 'none';
+        }
+    });
+}
+
+const closeStatsHelp = document.getElementById('closeStatsHelp');
+if (closeStatsHelp) {
+    closeStatsHelp.addEventListener('click', () => {
+        const explanation = document.getElementById('quizStatsExplanation');
+        if (explanation) explanation.style.display = 'none';
+    });
+}
+
 if (tabConjugationBtn) tabConjugationBtn.addEventListener('click', () => switchTab('conjugation'));
+if (tabLearnBtn) tabLearnBtn.addEventListener('click', () => switchTab('learn'));
 if (tabQuizBtn) tabQuizBtn.addEventListener('click', () => switchTab('quiz'));
 if (tabMasteredBtn) tabMasteredBtn.addEventListener('click', () => switchTab('mastered'));
 
 function initVerbs() {
     loadMasteredVerbs();
     renderVerbsList();
+    renderLearnTab();
     switchTab('conjugation');
     
     const totalVerbs = verbOrder.length;

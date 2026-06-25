@@ -6,6 +6,7 @@ let storyBlockMode = true;
 let isReadingActive = false;
 let currentSentenceIndex = 0;
 let storySentencesList = [];
+let currentSpeechRate = 1.0;
 
 const storyModal = document.getElementById('storyModal');
 const storyContentDiv = document.getElementById('storyContent');
@@ -80,7 +81,10 @@ function stopReading() {
   isReadingActive = false;
   currentSentenceIndex = 0;
   clearHighlights();
-  currentUtterance = null;
+  // Use the global currentUtterance from audio.js
+  if (typeof currentUtterance !== 'undefined') {
+    currentUtterance = null;
+  }
 }
 
 function readNextSentence() {
@@ -104,7 +108,11 @@ function readNextSentence() {
   const utterance = new SpeechSynthesisUtterance(cleanSentence);
   utterance.lang = 'ja-JP';
   utterance.rate = currentSpeechRate;
-  currentUtterance = utterance;
+  
+  // Use the global currentUtterance from audio.js
+  if (typeof currentUtterance !== 'undefined') {
+    window.currentUtterance = utterance;
+  }
   
   utterance.onend = () => {
     currentSentenceIndex++;

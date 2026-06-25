@@ -1,336 +1,514 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Particle Guide · N5 Japanese</title>
-<link rel="stylesheet" href="css/variables.css">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/particles.css">
-  <link rel="stylesheet" href="css/kana-helper.css">
-  <link rel="stylesheet" href="css/kanji-helper.css">
-</head>
-<body>
-<div class="particles-container">
-  
-  <!-- Header -->
-  <div class="particles-header">
-    <h1>🔘 Particle Guide · N5 Japanese</h1>
-    <a href="index.html" class="back-button">← Back to Main Menu</a>
-  </div>
-  
-<!-- Controls Bar -->
-<div class="particles-controls">
-  <div class="control-group">
-    <label>Sprint Examples:</label>
-    <select id="sprintSelect">
-      <option value="all">All Sprints</option>
-    </select>
-  </div>
-  <div class="control-group">
-    <button id="furiToggleBtn" class="small-btn">🔤 Furigana Off</button>
-  </div>
-  <div class="control-group">
-    <button id="resetMasteredOnlyBtn" class="small-btn" style="background: #ffc107; color: #333;">🔄 Reset Mastered Only</button>
-  </div>
-  <div class="control-group">
-    <button id="resetAllProgressBtn" class="small-btn" style="background: #dc3545; color: white;">🗑️ Reset All Progress</button>
-  </div>
-  <div class="progress-indicator">
-    <span id="masteredCount">0</span>/<span id="totalCount">0</span> particles mastered
-  </div>
-</div>
-  
-  <!-- Tab Navigation -->
-  <div class="tab-bar">
-    <button id="tabStructureBtn" class="tab-btn active">📊 Sentence Structure</button>
-    <button id="tabParticlesBtn" class="tab-btn">🎯 Particles</button>
-    <button id="tabPairsBtn" class="tab-btn">🔄 Confusing Pairs</button>
-    <button id="tabQuizBtn" class="tab-btn">❓ Quiz</button>
-  </div>
-  
-  <!-- Tab 1: Sentence Structure Table -->
-  <div id="tabStructure" class="tab-content active">
-    <!-- Core Structure Table -->
-    <div class="structure-container">
-      <h3>📊 Core Sentence Structure</h3>
-      <table class="master-table">
-        <thead>
-          <tr><th colspan="7">Japanese Sentence Structure</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="vertical-center" rowspan="5"><strong>Time (に)¹</strong></td>
-            <td class="vertical-center" rowspan="5"><strong>Topic (は)</strong></td>
-            <td colspan="3" style="background: #d4e3f0; text-align: center; font-weight: 600;">Particles & Adverb</td>
-            <td class="vertical-center" rowspan="5"><strong>Verb</strong></td>
-          </tr>
-          <tr>
-            <td style="background: #e6f2ff;"><strong>Time (に)</strong></td>
-            <td style="background: #e6f2ff;"><strong>Object (を)</strong></td>
-            <td style="background: #e6f2ff;"><strong>Co-participant (と)</strong></td>
-          </tr>
-          <tr>
-            <td style="background: #e6f2ff;"><strong>Subject (が)</strong></td>
-            <td style="background: #e6f2ff;"><strong>Means (で)</strong></td>
-            <td style="background: #e6f2ff;"><strong>Location (で)</strong></td>
-          </tr>
-          <tr>
-            <td style="background: #e6f2ff;"><strong>Location of Existence (に)</strong></td>
-            <td style="background: #e6f2ff;"><strong>Origin (から)</strong></td>
-            <td style="background: #e6f2ff;"><strong>Destination (に)</strong></td>
-          </tr>
-          <tr>
-            <td style="background: #e6f2ff;"><strong>Direction (へ)</strong></td>
-            <td style="background: #e6f2ff;"><strong>End-point (まで)</strong></td>
-            <td style="background: #e6f2ff;"><strong>Adverb</strong></td>
-          </tr>
-          <tr class="time-row">
-            <td colspan="7">¹ Time (に) can go in front of Topic (は) but it is not always the case. The sentence could just start with Topic (は). Everything other than the verb is optional, including the topic. Order in which the particles appear in the sentence is not important, in that Japanese is very flexible with multiple ways to communicate the same information.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>Particle Guide · N5 Japanese</title>
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/particles.css" />
+    <link rel="stylesheet" href="css/learn.css" />
+    <link rel="stylesheet" href="css/kana-helper.css" />
+    <link rel="stylesheet" href="css/kanji-helper.css" />
+  </head>
+  <body>
+    <div class="particles-container">
+      <!-- Header -->
+      <div class="particles-header">
+        <h1>🔘 Particle Guide · N5 Japanese</h1>
+        <a href="index.html" class="back-button">← Back to Main Menu</a>
+      </div>
 
-    <!-- Example Sentences for Core Structure -->
-    <div class="structure-examples">
-      <h3>📝 Example Sentences</h3>
-      <div id="structureExamples" class="example-list"></div>
-    </div>
+      <!-- Controls Bar -->
+      <div class="particles-controls">
+        <div class="control-group">
+          <label>Sprint Examples:</label>
+          <select id="sprintSelect">
+            <option value="all">All Sprints</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <button id="furiToggleBtn" class="small-btn">🔤 Furigana Off</button>
+        </div>
+        <div class="control-group">
+          <button
+            id="resetMasteredOnlyBtn"
+            class="small-btn"
+            style="background: #ffc107; color: #333"
+          >
+            🔄 Reset Mastered Only
+          </button>
+        </div>
+        <div class="control-group">
+          <button
+            id="resetAllProgressBtn"
+            class="small-btn"
+            style="background: #dc3545; color: white"
+          >
+            🗑️ Reset All Progress
+          </button>
+        </div>
+        <div class="progress-indicator">
+          <span id="masteredCount">0</span>/<span id="totalCount">0</span>
+          particles mastered
+        </div>
+      </div>
 
-    <!-- Complete Particle Reference Table -->
-    <div class="particle-reference-container">
-      <h3>📋 Complete Particle Reference</h3>
-      <p class="reference-note">All particles with their functions, positions, and examples from your N5 sentences. <span style="background:#e8f5e9; padding:2px 8px; border-radius:12px;">🟢 N5 Example</span> <span style="background:#fff3e0; padding:2px 8px; border-radius:12px;">🟡 Extra Example</span></p>
-      
-      <div class="particle-reference-grid">
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">は</div>
-          <div class="particle-ref-name">Topic Marker</div>
-          <div class="particle-ref-position">Position: After the topic</div>
-          <div class="particle-ref-desc">Defines the topic of the sentence. Emphasizes information AFTER は.</div>
-          <div class="particle-ref-example" id="ref-example-wa"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">が</div>
-          <div class="particle-ref-name">Subject Marker</div>
-          <div class="particle-ref-position">Position: After the subject</div>
-          <div class="particle-ref-desc">Defines the doer of the action. Emphasizes information BEFORE が.</div>
-          <div class="particle-ref-example" id="ref-example-ga"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">を</div>
-          <div class="particle-ref-name">Object Marker</div>
-          <div class="particle-ref-position">Position: After the direct object</div>
-          <div class="particle-ref-desc">Marks the direct object of an action verb.</div>
-          <div class="particle-ref-example" id="ref-example-wo"></div>
-        </div>
+      <!-- Tab Navigation -->
+      <div class="tab-bar">
+        <button id="tabStructureBtn" class="tab-btn active">
+          📊 Sentence Structure
+        </button>
+        <button id="tabLearnBtn" class="tab-btn">📖 Learn</button>
+        <button id="tabParticlesBtn" class="tab-btn">🎯 Particles</button>
+        <button id="tabPairsBtn" class="tab-btn">🔄 Confusing Pairs</button>
+        <button id="tabQuizBtn" class="tab-btn">❓ Quiz</button>
       </div>
-      
-      <div class="particle-reference-grid">
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">に</div>
-          <div class="particle-ref-name">Time / Direction / Existence</div>
-          <div class="particle-ref-position">Position: After time, destination, or location</div>
-          <div class="particle-ref-desc">Indicates specific time, direction of movement, or location of existence.</div>
-          <div class="particle-ref-example" id="ref-example-ni"></div>
+
+      <!-- Tab 1: Sentence Structure Table -->
+      <div id="tabStructure" class="tab-content active">
+        <!-- Core Structure Table -->
+        <div class="structure-container">
+          <h3>📊 Core Sentence Structure</h3>
+          <table class="master-table">
+            <thead>
+              <tr>
+                <th colspan="7">Japanese Sentence Structure</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="vertical-center" rowspan="5">
+                  <strong>Time (に)¹</strong>
+                </td>
+                <td class="vertical-center" rowspan="5">
+                  <strong>Topic (は)</strong>
+                </td>
+                <td
+                  colspan="3"
+                  style="
+                    background: #d4e3f0;
+                    text-align: center;
+                    font-weight: 600;
+                  "
+                >
+                  Particles & Adverb
+                </td>
+                <td class="vertical-center" rowspan="5">
+                  <strong>Verb</strong>
+                </td>
+              </tr>
+              <tr>
+                <td style="background: #e6f2ff"><strong>Time (に)</strong></td>
+                <td style="background: #e6f2ff">
+                  <strong>Object (を)</strong>
+                </td>
+                <td style="background: #e6f2ff">
+                  <strong>Co-participant (と)</strong>
+                </td>
+              </tr>
+              <tr>
+                <td style="background: #e6f2ff">
+                  <strong>Subject (が)</strong>
+                </td>
+                <td style="background: #e6f2ff"><strong>Means (で)</strong></td>
+                <td style="background: #e6f2ff">
+                  <strong>Location (で)</strong>
+                </td>
+              </tr>
+              <tr>
+                <td style="background: #e6f2ff">
+                  <strong>Location of Existence (に)</strong>
+                </td>
+                <td style="background: #e6f2ff">
+                  <strong>Origin (から)</strong>
+                </td>
+                <td style="background: #e6f2ff">
+                  <strong>Destination (に)</strong>
+                </td>
+              </tr>
+              <tr>
+                <td style="background: #e6f2ff">
+                  <strong>Direction (へ)</strong>
+                </td>
+                <td style="background: #e6f2ff">
+                  <strong>End-point (まで)</strong>
+                </td>
+                <td style="background: #e6f2ff"><strong>Adverb</strong></td>
+              </tr>
+              <tr class="time-row">
+                <td colspan="7">
+                  ¹ Time (に) can go in front of Topic (は) but it is not always
+                  the case. The sentence could just start with Topic (は).
+                  Everything other than the verb is optional, including the
+                  topic. Order in which the particles appear in the sentence is
+                  not important, in that Japanese is very flexible with multiple
+                  ways to communicate the same information.
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">で</div>
-          <div class="particle-ref-name">Location / Means</div>
-          <div class="particle-ref-position">Position: After place of action or method/instrument</div>
-          <div class="particle-ref-desc">Indicates where an action takes place or the means by which something is done.</div>
-          <div class="particle-ref-example" id="ref-example-de"></div>
+
+        <!-- Example Sentences for Core Structure -->
+        <div class="structure-examples">
+          <h3>📝 Example Sentences</h3>
+          <div id="structureExamples" class="example-list"></div>
         </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">へ</div>
-          <div class="particle-ref-name">Direction Marker</div>
-          <div class="particle-ref-position">Position: After direction of movement</div>
-          <div class="particle-ref-desc">Indicates the general direction of movement (pronounced "e").</div>
-          <div class="particle-ref-example" id="ref-example-e"></div>
-        </div>
-      </div>
-      
-      <div class="particle-reference-grid">
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">と</div>
-          <div class="particle-ref-name">And / With</div>
-          <div class="particle-ref-position">Position: Between nouns (and) or after person (with)</div>
-          <div class="particle-ref-desc">Connects nouns or indicates accompaniment.</div>
-          <div class="particle-ref-example" id="ref-example-to"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">から</div>
-          <div class="particle-ref-name">Origin / From</div>
-          <div class="particle-ref-position">Position: After starting point (time or place)</div>
-          <div class="particle-ref-desc">Indicates origin, starting point in time or space.</div>
-          <div class="particle-ref-example" id="ref-example-kara"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">まで</div>
-          <div class="particle-ref-name">Until / To</div>
-          <div class="particle-ref-position">Position: After end point (time or place)</div>
-          <div class="particle-ref-desc">Indicates an end point in time or space.</div>
-          <div class="particle-ref-example" id="ref-example-made"></div>
-        </div>
-      </div>
-      
-      <div class="particle-reference-grid">
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">の</div>
-          <div class="particle-ref-name">Possession / Linking</div>
-          <div class="particle-ref-position">Position: Between two nouns (A の B)</div>
-          <div class="particle-ref-desc">Connects nouns to show possession, description, or relationship.</div>
-          <div class="particle-ref-example" id="ref-example-no"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">も</div>
-          <div class="particle-ref-name">Also / Even</div>
-          <div class="particle-ref-position">Position: Replaces は, が, を; adds to other particles</div>
-          <div class="particle-ref-desc">Indicates "also", "too", or "even".</div>
-          <div class="particle-ref-example" id="ref-example-mo"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">か</div>
-          <div class="particle-ref-name">Question / Or</div>
-          <div class="particle-ref-position">Position: At end of sentence (question) or between nouns (or)</div>
-          <div class="particle-ref-desc">Marks a question or indicates choice ("or").</div>
-          <div class="particle-ref-example" id="ref-example-ka"></div>
-        </div>
-      </div>
-      
-      <div class="particle-reference-grid">
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">よ</div>
-          <div class="particle-ref-name">Emphasis</div>
-          <div class="particle-ref-position">Position: End of sentence</div>
-          <div class="particle-ref-desc">Adds emphasis, certainty, or new information.</div>
-          <div class="particle-ref-example" id="ref-example-yo"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">ね</div>
-          <div class="particle-ref-name">Confirmation</div>
-          <div class="particle-ref-position">Position: End of sentence</div>
-          <div class="particle-ref-desc">Seeks agreement or confirmation ("isn't it?", "right?").</div>
-          <div class="particle-ref-example" id="ref-example-ne"></div>
-        </div>
-        
-        <div class="particle-ref-card">
-          <div class="particle-ref-char">や</div>
-          <div class="particle-ref-name">Partial Listing</div>
-          <div class="particle-ref-position">Position: Between nouns</div>
-          <div class="particle-ref-desc">Lists examples ("things like...", "such as...").</div>
-          <div class="particle-ref-example" id="ref-example-ya"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Tab 2: Individual Particles -->
-  <div id="tabParticles" class="tab-content">
-    <div class="particle-nav" id="particleNav"></div>
-    <div id="particleDetails" class="particle-details"></div>
-  </div>
-  
-  <!-- Tab 3: Confusing Pairs -->
-  <div id="tabPairs" class="tab-content">
-    <div id="pairDetails" class="pair-details"></div>
-  </div>
-  
-  <!-- Tab 4: Quiz -->
-  <div id="tabQuiz" class="tab-content">
-    <div class="quiz-container">
-      
-      <!-- Stats Panel -->
-      <div class="quiz-stats-panel" id="quizStatsPanel">
-        <div class="stat-item">
-          <span class="stat-label">📊 Score:</span>
-          <span class="stat-value" id="quizRunningScore">0.0</span>
-          <span class="stat-label">/ <span id="quizTotalPossible">0</span></span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">🏆 Mastered Particles:</span>
-          <span class="stat-value" id="quizMasteredCount">0</span>
-          <span class="stat-label">/ <span id="quizTotalParticles">15</span></span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">📚 Attempted Particles:</span>
-          <span class="stat-value" id="quizAttemptedCount">0</span>
-          <span class="stat-label">/ <span id="quizTotalParticles2">15</span></span>
-        </div>
-        <div class="stat-help-icon" id="statHelpIcon">ⓘ</div>
-      </div>
-      
-      <!-- Stats Explanation (hidden initially) -->
-      <div id="quizStatsExplanation" class="stats-explanation" style="display: none;">
-        <h4>📖 How Scoring Works</h4>
-        <ul>
-          <li><strong>✓ 1st attempt correct</strong> → +1 point & particle mastered</li>
-          <li><strong>✓ 2nd attempt correct</strong> → +0.5 points (no mastery)</li>
-          <li><strong>📖 Used "Show Answer"</strong> → 0 points (no mastery)</li>
-          <li><strong>❌ Wrong both attempts</strong> → 0 points (no mastery)</li>
-          <li><strong>🏆 Mastered</strong> = Correct on 1st attempt only</li>
-          <li><strong>📚 Attempted</strong> = Ever seen (studied)</li>
-        </ul>
-        <button id="closeStatsHelp" class="small-btn">Got it</button>
-      </div>
-      
-      <!-- Quiz Header -->
-      <div class="quiz-header">
-        <h3>📝 Particle Quiz</h3>
-        <div class="quiz-instructions">
-          <p><strong>Easy Mode:</strong> Select the missing particle from the buttons below.</p>
-          <p><strong>Hard Mode:</strong> Choose the correct particle for each blank using the dropdown menus.</p>
-        </div>
-        <div class="quiz-settings">
-          <div class="quiz-mode-selector">
-            <label>Mode:</label>
-            <button id="quizEasyModeBtn" class="mode-btn active">🎯 Easy Mode</button>
-            <button id="quizHardModeBtn" class="mode-btn">🔥 Hard Mode</button>
+
+        <!-- Complete Particle Reference Table -->
+        <div class="particle-reference-container">
+          <h3>📋 Complete Particle Reference</h3>
+          <p class="reference-note">
+            All particles with their functions, positions, and examples from
+            your N5 sentences.
+            <span
+              style="background: #e8f5e9; padding: 2px 8px; border-radius: 12px"
+              >🟢 N5 Example</span
+            >
+            <span
+              style="background: #fff3e0; padding: 2px 8px; border-radius: 12px"
+              >🟡 Extra Example</span
+            >
+          </p>
+
+          <div class="particle-reference-grid">
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">は</div>
+              <div class="particle-ref-name">Topic Marker</div>
+              <div class="particle-ref-position">Position: After the topic</div>
+              <div class="particle-ref-desc">
+                Defines the topic of the sentence. Emphasizes information AFTER
+                は.
+              </div>
+              <div class="particle-ref-example" id="ref-example-wa"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">が</div>
+              <div class="particle-ref-name">Subject Marker</div>
+              <div class="particle-ref-position">
+                Position: After the subject
+              </div>
+              <div class="particle-ref-desc">
+                Defines the doer of the action. Emphasizes information BEFORE
+                が.
+              </div>
+              <div class="particle-ref-example" id="ref-example-ga"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">を</div>
+              <div class="particle-ref-name">Object Marker</div>
+              <div class="particle-ref-position">
+                Position: After the direct object
+              </div>
+              <div class="particle-ref-desc">
+                Marks the direct object of an action verb.
+              </div>
+              <div class="particle-ref-example" id="ref-example-wo"></div>
+            </div>
           </div>
-          <label>Sprint: <select id="quizSprintSelect"></select></label>
-          <label>Questions: <select id="quizCountSelect">
-            <option value="5">5 questions</option>
-            <option value="10" selected>10 questions</option>
-            <option value="15">15 questions</option>
-          </select></label>
-          <button id="startQuizBtn" class="action-btn">Start New Quiz</button>
+
+          <div class="particle-reference-grid">
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">に</div>
+              <div class="particle-ref-name">Time / Direction / Existence</div>
+              <div class="particle-ref-position">
+                Position: After time, destination, or location
+              </div>
+              <div class="particle-ref-desc">
+                Indicates specific time, direction of movement, or location of
+                existence.
+              </div>
+              <div class="particle-ref-example" id="ref-example-ni"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">で</div>
+              <div class="particle-ref-name">Location / Means</div>
+              <div class="particle-ref-position">
+                Position: After place of action or method/instrument
+              </div>
+              <div class="particle-ref-desc">
+                Indicates where an action takes place or the means by which
+                something is done.
+              </div>
+              <div class="particle-ref-example" id="ref-example-de"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">へ</div>
+              <div class="particle-ref-name">Direction Marker</div>
+              <div class="particle-ref-position">
+                Position: After direction of movement
+              </div>
+              <div class="particle-ref-desc">
+                Indicates the general direction of movement (pronounced "e").
+              </div>
+              <div class="particle-ref-example" id="ref-example-e"></div>
+            </div>
+          </div>
+
+          <div class="particle-reference-grid">
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">と</div>
+              <div class="particle-ref-name">And / With</div>
+              <div class="particle-ref-position">
+                Position: Between nouns (and) or after person (with)
+              </div>
+              <div class="particle-ref-desc">
+                Connects nouns or indicates accompaniment.
+              </div>
+              <div class="particle-ref-example" id="ref-example-to"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">から</div>
+              <div class="particle-ref-name">Origin / From</div>
+              <div class="particle-ref-position">
+                Position: After starting point (time or place)
+              </div>
+              <div class="particle-ref-desc">
+                Indicates origin, starting point in time or space.
+              </div>
+              <div class="particle-ref-example" id="ref-example-kara"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">まで</div>
+              <div class="particle-ref-name">Until / To</div>
+              <div class="particle-ref-position">
+                Position: After end point (time or place)
+              </div>
+              <div class="particle-ref-desc">
+                Indicates an end point in time or space.
+              </div>
+              <div class="particle-ref-example" id="ref-example-made"></div>
+            </div>
+          </div>
+
+          <div class="particle-reference-grid">
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">の</div>
+              <div class="particle-ref-name">Possession / Linking</div>
+              <div class="particle-ref-position">
+                Position: Between two nouns (A の B)
+              </div>
+              <div class="particle-ref-desc">
+                Connects nouns to show possession, description, or relationship.
+              </div>
+              <div class="particle-ref-example" id="ref-example-no"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">も</div>
+              <div class="particle-ref-name">Also / Even</div>
+              <div class="particle-ref-position">
+                Position: Replaces は, が, を; adds to other particles
+              </div>
+              <div class="particle-ref-desc">
+                Indicates "also", "too", or "even".
+              </div>
+              <div class="particle-ref-example" id="ref-example-mo"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">か</div>
+              <div class="particle-ref-name">Question / Or</div>
+              <div class="particle-ref-position">
+                Position: At end of sentence (question) or between nouns (or)
+              </div>
+              <div class="particle-ref-desc">
+                Marks a question or indicates choice ("or").
+              </div>
+              <div class="particle-ref-example" id="ref-example-ka"></div>
+            </div>
+          </div>
+
+          <div class="particle-reference-grid">
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">よ</div>
+              <div class="particle-ref-name">Emphasis</div>
+              <div class="particle-ref-position">Position: End of sentence</div>
+              <div class="particle-ref-desc">
+                Adds emphasis, certainty, or new information.
+              </div>
+              <div class="particle-ref-example" id="ref-example-yo"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">ね</div>
+              <div class="particle-ref-name">Confirmation</div>
+              <div class="particle-ref-position">Position: End of sentence</div>
+              <div class="particle-ref-desc">
+                Seeks agreement or confirmation ("isn't it?", "right?").
+              </div>
+              <div class="particle-ref-example" id="ref-example-ne"></div>
+            </div>
+
+            <div class="particle-ref-card">
+              <div class="particle-ref-char">や</div>
+              <div class="particle-ref-name">Partial Listing</div>
+              <div class="particle-ref-position">Position: Between nouns</div>
+              <div class="particle-ref-desc">
+                Lists examples ("things like...", "such as...").
+              </div>
+              <div class="particle-ref-example" id="ref-example-ya"></div>
+            </div>
+          </div>
         </div>
       </div>
-      
-      <!-- Quiz Area -->
-      <div id="quizArea" class="quiz-area">
-        <p class="quiz-welcome">Select mode, sprint, and number of questions, then click "Start New Quiz"</p>
-      </div>
-      
-      <!-- Quiz Results -->
-      <div id="quizResults" class="quiz-results" style="display: none;"></div>
-      
-    </div>
-  </div>
-  
-</div>
 
-<script src="js/data/sprints.js"></script>
-<script src="js/data/sentences.js"></script>
-<script src="js/data/particlesData.js"></script>
-<script src="js/utils/helpers.js"></script>
-<script src="js/utils/furigana.js"></script>
-<script src="js/utils/tooltips.js"></script>
-<script src="js/utils/particleExtractor.js"></script>
-<script src="js/modules/audio.js"></script>
-<script src="js/modules/particles.js"></script>
-<script src="js/utils/kanaHelper.js"></script>
-<script src="js/modules/kanji-stroke.js"></script>
-<script src="js/modules/kanji-helper.js"></script>
-</body>
+      <!-- Tab 2: Learn -->
+      <div id="tabLearn" class="tab-content">
+        <div id="learnContent"></div>
+      </div>
+
+      <!-- Tab 3: Individual Particles -->
+      <div id="tabParticles" class="tab-content">
+        <div class="particle-nav" id="particleNav"></div>
+        <div id="particleDetails" class="particle-details"></div>
+      </div>
+
+      <!-- Tab 4: Confusing Pairs -->
+      <div id="tabPairs" class="tab-content">
+        <div id="pairDetails" class="pair-details"></div>
+      </div>
+
+      <!-- Tab 5: Quiz -->
+      <div id="tabQuiz" class="tab-content">
+        <div class="quiz-container">
+          <!-- Stats Panel -->
+          <div class="quiz-stats-panel" id="quizStatsPanel">
+            <div class="stat-item">
+              <span class="stat-label">📊 Score:</span>
+              <span class="stat-value" id="quizRunningScore">0.0</span>
+              <span class="stat-label"
+                >/ <span id="quizTotalPossible">0</span></span
+              >
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">🏆 Mastered Particles:</span>
+              <span class="stat-value" id="quizMasteredCount">0</span>
+              <span class="stat-label"
+                >/ <span id="quizTotalParticles">15</span></span
+              >
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">📚 Attempted Particles:</span>
+              <span class="stat-value" id="quizAttemptedCount">0</span>
+              <span class="stat-label"
+                >/ <span id="quizTotalParticles2">15</span></span
+              >
+            </div>
+            <div class="stat-help-icon" id="statHelpIcon">ⓘ</div>
+          </div>
+
+          <!-- Stats Explanation (hidden initially) -->
+          <div
+            id="quizStatsExplanation"
+            class="stats-explanation"
+            style="display: none"
+          >
+            <h4>📖 How Scoring Works</h4>
+            <ul>
+              <li>
+                <strong>✓ 1st attempt correct</strong> → +1 point & particle
+                mastered
+              </li>
+              <li>
+                <strong>✓ 2nd attempt correct</strong> → +0.5 points (no
+                mastery)
+              </li>
+              <li>
+                <strong>📖 Used "Show Answer"</strong> → 0 points (no mastery)
+              </li>
+              <li>
+                <strong>❌ Wrong both attempts</strong> → 0 points (no mastery)
+              </li>
+              <li>
+                <strong>🏆 Mastered</strong> = Correct on 1st attempt only
+              </li>
+              <li><strong>📚 Attempted</strong> = Ever seen (studied)</li>
+            </ul>
+            <button id="closeStatsHelp" class="small-btn">Got it</button>
+          </div>
+
+          <!-- Quiz Header -->
+          <div class="quiz-header">
+            <h3>📝 Particle Quiz</h3>
+            <div class="quiz-instructions">
+              <p>
+                <strong>Easy Mode:</strong> Select the missing particle from the
+                buttons below.
+              </p>
+              <p>
+                <strong>Hard Mode:</strong> Choose the correct particle for each
+                blank using the dropdown menus.
+              </p>
+            </div>
+            <div class="quiz-settings">
+              <div class="quiz-mode-selector">
+                <label>Mode:</label>
+                <button id="quizEasyModeBtn" class="mode-btn active">
+                  🎯 Easy Mode
+                </button>
+                <button id="quizHardModeBtn" class="mode-btn">
+                  🔥 Hard Mode
+                </button>
+              </div>
+              <label
+                >Sprint:
+                <select id="quizSprintSelect"></select
+              ></label>
+              <label
+                >Questions:
+                <select id="quizCountSelect">
+                  <option value="5">5 questions</option>
+                  <option value="10" selected>10 questions</option>
+                  <option value="15">15 questions</option>
+                </select></label
+              >
+              <button id="startQuizBtn" class="action-btn">
+                Start New Quiz
+              </button>
+            </div>
+          </div>
+
+          <!-- Quiz Area -->
+          <div id="quizArea" class="quiz-area">
+            <p class="quiz-welcome">
+              Select mode, sprint, and number of questions, then click "Start
+              New Quiz"
+            </p>
+          </div>
+
+          <!-- Quiz Results -->
+          <div
+            id="quizResults"
+            class="quiz-results"
+            style="display: none"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data/sprints.js"></script>
+    <script src="js/data/sentences.js"></script>
+    <script src="js/data/particlesData.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/furigana.js"></script>
+    <script src="js/utils/tooltips.js"></script>
+    <script src="js/utils/particleExtractor.js"></script>
+    <script src="js/modules/audio.js"></script>
+    <script src="js/data/wordDict.js"></script>
+    <script src="js/modules/particles.js"></script>
+    <script src="js/utils/kanaHelper.js"></script>
+    <script src="js/modules/kanji-stroke.js"></script>
+    <script src="js/modules/kanji-helper.js"></script>
+  </body>
 </html>

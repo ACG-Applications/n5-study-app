@@ -50,95 +50,90 @@ sprintSelect.addEventListener('change', (e) => {
   }
 });
 
-// Mastered Controls
-document.getElementById('showMasteredBtn').onclick = () => { 
-  showMastered = true; 
-  if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
-};
-document.getElementById('hideMasteredBtn').onclick = () => { 
-  showMastered = false; 
-  if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
-};
-document.getElementById('resetMasteredBtn').onclick = () => { 
-  resetMastered(); 
-  if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
-};
-
-// CSV Export
-document.getElementById('csvBtn').onclick = () => {
-  let csv = [["Sentence","Reading","Translation","Grammar"]];
-  sentencesData.forEach(s => csv.push([s.jp, s.reading, s.translation, s.grammarHint || ""]));
-  const blob = new Blob(["\uFEFF" + csv.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n")], {type: "text/csv"});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `n5_sentences_${sprints[activeSprintIndex].name}.csv`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-};
-
-// Export/Import Mastered Data
-document.getElementById('exportMasteredBtn').onclick = () => {
-  const data = JSON.stringify([...masteredSet]);
-  const blob = new Blob([data], {type: "application/json"});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = "n5_mastered_backup.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
-};
-
-document.getElementById('importMasteredBtn').onclick = () => {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
-  input.onchange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const imported = JSON.parse(event.target.result);
-        masteredSet = new Set(imported);
-        saveMastered();
-        updateProgressDisplay();
-        if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
-        alert(`Imported ${masteredSet.size} mastered items!`);
-      } catch (err) {
-        alert('Invalid file format');
-      }
-    };
-    reader.readAsText(file);
+// Mastered Controls - Check if elements exist before setting onclick
+const showMasteredBtn = document.getElementById('showMasteredBtn');
+if (showMasteredBtn) {
+  showMasteredBtn.onclick = () => { 
+    showMastered = true; 
+    if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
   };
-  input.click();
-};
+}
 
-// Print Button - Opens Print Modal
-const printModal = document.getElementById('printModal');
-document.getElementById('printBtn').onclick = () => {
-  printModal.style.display = 'flex';
-};
-document.getElementById('closePrintBtn').onclick = () => {
-  printModal.style.display = 'none';
-};
+const hideMasteredBtn = document.getElementById('hideMasteredBtn');
+if (hideMasteredBtn) {
+  hideMasteredBtn.onclick = () => { 
+    showMastered = false; 
+    if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+  };
+}
 
-// Print Options
-document.getElementById('printKanjiOnlyBtn').onclick = () => {
-  printModal.style.display = 'none';
-  const sentences = getCurrentSprintSentences();
-  if (!sentences.length) { alert('No sentences to print!'); return; }
-  openPrintWindow(generatePrintContent(sentences, false, false), 'N5 Writing Practice - Kanji Only');
-};
-document.getElementById('printWithFuriganaBtn').onclick = () => {
-  printModal.style.display = 'none';
-  const sentences = getCurrentSprintSentences();
-  if (!sentences.length) { alert('No sentences to print!'); return; }
-  openPrintWindow(generatePrintContent(sentences, true, false), 'N5 Writing Practice - with Furigana');
-};
-document.getElementById('printWithTranslationBtn').onclick = () => {
-  printModal.style.display = 'none';
-  const sentences = getCurrentSprintSentences();
-  if (!sentences.length) { alert('No sentences to print!'); return; }
-  openPrintWindow(generatePrintContent(sentences, false, true), 'N5 Writing Practice - with Translation');
-};
+const resetMasteredBtn = document.getElementById('resetMasteredBtn');
+if (resetMasteredBtn) {
+  resetMasteredBtn.onclick = () => { 
+    resetMastered(); 
+    if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+  };
+}
+
+// CSV Export - Check if element exists
+const csvBtn = document.getElementById('csvBtn');
+if (csvBtn) {
+  csvBtn.onclick = () => {
+    let csv = [["Sentence","Reading","Translation","Grammar"]];
+    sentencesData.forEach(s => csv.push([s.jp, s.reading, s.translation, s.grammarHint || ""]));
+    const blob = new Blob(["\uFEFF" + csv.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n")], {type: "text/csv"});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `n5_sentences_${sprints[activeSprintIndex].name}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+}
+
+// Export/Import Mastered Data - Check if elements exist
+const exportMasteredBtn = document.getElementById('exportMasteredBtn');
+if (exportMasteredBtn) {
+  exportMasteredBtn.onclick = () => {
+    const data = JSON.stringify([...masteredSet]);
+    const blob = new Blob([data], {type: "application/json"});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = "n5_mastered_backup.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+}
+
+const importMasteredBtn = document.getElementById('importMasteredBtn');
+if (importMasteredBtn) {
+  importMasteredBtn.onclick = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const imported = JSON.parse(event.target.result);
+          masteredSet = new Set(imported);
+          saveMastered();
+          updateProgressDisplay();
+          if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+          alert(`Imported ${masteredSet.size} mastered items!`);
+        } catch (err) {
+          alert('Invalid file format');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+}
+
+// ========== PRINT FUNCTIONALITY REMOVED - Now handled by print.js ==========
+// The print button and modal are now controlled by print.js
+// This prevents conflicts with the new print module
 
 // Initialize App
 function init() {

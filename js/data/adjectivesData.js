@@ -22,7 +22,7 @@ const adjectivesData = [
             adverbial: "暑（あつ）く"
         },
         examples: [
-            { sentence: "今日（きょう）はとても暑（あつ）いです", reading: "きょうはとてもあついです", english: "Today is very hot." }
+            { sentence: "今日（きょう） は とても 暑（あつ）い です", reading: "きょう は とても あつい です", english: "Today is very hot." }
         ]
     },
     {
@@ -44,7 +44,7 @@ const adjectivesData = [
             adverbial: "寒（さむ）く"
         },
         examples: [
-            { sentence: "明日（あした）は寒（さむ）くなるでしょう", reading: "あしたはさむくなるでしょう", english: "It will probably get cold tomorrow." }
+            { sentence: "明日（あした） は 寒（さむ）く なる でしょう", reading: "あした は さむく なる でしょう", english: "It will probably get cold tomorrow." }
         ]
     },
     {
@@ -66,7 +66,7 @@ const adjectivesData = [
             adverbial: "熱（あつ）く"
         },
         examples: [
-            { sentence: "スープが熱（あつ）いです", reading: "すーぷがあついです", english: "The soup is hot." }
+            { sentence: "スープ が 熱（あつ）い です", reading: "すーぷ が あつい です", english: "The soup is hot." }
         ]
     },
     {
@@ -88,7 +88,7 @@ const adjectivesData = [
             adverbial: "冷（つめ）たく"
         },
         examples: [
-            { sentence: "夏（なつ）は冷（つめ）たいアイスクリームが一番好（いちばんす）きです", reading: "なつはつめたいあいすくりーむがいちばんすきです", english: "In summer, I like cold ice cream the most." }
+            { sentence: "夏（なつ） は 冷（つめ）たい アイスクリーム が 一番（いちばん） 好（す）き です", reading: "なつ は つめたい あいすくりーむ が いちばん すき です", english: "In summer, I like cold ice cream the most." }
         ]
     },
     {
@@ -110,7 +110,7 @@ const adjectivesData = [
             adverbial: "大（おお）きく"
         },
         examples: [
-            { sentence: "この町（まち）には大（おお）きな図書館（としょかん）があります", reading: "このまちにはおおきなとしょかんがあります", english: "There is a big library in this town." }
+            { sentence: "この 町（まち） に は 大（おお）きな 図書館（としょかん） が あります", reading: "この まち に は おおきな としょかん が あります", english: "There is a big library in this town." }
         ]
     },
     {
@@ -132,7 +132,7 @@ const adjectivesData = [
             adverbial: "小（ちい）さく"
         },
         examples: [
-            { sentence: "公園（こうえん）で小（ちい）さい犬（いぬ）を見（み）ました", reading: "こうえんでちいさいいぬをみました", english: "I saw a small dog in the park." }
+            { sentence: "公園（こうえん） で 小（ちい）さい 犬（いぬ） を 見（み）ました", reading: "こうえん で ちいさい いぬ を みました", english: "I saw a small dog in the park." }
         ]
     },
     {
@@ -154,7 +154,7 @@ const adjectivesData = [
             adverbial: "新（あたら）しく"
         },
         examples: [
-            { sentence: "新（あたら）しい隣人（りんじん）はとても親切（しんせつ）です", reading: "あたらしいりんじんはとてもしんせつです", english: "The new neighbor is very kind." }
+            { sentence: "新（あたら）しい 隣人（りんじん） は とても 親切（しんせつ） です", reading: "あたらしい りんじん は とても しんせつ です", english: "The new neighbor is very kind." }
         ]
     },
     {
@@ -176,7 +176,7 @@ const adjectivesData = [
             adverbial: "古（ふる）く"
         },
         examples: [
-            { sentence: "この町（まち）には古（ふる）い建物（たてもの）があります", reading: "このまちにはふるいたてものがあります", english: "There are old buildings in this town." }
+            { sentence: "この 町（まち） に は 古（ふる）い 建物（たてもの） が あります", reading: "この まち に は ふるい たてもの が あります", english: "There are old buildings in this town." }
         ]
     },
     {
@@ -198,7 +198,7 @@ const adjectivesData = [
             adverbial: "高（たか）く"
         },
         examples: [
-            { sentence: "新幹線（しんかんせん）は速（はや）いですが少（すこ）し高（たか）いです", reading: "しんかんせんははやいですがすこしたかいです", english: "The Shinkansen is fast but a little expensive." }
+            { sentence: "新幹線（しんかんせん） は 速（はや）い です が 少（すこ）し 高（たか）い です", reading: "しんかんせん は はやい です が すこし たかい です", english: "The Shinkansen is fast but a little expensive." }
         ]
     },
     {
@@ -220,7 +220,7 @@ const adjectivesData = [
             adverbial: "安（やす）く"
         },
         examples: [
-            { sentence: "もっと安（やす）いのはありませんか", reading: "もっとやすいのはありませんか", english: "Don't you have something cheaper?" }
+            { sentence: "もっと 安（やす）い の は ありません か", reading: "もっと やすい の は ありません か", english: "Don't you have something cheaper?" }
         ]
     },
     {
@@ -242,7 +242,7 @@ const adjectivesData = [
             adverbial: "美味（おい）しく"
         },
         examples: [
-            { sentence: "この料理（りょうり）は少（すこ）し辛（から）いですが美味（おい）しいです", reading: "このりょうりはすこしからいですがおいしいです", english: "This dish is a little spicy but delicious." }
+            { sentence: "この 料理（りょうり） は 少（すこ）し 辛（から）い です が 美味（おい）しい です", reading: "この りょうり は すこし からい です が おいしい です", english: "This dish is a little spicy but delicious." }
         ]
     },
     {
@@ -264,7 +264,7 @@ const adjectivesData = [
             adverbial: "まずく"
         },
         examples: [
-            { sentence: "この薬（くすり）はまずいです", reading: "このくすりはまずいです", english: "This medicine tastes bad." }
+            { sentence: "この 薬（くすり） は まずい です", reading: "この くすり は まずい です", english: "This medicine tastes bad." }
         ]
     },
     {
@@ -286,7 +286,7 @@ const adjectivesData = [
             adverbial: "速（はや）く"
         },
         examples: [
-            { sentence: "飛行機（ひこうき）は速（はや）いですが少（すこ）し高（たか）いです", reading: "ひこうきははやいですがすこしたかいです", english: "The airplane is fast but a little expensive." }
+            { sentence: "飛行機（ひこうき） は 速（はや）い です が 少（すこ）し 高（たか）い です", reading: "ひこうき は はやい です が すこし たかい です", english: "The airplane is fast but a little expensive." }
         ]
     },
     {
@@ -308,7 +308,7 @@ const adjectivesData = [
             adverbial: "遅（おそ）く"
         },
         examples: [
-            { sentence: "電車（でんしゃ）が遅（おそ）れています", reading: "でんしゃがおくれています", english: "The train is late." }
+            { sentence: "電車（でんしゃ） が 遅（おそ）れ ています", reading: "でんしゃ が おくれ ています", english: "The train is late." }
         ]
     },
     {
@@ -330,7 +330,7 @@ const adjectivesData = [
             adverbial: "楽（たの）しく"
         },
         examples: [
-            { sentence: "日本語（にほんご）の授業（じゅぎょう）は楽（たの）しいです", reading: "にほんごのじゅぎょうはたのしいです", english: "Japanese class is fun." }
+            { sentence: "日本語（にほんご） の 授業（じゅぎょう） は 楽（たの）しい です", reading: "にほんご の じゅぎょう は たのしい です", english: "Japanese class is fun." }
         ]
     },
     {
@@ -352,7 +352,7 @@ const adjectivesData = [
             adverbial: "辛（つら）く"
         },
         examples: [
-            { sentence: "仕事（しごと）が辛（つら）いです", reading: "しごとがつらいです", english: "Work is hard." }
+            { sentence: "仕事（しごと） が 辛（つら）い です", reading: "しごと が つらい です", english: "Work is hard." }
         ]
     },
     {
@@ -374,7 +374,7 @@ const adjectivesData = [
             adverbial: "軽（かる）く"
         },
         examples: [
-            { sentence: "この荷物（にもつ）は軽（かる）いです", reading: "このにもつはかるいです", english: "This luggage is light." }
+            { sentence: "この 荷物（にもつ） は 軽（かる）い です", reading: "この にもつ は かるい です", english: "This luggage is light." }
         ]
     },
     {
@@ -396,7 +396,7 @@ const adjectivesData = [
             adverbial: "重（おも）く"
         },
         examples: [
-            { sentence: "この荷物（にもつ）は重（おも）いです", reading: "このにもつはおもいです", english: "This luggage is heavy." }
+            { sentence: "この 荷物（にもつ） は 重（おも）い です", reading: "この にもつ は おもい です", english: "This luggage is heavy." }
         ]
     },
     {
@@ -418,7 +418,7 @@ const adjectivesData = [
             adverbial: "広（ひろ）く"
         },
         examples: [
-            { sentence: "この部屋（へや）は広（ひろ）いです", reading: "このへやはひろいです", english: "This room is spacious." }
+            { sentence: "この 部屋（へや） は 広（ひろ）い です", reading: "この へや は ひろい です", english: "This room is spacious." }
         ]
     },
     {
@@ -440,7 +440,7 @@ const adjectivesData = [
             adverbial: "狭（せま）く"
         },
         examples: [
-            { sentence: "キッチンは狭（せま）いですが綺麗（きれい）です", reading: "きっちんはせまいですがきれいです", english: "The kitchen is small but clean." }
+            { sentence: "キッチン は 狭（せま）い です が 綺麗（きれい） です", reading: "きっちん は せまい です が きれい です", english: "The kitchen is small but clean." }
         ]
     },
     {
@@ -462,7 +462,7 @@ const adjectivesData = [
             adverbial: "難（むずか）しく"
         },
         examples: [
-            { sentence: "発音（はつおん）が難（むずか）しいです", reading: "はつおんがむずかしいです", english: "Pronunciation is difficult." }
+            { sentence: "発音（はつおん） が 難（むずか）しい です", reading: "はつおん が むずかしい です", english: "Pronunciation is difficult." }
         ]
     },
     {
@@ -484,7 +484,7 @@ const adjectivesData = [
             adverbial: "易（やさ）しく"
         },
         examples: [
-            { sentence: "この問題（もんだい）は易（やさ）しいです", reading: "このもんだいはやさしいです", english: "This problem is easy." }
+            { sentence: "この 問題（もんだい） は 易（やさ）しい です", reading: "この もんだい は やさしい です", english: "This problem is easy." }
         ]
     },
     {
@@ -506,7 +506,7 @@ const adjectivesData = [
             adverbial: "忙（いそが）しく"
         },
         examples: [
-            { sentence: "忙（いそが）しいですか", reading: "いそがしいですか", english: "Are you busy?" }
+            { sentence: "忙（いそが）しい です か", reading: "いそがしい です か", english: "Are you busy?" }
         ]
     },
 
@@ -530,7 +530,7 @@ const adjectivesData = [
             adverbial: "静（しず）かに"
         },
         examples: [
-            { sentence: "この辺（へん）は静（しず）かでいいですね", reading: "このへんはしずかでいいですね", english: "This area is quiet and nice." }
+            { sentence: "この 辺（へん） は 静（しず）か で いい です ね", reading: "この へん は しずか で いい です ね", english: "This area is quiet and nice." }
         ]
     },
     {
@@ -552,7 +552,7 @@ const adjectivesData = [
             adverbial: "賑（にぎ）やかに"
         },
         examples: [
-            { sentence: "東京（とうきょう）は賑（にぎ）やかな街（まち）です", reading: "とうきょうはにぎやかなまちです", english: "Tokyo is a lively city." }
+            { sentence: "東京（とうきょう） は 賑（にぎ）やかな 街（まち） です", reading: "とうきょう は にぎやかな まち です", english: "Tokyo is a lively city." }
         ]
     },
     {
@@ -574,7 +574,7 @@ const adjectivesData = [
             adverbial: "綺麗（きれい）に"
         },
         examples: [
-            { sentence: "彼女（かのじょ）は綺麗（きれい）な声（こえ）で歌（うた）います", reading: "かのじょはきれいなこえでうたいます", english: "She sings with a beautiful voice." }
+            { sentence: "彼女（かのじょ） は 綺麗（きれい）な 声（こえ） で 歌（うた）います", reading: "かのじょ は きれいな こえ で うたいます", english: "She sings with a beautiful voice." }
         ]
     },
     {
@@ -596,7 +596,7 @@ const adjectivesData = [
             adverbial: "有名（ゆうめい）に"
         },
         examples: [
-            { sentence: "このレストランは有名（ゆうめい）です", reading: "このれすとらんはゆうめいです", english: "This restaurant is famous." }
+            { sentence: "この レストラン は 有名（ゆうめい） です", reading: "この れすとらん は ゆうめい です", english: "This restaurant is famous." }
         ]
     },
     {
@@ -618,7 +618,7 @@ const adjectivesData = [
             adverbial: "親切（しんせつ）に"
         },
         examples: [
-            { sentence: "店員（てんいん）さんは親切（しんせつ）に説明（せつめい）してくれました", reading: "てんいんさんはしんせつにせつめいしてくれました", english: "The clerk kindly explained for me." }
+            { sentence: "店員（てんいん）さん は 親切（しんせつ） に 説明（せつめい）して くれました", reading: "てんいんさん は しんせつ に せつめいして くれました", english: "The clerk kindly explained for me." }
         ]
     },
     {
@@ -640,7 +640,7 @@ const adjectivesData = [
             adverbial: "元気（げんき）に"
         },
         examples: [
-            { sentence: "お元気（げんき）ですか", reading: "おげんきですか", english: "How are you?" }
+            { sentence: "お 元気（げんき） です か", reading: "お げんき です か", english: "How are you?" }
         ]
     },
     {
@@ -662,7 +662,7 @@ const adjectivesData = [
             adverbial: "好（す）きに"
         },
         examples: [
-            { sentence: "夏（なつ）は冷（つめ）たいアイスクリームが一番（いちばん）好（す）きです", reading: "なつはつめたいあいすくりーむがいちばんすきです", english: "In summer, I like cold ice cream the most." }
+            { sentence: "夏（なつ） は 冷（つめ）たい アイスクリーム が 一番（いちばん） 好（す）き です", reading: "なつ は つめたい あいすくりーむ が いちばん すき です", english: "In summer, I like cold ice cream the most." }
         ]
     },
     {
@@ -684,7 +684,7 @@ const adjectivesData = [
             adverbial: "大好（だいす）きに"
         },
         examples: [
-            { sentence: "両親（りょうしん）は旅行（りょこう）が大好（だいす）きです", reading: "りょうしんはりょこうがだいすきです", english: "My parents love traveling." }
+            { sentence: "両親（りょうしん） は 旅行（りょこう） が 大好（だいす）き です", reading: "りょうしん は りょこう が だいすき です", english: "My parents love traveling." }
         ]
     },
     {
@@ -706,7 +706,7 @@ const adjectivesData = [
             adverbial: "嫌（きら）いに"
         },
         examples: [
-            { sentence: "野菜（やさい）が嫌（きら）いです", reading: "やさいがきらいです", english: "I dislike vegetables." }
+            { sentence: "野菜（やさい） が 嫌（きら）い です", reading: "やさい が きらい です", english: "I dislike vegetables." }
         ]
     },
     {
@@ -728,7 +728,7 @@ const adjectivesData = [
             adverbial: "上手（じょうず）に"
         },
         examples: [
-            { sentence: "ダンスを踊（おど）るのが上手（じょうず）です", reading: "だんすをおどるのがじょうずです", english: "I'm good at dancing." }
+            { sentence: "ダンス を 踊（おど）る の が 上手（じょうず） です", reading: "だんす を おどる の が じょうず です", english: "I'm good at dancing." }
         ]
     },
     {
@@ -750,7 +750,7 @@ const adjectivesData = [
             adverbial: "下手（へた）に"
         },
         examples: [
-            { sentence: "歌（うた）うのが下手（へた）です", reading: "うたうのがへたです", english: "I'm bad at singing." }
+            { sentence: "歌（うた）う の が 下手（へた） です", reading: "うたう の が へた です", english: "I'm bad at singing." }
         ]
     },
     {
@@ -772,7 +772,7 @@ const adjectivesData = [
             adverbial: "便利（べんり）に"
         },
         examples: [
-            { sentence: "この電車（でんしゃ）は便利（べんり）です", reading: "このでんしゃはべんりです", english: "This train is convenient." }
+            { sentence: "この 電車（でんしゃ） は 便利（べんり） です", reading: "この でんしゃ は べんり です", english: "This train is convenient." }
         ]
     },
     {
@@ -794,7 +794,7 @@ const adjectivesData = [
             adverbial: "不便（ふべん）に"
         },
         examples: [
-            { sentence: "田舎（いなか）は不便（ふべん）です", reading: "いなかはふべんです", english: "The countryside is inconvenient." }
+            { sentence: "田舎（いなか） は 不便（ふべん） です", reading: "いなか は ふべん です", english: "The countryside is inconvenient." }
         ]
     },
     {
@@ -816,7 +816,7 @@ const adjectivesData = [
             adverbial: "大切（たいせつ）に"
         },
         examples: [
-            { sentence: "よく寝（ね）ることが大切（たいせつ）です", reading: "よくねることがたいせつです", english: "Getting enough sleep is important." }
+            { sentence: "よく 寝（ね）る こと が 大切（たいせつ） です", reading: "よく ねる こと が たいせつ です", english: "Getting enough sleep is important." }
         ]
     },
     {
@@ -838,7 +838,7 @@ const adjectivesData = [
             adverbial: "必要（ひつよう）に"
         },
         examples: [
-            { sentence: "手術（しゅじゅつ）が必要（ひつよう）です", reading: "しゅじゅつがひつようです", english: "Surgery is necessary." }
+            { sentence: "手術（しゅじゅつ） が 必要（ひつよう） です", reading: "しゅじゅつ が ひつよう です", english: "Surgery is necessary." }
         ]
     },
     {
@@ -860,7 +860,7 @@ const adjectivesData = [
             adverbial: "自由（じゆう）に"
         },
         examples: [
-            { sentence: "時間（じかん）が自由（じゆう）です", reading: "じかんがじゆうです", english: "My time is free." }
+            { sentence: "時間（じかん） が 自由（じゆう） です", reading: "じかん が じゆう です", english: "My time is free." }
         ]
     },
     {
@@ -882,7 +882,7 @@ const adjectivesData = [
             adverbial: "幸（しあわ）せに"
         },
         examples: [
-            { sentence: "彼女（かのじょ）の笑顔（えがお）を見（み）るだけで幸（しあわ）せです", reading: "かのじょのえがおをみるだけでしあわせです", english: "Just seeing her smile makes me happy." }
+            { sentence: "彼女（かのじょ） の 笑顔（えがお） を 見（み）る だけ で 幸（しあわ）せ です", reading: "かのじょ の えがお を みる だけ で しあわせ です", english: "Just seeing her smile makes me happy." }
         ]
     },
     {
@@ -904,7 +904,7 @@ const adjectivesData = [
             adverbial: "丈夫（じょうぶ）に"
         },
         examples: [
-            { sentence: "この鞄（かばん）は丈夫（じょうぶ）です", reading: "このかばんはじょうぶです", english: "This bag is durable." }
+            { sentence: "この 鞄（かばん） は 丈夫（じょうぶ） です", reading: "この かばん は じょうぶ です", english: "This bag is durable." }
         ]
     },
     {
@@ -926,7 +926,7 @@ const adjectivesData = [
             adverbial: "真面目（まじめ）に"
         },
         examples: [
-            { sentence: "彼（かれ）はとても真面目（まじめ）な人間（にんげん）です", reading: "かれはとてもまじめなにんげんです", english: "He is a very serious person." }
+            { sentence: "彼（かれ） は とても 真面目（まじめ）な 人間（にんげん） です", reading: "かれ は とても まじめな にんげん です", english: "He is a very serious person." }
         ]
     }
 ];

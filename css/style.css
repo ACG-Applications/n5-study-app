@@ -266,12 +266,57 @@ button.action-btn {
     color: #555;
 }
 
-/* Print options */
-.print-options {
+/* ===== PRINT OPTIONS (NEW) ===== */
+.print-option-group {
+    margin: 16px 0;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.print-option-group:last-of-type {
+    border-bottom: none;
+}
+
+.print-option-group h4 {
+    margin: 0 0 10px 0;
+    font-size: 15px;
+    color: #4a6741;
+    font-weight: 600;
+}
+
+.radio-group label {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    margin: 20px 0;
+    padding: 6px 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: color 0.2s;
+}
+
+.radio-group label:hover {
+    color: #4a6741;
+}
+
+.radio-group input[type="radio"],
+.radio-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #6c8b6b;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.radio-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+/* Print options in modal - override action-btn for inline use */
+.modal-card .action-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
 }
 
 /* ===== RESPONSIVE: TABLET (iPad, Lenovo, Samsung) ===== */
@@ -340,6 +385,17 @@ button.action-btn {
     .flash-jp {
         font-size: 1.4rem;
     }
+    
+    /* Print options mobile */
+    .modal-card .action-btn {
+        font-size: 0.85rem;
+        padding: 10px 16px;
+    }
+    
+    .radio-group label {
+        font-size: 13px;
+        padding: 4px 0;
+    }
 }
 
 /* ===== RESPONSIVE: PHONE ===== */
@@ -365,6 +421,14 @@ button.action-btn {
     .small-btn {
         padding: 6px 12px;
         font-size: 0.75rem;
+    }
+    
+    .modal-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    .print-option-group h4 {
+        font-size: 14px;
     }
 }
 

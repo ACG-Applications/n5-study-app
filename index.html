@@ -128,33 +128,89 @@
   </div>
 </div>
 
-<!-- Print Modal -->
+<!-- ===== UPDATED PRINT MODAL (DOCX removed) ===== -->
 <div id="printModal" class="modal">
-  <div class="modal-card" style="max-width: 400px;">
+  <div class="modal-card" style="max-width: 450px;">
     <h3>🖨️ Print Options</h3>
-    <div class="print-options">
-      <button id="printKanjiOnlyBtn" class="action-btn" style="width: 100%; margin-bottom: 10px;">📝 Kanji Only</button>
-      <button id="printWithFuriganaBtn" class="action-btn" style="width: 100%; margin-bottom: 10px;">📖 With Furigana</button>
-      <button id="printWithTranslationBtn" class="action-btn" style="width: 100%;">🌎 With Translation</button>
+    
+    <!-- Sentences Options -->
+    <div class="print-option-group">
+      <h4>📝 Sentences</h4>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="sentenceMode" value="kanji" checked>
+          Kanji Only
+        </label>
+        <label>
+          <input type="radio" name="sentenceMode" value="furigana">
+          With Furigana
+        </label>
+        <label>
+          <input type="radio" name="sentenceMode" value="translation">
+          With Translation
+        </label>
+      </div>
     </div>
-    <button id="closePrintBtn" class="small-btn" style="margin-top: 20px;">Cancel</button>
+    
+    <!-- Kanji Stroke Reference -->
+    <div class="print-option-group">
+      <h4>📖 Kanji Stroke Reference</h4>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label>
+          <input type="checkbox" id="includeKanjiStrokes">
+          Append stroke diagrams to sentences
+        </label>
+        <button id="printKanjiStrokesBtn" class="action-btn" style="padding: 8px 16px; font-size: 0.85rem; background: #8b6b6b; width: 100%;">
+          ✍️ Print Kanji Strokes Only
+        </button>
+        <span style="font-size: 11px; color: #999;">(Prints ONLY stroke order diagrams for this sprint)</span>
+      </div>
+    </div>
+    
+    <!-- Export Format -->
+    <div class="print-option-group">
+      <h4>📄 Export Format</h4>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="exportFormat" value="print" checked>
+          🖨️ Print
+        </label>
+        <label>
+          <input type="radio" name="exportFormat" value="pdf">
+          📥 PDF (Save as PDF in print dialog)
+        </label>
+      </div>
+      <p style="font-size: 11px; color: #999; margin-top: 8px;">
+        💡 For PDF: Select "Save as PDF" in the print dialog that appears.
+      </p>
+    </div>
+    
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+      <button id="printActionBtn" class="action-btn" style="flex: 1;">🖨️ Print / PDF</button>
+      <button id="cancelPrintBtn" class="small-btn">Cancel</button>
+    </div>
   </div>
 </div>
 
+<!-- 1. DATA - All data files together ✅ -->
 <script src="js/data/sprints.js"></script>
 <script src="js/data/sentences.js"></script>
 <script src="js/data/stories.js"></script>
-<script src="js/data/wordDict.js"></script>
+<script src="js/data/wordDict.js"></script>   <!-- ✅ Correct position! -->
+
+<!-- 2. UTILITIES ✅ -->
 <script src="js/utils/helpers.js"></script>
 <script src="js/utils/furigana.js"></script>
 <script src="js/utils/tooltips.js"></script>
+<script src="js/utils/kanaHelper.js"></script>
+
+<!-- 3. MODULES ✅ -->
 <script src="js/modules/audio.js"></script>
 <script src="js/modules/mastered.js"></script>
 <script src="js/modules/flashcards.js"></script>
 <script src="js/modules/storyMode.js"></script>
 <script src="js/modules/print.js"></script>
 <script src="js/modules/ui.js"></script>
-<script src="js/utils/kanaHelper.js"></script>
 <script src="js/modules/kanji-stroke.js"></script>
 <script src="js/modules/kanji-helper.js"></script>
 <script>

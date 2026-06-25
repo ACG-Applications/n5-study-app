@@ -3,15 +3,23 @@
 
 let currentPrintMode = 'kanji'; // 'kanji', 'furigana', 'translation'
 
-// Get SVG filename for a kanji (5-digit format)
+// Print options state
+const printOptions = {
+    sentenceMode: 'kanji', // 'kanji' | 'furigana' | 'translation'
+    includeKanjiStrokes: false,
+    exportFormat: 'print' // 'print' | 'pdf'
+};
+
+// ==================== PRINT FUNCTIONS ====================
+
+// Get SVG filename for a kanji (5-digit format - UPPERCASE)
 function getSvgFilename(kanji) {
-    const unicode = kanji.codePointAt(0).toString(16);
+    const unicode = kanji.codePointAt(0).toString(16).toUpperCase();
     return unicode.padStart(5, '0') + '.svg';
 }
 
 // Extract all unique kanji from a sentence
 function extractKanji(sentence) {
-    // Match any CJK Unified Ideograph (kanji)
     const kanjiRegex = /[\u4e00-\u9faf\u3400-\u4dbf]/g;
     const matches = sentence.match(kanjiRegex);
     return matches ? [...new Set(matches)] : [];
@@ -31,7 +39,7 @@ function extractAllKanji(sentences) {
     return allKanji;
 }
 
-// Get reading for a kanji (for display)
+// Get reading for a kanji
 function getKanjiReading(kanji) {
     if (typeof kanjiData !== 'undefined') {
         const entry = kanjiData.find(k => k.kanji === kanji);
@@ -53,15 +61,11 @@ function getKanjiMeaning(kanji) {
     return '';
 }
 
-// Generate kanji reference table HTML
+// Generate kanji reference table HTML with improved pagination
 function generateKanjiTableHtml(kanjiList) {
-    if (!kanjiList || kanjiList.length === 0) {
-        return '';
-    }
+    if (!kanjiList || kanjiList.length === 0) return '';
     
-    // Sort kanji by stroke count (if available) or by Unicode
     const sortedKanji = [...kanjiList].sort((a, b) => {
-        // Try to sort by stroke count from known data
         const strokeCounts = {
             '一': 1, '二': 2, '三': 3, '四': 5, '五': 4, '六': 4, '七': 2, '八': 2, '九': 2, '十': 2,
             '日': 4, '月': 4, '火': 4, '水': 4, '木': 4, '金': 8, '土': 3, '本': 5, '人': 2, '子': 3,
@@ -78,14 +82,13 @@ function generateKanjiTableHtml(kanjiList) {
         return (strokeCounts[a] || 99) - (strokeCounts[b] || 99);
     });
     
-    // Create table with 4 columns
-    let html = `
-        <div class="print-kanji-reference">
+    let html = `<div class="print-kanji-reference">
             <h3>📖 Kanji Reference (Stroke Order)</h3>
-            <div class="kanji-reference-grid">
-    `;
+            <div class="kanji-reference-grid">`;
     
-    for (const kanji of sortedKanji) {
+    // Group kanji into rows of 4 for better pagination
+    for (let i = 0; i < sortedKanji.length; i++) {
+        const kanji = sortedKanji[i];
         const svgFilename = getSvgFilename(kanji);
         const svgPath = `images/kanji-strokes/${svgFilename}`;
         const meaning = getKanjiMeaning(kanji) || '';
@@ -100,316 +103,428 @@ function generateKanjiTableHtml(kanjiList) {
                 </div>
                 <div class="kanji-reference-meaning">${meaning}</div>
                 <div class="kanji-reference-reading">${reading}</div>
-            </div>
-        `;
+            </div>`;
     }
     
-    html += `
-            </div>
-        </div>
-    `;
-    
+    html += `</div></div>`;
     return html;
 }
 
-// Print function - generates HTML for printing
-function printSprint(sprintIndex, showFurigana, showTranslation) {
+// Generate print HTML content with improved pagination
+function generatePrintHTML(sprintIndex, options, isKanjiOnly = false) {
     if (typeof sprints === 'undefined' || typeof sentencesData === 'undefined') {
         console.error('Required data not loaded');
-        return;
+        return null;
     }
     
     const sprint = sprints[sprintIndex];
-    if (!sprint) return;
+    if (!sprint) return null;
     
     const { start, end } = sprint;
     const title = sprint.name;
     
-    // Get sentences for this sprint
     const sentences = [];
     for (let i = start; i <= end; i++) {
-        if (sentencesData[i]) {
-            sentences.push(sentencesData[i]);
-        }
+        if (sentencesData[i]) sentences.push(sentencesData[i]);
     }
     
-    // Extract all unique kanji from these sentences
     const allKanji = extractAllKanji(sentences);
     
-    // Build print HTML
-    let printHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>N5 Japanese - ${title}</title>
-            <style>
-                body {
-                    font-family: 'Segoe UI', 'Noto Sans', 'Hiragino Kaku Gothic Pro', sans-serif;
-                    max-width: 900px;
-                    margin: 0 auto;
-                    padding: 40px 20px;
-                    background: white;
-                    font-size: 14px;
-                    line-height: 1.5;
+    let printHtml = `<!DOCTYPE html>
+        <html><head><meta charset="UTF-8"><title>N5 Japanese - ${title}</title>
+        <style>
+            /* Page setup */
+            @page {
+                size: A4;
+                margin: 15mm 12mm 15mm 12mm;
+            }
+            
+            body { 
+                font-family: 'Segoe UI', 'Noto Sans', 'Hiragino Kaku Gothic Pro', sans-serif; 
+                max-width: 1000px; 
+                margin: 0 auto; 
+                padding: 20px; 
+                background: white; 
+                font-size: 14px; 
+                line-height: 1.5; 
+                color: #2c3e2f;
+            }
+            
+            h1 { 
+                text-align: center; 
+                color: #2c3e2f; 
+                border-bottom: 2px solid #6c8b6b; 
+                padding-bottom: 10px; 
+                margin-bottom: 10px;
+                font-size: 24px;
+            }
+            
+            .sprint-title { 
+                text-align: center; 
+                color: #6c8b6b; 
+                margin-bottom: 25px; 
+                font-size: 18px;
+            }
+            
+            .sentence-list { 
+                margin-bottom: 30px; 
+            }
+            
+            .sentence-item { 
+                margin-bottom: 15px; 
+                padding: 8px 10px; 
+                border-bottom: 1px solid #eee; 
+                page-break-inside: avoid;
+            }
+            
+            .sentence-jp { 
+                font-size: 16px; 
+                margin-bottom: 3px; 
+            }
+            
+            .sentence-en { 
+                font-size: 13px; 
+                color: #666; 
+            }
+            
+            /* Kanji Reference - Improved Pagination */
+            .print-kanji-reference { 
+                margin-top: 30px; 
+                padding-top: 15px; 
+                border-top: 2px solid #6c8b6b; 
+                page-break-before: auto;
+            }
+            
+            .print-kanji-reference h3 { 
+                color: #2c3e2f; 
+                margin-bottom: 15px; 
+                font-size: 18px;
+                page-break-after: avoid;
+            }
+            
+            .kanji-reference-grid { 
+                display: grid; 
+                grid-template-columns: repeat(4, 1fr); 
+                gap: 15px; 
+                margin-top: 15px; 
+            }
+            
+            .kanji-reference-item { 
+                text-align: center; 
+                padding: 12px; 
+                border: 1px solid #ddd; 
+                border-radius: 8px; 
+                background: #faf8f5; 
+                page-break-inside: avoid;
+                break-inside: avoid;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: 180px;
+            }
+            
+            .kanji-reference-char { 
+                font-size: 32px; 
+                font-weight: bold; 
+                margin-bottom: 8px; 
+                color: #2c3e2f; 
+            }
+            
+            .kanji-reference-svg { 
+                width: 70px; 
+                height: 70px; 
+                margin: 0 auto 8px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                background: white;
+                border-radius: 4px;
+            }
+            
+            .kanji-reference-svg img { 
+                max-width: 100%; 
+                max-height: 100%; 
+            }
+            
+            .kanji-reference-svg .no-svg { 
+                font-size: 10px; 
+                color: #999; 
+            }
+            
+            .kanji-reference-meaning { 
+                font-size: 11px; 
+                color: #6c8b6b; 
+                margin-bottom: 3px; 
+                font-weight: 500;
+            }
+            
+            .kanji-reference-reading { 
+                font-size: 10px; 
+                color: #8a7b6e; 
+            }
+            
+            .footer { 
+                text-align: center; 
+                margin-top: 30px; 
+                font-size: 11px; 
+                color: #999; 
+                border-top: 1px solid #eee; 
+                padding-top: 15px; 
+            }
+            
+            /* Print-specific styles */
+            @media print { 
+                body { 
+                    padding: 0; 
+                    margin: 0;
                 }
-                h1 {
-                    text-align: center;
-                    color: #2c3e2f;
-                    border-bottom: 2px solid #6c8b6b;
-                    padding-bottom: 10px;
+                
+                .kanji-reference-grid { 
+                    break-inside: auto;
+                    page-break-inside: auto;
                 }
-                .sprint-title {
-                    text-align: center;
-                    color: #6c8b6b;
-                    margin-bottom: 30px;
+                
+                .kanji-reference-item { 
+                    break-inside: avoid;
+                    page-break-inside: avoid;
+                    border-color: #ccc;
                 }
-                .sentence-list {
-                    margin-bottom: 40px;
-                }
+                
                 .sentence-item {
-                    margin-bottom: 20px;
-                    padding: 10px;
-                    border-bottom: 1px solid #eee;
+                    break-inside: avoid;
+                    page-break-inside: avoid;
                 }
-                .sentence-jp {
-                    font-size: 16px;
-                    margin-bottom: 5px;
-                }
-                .sentence-en {
-                    font-size: 13px;
-                    color: #666;
-                }
-                .sentence-reading {
-                    font-size: 12px;
-                    color: #8a7b6e;
-                    margin-bottom: 5px;
-                }
+                
                 .print-kanji-reference {
-                    margin-top: 40px;
-                    padding-top: 20px;
-                    border-top: 2px solid #6c8b6b;
-                    page-break-before: avoid;
+                    break-inside: auto;
+                    page-break-inside: auto;
                 }
-                .print-kanji-reference h3 {
-                    color: #2c3e2f;
-                    margin-bottom: 20px;
-                }
-                .kanji-reference-grid {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 20px;
-                    margin-top: 20px;
+            }
+            
+            /* Responsive */
+            @media (max-width: 700px) { 
+                .kanji-reference-grid { 
+                    grid-template-columns: repeat(3, 1fr); 
+                    gap: 12px; 
                 }
                 .kanji-reference-item {
-                    text-align: center;
-                    padding: 15px;
-                    border: 1px solid #ddd;
-                    border-radius: 12px;
-                    background: #faf8f5;
-                    break-inside: avoid;
+                    min-height: 160px;
                 }
-                .kanji-reference-char {
-                    font-size: 32px;
-                    font-weight: bold;
-                    margin-bottom: 10px;
-                    color: #2c3e2f;
+            }
+            
+            @media (max-width: 500px) { 
+                .kanji-reference-grid { 
+                    grid-template-columns: repeat(2, 1fr); 
                 }
-                .kanji-reference-svg {
-                    width: 80px;
-                    height: 80px;
-                    margin: 0 auto 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                .kanji-reference-item {
+                    min-height: 150px;
                 }
-                .kanji-reference-svg img {
-                    max-width: 100%;
-                    max-height: 100%;
-                }
-                .kanji-reference-svg .no-svg {
-                    font-size: 10px;
-                    color: #999;
-                }
-                .kanji-reference-meaning {
-                    font-size: 11px;
-                    color: #6c8b6b;
-                    margin-bottom: 4px;
-                }
-                .kanji-reference-reading {
-                    font-size: 10px;
-                    color: #8a7b6e;
-                }
-                .footer {
-                    text-align: center;
-                    margin-top: 40px;
-                    font-size: 11px;
-                    color: #999;
-                    border-top: 1px solid #eee;
-                    padding-top: 20px;
-                }
-                @media print {
-                    body {
-                        padding: 20px;
-                    }
-                    .kanji-reference-grid {
-                        break-inside: avoid;
-                    }
-                    .kanji-reference-item {
-                        break-inside: avoid;
-                        page-break-inside: avoid;
-                    }
-                }
-                @media (max-width: 700px) {
-                    .kanji-reference-grid {
-                        grid-template-columns: repeat(3, 1fr);
-                        gap: 15px;
-                    }
-                }
-                @media (max-width: 500px) {
-                    .kanji-reference-grid {
-                        grid-template-columns: repeat(2, 1fr);
-                    }
-                }
-            </style>
-        </head>
-        <body>
+            }
+        </style>
+        </head><body>
             <h1>📚 N5 Japanese Study App</h1>
             <div class="sprint-title">${title}</div>
-            <div class="sentence-list">
-    `;
+            <div class="sentence-list">`;
     
-    // Add sentences
-    for (let i = 0; i < sentences.length; i++) {
-        const sentence = sentences[i];
-        let jpText = sentence.jp;
-        let readingText = sentence.reading || '';
+    // If kanji-only mode, only show the kanji reference
+    if (isKanjiOnly) {
+        printHtml += `<p style="text-align:center;color:#6c8b6b;margin-bottom:20px;">Stroke Order Reference for all kanji in this sprint</p>`;
+        printHtml += `</div>`; // Close sentence-list
+        if (allKanji.length > 0) {
+            printHtml += generateKanjiTableHtml(allKanji);
+        } else {
+            printHtml += `<p style="text-align:center;color:#999;">No kanji found in this sprint.</p>`;
+        }
+    } else {
+        // Regular sentence printing
+        const showFurigana = options.sentenceMode === 'furigana' || options.sentenceMode === 'translation';
+        const showTranslation = options.sentenceMode === 'translation';
         
-        // Apply furigana if needed
-        if (showFurigana && readingText) {
-            // Convert reading to furigana format or just show reading
-            jpText = `${jpText}<br><span style="font-size: 11px; color: #8a7b6e;">${readingText}</span>`;
-        } else if (!showFurigana) {
-            // Strip furigana parentheses
-            jpText = jpText.replace(/[（(][^）)]*[）)]/g, '');
+        for (let i = 0; i < sentences.length; i++) {
+            const sentence = sentences[i];
+            let jpText = sentence.jp;
+            
+            if (!showFurigana) {
+                jpText = jpText.replace(/[（(][^）)]*[）)]/g, '');
+            }
+            
+            printHtml += `<div class="sentence-item">
+                    <div class="sentence-jp">${start + i + 1}. ${jpText}</div>
+                    ${showTranslation ? `<div class="sentence-en">→ ${sentence.translation}</div>` : ''}
+                </div>`;
         }
         
-        printHtml += `
-            <div class="sentence-item">
-                <div class="sentence-jp">${start + i + 1}. ${jpText}</div>
-                ${showTranslation ? `<div class="sentence-en">→ ${sentence.en}</div>` : ''}
-            </div>
-        `;
-    }
-    
-    // Add kanji reference table
-    if (allKanji.length > 0) {
-        printHtml += generateKanjiTableHtml(allKanji);
+        printHtml += `</div>`; // Close sentence-list
+        
+        if (options.includeKanjiStrokes && allKanji.length > 0) {
+            printHtml += generateKanjiTableHtml(allKanji);
+        }
     }
     
     printHtml += `
-            </div>
-            <div class="footer">
-                Generated by N5 Japanese Study App · Page ${new Date().toLocaleDateString()}
-            </div>
-        </body>
-        </html>
-    `;
+            <div class="footer">Generated by N5 Japanese Study App · ${new Date().toLocaleDateString()}</div>
+        </body></html>`;
     
-    // Open print window
+    return printHtml;
+}
+
+// ========== EXPORT FUNCTIONS ==========
+
+function exportPrint(htmlContent) {
     const printWindow = window.open('', '_blank');
-    printWindow.document.write(printHtml);
+    printWindow.document.write(htmlContent);
     printWindow.document.close();
-    
-    // Auto-print after load
-    printWindow.onload = function() {
-        printWindow.print();
+    printWindow.onload = function() { 
+        printWindow.print(); 
     };
 }
 
-// Print with current sprint
-function printCurrentSprint() {
-    if (typeof activeSprintIndex === 'undefined') {
-        console.error('No active sprint');
+function exportPDF(htmlContent) {
+    // PDF is handled by the browser's "Save as PDF" option in the print dialog
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    printWindow.onload = function() { 
+        printWindow.print(); 
+    };
+}
+
+function printSprint(sprintIndex, options, isKanjiOnly = false) {
+    const htmlContent = generatePrintHTML(sprintIndex, options, isKanjiOnly);
+    if (!htmlContent) {
+        alert('Error generating content. Please try again.');
         return;
     }
     
-    const options = {
-        kanji: false,
-        furigana: false,
-        translation: false
-    };
-    
-    if (currentPrintMode === 'kanji') {
-        options.kanji = true;
-        options.furigana = false;
-        options.translation = false;
-    } else if (currentPrintMode === 'furigana') {
-        options.kanji = true;
-        options.furigana = true;
-        options.translation = false;
-    } else if (currentPrintMode === 'translation') {
-        options.kanji = true;
-        options.furigana = true;
-        options.translation = true;
-    }
-    
-    printSprint(activeSprintIndex, options.furigana, options.translation);
+    // Both 'print' and 'pdf' use the same print dialog
+    // User can select "Save as PDF" from the print dialog
+    exportPrint(htmlContent);
 }
 
-// Event listeners for print buttons
+function printCurrentSprint() {
+    if (typeof activeSprintIndex === 'undefined') {
+        alert('Please select a sprint first');
+        return;
+    }
+    printSprint(activeSprintIndex, printOptions, false);
+}
+
+function printKanjiStrokesOnly() {
+    if (typeof activeSprintIndex === 'undefined') {
+        alert('Please select a sprint first');
+        return;
+    }
+    // Override: set to kanji-only mode
+    const kanjiOnlyOptions = {
+        sentenceMode: 'kanji',
+        includeKanjiStrokes: true,
+        exportFormat: 'print'
+    };
+    printSprint(activeSprintIndex, kanjiOnlyOptions, true);
+}
+
+// ========== EVENT LISTENERS ==========
+
 function initPrintModule() {
+    console.log('Initializing print module...');
+    
+    // Print button - opens the modal
     const printBtn = document.getElementById('printBtn');
     if (printBtn) {
         printBtn.addEventListener('click', () => {
+            console.log('Print button clicked');
             if (typeof activeSprintIndex !== 'undefined') {
-                printCurrentSprint();
+                const modal = document.getElementById('printModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    console.log('Modal opened');
+                } else {
+                    console.error('Modal not found');
+                    alert('Print options not available. Please refresh the page.');
+                }
             } else {
                 alert('Please select a sprint first');
             }
         });
+    } else {
+        console.error('Print button not found');
     }
     
-    // Print modal buttons
-    const printKanjiOnlyBtn = document.getElementById('printKanjiOnlyBtn');
-    const printWithFuriganaBtn = document.getElementById('printWithFuriganaBtn');
-    const printWithTranslationBtn = document.getElementById('printWithTranslationBtn');
+    // Sentence mode radio buttons
+    const sentenceRadios = document.querySelectorAll('input[name="sentenceMode"]');
+    console.log('Found sentence radios:', sentenceRadios.length);
+    sentenceRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            printOptions.sentenceMode = e.target.value;
+            console.log('Sentence mode changed to:', printOptions.sentenceMode);
+        });
+    });
     
-    if (printKanjiOnlyBtn) {
-        printKanjiOnlyBtn.addEventListener('click', () => {
-            currentPrintMode = 'kanji';
+    // Kanji strokes checkbox
+    const strokesCheckbox = document.getElementById('includeKanjiStrokes');
+    if (strokesCheckbox) {
+        strokesCheckbox.addEventListener('change', (e) => {
+            printOptions.includeKanjiStrokes = e.target.checked;
+            console.log('Include kanji strokes:', printOptions.includeKanjiStrokes);
+        });
+    } else {
+        console.error('Strokes checkbox not found');
+    }
+    
+    // Print action button
+    const actionBtn = document.getElementById('printActionBtn');
+    if (actionBtn) {
+        actionBtn.addEventListener('click', () => {
+            console.log('Print action button clicked');
+            console.log('Current options:', printOptions);
             printCurrentSprint();
             const modal = document.getElementById('printModal');
             if (modal) modal.style.display = 'none';
         });
+    } else {
+        console.error('Action button not found');
     }
     
-    if (printWithFuriganaBtn) {
-        printWithFuriganaBtn.addEventListener('click', () => {
-            currentPrintMode = 'furigana';
-            printCurrentSprint();
+    // Kanji Strokes Only button
+    const kanjiStrokesBtn = document.getElementById('printKanjiStrokesBtn');
+    if (kanjiStrokesBtn) {
+        kanjiStrokesBtn.addEventListener('click', () => {
+            console.log('Kanji Strokes Only button clicked');
+            printKanjiStrokesOnly();
             const modal = document.getElementById('printModal');
             if (modal) modal.style.display = 'none';
         });
     }
     
-    if (printWithTranslationBtn) {
-        printWithTranslationBtn.addEventListener('click', () => {
-            currentPrintMode = 'translation';
-            printCurrentSprint();
+    // Cancel button
+    const cancelBtn = document.getElementById('cancelPrintBtn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
             const modal = document.getElementById('printModal');
             if (modal) modal.style.display = 'none';
         });
     }
     
-    // Close modal button
-    const closePrintBtn = document.getElementById('closePrintBtn');
-    if (closePrintBtn) {
-        closePrintBtn.addEventListener('click', () => {
+    // Close button (keeping for compatibility)
+    const closeBtn = document.getElementById('closePrintBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
             const modal = document.getElementById('printModal');
             if (modal) modal.style.display = 'none';
         });
     }
+    
+    // Click outside to close
+    const modal = document.getElementById('printModal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+    
+    console.log('Print module initialized successfully');
 }
 
 // Initialize when DOM is ready

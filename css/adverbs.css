@@ -199,7 +199,6 @@ rt {
     border-bottom: 1px solid #ddd;
 }
 
-/* STANDARDIZED: adverb-title from 1.6rem → 1.5rem */
 .adverb-title {
     font-size: 1.5rem;
     font-weight: bold;
@@ -238,7 +237,6 @@ rt {
     border-radius: 16px;
 }
 
-/* STANDARDIZED: example-jp from 1rem → 0.9rem */
 .example-item {
     background: white;
     border-radius: 12px;
@@ -308,7 +306,6 @@ rt {
     color: #333;
 }
 
-/* STANDARDIZED: quiz-sentence from 1.3rem → 1.2rem */
 .quiz-sentence {
     font-size: 1.2rem;
     text-align: center;

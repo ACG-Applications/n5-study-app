@@ -1,0 +1,461 @@
+/* ================================================================ */
+/* learn.css - Shared styles for Learn tabs across all modules      */
+/* Does NOT override or break any existing module styles            */
+/* ================================================================ */
+
+/* ===== LEARN CONTAINER ===== */
+.learn-container {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e8e0d5;
+}
+
+/* ===== LEARN HEADER WITH PRINT BUTTON ===== */
+.learn-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.learn-header h2 {
+    color: #000000;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.learn-print-btn {
+    background: #6c8b6b;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: inherit;
+    transition: background 0.2s;
+}
+
+.learn-print-btn:hover {
+    background: #5a7a59;
+}
+
+.learn-subtitle {
+    color: #444444;
+    font-weight: 400;
+    margin-bottom: 24px;
+}
+
+/* ===== LEARN SECTIONS ===== */
+.learn-section {
+    margin-bottom: 28px;
+}
+.learn-section h3 {
+    color: #000000;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+.learn-section h4 {
+    color: #000000;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+.learn-section p {
+    color: #000000;
+    font-weight: 400;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+.learn-section .note {
+    color: #555555;
+    font-weight: 400;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+}
+
+/* ===== EXAMPLE BOXES ===== */
+.example-box {
+    background: #f5f5f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.example-box:hover {
+    background: #e8e0d5;
+}
+.example-box .jp {
+    font-size: 1.1rem;
+    color: #000000;
+    font-weight: 500;
+}
+.example-box .en {
+    color: #444444;
+    font-weight: 400;
+    font-size: 0.95rem;
+}
+.example-box .listen-hint {
+    color: #888888;
+    font-size: 0.7rem;
+    margin-top: 4px;
+}
+
+/* ===== TABLES ===== */
+.learn-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 16px;
+}
+.learn-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #faf8f5;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.learn-table thead tr {
+    background: #e8e0d5;
+}
+.learn-table th {
+    padding: 10px 16px;
+    text-align: left;
+    color: #000000;
+    font-weight: 600;
+    border-bottom: 2px solid #d4cbbc;
+}
+.learn-table th .sub {
+    font-weight: 400;
+    font-size: 0.8rem;
+}
+.learn-table td {
+    padding: 8px 16px;
+    color: #000000;
+    font-weight: 400;
+    border-bottom: 1px solid #e8e0d5;
+}
+.learn-table td.clickable {
+    cursor: pointer;
+}
+.learn-table td.clickable:hover {
+    background: #e8e0d5;
+}
+.learn-table .incorrect {
+    color: #d9534f;
+}
+.learn-table .correct {
+    color: #28a745;
+}
+
+/* ===== SUMMARY BOX ===== */
+.summary-box {
+    background: #e8f0e7;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 24px;
+    border-left: 4px solid #6c8b6b;
+}
+.summary-box h4 {
+    color: #000000;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+}
+.summary-grid .label {
+    color: #000000;
+    font-weight: 500;
+}
+.summary-grid .label .sub {
+    font-weight: 400;
+    font-size: 0.85rem;
+}
+.summary-grid .value {
+    color: #000000;
+    font-weight: 400;
+}
+
+/* ================================================================ */
+/* ===== PRINT STYLES ===== */
+/* ================================================================ */
+@media print {
+    /* Hide UI elements from all modules */
+    .adverbs-header,
+    .adverbs-controls,
+    .tab-bar,
+    .kanji-header,
+    .kanji-controls,
+    .back-button,
+    #furiToggleBtn,
+    .progress-indicator,
+    .control-group,
+    .quiz-container,
+    .mastered-list,
+    #tabList,
+    #tabQuiz,
+    #tabMastered,
+    .tab-content:not(#tabLearn):not(.active) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Show ONLY learn tab */
+    #tabLearn.tab-content.active {
+        display: block !important;
+        visibility: visible !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        overflow: visible !important;
+    }
+
+    /* Hide print button - covers both class and inline button */
+    .learn-print-btn,
+    button[onclick="printLesson()"],
+    [onclick*="printLesson"],
+    .learn-container button[onclick*="printLesson"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+    }
+
+    /* Clean learn container */
+    .learn-container {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 20px !important;
+        background: #ffffff !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+    }
+
+    /* Ensure furigana renders properly in print */
+    ruby {
+        ruby-align: center;
+        display: ruby;
+    }
+    rt {
+        font-size: 0.55rem !important;
+        color: #333333 !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.02em;
+    }
+
+    /* Tables - keep together and styled */
+    .learn-table {
+        page-break-inside: avoid !important;
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+    .learn-table th,
+    .learn-table td {
+        border: 1px solid #d4cbbc !important;
+        padding: 8px 12px !important;
+        color: #000000 !important;
+        background: #ffffff !important;
+    }
+    .learn-table thead {
+        display: table-header-group !important;
+    }
+    .learn-table tr {
+        page-break-inside: avoid !important;
+    }
+    .learn-table th {
+        background: #e8e0d5 !important;
+        font-weight: 600 !important;
+    }
+
+    /* Hide listen indicators */
+    .listen-hint,
+    [class*="Listen"],
+    [style*="Click to listen"],
+    [style*="🔊 Click to listen"],
+    .example-box .listen-hint,
+    .example-box div[style*="color: #888888"],
+    .example-click div[style*="color: #888888"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Remove hover effects */
+    .example-box:hover {
+        background: #f5f5f0 !important;
+        cursor: default !important;
+        transform: none !important;
+    }
+    .example-box {
+        cursor: default !important;
+    }
+
+    /* Keep sections together */
+    .learn-section {
+        page-break-inside: avoid !important;
+    }
+
+    /* Summary box */
+    .summary-box,
+    div[style*="background: #e8f0e7"],
+    div[style*="background:#e8f0e7"] {
+        border: 2px solid #6c8b6b !important;
+        page-break-inside: avoid !important;
+        background: #e8f0e7 !important;
+        padding: 16px !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
+    }
+
+    /* Summary grid */
+    .summary-grid,
+    div[style*="display: grid"] {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px 16px !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Page margins */
+    @page {
+        margin: 1.5cm;
+        size: A4;
+    }
+
+    /* Hide scrollbars */
+    ::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+    * {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+
+    /* Ensure learn content is fully visible */
+    #learnContent {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
+        overflow: visible !important;
+        width: 100% !important;
+    }
+
+    /* Force the learn tab to show */
+    #tabLearn.tab-content {
+        display: block !important;
+    }
+
+    /* Hide any remaining interactive elements */
+    .small-btn,
+    .mark-mastered-btn,
+    .unmaster-btn,
+    .example-tts-btn,
+    .quiz-nav-btn,
+    .start-quiz-btn,
+    .mode-btn,
+    .action-btn,
+    .quiz-option-btn,
+    .hard-opt-btn,
+    button:not(.no-print) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+    }
+
+    /* White background for everything */
+    .adverbs-container,
+    .kanji-container,
+    body,
+    html {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+    }
+
+    /* Hide any remaining tab content */
+    .tab-content {
+        display: none !important;
+    }
+    .tab-content.active#tabLearn {
+        display: block !important;
+    }
+
+    /* Ensure proper text colors */
+    h1, h2, h3, h4, h5, h6,
+    p, div, span, li, td, th, strong, em {
+        color: #000000 !important;
+    }
+
+    /* Fix overflow issues */
+    .overflow-x-auto,
+    .learn-table-wrap,
+    div[style*="overflow-x: auto"] {
+        overflow: visible !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    .learn-container {
+        padding: 16px;
+    }
+    .learn-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .learn-header h2 {
+        font-size: 1.3rem;
+    }
+    .learn-print-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .learn-header h2 {
+        font-size: 1.2rem;
+    }
+    .learn-table th,
+    .learn-table td {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+    .learn-container {
+        padding: 12px;
+    }
+    .example-box .jp {
+        font-size: 1rem;
+    }
+    .example-box .en {
+        font-size: 0.85rem;
+    }
+}
