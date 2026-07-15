@@ -44,37 +44,46 @@ function injectWordMeanings() {
 }
 
 // ============================================================
-// VERSION 1: Simple - Handles single furigana + trailing kana
+// FIXED: Build Ruby HTML using match collection + end-to-start replacement
 // Example: 好（す）き → <ruby>好<rt>す</rt></ruby>き
 // ============================================================
 function buildRubyHTML(text) {
+  if (!text) return text;
+  
   // Pattern: kanji + (furigana) + optional trailing kana
-  return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）([\u3040-\u30FF]*)/g, (_, kanji, furigana, trailing) => 
-    `<ruby>${kanji}<rt>${furigana}</rt></ruby>${trailing}`
-  );
-}
-
-// ============================================================
-// VERSION 2: Robust - Handles multiple furigana in one string
-// Example: 一番（いちばん）好（す）き → 
-//          <ruby>一番<rt>いちばん</rt></ruby><ruby>好<rt>す</rt></ruby>き
-// ============================================================
-/*
-function buildRubyHTML(text) {
-  // First pass: Handle all furigana with trailing kana
-  // This handles: 好（す）き, 楽（たの）しい, 食（た）べて, etc.
-  let result = text.replace(
-    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）([\u3040-\u30FF]*)/g,
-    (_, kanji, furigana, trailing) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>${trailing}`
-  );
-  // Second pass: Handle any remaining simple furigana (kanji without trailing kana)
-  result = result.replace(
-    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-    (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-  );
+  const pattern = /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）([\u3040-\u30FF]*)/g;
+  
+  // Collect all matches with their positions
+  let matches = [];
+  let match;
+  while ((match = pattern.exec(text)) !== null) {
+    matches.push({
+      fullMatch: match[0],
+      kanji: match[1],
+      furigana: match[2],
+      trailing: match[3] || '',
+      index: match.index,
+      endIndex: match.index + match[0].length
+    });
+  }
+  
+  // If no matches, return original text
+  if (matches.length === 0) return text;
+  
+  // Sort matches by index (reverse to replace from end to start)
+  matches.sort((a, b) => b.index - a.index);
+  
+  // Replace from end to start to avoid position shifts
+  let result = text;
+  for (const match of matches) {
+    const before = result.substring(0, match.index);
+    const after = result.substring(match.endIndex);
+    const replacement = `<ruby>${match.kanji}<rt>${match.furigana}</rt></ruby>${match.trailing}`;
+    result = before + replacement + after;
+  }
+  
   return result;
 }
-*/
 
 function wrapWordsWithTooltips(sentence) {
   const words = sentence.splitWords;

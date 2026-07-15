@@ -13,16 +13,442 @@
   <link rel="stylesheet" href="css/kana-helper.css">
   <link rel="stylesheet" href="css/kanji-helper.css">
   <!-- PWA Manifest -->
-<link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a73e8">
+  <link rel="apple-touch-icon" href="images/icons/icon-192x19202.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<!-- Theme color for mobile browsers -->
-<meta name="theme-color" content="#1a73e8">
+  <!-- Word Search Styles -->
+  <style>
+    /* ===== WORD SEARCH MODAL STYLES ===== */
+    #wordSearchModal .modal-card {
+      max-width: 1100px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px 24px;
+      width: 95%;
+    }
+    #wordSearchModal .ws-container { width: 100%; }
+    #wordSearchModal .ws-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #d4c9b8;
+      padding-bottom: 12px;
+    }
+    #wordSearchModal .ws-header h2 {
+      font-size: 1.4rem;
+      color: #2c241c;
+      margin: 0;
+    }
+    #wordSearchModal .ws-header small {
+      font-size: 0.85rem;
+      color: #7a6f60;
+      font-weight: 400;
+    }
+    #wordSearchModal .ws-top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    #wordSearchModal .ws-btn {
+      background: #f0ebe3;
+      border: 1px solid #ccc2b2;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2d2720;
+      cursor: pointer;
+      transition: 0.15s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    #wordSearchModal .ws-btn:hover { background: #e6ddd2; transform: scale(0.97); }
+    #wordSearchModal .ws-btn:active { transform: scale(0.95); }
+    #wordSearchModal .ws-btn-primary {
+      background: #b8a58b;
+      border-color: #9e8a72;
+      color: white;
+    }
+    #wordSearchModal .ws-btn-primary:hover { background: #a9947a; }
+    #wordSearchModal .ws-btn-active {
+      background: #8a7a6a;
+      border-color: #6b5f4e;
+      color: white;
+    }
+    #wordSearchModal .ws-btn-active:hover { background: #7a6a5a; }
+    #wordSearchModal .ws-btn-tts {
+      background: #4a8a6a;
+      border-color: #3a6a4a;
+      color: white;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+    }
+    #wordSearchModal .ws-btn-tts:hover { background: #3a7a5a; }
+    #wordSearchModal .ws-status {
+      background: #ede8e1;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      color: #3d352b;
+      margin-left: auto;
+      text-align: center;
+      min-width: 150px;
+    }
+    #wordSearchModal .ws-puzzle-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    #wordSearchModal .ws-grid-section {
+      flex: 2 1 450px;
+      min-width: 300px;
+      overflow-x: auto;
+    }
+    #wordSearchModal .ws-grid-container {
+      background: #ffffff;
+      padding: 12px 10px;
+      border-radius: 16px;
+      box-shadow: inset 0 0 0 1px #e3dbd0;
+      user-select: none;
+    }
+    #wordSearchModal .ws-grid-instructions {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #8a7e6e;
+      margin-bottom: 10px;
+      padding: 6px;
+      background: #f8f5f0;
+      border-radius: 6px;
+    }
+    #wordSearchModal table.ws-grid {
+      border-collapse: collapse;
+      margin: 0 auto;
+      cursor: pointer;
+      background: #ffffff;
+    }
+    #wordSearchModal table.ws-grid td {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 18px;
+      font-weight: 450;
+      border: 1px solid #d9d0c2;
+      background: #ffffff;
+      transition: background 0.15s;
+      font-family: 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif;
+      padding: 0;
+      position: relative;
+    }
+    #wordSearchModal table.ws-grid td .ws-kanji {
+      display: block;
+      font-size: 17px;
+      line-height: 1.2;
+      color: #000000;
+    }
+    #wordSearchModal table.ws-grid td .ws-furigana {
+      display: block;
+      font-size: 8px;
+      color: #8b0000;
+      line-height: 1.1;
+      font-weight: 300;
+      letter-spacing: 0.3px;
+    }
+    #wordSearchModal table.ws-grid td .ws-furigana.ws-hidden { display: none; }
+    #wordSearchModal table.ws-grid td .ws-cell-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      padding: 1px 0;
+    }
+    #wordSearchModal table.ws-grid td.ws-highlight { background: #f5e3c4; }
+    #wordSearchModal table.ws-grid td.ws-highlight .ws-kanji { color: #000000; font-weight: 700; }
+    #wordSearchModal table.ws-grid td.ws-highlight .ws-furigana { color: #8b0000; font-weight: 500; }
+    #wordSearchModal table.ws-grid td.ws-found-word { background: #d4e8d4; }
+    #wordSearchModal table.ws-grid td.ws-found-word .ws-kanji { color: #000000; }
+    #wordSearchModal table.ws-grid td.ws-found-word .ws-furigana { color: #8b0000; }
+    #wordSearchModal table.ws-grid td.ws-mark-start {
+      background: #f0d8b0;
+      border-color: #c8a070;
+    }
+    #wordSearchModal table.ws-grid td.ws-mark-start .ws-kanji { color: #000000; font-weight: 700; }
+    #wordSearchModal table.ws-grid td.ws-mark-start .ws-furigana { color: #8b0000; }
+    #wordSearchModal table.ws-grid td.ws-mark-path { background: #f5e8d0; }
+    #wordSearchModal table.ws-grid td.ws-mark-path .ws-kanji { color: #000000; }
+    #wordSearchModal table.ws-grid td.ws-mark-path .ws-furigana { color: #8b0000; }
+    #wordSearchModal table.ws-grid td.ws-error-mark { background: #f8d0d0; }
+    #wordSearchModal table.ws-grid td.ws-error-mark .ws-kanji { color: #000000; }
+    #wordSearchModal table.ws-grid td.ws-error-mark .ws-furigana { color: #8b0000; }
 
-<!-- Apple Touch Icon (for iOS home screen) -->
-<link rel="apple-touch-icon" href="images/icons/icon-192x19202.png">
+    #wordSearchModal .ws-word-list {
+      flex: 1 1 240px;
+      min-width: 180px;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px 16px 18px;
+      box-shadow: inset 0 0 0 1px #e3dbd0;
+      align-self: flex-start;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    #wordSearchModal .ws-word-list h3 {
+      font-weight: 400;
+      color: #3b352e;
+      border-bottom: 2px dashed #d4c9b8;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    #wordSearchModal .ws-word-list ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    #wordSearchModal .ws-word-list li {
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      color: #000000;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.1s;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-family: 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', sans-serif;
+      border: 1px solid transparent;
+      background: #ffffff;
+    }
+    #wordSearchModal .ws-word-list li:hover {
+      background: #f5f0eb;
+      border-color: #d4c9b8;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-main {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-kanji {
+      font-weight: 500;
+      font-size: 1rem;
+      color: #000000;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-reading {
+      font-size: 0.7rem;
+      color: #8b0000;
+      font-weight: 300;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-reading.ws-hidden { display: none; }
+    #wordSearchModal .ws-word-list li .ws-word-meaning {
+      font-size: 0.7rem;
+      color: #6b6256;
+      font-style: italic;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-sentence {
+      font-size: 0.75rem;
+      color: #000000;
+      padding: 4px 6px;
+      background: #ffffff;
+      border-radius: 4px;
+      margin-top: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      border: 1px solid #e8e4e0;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-sentence .ws-jp-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-sentence .ws-jp-text {
+      color: #000000;
+      line-height: 1.5;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-sentence .ws-jp-text ruby {
+      ruby-align: center;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-sentence .ws-jp-text ruby rt {
+      color: #8b0000;
+      font-size: 0.6rem;
+      font-weight: 300;
+    }
+    #wordSearchModal .ws-word-list li .ws-word-sentence .ws-en-text {
+      color: #6b6256;
+      font-style: italic;
+      font-size: 0.7rem;
+    }
+    #wordSearchModal .ws-word-list li .ws-tts-btn-small {
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #wordSearchModal .ws-word-list li .ws-tts-btn-small:hover { transform: scale(1.15); }
+    #wordSearchModal .ws-word-list li .ws-tts-btn-word {
+      background: #4a8a6a;
+    }
+    #wordSearchModal .ws-word-list li .ws-tts-btn-word:hover { background: #3a7a5a; }
+    #wordSearchModal .ws-word-list li .ws-tts-btn-sentence {
+      background: #4a6a8a;
+    }
+    #wordSearchModal .ws-word-list li .ws-tts-btn-sentence:hover { background: #3a5a7a; }
+    #wordSearchModal .ws-word-list li.ws-found {
+      opacity: 0.6;
+      text-decoration: line-through 2px #8a7e6e;
+    }
+    #wordSearchModal .ws-word-list li.ws-found .ws-word-kanji { color: #5a7a5a; }
+    #wordSearchModal .ws-word-list li.ws-found .ws-word-reading { color: #5a7a5a; }
+    #wordSearchModal .ws-word-list li.ws-active {
+      background: #f5e3c4;
+      border-radius: 10px;
+      border-color: #d4c9b8;
+    }
+    #wordSearchModal .ws-counter {
+      font-size: 0.8rem;
+      color: #6b6256;
+      padding: 4px 0;
+    }
+    #wordSearchModal .ws-legend {
+      margin-top: 16px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+      color: #6b6256;
+      justify-content: center;
+      border-top: 1px solid #e5ddd2;
+      padding-top: 14px;
+    }
+    #wordSearchModal .ws-legend span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    #wordSearchModal .ws-legend .ws-swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc2b2;
+    }
+    #wordSearchModal .ws-legend .ws-swatch-highlight { background: #f5e3c4; }
+    #wordSearchModal .ws-legend .ws-swatch-found { background: #d4e8d4; }
+    #wordSearchModal .ws-legend .ws-swatch-mark { background: #f0d8b0; }
+    #wordSearchModal .ws-close-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 8px 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: 0.15s;
+    }
+    #wordSearchModal .ws-close-btn:hover {
+      background: #c82333;
+      transform: scale(0.97);
+    }
 
-<!-- Mobile viewport -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    @media print {
+      #wordSearchModal .ws-btn,
+      #wordSearchModal .ws-close-btn,
+      #wordSearchModal .ws-tts-btn-small { display: none !important; }
+      #wordSearchModal .ws-grid-instructions { display: none !important; }
+      #wordSearchModal .ws-legend { display: none !important; }
+      #wordSearchModal .ws-top-bar { display: none !important; }
+      #wordSearchModal .ws-header { border-bottom: 2px solid #333; }
+      #wordSearchModal table.ws-grid td {
+        border: 1px solid #999;
+        width: 36px;
+        height: 36px;
+      }
+      #wordSearchModal table.ws-grid td .ws-kanji { font-size: 15px; }
+      #wordSearchModal table.ws-grid td .ws-furigana { font-size: 7px; }
+      #wordSearchModal table.ws-grid td.ws-highlight,
+      #wordSearchModal table.ws-grid td.ws-found-word,
+      #wordSearchModal table.ws-grid td.ws-mark-start,
+      #wordSearchModal table.ws-grid td.ws-mark-path,
+      #wordSearchModal table.ws-grid td.ws-error-mark { background: white !important; }
+      #wordSearchModal table.ws-grid td.ws-found-word {
+        border-color: #4a7a4a !important;
+        border-width: 2px !important;
+      }
+      #wordSearchModal .ws-word-list {
+        max-height: none;
+        border: 1px solid #ccc;
+      }
+      #wordSearchModal .ws-word-list ul {
+        columns: 2;
+        column-gap: 20px;
+      }
+      #wordSearchModal .ws-word-list li {
+        break-inside: avoid;
+        border: none !important;
+      }
+      #wordSearchModal .ws-word-list li .ws-word-sentence {
+        background: #f5f5f5 !important;
+      }
+    }
+
+    @media (max-width: 700px) {
+      #wordSearchModal .modal-card {
+        padding: 14px 16px;
+        max-height: 95vh;
+      }
+      #wordSearchModal table.ws-grid td {
+        width: 32px;
+        height: 32px;
+        font-size: 15px;
+      }
+      #wordSearchModal table.ws-grid td .ws-kanji { font-size: 14px; }
+      #wordSearchModal table.ws-grid td .ws-furigana { font-size: 6px; }
+      #wordSearchModal .ws-word-list { max-height: 300px; }
+      #wordSearchModal .ws-status {
+        font-size: 0.75rem;
+        min-width: 120px;
+      }
+      #wordSearchModal .ws-btn {
+        font-size: 0.75rem;
+        padding: 6px 14px;
+      }
+      #wordSearchModal .ws-header h2 { font-size: 1.1rem; }
+    }
+
+    @media (max-width: 480px) {
+      #wordSearchModal table.ws-grid td {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+      }
+      #wordSearchModal table.ws-grid td .ws-kanji { font-size: 11px; }
+      #wordSearchModal table.ws-grid td .ws-furigana { font-size: 5px; }
+      #wordSearchModal .ws-word-list li { font-size: 0.8rem; padding: 4px 8px; }
+    }
+  </style>
 </head>
 <body>
 <div class="app-container">
@@ -51,6 +477,7 @@
   <!-- Main Action Buttons -->
   <div class="action-buttons">
     <button id="flashcardBtn" class="action-btn">📇 Flashcards</button>
+    <button id="wordSearchBtn" class="action-btn">🔍 Word Search</button>
     <button id="storyModeBtn" class="action-btn">📖 Story Mode</button>
     <button id="printBtn" class="action-btn">🖨️ Print</button>
     <button id="csvBtn" class="action-btn">📥 CSV</button>
@@ -128,31 +555,63 @@
   </div>
 </div>
 
-<!-- ===== UPDATED PRINT MODAL (DOCX removed) ===== -->
+<!-- ===== WORD SEARCH MODAL ===== -->
+<div id="wordSearchModal" class="modal">
+  <div class="modal-card">
+    <div class="ws-container">
+      <div class="ws-header">
+        <h2>🔍 N5 Word Search <small>with Furigana · All Directions</small></h2>
+        <button class="ws-close-btn" id="wsCloseBtn">✕ Close</button>
+      </div>
+      <div class="ws-top-bar">
+        <button class="ws-btn ws-btn-primary" id="wsNewPuzzleBtn">🔄 New Puzzle</button>
+        <button class="ws-btn" id="wsPrintBtn">🖨️ Print</button>
+        <button class="ws-btn" id="wsFuriganaToggleBtn">🔤 Furigana: ON</button>
+        <button class="ws-btn" id="wsModeToggleBtn">📝 Mode: Words</button>
+        <button class="ws-btn ws-btn-tts" id="wsStopTtsBtn">⏹️ Stop TTS</button>
+        <span class="ws-status" id="wsStatusMsg">Click first letter, then last letter to mark</span>
+      </div>
+      <div class="ws-puzzle-wrapper">
+        <div class="ws-grid-section">
+          <div class="ws-grid-container">
+            <div class="ws-grid-instructions">
+              💡 Click the <strong>first</strong> letter, then click the <strong>last</strong> letter to mark
+            </div>
+            <table class="ws-grid" id="wsGrid"></table>
+          </div>
+        </div>
+        <div class="ws-word-list">
+          <h3>
+            <span id="wsListTitle">📖 Words</span>
+            <span class="ws-counter" id="wsFoundCounter">0 / 0</span>
+          </h3>
+          <ul id="wsWordList">
+            <li style="color: #999; text-align: center; padding: 20px;">Loading words...</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ws-legend">
+        <span><span class="ws-swatch ws-swatch-highlight"></span> Highlighted</span>
+        <span><span class="ws-swatch ws-swatch-found"></span> Found</span>
+        <span><span class="ws-swatch ws-swatch-mark"></span> Marking</span>
+        <span>⬆️⬇️↗️↘️ All Directions</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRINT MODAL ===== -->
 <div id="printModal" class="modal">
   <div class="modal-card" style="max-width: 450px;">
     <h3>🖨️ Print Options</h3>
-    
-    <!-- Sentences Options -->
     <div class="print-option-group">
       <h4>📝 Sentences</h4>
       <div class="radio-group">
-        <label>
-          <input type="radio" name="sentenceMode" value="kanji" checked>
-          Kanji Only
-        </label>
-        <label>
-          <input type="radio" name="sentenceMode" value="furigana">
-          With Furigana
-        </label>
-        <label>
-          <input type="radio" name="sentenceMode" value="translation">
-          With Translation
-        </label>
+        <label><input type="radio" name="sentenceMode" value="kanji" checked> Kanji Only</label>
+        <label><input type="radio" name="sentenceMode" value="furigana"> With Furigana</label>
+        <label><input type="radio" name="sentenceMode" value="translation"> With Translation</label>
       </div>
     </div>
-    
-    <!-- Kanji Stroke Reference -->
     <div class="print-option-group">
       <h4>📖 Kanji Stroke Reference</h4>
       <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -166,25 +625,16 @@
         <span style="font-size: 11px; color: #999;">(Prints ONLY stroke order diagrams for this sprint)</span>
       </div>
     </div>
-    
-    <!-- Export Format -->
     <div class="print-option-group">
       <h4>📄 Export Format</h4>
       <div class="radio-group">
-        <label>
-          <input type="radio" name="exportFormat" value="print" checked>
-          🖨️ Print
-        </label>
-        <label>
-          <input type="radio" name="exportFormat" value="pdf">
-          📥 PDF (Save as PDF in print dialog)
-        </label>
+        <label><input type="radio" name="exportFormat" value="print" checked> 🖨️ Print</label>
+        <label><input type="radio" name="exportFormat" value="pdf"> 📥 PDF (Save as PDF in print dialog)</label>
       </div>
       <p style="font-size: 11px; color: #999; margin-top: 8px;">
         💡 For PDF: Select "Save as PDF" in the print dialog that appears.
       </p>
     </div>
-    
     <div style="display: flex; gap: 10px; margin-top: 20px;">
       <button id="printActionBtn" class="action-btn" style="flex: 1;">🖨️ Print / PDF</button>
       <button id="cancelPrintBtn" class="small-btn">Cancel</button>
@@ -196,7 +646,7 @@
 <script src="js/data/sprints.js"></script>
 <script src="js/data/sentences.js"></script>
 <script src="js/data/stories.js"></script>
-<script src="js/data/wordDict.js"></script>   <!-- ✅ Correct position! -->
+<script src="js/data/wordDict.js"></script>
 
 <!-- 2. UTILITIES ✅ -->
 <script src="js/utils/helpers.js"></script>
@@ -213,6 +663,791 @@
 <script src="js/modules/ui.js"></script>
 <script src="js/modules/kanji-stroke.js"></script>
 <script src="js/modules/kanji-helper.js"></script>
+
+<!-- 4. WORD SEARCH MODULE ✅ -->
+<script>
+// ============================================================
+// WORD SEARCH - Integrated into the app
+// ============================================================
+(function() {
+    'use strict';
+
+    // ============================================================
+    // DOM References
+    // ============================================================
+    const modal = document.getElementById('wordSearchModal');
+    const gridEl = document.getElementById('wsGrid');
+    const wordListEl = document.getElementById('wsWordList');
+    const foundCounterEl = document.getElementById('wsFoundCounter');
+    const listTitleEl = document.getElementById('wsListTitle');
+    const statusEl = document.getElementById('wsStatusMsg');
+    const furiganaToggleBtn = document.getElementById('wsFuriganaToggleBtn');
+    const modeToggleBtn = document.getElementById('wsModeToggleBtn');
+    const stopTtsBtn = document.getElementById('wsStopTtsBtn');
+    const newPuzzleBtn = document.getElementById('wsNewPuzzleBtn');
+    const printBtn = document.getElementById('wsPrintBtn');
+    const closeBtn = document.getElementById('wsCloseBtn');
+
+    // ============================================================
+    // State
+    // ============================================================
+    const GRID_SIZE = 12;
+    const MAX_WORDS = 12;
+    const DIRS = [
+        [0, 1], [1, 0], [0, -1], [-1, 0],
+        [1, 1], [1, -1], [-1, 1], [-1, -1]
+    ];
+
+    let currentGrid = [];
+    let wordPlacements = [];
+    let foundWords = new Set();
+    let selectedWord = null;
+    let activeWordList = [];
+    let currentMode = 'words';
+    let showFurigana = true;
+    let markingState = null;
+    let firstMark = null;
+    let markCells = new Set();
+    let errorMark = false;
+
+    // ============================================================
+    // Data Helpers - Use existing globals
+    // ============================================================
+    function getSentencesData() {
+        // Try multiple ways to get sentencesData
+        if (typeof sentencesData !== 'undefined') {
+            return sentencesData;
+        }
+        if (typeof window.sentencesData !== 'undefined') {
+            return window.sentencesData;
+        }
+        // Try to get from the global scope
+        try {
+            return window.sentencesData || [];
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function getWordDict() {
+        if (typeof wordDict !== 'undefined') {
+            return wordDict;
+        }
+        if (typeof window.wordDict !== 'undefined') {
+            return window.wordDict;
+        }
+        try {
+            return window.wordDict || {};
+        } catch(e) {
+            return {};
+        }
+    }
+
+    function buildWordPool() {
+        const pool = [];
+        const dict = getWordDict();
+        console.log('📚 Building word pool from wordDict with', Object.keys(dict).length, 'entries');
+        
+        for (const [word, data] of Object.entries(dict)) {
+            if (word.length >= 2 && word.length <= 6) {
+                pool.push({
+                    word: word,
+                    reading: data.reading || word,
+                    meaning: data.meaning || '',
+                    sentence: '',
+                    fullSentence: ''
+                });
+            }
+        }
+        console.log('📚 Word pool built:', pool.length, 'entries');
+        pool.sort((a, b) => b.word.length - a.word.length);
+        return pool;
+    }
+
+    function buildSentencePool() {
+        const pool = [];
+        const usedWords = new Set();
+        const dict = getWordDict();
+        const sentences = getSentencesData();
+        
+        console.log('📖 Building sentence pool from', sentences.length, 'sentences');
+        console.log('📖 Using wordDict with', Object.keys(dict).length, 'entries');
+        
+        for (const sentence of sentences) {
+            const originalJp = sentence.jp || '';
+            // Remove furigana in parentheses but keep the kanji
+            let cleanJp = originalJp.replace(/[（(][^）)]*[）)]/g, '').trim();
+            // Remove extra spaces
+            cleanJp = cleanJp.replace(/\s+/g, ' ');
+            const words = cleanJp.split(/[\s,、。！？]+/);
+            
+            for (const word of words) {
+                const cleanWord = word.replace(/[、。，,、！!？?、]/g, '').trim();
+                if (cleanWord.length >= 2 && cleanWord.length <= 6 && !usedWords.has(cleanWord)) {
+                    // Check if it's in the dictionary
+                    if (dict[cleanWord]) {
+                        usedWords.add(cleanWord);
+                        pool.push({
+                            word: cleanWord,
+                            reading: dict[cleanWord].reading || cleanWord,
+                            meaning: dict[cleanWord].meaning || '',
+                            sentence: sentence.translation || '',
+                            fullSentence: originalJp
+                        });
+                        console.log('✅ Added word:', cleanWord);
+                    }
+                }
+            }
+        }
+        console.log('📖 Sentence pool built:', pool.length, 'entries');
+        pool.sort((a, b) => b.word.length - a.word.length);
+        return pool;
+    }
+
+    let wordPool = buildWordPool();
+    let sentencePool = buildSentencePool();
+
+    console.log('📚 Word pool final:', wordPool.length, 'entries');
+    console.log('📖 Sentence pool final:', sentencePool.length, 'entries');
+
+    // ============================================================
+    // TTS - Use app's speakText or fallback
+    // ============================================================
+    function speakWordSearch(text, lang = 'ja-JP', rate = 0.9) {
+        if (typeof speakText === 'function') {
+            speakText(text, lang, rate);
+        } else if (window.speechSynthesis) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = rate;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // ============================================================
+    // Puzzle Engine
+    // ============================================================
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function canPlace(word, row, col, dr, dc, grid) {
+        const n = grid.length;
+        for (let i = 0; i < word.length; i++) {
+            const r = row + i * dr;
+            const c = col + i * dc;
+            if (r < 0 || r >= n || c < 0 || c >= n) return false;
+            if (grid[r][c] !== '' && grid[r][c] !== word[i]) return false;
+        }
+        return true;
+    }
+
+    function placeWord(word, row, col, dr, dc, grid) {
+        for (let i = 0; i < word.length; i++) {
+            const r = row + i * dr;
+            const c = col + i * dc;
+            grid[r][c] = word[i];
+        }
+    }
+
+    function getCurrentPool() {
+        if (currentMode === 'sentences') {
+            return sentencePool;
+        }
+        return wordPool;
+    }
+
+    function generatePuzzle() {
+        const pool = getCurrentPool();
+        if (pool.length === 0) {
+            statusEl.textContent = '⚠️ No data available. Pool is empty.';
+            console.warn('⚠️ Pool is empty for mode:', currentMode);
+            console.warn('⚠️ wordPool:', wordPool.length, 'sentencePool:', sentencePool.length);
+            gridEl.innerHTML = '<tr><td colspan="12" style="padding: 40px; text-align: center; color: #a02020;">⚠️ No data available</td></tr>';
+            wordListEl.innerHTML = '<li style="color: #a02020; text-align: center; padding: 20px;">⚠️ No data available</li>';
+            return;
+        }
+
+        console.log('🎲 Generating puzzle with', pool.length, 'words from', currentMode, 'mode');
+
+        const shuffledPool = shuffle([...pool]);
+        const selected = [];
+        for (const entry of shuffledPool) {
+            if (selected.length >= MAX_WORDS) break;
+            if (entry.word.length >= 2 && entry.word.length <= 6) {
+                if (!selected.some(e => e.word === entry.word)) {
+                    selected.push(entry);
+                }
+            }
+        }
+
+        while (selected.length < 6 && pool.length > 0) {
+            const fallback = pool[Math.floor(Math.random() * pool.length)];
+            if (!selected.some(e => e.word === fallback.word) && fallback.word.length >= 2) {
+                selected.push(fallback);
+            }
+        }
+
+        activeWordList = selected;
+        const n = GRID_SIZE;
+        const newGrid = Array.from({ length: n }, () => Array(n).fill(''));
+        const placements = [];
+
+        for (const entry of selected) {
+            const word = entry.word;
+            let placed = false;
+            for (let attempt = 0; attempt < 300; attempt++) {
+                const dir = DIRS[Math.floor(Math.random() * DIRS.length)];
+                const dr = dir[0], dc = dir[1];
+                const maxRow = n - (dr === 1 ? word.length : (dr === -1 ? word.length : 0));
+                const maxCol = n - (dc === 1 ? word.length : (dc === -1 ? word.length : 0));
+                if (maxRow <= 0 || maxCol <= 0) continue;
+                const row = Math.floor(Math.random() * maxRow);
+                const col = Math.floor(Math.random() * maxCol);
+
+                let startRow = row, startCol = col;
+                if (dr === -1) startRow = row + word.length - 1;
+                if (dc === -1) startCol = col + word.length - 1;
+                if (startRow < 0 || startRow >= n || startCol < 0 || startCol >= n) continue;
+
+                const r = (dr === -1) ? startRow : row;
+                const c = (dc === -1) ? startCol : col;
+
+                if (canPlace(word, r, c, dr, dc, newGrid)) {
+                    placeWord(word, r, c, dr, dc, newGrid);
+                    placements.push({ word, row: r, col: c, dr, dc, entry });
+                    placed = true;
+                    break;
+                }
+            }
+            if (!placed) {
+                console.warn('Could not place:', word);
+            }
+        }
+
+        const placedWords = new Set(placements.map(p => p.word));
+        activeWordList = activeWordList.filter(e => placedWords.has(e.word));
+
+        const hiragana = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん';
+        for (let r = 0; r < n; r++) {
+            for (let c = 0; c < n; c++) {
+                if (newGrid[r][c] === '') {
+                    newGrid[r][c] = hiragana[Math.floor(Math.random() * hiragana.length)];
+                }
+            }
+        }
+
+        currentGrid = newGrid;
+        wordPlacements = placements;
+        foundWords = new Set();
+        selectedWord = null;
+        markingState = null;
+        firstMark = null;
+        markCells = new Set();
+        errorMark = false;
+        renderAll();
+        statusEl.textContent = 'Click the first letter, then click the last letter to mark';
+    }
+
+    // ============================================================
+    // Render
+    // ============================================================
+    function getCellKey(row, col) {
+        return `${row},${col}`;
+    }
+
+    function getFuriganaForChar(ch) {
+        for (const entry of activeWordList) {
+            const idx = entry.word.indexOf(ch);
+            if (idx !== -1) {
+                const readingChars = entry.reading.split('');
+                if (readingChars[idx]) return readingChars[idx];
+            }
+        }
+        const dict = getWordDict();
+        if (dict[ch]) {
+            return dict[ch].reading || '';
+        }
+        return '';
+    }
+
+    function renderGrid() {
+        const n = currentGrid.length;
+        if (n === 0 || !currentGrid[0]) {
+            gridEl.innerHTML = '<tr><td colspan="12" style="padding: 40px; text-align: center; color: #999;">No grid data</td></tr>';
+            return;
+        }
+        
+        let html = '';
+        for (let r = 0; r < n; r++) {
+            html += '<tr>';
+            for (let c = 0; c < n; c++) {
+                const ch = currentGrid[r][c] || '　';
+                let cls = '';
+                const cellKey = getCellKey(r, c);
+
+                if (markCells.has(cellKey)) {
+                    if (firstMark && r === firstMark.row && c === firstMark.col) {
+                        cls = 'ws-mark-start';
+                    } else if (firstMark && markingState === 'second') {
+                        cls = 'ws-mark-path';
+                    }
+                }
+
+                if (!markingState && selectedWord && !markCells.size) {
+                    const placement = wordPlacements.find(p => p.word === selectedWord);
+                    if (placement) {
+                        const { row, col, dr, dc } = placement;
+                        for (let i = 0; i < selectedWord.length; i++) {
+                            const cr = row + i * dr;
+                            const cc = col + i * dc;
+                            if (cr === r && cc === c) {
+                                cls = 'ws-highlight';
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!markCells.has(cellKey)) {
+                    for (const foundWord of foundWords) {
+                        const placement = wordPlacements.find(p => p.word === foundWord);
+                        if (placement) {
+                            const { row, col, dr, dc } = placement;
+                            for (let i = 0; i < foundWord.length; i++) {
+                                const cr = row + i * dr;
+                                const cc = col + i * dc;
+                                if (cr === r && cc === c) {
+                                    if (cls !== 'ws-highlight' && cls !== 'ws-mark-start' && cls !== 'ws-mark-path') {
+                                        cls = 'ws-found-word';
+                                    }
+                                    break;
+                                }
+                            }
+                            if (cls === 'ws-found-word') break;
+                        }
+                    }
+                }
+
+                if (errorMark && markCells.has(cellKey)) {
+                    cls = 'ws-error-mark';
+                }
+
+                const furigana = getFuriganaForChar(ch);
+                const furiganaClass = showFurigana ? '' : 'ws-hidden';
+
+                html += `<td class="${cls}" data-row="${r}" data-col="${c}">
+                    <div class="ws-cell-content">
+                        <span class="ws-furigana ${furiganaClass}">${furigana || ''}</span>
+                        <span class="ws-kanji">${ch}</span>
+                    </div>
+                </td>`;
+            }
+            html += '</tr>';
+        }
+        gridEl.innerHTML = html;
+    }
+
+    // Use buildRubyHTML from furigana.js
+    function getSentenceWithFurigana(sentence) {
+        if (!sentence) return sentence;
+        if (typeof window.buildRubyHTML === 'function') {
+            return window.buildRubyHTML(sentence);
+        }
+        if (typeof buildRubyHTML === 'function') {
+            return buildRubyHTML(sentence);
+        }
+        return sentence.replace(
+            /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+            (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+        );
+    }
+
+    function renderWordList() {
+        if (activeWordList.length === 0) {
+            wordListEl.innerHTML = '<li style="color: #999; text-align: center; padding: 20px;">No words available</li>';
+            return;
+        }
+        
+        let html = '';
+        for (const entry of activeWordList) {
+            const found = foundWords.has(entry.word);
+            const active = selectedWord === entry.word;
+            
+            const originalSentence = entry.fullSentence || '';
+            const cleanSentence = originalSentence.replace(/[（(][^）)]*[）)]/g, '').trim();
+            
+            let displaySentence;
+            if (showFurigana) {
+                displaySentence = getSentenceWithFurigana(originalSentence);
+            } else {
+                displaySentence = cleanSentence;
+            }
+            
+            let sentenceHtml = '';
+            if (originalSentence) {
+                sentenceHtml = `
+                    <div class="ws-word-sentence">
+                        <div class="ws-jp-line">
+                            <span class="ws-jp-text">${displaySentence}</span>
+                            <button class="ws-tts-btn-small ws-tts-btn-sentence" data-tts="${cleanSentence}" data-lang="ja-JP" title="🔊 Listen to sentence">🔊</button>
+                        </div>
+                        <div class="ws-en-text">${entry.sentence || ''}</div>
+                    </div>
+                `;
+            }
+            
+            const readingClass = showFurigana ? '' : 'ws-hidden';
+            
+            html += `<li class="${found ? 'ws-found' : ''} ${active ? 'ws-active' : ''}" 
+                         data-word="${entry.word}">
+                <div class="ws-word-main">
+                    <span class="ws-word-kanji">${entry.word}</span>
+                    <span class="ws-word-reading ${readingClass}">${entry.reading}</span>
+                    <span class="ws-word-meaning">${entry.meaning}</span>
+                    <button class="ws-tts-btn-small ws-tts-btn-word" data-tts="${entry.word}" data-lang="ja-JP" title="🔊 Listen to word">🔊</button>
+                </div>
+                ${sentenceHtml}
+            </li>`;
+        }
+        wordListEl.innerHTML = html;
+
+        // TTS for buttons
+        document.querySelectorAll('#wsWordList .ws-tts-btn-small').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const text = this.dataset.tts;
+                const lang = this.dataset.lang || 'ja-JP';
+                if (text) {
+                    speakWordSearch(text, lang);
+                }
+            });
+        });
+
+        // Click: highlight
+        document.querySelectorAll('#wsWordList li').forEach(li => {
+            li.addEventListener('click', function(e) {
+                if (e.target.closest('.ws-tts-btn-small')) return;
+                const word = this.dataset.word;
+                if (foundWords.has(word)) {
+                    selectedWord = word;
+                    markingState = null;
+                    firstMark = null;
+                    markCells = new Set();
+                    errorMark = false;
+                    renderGrid();
+                    renderWordList();
+                    statusEl.textContent = `✅ "${word}" already found`;
+                } else {
+                    selectedWord = word;
+                    markingState = null;
+                    firstMark = null;
+                    markCells = new Set();
+                    errorMark = false;
+                    renderGrid();
+                    renderWordList();
+                    statusEl.textContent = `🔎 Looking for "${word}"...`;
+                }
+            });
+
+            // Double-click: mark as found
+            li.addEventListener('dblclick', function(e) {
+                const word = this.dataset.word;
+                const placement = wordPlacements.find(p => p.word === word);
+                if (!placement) {
+                    statusEl.textContent = `⚠️ "${word}" not placed in grid`;
+                    return;
+                }
+                if (foundWords.has(word)) {
+                    statusEl.textContent = `"${word}" already found`;
+                    return;
+                }
+                foundWords.add(word);
+                selectedWord = word;
+                markingState = null;
+                firstMark = null;
+                markCells = new Set();
+                errorMark = false;
+                renderGrid();
+                renderWordList();
+                updateCounter();
+                statusEl.textContent = `🎉 Found "${word}"!`;
+                speakWordSearch(word, 'ja-JP');
+                if (foundWords.size === activeWordList.length) {
+                    statusEl.textContent = '🎊 Congratulations! All words found!';
+                }
+            });
+        });
+    }
+
+    function updateCounter() {
+        foundCounterEl.textContent = `${foundWords.size} / ${activeWordList.length}`;
+        listTitleEl.textContent = currentMode === 'sentences' ? '📖 Sentences' : '📖 Words';
+    }
+
+    function renderAll() {
+        renderGrid();
+        renderWordList();
+        updateCounter();
+    }
+
+    // ============================================================
+    // Grid Marking Logic
+    // ============================================================
+    function getCellFromEvent(e) {
+        const td = e.target.closest('td');
+        if (!td) return null;
+        const row = parseInt(td.dataset.row);
+        const col = parseInt(td.dataset.col);
+        if (isNaN(row) || isNaN(col)) return null;
+        return { row, col };
+    }
+
+    function getPathCells(start, end) {
+        if (!start || !end) return [];
+        const dr = Math.sign(end.row - start.row);
+        const dc = Math.sign(end.col - start.col);
+        if (dr !== 0 && dc !== 0 && Math.abs(end.row - start.row) !== Math.abs(end.col - start.col)) {
+            return null;
+        }
+        const cells = [];
+        let row = start.row, col = start.col;
+        const endRow = end.row, endCol = end.col;
+        while (row !== endRow + dr || col !== endCol + dc) {
+            cells.push({ row, col });
+            row += dr;
+            col += dc;
+        }
+        return cells;
+    }
+
+    function getWordFromCells(cells) {
+        if (!cells || cells.length < 2) return null;
+        const wordChars = cells.map(cell => currentGrid[cell.row][cell.col]).join('');
+        for (const entry of activeWordList) {
+            const target = entry.word;
+            if (wordChars === target) return entry;
+            const reversed = wordChars.split('').reverse().join('');
+            if (reversed === target) return entry;
+        }
+        return null;
+    }
+
+    // Grid click handler
+    gridEl.addEventListener('click', function(e) {
+        const cell = getCellFromEvent(e);
+        if (!cell) return;
+
+        const cellKey = getCellKey(cell.row, cell.col);
+        let cellFound = false;
+        for (const foundWord of foundWords) {
+            const placement = wordPlacements.find(p => p.word === foundWord);
+            if (placement) {
+                const { row, col, dr, dc } = placement;
+                for (let i = 0; i < foundWord.length; i++) {
+                    const cr = row + i * dr;
+                    const cc = col + i * dc;
+                    if (cr === cell.row && cc === cell.col) {
+                        cellFound = true;
+                        break;
+                    }
+                }
+                if (cellFound) break;
+            }
+        }
+        if (cellFound) {
+            statusEl.textContent = 'This letter is already part of a found word';
+            return;
+        }
+
+        if (markingState === null || markingState === 'first') {
+            markingState = 'second';
+            firstMark = cell;
+            markCells = new Set([getCellKey(cell.row, cell.col)]);
+            errorMark = false;
+            renderGrid();
+            statusEl.textContent = `📍 Start: (${cell.row+1}, ${cell.col+1}) - Click the last letter`;
+        } else if (markingState === 'second') {
+            const path = getPathCells(firstMark, cell);
+            if (!path) {
+                errorMark = true;
+                markCells = new Set();
+                markCells.add(getCellKey(firstMark.row, firstMark.col));
+                markCells.add(getCellKey(cell.row, cell.col));
+                renderGrid();
+                statusEl.textContent = '❌ Must be straight line (horizontal, vertical, or diagonal)';
+                setTimeout(() => {
+                    errorMark = false;
+                    markCells = new Set();
+                    markingState = null;
+                    firstMark = null;
+                    renderGrid();
+                    statusEl.textContent = 'Click the first letter, then click the last letter';
+                }, 1500);
+                return;
+            }
+
+            const foundEntry = getWordFromCells(path);
+            if (foundEntry) {
+                if (foundWords.has(foundEntry.word)) {
+                    statusEl.textContent = `"${foundEntry.word}" already found`;
+                    markCells = new Set();
+                    markingState = null;
+                    firstMark = null;
+                    renderGrid();
+                    return;
+                }
+                foundWords.add(foundEntry.word);
+                selectedWord = foundEntry.word;
+                markCells = new Set();
+                markingState = null;
+                firstMark = null;
+                errorMark = false;
+                renderAll();
+                statusEl.textContent = `🎉 Found "${foundEntry.word}"!`;
+                speakWordSearch(foundEntry.word, 'ja-JP');
+                if (foundWords.size === activeWordList.length) {
+                    statusEl.textContent = '🎊 Congratulations! All words found!';
+                }
+            } else {
+                errorMark = true;
+                for (const p of path) {
+                    markCells.add(getCellKey(p.row, p.col));
+                }
+                renderGrid();
+                statusEl.textContent = '❌ Not a valid word in the list';
+                setTimeout(() => {
+                    errorMark = false;
+                    markCells = new Set();
+                    markingState = null;
+                    firstMark = null;
+                    renderGrid();
+                    statusEl.textContent = 'Click the first letter, then click the last letter';
+                }, 1500);
+            }
+        }
+    });
+
+    // ============================================================
+    // Controls
+    // ============================================================
+    furiganaToggleBtn.addEventListener('click', function() {
+        showFurigana = !showFurigana;
+        this.textContent = showFurigana ? '🔤 Furigana: ON' : '🔤 Furigana: OFF';
+        this.classList.toggle('ws-btn-active', !showFurigana);
+        renderGrid();
+        renderWordList();
+    });
+
+    modeToggleBtn.addEventListener('click', function() {
+        currentMode = currentMode === 'words' ? 'sentences' : 'words';
+        this.textContent = currentMode === 'sentences' ? '📝 Mode: Sentences' : '📝 Mode: Words';
+        this.classList.toggle('ws-btn-active', currentMode === 'sentences');
+        
+        // Rebuild pools if needed
+        if (currentMode === 'sentences') {
+            sentencePool = buildSentencePool();
+            console.log('📖 Sentence pool rebuilt:', sentencePool.length, 'entries');
+        }
+        if (currentMode === 'words') {
+            wordPool = buildWordPool();
+            console.log('📚 Word pool rebuilt:', wordPool.length, 'entries');
+        }
+        
+        generatePuzzle();
+        statusEl.textContent = currentMode === 'sentences' ? '📖 Sentences mode' : '📖 Words mode';
+    });
+
+    stopTtsBtn.addEventListener('click', function() {
+        if (typeof stopTts === 'function') {
+            stopTts();
+        } else if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        statusEl.textContent = '⏹️ TTS stopped';
+        setTimeout(() => {
+            statusEl.textContent = 'Click the first letter, then click the last letter to mark';
+        }, 1500);
+    });
+
+    newPuzzleBtn.addEventListener('click', function() {
+        generatePuzzle();
+    });
+
+    printBtn.addEventListener('click', function() {
+        window.print();
+    });
+
+    // Close modal
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        if (typeof stopTts === 'function') {
+            stopTts();
+        } else if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+    });
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            if (typeof stopTts === 'function') {
+                stopTts();
+            } else if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+        }
+    });
+
+    // ============================================================
+    // Open/Close from main button
+    // ============================================================
+    document.getElementById('wordSearchBtn').addEventListener('click', function() {
+        // Refresh data pools
+        wordPool = buildWordPool();
+        sentencePool = buildSentencePool();
+        console.log('🔍 Word Search opened - Word pool:', wordPool.length, 'Sentence pool:', sentencePool.length);
+        generatePuzzle();
+        modal.style.display = 'flex';
+    });
+
+    // ============================================================
+    // Init
+    // ============================================================
+    // Generate initial puzzle
+    wordPool = buildWordPool();
+    sentencePool = buildSentencePool();
+    console.log('📚 Word pool init:', wordPool.length, 'entries');
+    console.log('📖 Sentence pool init:', sentencePool.length, 'entries');
+    
+    // Check if we have any data
+    const dict = getWordDict();
+    const sentences = getSentencesData();
+    console.log('📖 Total sentences available:', sentences.length);
+    console.log('📚 Total wordDict entries:', Object.keys(dict).length);
+    
+    if (wordPool.length > 0) {
+        generatePuzzle();
+    } else if (sentencePool.length > 0) {
+        // If word pool is empty but sentence pool has data, switch to sentences mode
+        currentMode = 'sentences';
+        modeToggleBtn.textContent = '📝 Mode: Sentences';
+        modeToggleBtn.classList.add('ws-btn-active');
+        generatePuzzle();
+    } else {
+        statusEl.textContent = '⚠️ No data available.';
+        gridEl.innerHTML = '<tr><td colspan="12" style="padding: 40px; text-align: center; color: #a02020;">⚠️ No data loaded</td></tr>';
+        wordListEl.innerHTML = '<li style="color: #a02020; text-align: center; padding: 20px;">⚠️ No data loaded</li>';
+    }
+
+})();
+</script>
+
 <script>
   // Register Service Worker for PWA offline support
   if ('serviceWorker' in navigator) {
