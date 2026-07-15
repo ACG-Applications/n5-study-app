@@ -711,17 +711,108 @@
     let errorMark = false;
 
     // ============================================================
+    // FIXED: Proper furigana mapping - handles multiple reading chars per kanji
+    // ============================================================
+
+    // Build a dictionary mapping cell positions to furigana for each word placement
+    const furiganaMap = new Map();
+
+    function getCellKey(row, col) {
+        return `${row},${col}`;
+    }
+
+    function buildFuriganaMap() {
+        furiganaMap.clear();
+        
+        for (const placement of wordPlacements) {
+            const { word, entry, row, col, dr, dc } = placement;
+            const reading = entry.reading || word;
+            
+            // Get the kanji characters in this word
+            const kanjiChars = word.split('');
+            const readingChars = reading.split('');
+            
+            const kanjiCount = kanjiChars.length;
+            const readingCount = readingChars.length;
+            const furiganaForKanji = [];
+            
+            if (kanjiCount === readingCount) {
+                // 1:1 mapping
+                for (let i = 0; i < kanjiCount; i++) {
+                    furiganaForKanji.push(readingChars[i] || '');
+                }
+            } else if (kanjiCount === 1) {
+                // Single kanji, all reading chars go to it
+                furiganaForKanji.push(reading);
+            } else {
+                // More complex: distribute reading chars across kanji
+                let remainingChars = readingCount - kanjiCount;
+                
+                // Give 1 base char to each kanji, distribute extras
+                let idx = 0;
+                for (let i = 0; i < kanjiCount; i++) {
+                    let charCount = 1;
+                    if (i === kanjiCount - 1) {
+                        // Last kanji gets all remaining chars
+                        charCount = 1 + remainingChars;
+                    } else if (remainingChars > 0) {
+                        // Give extras to earlier kanji too
+                        charCount = 1 + Math.floor(remainingChars / (kanjiCount - i));
+                        remainingChars -= (charCount - 1);
+                    }
+                    
+                    const furiganaSegment = readingChars.slice(idx, idx + charCount).join('');
+                    furiganaForKanji.push(furiganaSegment);
+                    idx += charCount;
+                }
+            }
+            
+            // Store the mapping for each grid cell
+            for (let i = 0; i < word.length; i++) {
+                const r = row + i * dr;
+                const c = col + i * dc;
+                const key = getCellKey(r, c);
+                const furigana = furiganaForKanji[i] || '';
+                furiganaMap.set(key, furigana);
+            }
+        }
+    }
+
+    function getFuriganaForChar(row, col) {
+        const key = getCellKey(row, col);
+        // Check furigana map first
+        if (furiganaMap.has(key)) {
+            return furiganaMap.get(key);
+        }
+        
+        // Fallback: try to find from word placements
+        const ch = currentGrid[row][col];
+        for (const entry of activeWordList) {
+            const idx = entry.word.indexOf(ch);
+            if (idx !== -1) {
+                const readingChars = entry.reading.split('');
+                if (readingChars[idx]) {
+                    return readingChars[idx];
+                }
+            }
+        }
+        const dict = getWordDict();
+        if (dict[ch]) {
+            return dict[ch].reading || '';
+        }
+        return '';
+    }
+
+    // ============================================================
     // Data Helpers - Use existing globals
     // ============================================================
     function getSentencesData() {
-        // Try multiple ways to get sentencesData
         if (typeof sentencesData !== 'undefined') {
             return sentencesData;
         }
         if (typeof window.sentencesData !== 'undefined') {
             return window.sentencesData;
         }
-        // Try to get from the global scope
         try {
             return window.sentencesData || [];
         } catch(e) {
@@ -775,16 +866,13 @@
         
         for (const sentence of sentences) {
             const originalJp = sentence.jp || '';
-            // Remove furigana in parentheses but keep the kanji
             let cleanJp = originalJp.replace(/[（(][^）)]*[）)]/g, '').trim();
-            // Remove extra spaces
             cleanJp = cleanJp.replace(/\s+/g, ' ');
             const words = cleanJp.split(/[\s,、。！？]+/);
             
             for (const word of words) {
                 const cleanWord = word.replace(/[、。，,、！!？?、]/g, '').trim();
                 if (cleanWord.length >= 2 && cleanWord.length <= 6 && !usedWords.has(cleanWord)) {
-                    // Check if it's in the dictionary
                     if (dict[cleanWord]) {
                         usedWords.add(cleanWord);
                         pool.push({
@@ -944,6 +1032,7 @@
 
         currentGrid = newGrid;
         wordPlacements = placements;
+        buildFuriganaMap(); // Build furigana mapping for the new puzzle
         foundWords = new Set();
         selectedWord = null;
         markingState = null;
@@ -957,25 +1046,6 @@
     // ============================================================
     // Render
     // ============================================================
-    function getCellKey(row, col) {
-        return `${row},${col}`;
-    }
-
-    function getFuriganaForChar(ch) {
-        for (const entry of activeWordList) {
-            const idx = entry.word.indexOf(ch);
-            if (idx !== -1) {
-                const readingChars = entry.reading.split('');
-                if (readingChars[idx]) return readingChars[idx];
-            }
-        }
-        const dict = getWordDict();
-        if (dict[ch]) {
-            return dict[ch].reading || '';
-        }
-        return '';
-    }
-
     function renderGrid() {
         const n = currentGrid.length;
         if (n === 0 || !currentGrid[0]) {
@@ -1038,7 +1108,7 @@
                     cls = 'ws-error-mark';
                 }
 
-                const furigana = getFuriganaForChar(ch);
+                const furigana = getFuriganaForChar(r, c);
                 const furiganaClass = showFurigana ? '' : 'ws-hidden';
 
                 html += `<td class="${cls}" data-row="${r}" data-col="${c}">
@@ -1349,7 +1419,6 @@
         this.textContent = currentMode === 'sentences' ? '📝 Mode: Sentences' : '📝 Mode: Words';
         this.classList.toggle('ws-btn-active', currentMode === 'sentences');
         
-        // Rebuild pools if needed
         if (currentMode === 'sentences') {
             sentencePool = buildSentencePool();
             console.log('📖 Sentence pool rebuilt:', sentencePool.length, 'entries');
@@ -1408,7 +1477,6 @@
     // Open/Close from main button
     // ============================================================
     document.getElementById('wordSearchBtn').addEventListener('click', function() {
-        // Refresh data pools
         wordPool = buildWordPool();
         sentencePool = buildSentencePool();
         console.log('🔍 Word Search opened - Word pool:', wordPool.length, 'Sentence pool:', sentencePool.length);
@@ -1419,13 +1487,11 @@
     // ============================================================
     // Init
     // ============================================================
-    // Generate initial puzzle
     wordPool = buildWordPool();
     sentencePool = buildSentencePool();
     console.log('📚 Word pool init:', wordPool.length, 'entries');
     console.log('📖 Sentence pool init:', sentencePool.length, 'entries');
     
-    // Check if we have any data
     const dict = getWordDict();
     const sentences = getSentencesData();
     console.log('📖 Total sentences available:', sentences.length);
@@ -1434,7 +1500,6 @@
     if (wordPool.length > 0) {
         generatePuzzle();
     } else if (sentencePool.length > 0) {
-        // If word pool is empty but sentence pool has data, switch to sentences mode
         currentMode = 'sentences';
         modeToggleBtn.textContent = '📝 Mode: Sentences';
         modeToggleBtn.classList.add('ws-btn-active');
