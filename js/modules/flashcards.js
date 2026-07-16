@@ -49,6 +49,111 @@ function resetFlashcardOrder() {
   if (flashIndices.length) showFlash(0);
 }
 
+/**
+ * Get dictionary meaning for a word
+ */
+function getWordMeaning(word) {
+  const dict = window.wordDict || null;
+  if (!dict) return null;
+  
+  // Clean the word (remove furigana markers)
+  const cleanWord = word.replace(/[（(][^）)]*[）)]/g, '').trim();
+  
+  // Try exact match
+  if (dict[cleanWord]) {
+    return dict[cleanWord].meaning;
+  }
+  if (dict[word]) {
+    return dict[word].meaning;
+  }
+  
+  // Try partial match - look for dictionary keys that are substrings
+  const sortedKeys = Object.keys(dict).sort((a, b) => b.length - a.length);
+  for (const key of sortedKeys) {
+    if (key.length > 1 && cleanWord.includes(key)) {
+      return dict[key].meaning;
+    }
+  }
+  
+  // Try removing common suffixes
+  if (cleanWord.endsWith('い')) {
+    const base = cleanWord.slice(0, -1);
+    if (dict[base]) return dict[base].meaning;
+  }
+  if (cleanWord.endsWith('な')) {
+    const base = cleanWord.slice(0, -1);
+    if (dict[base]) return dict[base].meaning;
+  }
+  
+  return null;
+}
+
+/**
+ * Wrap a word with tooltip HTML
+ */
+function wrapWordWithTooltip(word, meaning) {
+  // Build display with furigana
+  let displayWord = word;
+  
+  // Handle furigana format: kanji（ふりがな）
+  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => 
+    `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+  );
+  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => 
+    `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+  );
+  
+  // Check if this word contains a particle at the end
+  const cleanWord = word.replace(/[（(][^）)]*[）)]/g, '').trim();
+  const particleMatch = cleanWord.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
+  
+  if (particleMatch) {
+    const before = particleMatch[1];
+    const particle = particleMatch[2];
+    let beforeHtml = before;
+    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => 
+      `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+    );
+    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => 
+      `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+    );
+    return `<span class="word-tooltip">${beforeHtml}<span class="particle-highlight">${particle}</span><span class="tooltip-text">${meaning}</span></span>`;
+  }
+  
+  return `<span class="word-tooltip">${displayWord}<span class="tooltip-text">${meaning}</span></span>`;
+}
+
+/**
+ * Wrap words with tooltips for flashcard display
+ */
+function wrapWordsWithTooltips(sentence) {
+  if (!sentence || !sentence.jp) return '';
+  
+  const parts = sentence.jp.split(/\s+/);
+  let result = '';
+  
+  for (const part of parts) {
+    const meaning = getWordMeaning(part);
+    
+    if (meaning) {
+      result += wrapWordWithTooltip(part, meaning);
+    } else {
+      // No meaning found - just display with furigana
+      let displayPart = part;
+      displayPart = displayPart.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => 
+        `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+      );
+      displayPart = displayPart.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => 
+        `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+      );
+      result += displayPart;
+    }
+    result += ' ';
+  }
+  
+  return result.trim();
+}
+
 function showFlash(pos) { 
   if (!flashIndices.length || pos >= flashIndices.length) return;
   const idx = flashIndices[pos]; 
@@ -63,11 +168,6 @@ function showFlash(pos) {
   flashTranslationRevealed = false;
   const revealBtn = document.getElementById('revealTransBtn');
   if (revealBtn) revealBtn.innerText = '🔎 Reveal On';
-  
-  // Add long press support for tooltips on mobile
-  if (typeof addLongPressSupport === 'function') {
-    flashJpDiv.querySelectorAll('.word-tooltip').forEach(addLongPressSupport);
-  }
 }
 
 // Update flashcard content when sprint changes

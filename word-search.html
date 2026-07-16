@@ -953,6 +953,9 @@
         return `${row},${col}`;
     }
 
+    // ============================================================
+    // FIXED: buildFuriganaMap - correctly distributes reading chars to kanji
+    // ============================================================
     function buildFuriganaMap() {
         furiganaMap.clear();
         
@@ -960,42 +963,66 @@
             const { word, entry, row, col, dr, dc } = placement;
             const reading = entry.reading || word;
             
-            // Get the kanji characters in this word
-            const kanjiChars = word.split('');
+            const wordChars = word.split('');
             const readingChars = reading.split('');
             
-            const kanjiCount = kanjiChars.length;
-            const readingCount = readingChars.length;
-            const furiganaForKanji = [];
-            
-            if (kanjiCount === readingCount) {
-                // 1:1 mapping
-                for (let i = 0; i < kanjiCount; i++) {
-                    furiganaForKanji.push(readingChars[i] || '');
+            // Find positions of kanji in the word
+            const kanjiPositions = [];
+            for (let i = 0; i < wordChars.length; i++) {
+                const code = wordChars[i].charCodeAt(0);
+                // Check if character is kanji (CJK Unified Ideographs)
+                if ((code >= 0x4E00 && code <= 0x9FAF) || (code >= 0x3400 && code <= 0x4DBF)) {
+                    kanjiPositions.push(i);
                 }
+            }
+            
+            const kanjiCount = kanjiPositions.length;
+            const furiganaForKanji = new Array(wordChars.length).fill('');
+            
+            if (kanjiCount === 0) {
+                // No kanji - no furigana
+                // All entries remain empty
             } else if (kanjiCount === 1) {
-                // Single kanji, all reading chars go to it
-                furiganaForKanji.push(reading);
+                // Single kanji - all reading chars go to it
+                const pos = kanjiPositions[0];
+                furiganaForKanji[pos] = reading;
             } else {
-                // More complex: distribute reading chars across kanji
-                let remainingChars = readingCount - kanjiCount;
+                // Multiple kanji - distribute reading chars only to kanji positions
                 
-                // Give 1 base char to each kanji, distribute extras
-                let idx = 0;
-                for (let i = 0; i < kanjiCount; i++) {
-                    let charCount = 1;
-                    if (i === kanjiCount - 1) {
-                        // Last kanji gets all remaining chars
-                        charCount = 1 + remainingChars;
-                    } else if (remainingChars > 0) {
-                        // Give extras to earlier kanji too
-                        charCount = 1 + Math.floor(remainingChars / (kanjiCount - i));
-                        remainingChars -= (charCount - 1);
+                // First, try to match the reading to the word structure
+                // The reading may include okurigana (hiragana that are also in the word)
+                
+                // Remove okurigana from the reading (hiragana/katakana that appear in the word at the same position)
+                let cleanReadingChars = [...readingChars];
+                
+                // For each non-kanji position in the word, check if the same character appears in the reading
+                let offset = 0;
+                for (let i = 0; i < wordChars.length; i++) {
+                    if (!kanjiPositions.includes(i)) {
+                        // This is a non-kanji character in the word
+                        const readingIdx = i - offset;
+                        if (readingIdx >= 0 && readingIdx < cleanReadingChars.length && 
+                            cleanReadingChars[readingIdx] === wordChars[i]) {
+                            cleanReadingChars.splice(readingIdx, 1);
+                            offset++;
+                        }
+                    }
+                }
+                
+                // Now distribute the remaining reading chars among the kanji positions
+                let readingIdx = 0;
+                for (let i = 0; i < kanjiPositions.length; i++) {
+                    const pos = kanjiPositions[i];
+                    const remainingKanji = kanjiPositions.length - i;
+                    
+                    let charsForThisKanji = Math.ceil(cleanReadingChars.length / remainingKanji);
+                    if (charsForThisKanji < 1) charsForThisKanji = 1;
+                    if (charsForThisKanji > cleanReadingChars.length) {
+                        charsForThisKanji = cleanReadingChars.length;
                     }
                     
-                    const furiganaSegment = readingChars.slice(idx, idx + charCount).join('');
-                    furiganaForKanji.push(furiganaSegment);
-                    idx += charCount;
+                    const furiganaSegment = cleanReadingChars.splice(0, charsForThisKanji).join('');
+                    furiganaForKanji[pos] = furiganaSegment;
                 }
             }
             
@@ -1004,8 +1031,7 @@
                 const r = row + i * dr;
                 const c = col + i * dc;
                 const key = getCellKey(r, c);
-                const furigana = furiganaForKanji[i] || '';
-                furiganaMap.set(key, furigana);
+                furiganaMap.set(key, furiganaForKanji[i] || '');
             }
         }
     }
