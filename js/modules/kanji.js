@@ -1,77 +1,80 @@
 // ==================== KANJI MODULE ====================
 
-let currentKanjiTab = 'list';
+let currentKanjiTab = "list";
 let furiganaHidden = false;
 let masteredKanji = new Set();
 let attemptedKanji = new Set();
-let currentSearchTerm = '';
+let currentSearchTerm = "";
 
 // DOM Elements
-const furiToggleBtn = document.getElementById('furiToggleBtn');
-const tabListBtn = document.getElementById('tabListBtn');
-const tabLearnBtn = document.getElementById('tabLearnBtn');
-const tabQuizBtn = document.getElementById('tabQuizBtn');
-const tabMasteredBtn = document.getElementById('tabMasteredBtn');
-const kanjiSearchInput = document.getElementById('kanjiSearchInput');
-const resetAllProgressBtn = document.getElementById('resetAllProgressBtn');
-const resetMasteredOnlyBtn = document.getElementById('resetMasteredOnlyBtn');
+const furiToggleBtn = document.getElementById("furiToggleBtn");
+const tabListBtn = document.getElementById("tabListBtn");
+const tabLearnBtn = document.getElementById("tabLearnBtn");
+const tabQuizBtn = document.getElementById("tabQuizBtn");
+const tabMasteredBtn = document.getElementById("tabMasteredBtn");
+const kanjiSearchInput = document.getElementById("kanjiSearchInput");
+const resetAllProgressBtn = document.getElementById("resetAllProgressBtn");
+const resetMasteredOnlyBtn = document.getElementById("resetMasteredOnlyBtn");
 
 // ========== TTS FUNCTION ==========
-function speakText(text, lang = 'ja-JP') {
-    if (!text || text === '-' || text.trim() === '') return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang;
-    utterance.rate = 0.85;
-    utterance.pitch = 1.0;
-    window.speechSynthesis.speak(utterance);
+function speakText(text, lang = "ja-JP") {
+  if (!text || text === "-" || text.trim() === "") return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+  window.speechSynthesis.speak(utterance);
 }
 
 // ========== PRINT FUNCTION ==========
 function printLesson() {
-    window.print();
+  window.print();
 }
 
 // Helper: Get Unicode hex for a kanji character
 function getUnicodeHex(kanji) {
-    return kanji.codePointAt(0).toString(16).toUpperCase();
+  return kanji.codePointAt(0).toString(16).toUpperCase();
 }
 
 // Find example sentences from sentencesData containing this kanji
 function findSentencesForKanji(kanjiChar) {
-    if (typeof sentencesData === 'undefined' || !sentencesData) return [];
-    
-    const results = [];
-    for (const sentence of sentencesData) {
-        if (sentence.jp && sentence.jp.includes(kanjiChar)) {
-            results.push({
-                sentence: sentence.jp,
-                reading: sentence.reading || '',
-                english: sentence.translation || ''
-            });
-            if (results.length >= 3) break;
-        }
+  if (typeof sentencesData === "undefined" || !sentencesData) return [];
+
+  const results = [];
+  for (const sentence of sentencesData) {
+    if (sentence.jp && sentence.jp.includes(kanjiChar)) {
+      results.push({
+        sentence: sentence.jp,
+        reading: sentence.reading || "",
+        english: sentence.translation || "",
+      });
+      if (results.length >= 3) break;
     }
-    return results;
+  }
+  return results;
 }
 
 // Add furigana to text
 function addFuriganaToText(text) {
-    if (!text) return '';
-    if (furiganaHidden) {
-        return text.replace(/[（(][^）)]*[）)]/g, '');
-    }
-    return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-    });
+  if (!text) return "";
+  if (furiganaHidden) {
+    return text.replace(/[（(][^）)]*[）)]/g, "");
+  }
+  return text.replace(
+    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+    (_, kanji, furigana) => {
+      return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+    },
+  );
 }
 
 // ===== RENDER LEARN TAB =====
 function renderLearnTab() {
-    const container = document.getElementById("learnContent");
-    if (!container) return;
+  const container = document.getElementById("learnContent");
+  if (!container) return;
 
-    const content = `
+  const content = `
         <div class="learn-container" style="background: #ffffff; border-radius: 20px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e8e0d5;">
             
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
@@ -324,115 +327,121 @@ function renderLearnTab() {
         </div>
     `;
 
-    // Apply furigana to all Japanese text in the content
-    container.innerHTML = addFuriganaToText(content);
+  // Apply furigana to all Japanese text in the content
+  container.innerHTML = addFuriganaToText(content);
 
-    // Add TTS click listeners to all example elements
-    document.querySelectorAll(".example-box, .example-click").forEach((el) => {
-        if (!el.hasAttribute("data-tts-attached")) {
-            el.setAttribute("data-tts-attached", "true");
-            if (!el.hasAttribute("onclick")) {
-                const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
-                if (text) {
-                    el.addEventListener("click", function(e) {
-                        if (e.target.closest(".tooltip-text") || e.target.closest(".particle-highlight") || e.target.closest(".word-tooltip")) return;
-                        const cleanText = text.replace(/[→].*$/, "").trim();
-                        if (cleanText && typeof speakText === "function") {
-                            speakText(cleanText);
-                        }
-                    });
-                }
+  // Add TTS click listeners to all example elements
+  document.querySelectorAll(".example-box, .example-click").forEach((el) => {
+    if (!el.hasAttribute("data-tts-attached")) {
+      el.setAttribute("data-tts-attached", "true");
+      if (!el.hasAttribute("onclick")) {
+        const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
+        if (text) {
+          el.addEventListener("click", function (e) {
+            if (
+              e.target.closest(".tooltip-text") ||
+              e.target.closest(".particle-highlight") ||
+              e.target.closest(".word-tooltip")
+            )
+              return;
+            const cleanText = text.replace(/[→].*$/, "").trim();
+            if (cleanText && typeof speakText === "function") {
+              speakText(cleanText);
             }
+          });
         }
-    });
-
-    // Re-apply furigana hide state
-    if (furiganaHidden) {
-        container.querySelectorAll('rt').forEach(rt => {
-            rt.style.display = 'none';
-        });
-    } else {
-        container.querySelectorAll('rt').forEach(rt => {
-            rt.style.display = '';
-        });
+      }
     }
+  });
+
+  // Re-apply furigana hide state
+  if (furiganaHidden) {
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
+    });
+  } else {
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
+    });
+  }
 }
 
 // Load mastered from localStorage
 function loadMasteredKanji() {
-    const stored = localStorage.getItem('masteredKanji');
-    if (stored) {
-        masteredKanji = new Set(JSON.parse(stored));
-    }
-    const storedAttempted = localStorage.getItem('attemptedKanji');
-    if (storedAttempted) {
-        attemptedKanji = new Set(JSON.parse(storedAttempted));
-    }
-    updateMasteredCount();
+  const stored = localStorage.getItem("masteredKanji");
+  if (stored) {
+    masteredKanji = new Set(JSON.parse(stored));
+  }
+  const storedAttempted = localStorage.getItem("attemptedKanji");
+  if (storedAttempted) {
+    attemptedKanji = new Set(JSON.parse(storedAttempted));
+  }
+  updateMasteredCount();
 }
 
 function saveMasteredKanji() {
-    localStorage.setItem('masteredKanji', JSON.stringify([...masteredKanji]));
-    localStorage.setItem('attemptedKanji', JSON.stringify([...attemptedKanji]));
-    updateMasteredCount();
+  localStorage.setItem("masteredKanji", JSON.stringify([...masteredKanji]));
+  localStorage.setItem("attemptedKanji", JSON.stringify([...attemptedKanji]));
+  updateMasteredCount();
 }
 
 function updateMasteredCount() {
-    const total = kanjiData.length;
-    const mastered = masteredKanji.size;
-    const attempted = attemptedKanji.size;
-    
-    const masteredCountSpan = document.getElementById('masteredCount');
-    const totalCountSpan = document.getElementById('totalCount');
-    if (masteredCountSpan) masteredCountSpan.innerText = mastered;
-    if (totalCountSpan) totalCountSpan.innerText = total;
-    
-    const quizMasteredEl = document.getElementById('quizMasteredCount');
-    const quizAttemptedEl = document.getElementById('quizAttemptedCount');
-    const quizTotalEl = document.getElementById('quizTotalKanji');
-    const quizTotalEl2 = document.getElementById('quizTotalKanji2');
-    if (quizMasteredEl) quizMasteredEl.innerText = mastered;
-    if (quizAttemptedEl) quizAttemptedEl.innerText = attempted;
-    if (quizTotalEl) quizTotalEl.innerText = total;
-    if (quizTotalEl2) quizTotalEl2.innerText = total;
+  const total = kanjiData.length;
+  const mastered = masteredKanji.size;
+  const attempted = attemptedKanji.size;
+
+  const masteredCountSpan = document.getElementById("masteredCount");
+  const totalCountSpan = document.getElementById("totalCount");
+  if (masteredCountSpan) masteredCountSpan.innerText = mastered;
+  if (totalCountSpan) totalCountSpan.innerText = total;
+
+  const quizMasteredEl = document.getElementById("quizMasteredCount");
+  const quizAttemptedEl = document.getElementById("quizAttemptedCount");
+  const quizTotalEl = document.getElementById("quizTotalKanji");
+  const quizTotalEl2 = document.getElementById("quizTotalKanji2");
+  if (quizMasteredEl) quizMasteredEl.innerText = mastered;
+  if (quizAttemptedEl) quizAttemptedEl.innerText = attempted;
+  if (quizTotalEl) quizTotalEl.innerText = total;
+  if (quizTotalEl2) quizTotalEl2.innerText = total;
 }
 
 function markKanjiMastered(kanjiId, isFirstAttempt = true) {
-    if (isFirstAttempt && !masteredKanji.has(kanjiId)) {
-        masteredKanji.add(kanjiId);
-    }
-    if (!attemptedKanji.has(kanjiId)) {
-        attemptedKanji.add(kanjiId);
-    }
-    saveMasteredKanji();
-    renderKanjiList();
-    renderMasteredList();
+  if (isFirstAttempt && !masteredKanji.has(kanjiId)) {
+    masteredKanji.add(kanjiId);
+  }
+  if (!attemptedKanji.has(kanjiId)) {
+    attemptedKanji.add(kanjiId);
+  }
+  saveMasteredKanji();
+  renderKanjiList();
+  renderMasteredList();
 }
 
 function unmarkKanjiMastered(kanjiId) {
-    masteredKanji.delete(kanjiId);
-    saveMasteredKanji();
-    renderKanjiList();
-    renderMasteredList();
+  masteredKanji.delete(kanjiId);
+  saveMasteredKanji();
+  renderKanjiList();
+  renderMasteredList();
 }
 
 // Render mastered list
 function renderMasteredList() {
-    const container = document.getElementById('masteredList');
-    if (!container) return;
-    
-    const masteredIds = [...masteredKanji];
-    
-    if (masteredIds.length === 0) {
-        container.innerHTML = '<p class="empty-message">No kanji mastered yet. Complete a quiz to master them!</p>';
-        return;
-    }
-    
-    let html = '';
-    for (const kanjiId of masteredIds) {
-        const kanji = kanjiData.find(k => k.id === kanjiId);
-        if (kanji) {
-            html += `
+  const container = document.getElementById("masteredList");
+  if (!container) return;
+
+  const masteredIds = [...masteredKanji];
+
+  if (masteredIds.length === 0) {
+    container.innerHTML =
+      '<p class="empty-message">No kanji mastered yet. Complete a quiz to master them!</p>';
+    return;
+  }
+
+  let html = "";
+  for (const kanjiId of masteredIds) {
+    const kanji = kanjiData.find((k) => k.id === kanjiId);
+    if (kanji) {
+      html += `
                 <div class="mastered-kanji-item">
                     <div>
                         <span class="mastered-kanji-char">${kanji.kanji}</span>
@@ -441,106 +450,116 @@ function renderMasteredList() {
                     <button class="unmaster-btn" data-kanji-id="${kanji.id}">Remove</button>
                 </div>
             `;
-        }
     }
-    
-    container.innerHTML = html;
-    
-    document.querySelectorAll('.unmaster-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const kanjiId = btn.dataset.kanjiId;
-            unmarkKanjiMastered(kanjiId);
-        });
+  }
+
+  container.innerHTML = html;
+
+  document.querySelectorAll(".unmaster-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const kanjiId = btn.dataset.kanjiId;
+      unmarkKanjiMastered(kanjiId);
     });
+  });
 }
 
 // Helper function to display a sentence with proper furigana handling
 function displaySentenceWithFurigana(sentence) {
-    if (!sentence) return '';
-    
-    if (typeof getWordMeaningsForSentence === 'function' && typeof createQuizWordTooltips === 'function') {
-        const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
-        if (wordMeanings && wordMeanings.length > 0) {
-            if (furiganaHidden) {
-                const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
-                const cleanWordMeanings = getWordMeaningsForSentence({ jp: cleanSentence });
-                return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
-            }
-            return createQuizWordTooltips(sentence, wordMeanings);
-        }
+  if (!sentence) return "";
+
+  if (
+    typeof getWordMeaningsForSentence === "function" &&
+    typeof createQuizWordTooltips === "function"
+  ) {
+    const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
+    if (wordMeanings && wordMeanings.length > 0) {
+      if (furiganaHidden) {
+        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
+        const cleanWordMeanings = getWordMeaningsForSentence({
+          jp: cleanSentence,
+        });
+        return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
+      }
+      return createQuizWordTooltips(sentence, wordMeanings);
     }
-    return addFuriganaToText(sentence);
+  }
+  return addFuriganaToText(sentence);
 }
 
 // RENDER KANJI LIST - MAIN FUNCTION
 function renderKanjiList() {
-    const container = document.getElementById('kanjiList');
-    if (!container) {
-        console.log('Container not found');
-        return;
+  const container = document.getElementById("kanjiList");
+  if (!container) {
+    console.log("Container not found");
+    return;
+  }
+
+  let filteredKanji = [...kanjiData];
+
+  if (currentSearchTerm) {
+    const searchLower = currentSearchTerm.toLowerCase();
+    filteredKanji = filteredKanji.filter(
+      (k) =>
+        k.kanji.includes(currentSearchTerm) ||
+        k.meaning.toLowerCase().includes(searchLower) ||
+        (k.onyomi && k.onyomi.toLowerCase().includes(searchLower)) ||
+        (k.kunyomi && k.kunyomi.toLowerCase().includes(searchLower)),
+    );
+  }
+
+  let html = '<div class="kanji-grid">';
+
+  for (const kanji of filteredKanji) {
+    const isMastered = masteredKanji.has(kanji.id);
+
+    const onyomiAttr = (kanji.onyomi || "-").replace(/"/g, "&quot;");
+    const kunyomiAttr = (kanji.kunyomi || "-").replace(/"/g, "&quot;");
+
+    let exampleSentences = [];
+    if (kanji.examples && kanji.examples.length > 0) {
+      exampleSentences = kanji.examples;
+    } else {
+      exampleSentences = findSentencesForKanji(kanji.kanji);
     }
-    
-    let filteredKanji = [...kanjiData];
-    
-    if (currentSearchTerm) {
-        const searchLower = currentSearchTerm.toLowerCase();
-        filteredKanji = filteredKanji.filter(k => 
-            k.kanji.includes(currentSearchTerm) ||
-            k.meaning.toLowerCase().includes(searchLower) ||
-            (k.onyomi && k.onyomi.toLowerCase().includes(searchLower)) ||
-            (k.kunyomi && k.kunyomi.toLowerCase().includes(searchLower))
-        );
-    }
-    
-    let html = '<div class="kanji-grid">';
-    
-    for (const kanji of filteredKanji) {
-        const isMastered = masteredKanji.has(kanji.id);
-        
-        const onyomiAttr = (kanji.onyomi || '-').replace(/"/g, '&quot;');
-        const kunyomiAttr = (kanji.kunyomi || '-').replace(/"/g, '&quot;');
-        
-        let exampleSentences = [];
-        if (kanji.examples && kanji.examples.length > 0) {
-            exampleSentences = kanji.examples;
-        } else {
-            exampleSentences = findSentencesForKanji(kanji.kanji);
-        }
-        
-        let examplesHtml = '';
-        if (exampleSentences.length > 0) {
-            examplesHtml = exampleSentences.map(ex => {
-                let displayJp = displaySentenceWithFurigana(ex.sentence);
-                const reading = ex.reading || ex.sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
-                
-                return `
-                    <div class="example-item" data-reading="${reading}" data-sentence="${ex.sentence || ''}">
+
+    let examplesHtml = "";
+    if (exampleSentences.length > 0) {
+      examplesHtml = exampleSentences
+        .map((ex) => {
+          let displayJp = displaySentenceWithFurigana(ex.sentence);
+          const reading =
+            ex.reading || ex.sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
+
+          return `
+                    <div class="example-item" data-reading="${reading}" data-sentence="${ex.sentence || ""}">
                         <div class="example-jp">${displayJp}</div>
                         <div class="example-trans">${ex.english}</div>
                         <button class="small-btn example-tts-btn" style="margin-top: 6px; font-size: 0.7rem; background: #6c8b6b; color: white; border: none; padding: 2px 12px; border-radius: 20px; cursor: pointer;" data-reading="${reading}">🔊 Listen</button>
                     </div>
                 `;
-            }).join('');
-        } else {
-            examplesHtml = '<p style="color: #999; font-style: italic;">No examples available</p>';
-        }
-        
-        html += `
-            <div class="kanji-card ${isMastered ? 'mastered' : ''}" data-kanji-id="${kanji.id}">
+        })
+        .join("");
+    } else {
+      examplesHtml =
+        '<p style="color: #999; font-style: italic;">No examples available</p>';
+    }
+
+    html += `
+            <div class="kanji-card ${isMastered ? "mastered" : ""}" data-kanji-id="${kanji.id}">
                 <div class="kanji-header-card">
                     <span class="kanji-pattern">${kanji.kanji}</span>
                     <span class="kanji-meaning">${kanji.meaning}</span>
-                    ${isMastered ? '<span class="mastered-badge">✓ Mastered</span>' : ''}
+                    ${isMastered ? '<span class="mastered-badge">✓ Mastered</span>' : ""}
                 </div>
                 <div class="kanji-readings">
                     <div>
                         <strong>On'yomi:</strong> 
-                        <span class="reading-value">${kanji.onyomi || '-'}</span>
+                        <span class="reading-value">${kanji.onyomi || "-"}</span>
                         <button class="tts-reading-btn small-btn" data-text="${onyomiAttr}" data-lang="ja-JP" style="margin-left: 8px; padding: 2px 8px; font-size: 0.7rem;">🔊</button>
                     </div>
                     <div>
                         <strong>Kun'yomi:</strong> 
-                        <span class="reading-value">${kanji.kunyomi || '-'}</span>
+                        <span class="reading-value">${kanji.kunyomi || "-"}</span>
                         <button class="tts-reading-btn small-btn" data-text="${kunyomiAttr}" data-lang="ja-JP" style="margin-left: 8px; padding: 2px 8px; font-size: 0.7rem;">🔊</button>
                     </div>
                 </div>
@@ -550,7 +569,7 @@ function renderKanjiList() {
                 </div>
                 <div class="kanji-buttons">
                     <button class="small-btn mark-mastered-btn" data-kanji-id="${kanji.id}">
-                        ${isMastered ? '✓ Mastered' : '✓ Mark as Mastered'}
+                        ${isMastered ? "✓ Mastered" : "✓ Mark as Mastered"}
                     </button>
                     <button class="small-btn stroke-order-btn" data-kanji="${kanji.kanji}" data-unicode="${getUnicodeHex(kanji.kanji)}" data-meaning="${kanji.meaning}">
                         ✍️ Stroke Order
@@ -558,280 +577,378 @@ function renderKanjiList() {
                 </div>
             </div>
         `;
+  }
+
+  html += "</div>";
+
+  if (filteredKanji.length === 0) {
+    html =
+      '<p style="text-align: center; padding: 40px;">No kanji match your search.</p>';
+  }
+
+  container.innerHTML = html;
+  console.log("Kanji list rendered, count:", filteredKanji.length);
+
+  if (typeof attachQuizTooltipsGlobal === "function") {
+    setTimeout(attachQuizTooltipsGlobal, 50);
+  } else if (typeof attachQuizTooltips === "function") {
+    setTimeout(attachQuizTooltips, 50);
+  } else if (typeof attachTooltipLongPress === "function") {
+    setTimeout(() => attachTooltipLongPress(container), 50);
+  }
+}
+
+// ==================== RESET FUNCTIONS ====================
+function resetAllProgress() {
+  if (
+    confirm(
+      "⚠️ Are you sure you want to reset ALL progress? This will remove all mastered kanji and quiz history.",
+    )
+  ) {
+    masteredKanji.clear();
+    attemptedKanji.clear();
+    saveMasteredKanji();
+
+    // Reset any quiz state
+    if (typeof kanjiQuizState !== "undefined") {
+      kanjiQuizState.isActive = false;
+      kanjiQuizState.questions = [];
+      kanjiQuizState.currentIndex = 0;
+      kanjiQuizState.correctCount = 0;
+      kanjiQuizState.incorrectCount = 0;
+      kanjiQuizState.totalCount = 0;
     }
-    
-    html += '</div>';
-    
-    if (filteredKanji.length === 0) {
-        html = '<p style="text-align: center; padding: 40px;">No kanji match your search.</p>';
+
+    renderKanjiList();
+    renderMasteredList();
+    updateMasteredCount();
+
+    // Reset quiz display
+    const quizArea = document.getElementById("quizArea");
+    if (quizArea) {
+      quizArea.innerHTML = `
+                <p class="quiz-welcome" style="text-align: center; color: #666; padding: 40px; font-size: 1rem;">
+                    Progress has been reset. Select a mode and number of questions, then click <strong>"Start New Quiz"</strong>
+                </p>
+            `;
     }
-    
-    container.innerHTML = html;
-    console.log('Kanji list rendered, count:', filteredKanji.length);
-    
-    if (typeof attachQuizTooltipsGlobal === 'function') {
-        setTimeout(attachQuizTooltipsGlobal, 50);
-    } else if (typeof attachQuizTooltips === 'function') {
-        setTimeout(attachQuizTooltips, 50);
-    } else if (typeof attachTooltipLongPress === 'function') {
-        setTimeout(() => attachTooltipLongPress(container), 50);
+    const resultsDiv = document.getElementById("quizResults");
+    if (resultsDiv) resultsDiv.style.display = "none";
+
+    alert("✅ All progress has been reset.");
+  }
+}
+
+function resetMasteredOnly() {
+  if (
+    confirm(
+      "⚠️ Are you sure you want to reset only the mastered status? Quiz history will be preserved.",
+    )
+  ) {
+    masteredKanji.clear();
+    saveMasteredKanji();
+
+    renderKanjiList();
+    renderMasteredList();
+    updateMasteredCount();
+
+    // Reset quiz display
+    const quizArea = document.getElementById("quizArea");
+    if (quizArea && (!quizArea.innerHTML || quizArea.innerHTML.trim() === "")) {
+      quizArea.innerHTML = `
+                <p class="quiz-welcome" style="text-align: center; color: #666; padding: 40px; font-size: 1rem;">
+                    Mastered status has been reset. Select a mode and number of questions, then click <strong>"Start New Quiz"</strong>
+                </p>
+            `;
     }
+
+    alert("✅ Mastered status has been reset.");
+  }
 }
 
 // ========== EVENT DELEGATION ==========
 function setupDelegation() {
-    const container = document.getElementById('kanjiList');
-    if (!container) return;
-    
-    container.addEventListener('click', function(e) {
-        const btn = e.target.closest('.stroke-order-btn');
-        if (!btn) return;
-        e.stopPropagation();
-        
-        const kanji = btn.dataset.kanji;
-        const unicode = btn.dataset.unicode;
-        const meaning = btn.dataset.meaning;
-        
-        if (typeof showStrokeOrder === 'function') {
-            showStrokeOrder(kanji, unicode, meaning);
-        } else {
-            console.error('showStrokeOrder is not defined!');
-            alert('Stroke order feature not available. Please check console.');
-        }
-    });
-    
-    container.addEventListener('click', function(e) {
-        const btn = e.target.closest('.mark-mastered-btn');
-        if (!btn) return;
-        e.stopPropagation();
-        
-        const kanjiId = btn.dataset.kanjiId;
-        if (masteredKanji.has(kanjiId)) {
-            unmarkKanjiMastered(kanjiId);
-        } else {
-            markKanjiMastered(kanjiId, true);
-        }
-    });
-    
-    container.addEventListener('click', function(e) {
-        const btn = e.target.closest('.tts-reading-btn');
-        if (!btn) return;
-        e.stopPropagation();
-        
-        const text = btn.dataset.text;
-        const lang = btn.dataset.lang || 'ja-JP';
-        if (text && text !== '-') {
-            speakText(text, lang);
-        }
-    });
-    
-    container.addEventListener('click', function(e) {
-        const item = e.target.closest('.example-item');
-        if (!item) return;
-        e.stopPropagation();
-        
-        if (e.target.closest('.example-tts-btn')) {
-            const btn = e.target.closest('.example-tts-btn');
-            const btnReading = btn.dataset.reading || item.dataset.reading || '';
-            if (btnReading) {
-                speakText(btnReading, 'ja-JP');
-            }
-            return;
-        }
-        
-        const reading = item.dataset.reading;
-        if (reading && reading.trim() !== '') {
-            speakText(reading, 'ja-JP');
-        } else {
-            const sentence = item.dataset.sentence || '';
-            const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
-            if (cleanSentence) {
-                speakText(cleanSentence, 'ja-JP');
-            }
-        }
-    });
+  const container = document.getElementById("kanjiList");
+  if (!container) return;
+
+  container.addEventListener("click", function (e) {
+    const btn = e.target.closest(".stroke-order-btn");
+    if (!btn) return;
+    e.stopPropagation();
+
+    const kanji = btn.dataset.kanji;
+    const unicode = btn.dataset.unicode;
+    const meaning = btn.dataset.meaning;
+
+    if (typeof showStrokeOrder === "function") {
+      showStrokeOrder(kanji, unicode, meaning);
+    } else {
+      console.error("showStrokeOrder is not defined!");
+      alert("Stroke order feature not available. Please check console.");
+    }
+  });
+
+  container.addEventListener("click", function (e) {
+    const btn = e.target.closest(".mark-mastered-btn");
+    if (!btn) return;
+    e.stopPropagation();
+
+    const kanjiId = btn.dataset.kanjiId;
+    if (masteredKanji.has(kanjiId)) {
+      unmarkKanjiMastered(kanjiId);
+    } else {
+      markKanjiMastered(kanjiId, true);
+    }
+  });
+
+  container.addEventListener("click", function (e) {
+    const btn = e.target.closest(".tts-reading-btn");
+    if (!btn) return;
+    e.stopPropagation();
+
+    const text = btn.dataset.text;
+    const lang = btn.dataset.lang || "ja-JP";
+    if (text && text !== "-") {
+      speakText(text, lang);
+    }
+  });
+
+  container.addEventListener("click", function (e) {
+    const item = e.target.closest(".example-item");
+    if (!item) return;
+    e.stopPropagation();
+
+    if (e.target.closest(".example-tts-btn")) {
+      const btn = e.target.closest(".example-tts-btn");
+      const btnReading = btn.dataset.reading || item.dataset.reading || "";
+      if (btnReading) {
+        speakText(btnReading, "ja-JP");
+      }
+      return;
+    }
+
+    const reading = item.dataset.reading;
+    if (reading && reading.trim() !== "") {
+      speakText(reading, "ja-JP");
+    } else {
+      const sentence = item.dataset.sentence || "";
+      const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
+      if (cleanSentence) {
+        speakText(cleanSentence, "ja-JP");
+      }
+    }
+  });
 }
 
 function applyFuriganaHide() {
-    furiganaHidden = !furiganaHidden;
-    if (furiToggleBtn) {
-        furiToggleBtn.innerText = furiganaHidden ? '🔤 Furigana On' : '🔤 Furigana Off';
-    }
-    renderKanjiList();
-    renderLearnTab();
-    renderMasteredList();
-    
-    if (kanjiQuizState && kanjiQuizState.isActive && kanjiQuizState.questions.length > 0) {
-        renderKanjiQuizQuestion();
-    }
+  furiganaHidden = !furiganaHidden;
+  if (furiToggleBtn) {
+    furiToggleBtn.innerText = furiganaHidden
+      ? "🔤 Furigana On"
+      : "🔤 Furigana Off";
+  }
+  renderKanjiList();
+  renderLearnTab();
+  renderMasteredList();
+
+  if (
+    kanjiQuizState &&
+    kanjiQuizState.isActive &&
+    kanjiQuizState.questions.length > 0
+  ) {
+    renderKanjiQuizQuestion();
+  }
 }
 
 // ===== UPDATED switchTab function with learn tab support =====
 function switchTab(tabId) {
-    currentKanjiTab = tabId;
-    
-    // ===== ADD tabLearnBtn to the array =====
-    const tabButtons = [tabListBtn, tabLearnBtn, tabQuizBtn, tabMasteredBtn];
-    tabButtons.forEach(btn => {
-        if (btn) btn.classList.remove('active');
-    });
-    
-    const activeBtn = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Btn`);
-    if (activeBtn) activeBtn.classList.add('active');
-    
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    
-    const activeContent = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
-    if (activeContent) activeContent.classList.add('active');
-    
-    if (tabId === 'list') {
-        renderKanjiList();
-    } else if (tabId === 'learn') {
-        renderLearnTab();  // ===== ADD THIS CASE =====
-    } else if (tabId === 'mastered') {
-        renderMasteredList();
-    } else if (tabId === 'quiz') {
-        updateMasteredCount();
-        const quizArea = document.getElementById('quizArea');
-        if (quizArea && !quizArea.innerHTML.includes('quiz-welcome')) {
-            if (!quizArea.innerHTML || quizArea.innerHTML.trim() === '') {
-                quizArea.innerHTML = `
+  currentKanjiTab = tabId;
+
+  // ===== ADD tabLearnBtn to the array =====
+  const tabButtons = [tabListBtn, tabLearnBtn, tabQuizBtn, tabMasteredBtn];
+  tabButtons.forEach((btn) => {
+    if (btn) btn.classList.remove("active");
+  });
+
+  const activeBtn = document.getElementById(
+    `tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Btn`,
+  );
+  if (activeBtn) activeBtn.classList.add("active");
+
+  document.querySelectorAll(".tab-content").forEach((content) => {
+    content.classList.remove("active");
+  });
+
+  const activeContent = document.getElementById(
+    `tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`,
+  );
+  if (activeContent) activeContent.classList.add("active");
+
+  if (tabId === "list") {
+    renderKanjiList();
+  } else if (tabId === "learn") {
+    renderLearnTab(); // ===== ADD THIS CASE =====
+  } else if (tabId === "mastered") {
+    renderMasteredList();
+  } else if (tabId === "quiz") {
+    updateMasteredCount();
+    const quizArea = document.getElementById("quizArea");
+    if (quizArea && !quizArea.innerHTML.includes("quiz-welcome")) {
+      if (!quizArea.innerHTML || quizArea.innerHTML.trim() === "") {
+        quizArea.innerHTML = `
                     <p class="quiz-welcome" style="text-align: center; color: #666; padding: 40px; font-size: 1rem;">
                         Select a mode and number of questions, then click <strong>"Start New Quiz"</strong>
                     </p>
                 `;
-            }
-        }
-        if (kanjiQuizState && kanjiQuizState.isActive && kanjiQuizState.questions.length > 0) {
-            renderKanjiQuizQuestion();
-        }
+      }
     }
+    if (
+      kanjiQuizState &&
+      kanjiQuizState.isActive &&
+      kanjiQuizState.questions.length > 0
+    ) {
+      renderKanjiQuizQuestion();
+    }
+  }
 }
 
 // ==================== QUIZ FUNCTIONS ====================
 // ... (rest of the quiz functions remain the same) ...
 
 function getSelectedQuizMode() {
-    const modeRadios = document.querySelectorAll('input[name="quizMode"]');
-    for (const radio of modeRadios) {
-        if (radio.checked) {
-            return radio.value;
-        }
+  const modeRadios = document.querySelectorAll('input[name="quizMode"]');
+  for (const radio of modeRadios) {
+    if (radio.checked) {
+      return radio.value;
     }
-    return 'kanji_to_reading';
+  }
+  return "kanji_to_reading";
 }
 
 function getReadingModes(kanji) {
-    const readings = [];
-    
-    const onyomiList = kanji.onyomi ? kanji.onyomi.split(/[、,，\s]+/).filter(r => r && r !== '-') : [];
-    const kunyomiList = kanji.kunyomi ? kanji.kunyomi.split(/[、,，\s]+/).filter(r => r && r !== '-') : [];
-    
-    for (const r of onyomiList) {
-        readings.push({ reading: r, type: 'on' });
-    }
-    for (const r of kunyomiList) {
-        readings.push({ reading: r, type: 'kun' });
-    }
-    
-    return readings;
+  const readings = [];
+
+  const onyomiList = kanji.onyomi
+    ? kanji.onyomi.split(/[、,，\s]+/).filter((r) => r && r !== "-")
+    : [];
+  const kunyomiList = kanji.kunyomi
+    ? kanji.kunyomi.split(/[、,，\s]+/).filter((r) => r && r !== "-")
+    : [];
+
+  for (const r of onyomiList) {
+    readings.push({ reading: r, type: "on" });
+  }
+  for (const r of kunyomiList) {
+    readings.push({ reading: r, type: "kun" });
+  }
+
+  return readings;
 }
 
 function generateKanjiQuiz() {
-    console.log('generateKanjiQuiz called!');
-    
-    const quizArea = document.getElementById('quizArea');
-    const resultsDiv = document.getElementById('quizResults');
-    if (!quizArea) return;
-    if (resultsDiv) resultsDiv.style.display = 'none';
-    
-    const selectedMode = getSelectedQuizMode();
-    console.log('Selected mode:', selectedMode);
-    
-    const questionCount = parseInt(document.getElementById('quizCountSelect')?.value) || 10;
-    
-    const availableKanji = kanjiData.filter(k => k.examples && k.examples.length > 0);
-    
-    if (availableKanji.length < questionCount) {
-        quizArea.innerHTML = `
+  console.log("generateKanjiQuiz called!");
+
+  const quizArea = document.getElementById("quizArea");
+  const resultsDiv = document.getElementById("quizResults");
+  if (!quizArea) return;
+  if (resultsDiv) resultsDiv.style.display = "none";
+
+  const selectedMode = getSelectedQuizMode();
+  console.log("Selected mode:", selectedMode);
+
+  const questionCount =
+    parseInt(document.getElementById("quizCountSelect")?.value) || 10;
+
+  const availableKanji = kanjiData.filter(
+    (k) => k.examples && k.examples.length > 0,
+  );
+
+  if (availableKanji.length < questionCount) {
+    quizArea.innerHTML = `
             <p class="quiz-welcome" style="text-align: center; color: #c45d1e; padding: 40px;">
                 ⚠️ Not enough kanji with examples. Available: ${availableKanji.length}, Requested: ${questionCount}
                 <br><br>
                 Please reduce the number of questions.
             </p>
         `;
-        return;
-    }
-    
-    for (let i = availableKanji.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [availableKanji[i], availableKanji[j]] = [availableKanji[j], availableKanji[i]];
-    }
-    
-    const questions = [];
-    const usedKanji = new Set();
-    const kanjiPool = availableKanji.slice(0, questionCount * 2);
-    
-    // ... (rest of quiz generation remains the same) ...
-    
-    // For brevity, I'm showing the key fix. The full quiz functions remain unchanged.
+    return;
+  }
+
+  for (let i = availableKanji.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [availableKanji[i], availableKanji[j]] = [
+      availableKanji[j],
+      availableKanji[i],
+    ];
+  }
+
+  const questions = [];
+  const usedKanji = new Set();
+  const kanjiPool = availableKanji.slice(0, questionCount * 2);
+
+  // ... (rest of quiz generation remains the same) ...
+
+  // For brevity, I'm showing the key fix. The full quiz functions remain unchanged.
 }
 
 // ... (rest of the file - renderKanjiQuizQuestion, toggleShowAnswer, checkKanjiQuizAnswer, stopKanjiQuiz, showKanjiQuizResults, attachStartQuizListener, resetAllProgress, resetMasteredOnly, event listeners, initKanji) ...
 
 // Event Listeners
 if (furiToggleBtn) {
-    furiToggleBtn.addEventListener('click', applyFuriganaHide);
+  furiToggleBtn.addEventListener("click", applyFuriganaHide);
 }
 
 if (kanjiSearchInput) {
-    kanjiSearchInput.addEventListener('input', () => {
-        currentSearchTerm = kanjiSearchInput.value;
-        renderKanjiList();
-    });
+  kanjiSearchInput.addEventListener("input", () => {
+    currentSearchTerm = kanjiSearchInput.value;
+    renderKanjiList();
+  });
 }
 
-if (tabListBtn) tabListBtn.addEventListener('click', () => switchTab('list'));
-if (tabLearnBtn) tabLearnBtn.addEventListener('click', () => switchTab('learn'));
-if (tabQuizBtn) tabQuizBtn.addEventListener('click', () => switchTab('quiz'));
-if (tabMasteredBtn) tabMasteredBtn.addEventListener('click', () => switchTab('mastered'));
+if (tabListBtn) tabListBtn.addEventListener("click", () => switchTab("list"));
+if (tabLearnBtn)
+  tabLearnBtn.addEventListener("click", () => switchTab("learn"));
+if (tabQuizBtn) tabQuizBtn.addEventListener("click", () => switchTab("quiz"));
+if (tabMasteredBtn)
+  tabMasteredBtn.addEventListener("click", () => switchTab("mastered"));
 
-if (resetAllProgressBtn) resetAllProgressBtn.addEventListener('click', resetAllProgress);
-if (resetMasteredOnlyBtn) resetMasteredOnlyBtn.addEventListener('click', resetMasteredOnly);
+if (resetAllProgressBtn)
+  resetAllProgressBtn.addEventListener("click", resetAllProgress);
+if (resetMasteredOnlyBtn)
+  resetMasteredOnlyBtn.addEventListener("click", resetMasteredOnly);
 
-const statHelpIcon = document.getElementById('statHelpIcon');
+const statHelpIcon = document.getElementById("statHelpIcon");
 if (statHelpIcon) {
-    statHelpIcon.addEventListener('click', () => {
-        const explanation = document.getElementById('quizStatsExplanation');
-        if (explanation) {
-            explanation.style.display = explanation.style.display === 'none' ? 'block' : 'none';
-        }
-    });
+  statHelpIcon.addEventListener("click", () => {
+    const explanation = document.getElementById("quizStatsExplanation");
+    if (explanation) {
+      explanation.style.display =
+        explanation.style.display === "none" ? "block" : "none";
+    }
+  });
 }
 
-const closeStatsHelp = document.getElementById('closeStatsHelp');
+const closeStatsHelp = document.getElementById("closeStatsHelp");
 if (closeStatsHelp) {
-    closeStatsHelp.addEventListener('click', () => {
-        const explanation = document.getElementById('quizStatsExplanation');
-        if (explanation) explanation.style.display = 'none';
-    });
+  closeStatsHelp.addEventListener("click", () => {
+    const explanation = document.getElementById("quizStatsExplanation");
+    if (explanation) explanation.style.display = "none";
+  });
 }
 
 function initKanji() {
-    console.log('Initializing kanji module...');
-    loadMasteredKanji();
-    renderKanjiList();
-    renderLearnTab();
-    updateMasteredCount();
-    switchTab('list');
-    setupDelegation();
-    attachStartQuizListener();
+  console.log("Initializing kanji module...");
+  loadMasteredKanji();
+  renderKanjiList();
+  renderLearnTab();
+  updateMasteredCount();
+  switchTab("list");
+  setupDelegation();
+  attachStartQuizListener();
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initKanji);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initKanji);
 } else {
-    initKanji();
+  initKanji();
 }

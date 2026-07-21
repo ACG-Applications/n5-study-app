@@ -67,11 +67,12 @@ function getPlainJapanese(sentence) {
 
 // ==================== ENHANCED DICTIONARY LOOKUP ====================
 
-// Use the existing PARTICLES from particles.js or other files
-// Do NOT redeclare it - just use the global one
-const PARTICLES = (typeof window !== 'undefined' && window.PARTICLES) || 
-                  (typeof PARTICLES !== 'undefined' && PARTICLES) || 
-                  ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
+// PARTICLES is already defined in particles.js or particleExtractor.js
+// Use the existing one - DO NOT redeclare it with const
+// If it's not defined, this will create it safely with var
+if (typeof PARTICLES === 'undefined') {
+    var PARTICLES = ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
+}
 
 // Common words that might appear in different forms
 const COMMON_WORDS = {
@@ -118,7 +119,10 @@ function getSingleWordMeaning(word) {
   }
   
   // ===== 4. CHECK IF IT'S A PARTICLE =====
-  for (const particle of PARTICLES) {
+  // Use PARTICLES (which should be defined globally)
+  const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
+  
+  for (const particle of particles) {
     if (cleanWord === particle || strippedWord === particle) {
       if (dict[particle]) {
         return dict[particle].meaning;
@@ -380,6 +384,7 @@ function createQuizWordTooltips(text, wordMeanings) {
     
     if (meaning) {
       // Check if this word contains a particle
+      const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
       const particleMatch = word.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
       if (particleMatch) {
         const before = particleMatch[1];
@@ -397,6 +402,7 @@ function createQuizWordTooltips(text, wordMeanings) {
       }
     } else {
       // Check if this word contains a particle
+      const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
       const particleMatch = word.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
       if (particleMatch) {
         const before = particleMatch[1];
