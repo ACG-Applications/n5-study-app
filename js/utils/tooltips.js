@@ -145,7 +145,7 @@ function getSingleWordMeaning(word) {
 
   // ===== 4. CHECK IF IT'S A PARTICLE =====
   // Use PARTICLES (which should be defined globally)
-  const particles = PARTICLES;
+  const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
 
   for (const particle of particles) {
     if (cleanWord === particle || strippedWord === particle) {
@@ -511,7 +511,7 @@ function createQuizWordTooltips(text, wordMeanings) {
 
     if (meaning) {
       // Check if this word contains a particle
-      const particles = PARTICLES;
+      const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
       const particleMatch = word.match(
         /^(.*?)([はがをにでへとかからまでのもよねや])$/,
       );
@@ -533,7 +533,7 @@ function createQuizWordTooltips(text, wordMeanings) {
       }
     } else {
       // Check if this word contains a particle
-      const particles = PARTICLES;
+      const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
       const particleMatch = word.match(
         /^(.*?)([はがをにでへとかからまでのもよねや])$/,
       );
@@ -632,18 +632,26 @@ function attachTooltipLongPress(container) {
 /**
  * Global function to attach tooltips to quiz area
  * This is called after rendering quiz content
+ * @param {HTMLElement} container - Optional container to attach tooltips to
  */
-function attachQuizTooltipsGlobal() {
-  if (typeof attachQuizTooltips === "function") {
-    attachQuizTooltips();
-  } else {
-    // Fallback: try to attach to quiz area directly
-    const quizArea = document.getElementById("quizArea");
-    if (quizArea) {
-      attachTooltipsToContainer(quizArea);
-    }
-    // Also attach to any word-tooltip elements
-    document.querySelectorAll(".word-tooltip").forEach((el) => {
+function attachQuizTooltipsGlobal(container) {
+  // If a container is provided, use it
+  if (container) {
+    attachTooltipsToContainer(container);
+    return;
+  }
+  
+  // Otherwise, try to find the quiz area or document
+  const quizArea = document.getElementById("quizArea");
+  if (quizArea) {
+    attachTooltipsToContainer(quizArea);
+  }
+  
+  // Also attach to any word-tooltip elements in the document that aren't initialized yet
+  const tooltips = document.querySelectorAll(".word-tooltip:not(.tooltip-initialized)");
+  if (tooltips.length > 0) {
+    tooltips.forEach((el) => {
+      el.classList.add("tooltip-initialized");
       addLongPressSupport(el);
     });
   }
@@ -651,9 +659,28 @@ function attachQuizTooltipsGlobal() {
 
 /**
  * Attach quiz tooltips (alias for attachQuizTooltipsGlobal)
+ * @param {HTMLElement} container - Optional container to attach tooltips to
  */
-function attachQuizTooltips() {
-  attachQuizTooltipsGlobal();
+function attachQuizTooltips(container) {
+  // Directly attach tooltips without recursion
+  if (container) {
+    attachTooltipsToContainer(container);
+    return;
+  }
+  
+  const quizArea = document.getElementById("quizArea");
+  if (quizArea) {
+    attachTooltipsToContainer(quizArea);
+  }
+  
+  // Also attach to any word-tooltip elements in the document that aren't initialized yet
+  const tooltips = document.querySelectorAll(".word-tooltip:not(.tooltip-initialized)");
+  if (tooltips.length > 0) {
+    tooltips.forEach((el) => {
+      el.classList.add("tooltip-initialized");
+      addLongPressSupport(el);
+    });
+  }
 }
 
 /**

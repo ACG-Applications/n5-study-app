@@ -1139,3 +1139,27 @@
     background-color: #ffffff !important;
   }
 }
+/* ===== RUBY / FURIGANA STYLING ===== */
+.quiz-question-text ruby {
+  ruby-align: center;
+}
+
+.quiz-question-text rt {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: #555;
+  letter-spacing: 0.02em;
+}
+
+/* Make the blank stand out */
+.quiz-question-text .blank {
+  display: inline-block;
+  background: #fff3e0;
+  padding: 2px 12px;
+  border-radius: 6px;
+  border-bottom: 3px solid #ff9800;
+  font-weight: 700;
+  color: #e65100;
+  min-width: 60px;
+  text-align: center;
+}
