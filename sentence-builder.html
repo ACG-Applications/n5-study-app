@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>N5 Sentence Builder</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1a73e8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="apple-touch-icon" href="images/icons/icon-192x19202.png" />
+
+    <!-- ===== STYLES ===== -->
+    <link rel="stylesheet" href="css/sentenceBuilder.css" />
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="js/data/sentences.js"></script>
+    <script src="js/data/wordDict.js"></script>
+    <script src="js/utils/furigana.js"></script>
+    <script src="js/modules/audio.js"></script>
+    <script src="js/managers/masteryManager.js"></script>
+    <script src="js/modules/sentenceBuilder.js"></script>
+
+    <style>
+      .back-to-app {
+        display: inline-block;
+        padding: 8px 20px;
+        background: #8a7a6a;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: 0.15s;
+        text-decoration: none;
+      }
+      .back-to-app:hover {
+        background: #7a6a5a;
+        transform: scale(0.97);
+      }
+      .builder-header-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container" id="app">
+      <!-- Back to Main App Button -->
+      <div class="builder-header-wrapper">
+        <a href="index.html" class="back-to-app">⬅ Back to Main App</a>
+        <span style="font-size: 0.8rem; color: #7a6f60;">N5 Sentence Builder</span>
+      </div>
+
+      <!-- HEADER -->
+      <div class="app-header">
+        <h1>🧩 N5 Sentence Builder <span>— Master the sentences!</span></h1>
+        <div class="header-controls">
+          <label for="sprintSelect">Sprint:</label>
+          <select id="sprintSelect">
+            <option value="">Loading...</option>
+          </select>
+
+          <button id="furiganaToggle" class="toggle-btn active">🔤 ON</button>
+
+          <div class="mode-toggle">
+            <span class="mode-label">Mode:</span>
+            <button class="mode-btn active" data-mode="fill">📝 Fill</button>
+            <button class="mode-btn" data-mode="order">🔄 Order</button>
+            <button class="mode-btn" data-mode="select-order">🎯 Select</button>
+          </div>
+
+          <!-- Mastery Selector -->
+          <div class="mastery-selector">
+            <span class="mastery-label">Mastery:</span>
+            <select id="primaryModeSelect">
+              <option value="fill">📝 Fill</option>
+              <option value="order">🔄 Order</option>
+              <option value="select-order">🎯 Select</option>
+            </select>
+            <span id="modeStatus">📊 Mastery: Fill</span>
+            <button
+              id="resetMasteryBtn"
+              class="reset-mastery-btn"
+              style="display: none"
+            >
+              🔄 Reset Progress
+            </button>
+          </div>
+
+          <span style="font-size: 0.65rem; color: #7a6f60">Speed:</span>
+          <button class="speed-btn" data-speed="0.75">0.75x</button>
+          <button class="speed-btn active" data-speed="1.0">1.0x</button>
+          <button class="speed-btn" data-speed="1.25">1.25x</button>
+        </div>
+      </div>
+
+      <!-- PROGRESS -->
+      <div class="progress-section">
+        <div class="progress-stats">
+          <span class="stat-item correct"
+            >✅ <span class="stat-value" id="correctCount">0</span>
+            <span class="stat-label">correct</span></span
+          >
+          <span class="stat-item incorrect"
+            >❌ <span class="stat-value" id="incorrectCount">0</span>
+            <span class="stat-label">incorrect</span></span
+          >
+          <span class="stat-item"
+            >📝 <span class="stat-value" id="attemptsCount">0</span>
+            <span class="stat-label">attempts</span></span
+          >
+          <span class="stat-item"
+            >🔄 <span class="stat-value" id="cycleCount">0</span>
+            <span class="stat-label">cycle</span></span
+          >
+          <span class="stat-item"
+            >📊 <span class="stat-value" id="masteredCount">0</span>
+            <span class="stat-label">mastered</span></span
+          >
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+        <div class="progress-label">
+          <span id="progressText">0 / 0 mastered</span>
+          <span id="progressPercent">0%</span>
+        </div>
+      </div>
+
+      <!-- SENTENCE -->
+      <div class="sentence-area" id="sentenceArea">
+        <div class="translation-toggle">
+          <button id="translationToggleBtn">📖 Show Translation</button>
+        </div>
+        <div class="sentence-jp" id="sentenceJp">
+          <span class="empty-state">
+            <span class="empty-icon">📚</span>
+            Select a sprint to begin building sentences!
+          </span>
+        </div>
+        <div class="sentence-en" id="sentenceEn"></div>
+        <div class="sentence-controls">
+          <button class="action-btn sentence-tts" id="sentenceTtsBtn" disabled>
+            🔊 Play Sentence
+          </button>
+          <span class="sentence-hint" id="sentenceHint"></span>
+        </div>
+      </div>
+
+      <!-- WORD BANK -->
+      <div class="word-bank-area" id="wordBankArea">
+        <div class="word-bank-label">
+          <span>📦 Word Bank</span>
+          <span class="bank-count" id="bankCount">0 words</span>
+        </div>
+        <div class="word-bank" id="wordBank">
+          <span class="empty-bank-message"
+            >Select a sentence to see the word bank...</span
+          >
+        </div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="action-controls">
+        <button class="action-btn primary" id="submitBtn" disabled>
+          ✅ Submit
+        </button>
+        <button class="action-btn danger" id="resetBtn">⟳ Reset Sprint</button>
+        <button class="action-btn clear-btn" id="clearProgressBtn">
+          🗑️ Clear All Progress
+        </button>
+      </div>
+
+      <!-- FEEDBACK -->
+      <div class="feedback-area" id="feedbackArea">
+        <div class="feedback-title" id="feedbackTitle"></div>
+        <div class="feedback-detail" id="feedbackDetail"></div>
+      </div>
+
+      <!-- COMPLETION -->
+      <div class="completion-overlay" id="completionOverlay">
+        <h2>🎉 Sprint Complete!</h2>
+        <div class="completion-stats" id="completionStats">
+          <p>You've mastered all sentences in this sprint!</p>
+          <p>
+            ✅ Correct: <span class="highlight-num" id="compCorrect">0</span>
+          </p>
+          <p>
+            ❌ Incorrect:
+            <span class="highlight-num" id="compIncorrect">0</span>
+          </p>
+          <p>
+            📝 Total attempts:
+            <span class="highlight-num" id="compAttempts">0</span>
+          </p>
+          <p>🔄 Cycles: <span class="highlight-num" id="compCycles">0</span></p>
+        </div>
+        <div class="completion-actions">
+          <button class="action-btn primary" id="compResetBtn">
+            ⟳ Reset Sprint
+          </button>
+          <button class="action-btn secondary" id="compNextSprintBtn">
+            ➡️ Next Sprint
+          </button>
+        </div>
+      </div>
+
+      <div
+        style="
+          text-align: center;
+          font-size: 0.75rem;
+          color: #8a7a6a;
+          margin-top: 8px;
+          border-top: 1px solid #f0ebe3;
+          padding-top: 12px;
+        "
+      >
+        💡 Click a word in the bank, then click a blank slot to place it. Click
+        a placed word to remove it.
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("📚 N5 Sentence Builder starting...");
+        setTimeout(function () {
+          if (typeof SentenceBuilder !== "undefined") {
+            try {
+              const builder = new SentenceBuilder();
+              builder.init();
+              window.builder = builder;
+              console.log("✅ Sentence Builder initialized successfully!");
+            } catch (e) {
+              console.error("❌ Error initializing SentenceBuilder:", e);
+            }
+          } else {
+            console.error(
+              "❌ SentenceBuilder class not found. Check that sentenceBuilder.js loaded correctly.",
+            );
+          }
+        }, 300);
+      });
+    </script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          const swPath = "/sw.js";
+          navigator.serviceWorker
+            .register(swPath)
+            .then((registration) => {
+              console.log(
+                "✅ Service Worker registered with scope:",
+                registration.scope,
+              );
+            })
+            .catch((error) => {
+              console.log("❌ Service Worker registration failed:", error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
