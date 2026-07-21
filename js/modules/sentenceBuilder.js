@@ -129,6 +129,40 @@ class SentenceBuilder {
   }
 
   // ============================================================
+  // DATA HELPERS - FIXED: More robust data loading
+  // ============================================================
+
+  getData() {
+    // Check all possible places where sentencesData might be
+    if (typeof sentencesData !== "undefined" && sentencesData) {
+      console.log("📚 Found sentencesData in global scope:", sentencesData.length);
+      return sentencesData;
+    }
+    if (typeof window !== "undefined" && window.sentencesData) {
+      console.log("📚 Found sentencesData in window:", window.sentencesData.length);
+      return window.sentencesData;
+    }
+    // Also check for other possible variable names
+    if (typeof window.n5Sentences !== "undefined" && window.n5Sentences) {
+      console.log("📚 Found n5Sentences in window:", window.n5Sentences.length);
+      return window.n5Sentences;
+    }
+    console.error("❌ sentencesData not found!");
+    return null;
+  }
+
+  getWordDict() {
+    if (typeof wordDict !== "undefined" && wordDict) {
+      return wordDict;
+    }
+    if (typeof window !== "undefined" && window.wordDict) {
+      return window.wordDict;
+    }
+    console.error("❌ wordDict not found!");
+    return {};
+  }
+
+  // ============================================================
   // INITIALIZATION
   // ============================================================
 
@@ -222,24 +256,6 @@ class SentenceBuilder {
     }
 
     console.log(`✅ Sentence Builder initialized! Mode: ${this.mode}`);
-  }
-
-  getData() {
-    if (typeof window !== "undefined" && window.sentencesData) {
-      console.log(
-        "📚 Found sentencesData in window:",
-        window.sentencesData.length,
-      );
-      return window.sentencesData;
-    }
-    if (typeof sentencesData !== "undefined" && sentencesData) {
-      console.log(
-        "📚 Found sentencesData in global scope:",
-        sentencesData.length,
-      );
-      return sentencesData;
-    }
-    return null;
   }
 
   retryDataLoad() {
@@ -766,6 +782,7 @@ class SentenceBuilder {
   splitSentenceWords(jpText) {
     const parts = jpText.split(/\s+/);
     const result = [];
+    const dict = this.getWordDict();
 
     for (const part of parts) {
       // Check if this part contains multiple words with furigana
@@ -803,12 +820,8 @@ class SentenceBuilder {
         if (!hasFurigana) {
           const clean = part.replace(/[（(][^）)]*[）)]/g, "").trim();
           // Try to get furigana from wordDict
-          if (
-            typeof wordDict !== "undefined" &&
-            wordDict[clean] &&
-            wordDict[clean].reading
-          ) {
-            const reading = wordDict[clean].reading;
+          if (dict && dict[clean] && dict[clean].reading) {
+            const reading = dict[clean].reading;
             if (reading) {
               const wordWithFurigana = `${clean}（${reading}）`;
               result.push(
@@ -829,10 +842,11 @@ class SentenceBuilder {
     const clean = part.replace(/[（(][^）)]*[）)]/g, "").trim();
     let furigana = this.extractFurigana(part);
     let original = part;
+    const dict = this.getWordDict();
 
     // If no furigana found, try dictionary
-    if (!furigana && typeof wordDict !== "undefined" && wordDict[clean]) {
-      const dictEntry = wordDict[clean];
+    if (!furigana && dict && dict[clean]) {
+      const dictEntry = dict[clean];
       if (dictEntry.reading) {
         furigana = dictEntry.reading;
         // Always format with furigana in parentheses if it has a reading
@@ -846,10 +860,10 @@ class SentenceBuilder {
     if (
       !furigana &&
       !/[\u4e00-\u9faf\u3400-\u4dbf]/.test(clean) &&
-      typeof wordDict !== "undefined" &&
-      wordDict[clean]
+      dict &&
+      dict[clean]
     ) {
-      const dictEntry = wordDict[clean];
+      const dictEntry = dict[clean];
       if (dictEntry.reading) {
         furigana = dictEntry.reading;
         original = `${clean}（${furigana}）`;
@@ -884,9 +898,10 @@ class SentenceBuilder {
   generateDistractors(count) {
     const allWords = [];
     const usedCleanWords = new Set(this.words.map((w) => w.clean));
+    const dict = this.getWordDict();
 
-    if (typeof wordDict !== "undefined") {
-      const dictKeys = Object.keys(wordDict);
+    if (dict && Object.keys(dict).length > 0) {
+      const dictKeys = Object.keys(dict);
       this.shuffleArray(dictKeys);
 
       for (const key of dictKeys) {
@@ -903,7 +918,7 @@ class SentenceBuilder {
         // Skip if too long or too short
         if (clean.length > 12 || clean.length < 1) continue;
 
-        const dictEntry = wordDict[key];
+        const dictEntry = dict[key];
         const reading = dictEntry.reading || "";
 
         // Only include if reading matches the word (hiragana-only)
