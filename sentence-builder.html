@@ -280,7 +280,7 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          const swPath = "sw.js";
+          const swPath = "sw.js"; // Relative to the current page
           navigator.serviceWorker
             .register(swPath)
             .then((registration) => {
