@@ -236,6 +236,28 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         console.log("📚 N5 Sentence Builder starting...");
+
+        // Debug: Check data sources
+        console.log("🔍 Checking data sources...");
+        console.log(
+          "sentencesData:",
+          typeof sentencesData !== "undefined"
+            ? sentencesData.length
+            : "undefined",
+        );
+        console.log(
+          "wordDict:",
+          typeof wordDict !== "undefined"
+            ? Object.keys(wordDict).length
+            : "undefined",
+        );
+        console.log(
+          "SentenceBuilder:",
+          typeof SentenceBuilder !== "undefined"
+            ? "✅ Loaded"
+            : "❌ Not loaded",
+        );
+
         setTimeout(function () {
           if (typeof SentenceBuilder !== "undefined") {
             try {
@@ -251,7 +273,7 @@
               "❌ SentenceBuilder class not found. Check that sentenceBuilder.js loaded correctly.",
             );
           }
-        }, 300);
+        }, 600); // Increased timeout for slower connections
       });
     </script>
 
