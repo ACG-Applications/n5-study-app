@@ -67,11 +67,11 @@ function getPlainJapanese(sentence) {
 
 // ==================== ENHANCED DICTIONARY LOOKUP ====================
 
-// Check if PARTICLES already exists before declaring
-// Use var instead of const to allow re-declaration without error
-if (typeof PARTICLES === 'undefined') {
-    var PARTICLES = ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
-}
+// Use the existing PARTICLES from particles.js or other files
+// Do NOT redeclare it - just use the global one
+const PARTICLES = (typeof window !== 'undefined' && window.PARTICLES) || 
+                  (typeof PARTICLES !== 'undefined' && PARTICLES) || 
+                  ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
 
 // Common words that might appear in different forms
 const COMMON_WORDS = {
@@ -118,10 +118,7 @@ function getSingleWordMeaning(word) {
   }
   
   // ===== 4. CHECK IF IT'S A PARTICLE =====
-  // Use the PARTICLES variable (now safe)
-  const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
-  
-  for (const particle of particles) {
+  for (const particle of PARTICLES) {
     if (cleanWord === particle || strippedWord === particle) {
       if (dict[particle]) {
         return dict[particle].meaning;
@@ -383,7 +380,6 @@ function createQuizWordTooltips(text, wordMeanings) {
     
     if (meaning) {
       // Check if this word contains a particle
-      const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
       const particleMatch = word.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
       if (particleMatch) {
         const before = particleMatch[1];
@@ -401,7 +397,6 @@ function createQuizWordTooltips(text, wordMeanings) {
       }
     } else {
       // Check if this word contains a particle
-      const particles = typeof PARTICLES !== 'undefined' ? PARTICLES : ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
       const particleMatch = word.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
       if (particleMatch) {
         const before = particleMatch[1];
