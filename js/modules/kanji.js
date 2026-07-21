@@ -666,6 +666,300 @@ function resetMasteredOnly() {
   }
 }
 
+// ==================== QUIZ STATE ====================
+const kanjiQuizState = {
+  isActive: false,
+  questions: [],
+  currentIndex: 0,
+  correctCount: 0,
+  incorrectCount: 0,
+  totalCount: 0,
+  score: 0,
+  usedShowAnswer: false,
+  attempts: 0,
+};
+
+// ==================== QUIZ FUNCTIONS ====================
+
+function attachStartQuizListener() {
+  const startBtn = document.getElementById("startQuizBtn");
+  if (startBtn) {
+    startBtn.removeEventListener("click", generateKanjiQuiz);
+    startBtn.addEventListener("click", generateKanjiQuiz);
+  }
+}
+
+function renderKanjiQuizQuestion() {
+  if (!kanjiQuizState.isActive || kanjiQuizState.questions.length === 0) {
+    return;
+  }
+
+  const quizArea = document.getElementById("quizArea");
+  if (!quizArea) return;
+
+  const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
+  if (!question) {
+    showKanjiQuizResults();
+    return;
+  }
+
+  // Basic render - you can expand this
+  quizArea.innerHTML = `
+        <div class="quiz-question">
+            <p class="quiz-progress">Question ${kanjiQuizState.currentIndex + 1} of ${kanjiQuizState.questions.length}</p>
+            <p class="quiz-question-text">${question.question}</p>
+            <input type="text" id="quizAnswerInput" placeholder="Type your answer...">
+            <button class="small-btn" onclick="checkKanjiQuizAnswer()">Submit</button>
+            <button class="small-btn" onclick="toggleShowAnswer()">Show Answer</button>
+        </div>
+    `;
+}
+
+function generateKanjiQuiz() {
+  console.log("generateKanjiQuiz called!");
+
+  const quizArea = document.getElementById("quizArea");
+  const resultsDiv = document.getElementById("quizResults");
+  if (!quizArea) return;
+  if (resultsDiv) resultsDiv.style.display = "none";
+
+  const selectedMode = getSelectedQuizMode();
+  const questionCount =
+    parseInt(document.getElementById("quizCountSelect")?.value) || 10;
+
+  const availableKanji = kanjiData.filter(
+    (k) => k.examples && k.examples.length > 0,
+  );
+
+  if (availableKanji.length < questionCount) {
+    quizArea.innerHTML = `
+            <p class="quiz-welcome" style="text-align: center; color: #c45d1e; padding: 40px;">
+                ⚠️ Not enough kanji with examples. Available: ${availableKanji.length}, Requested: ${questionCount}
+                <br><br>
+                Please reduce the number of questions.
+            </p>
+        `;
+    return;
+  }
+
+  // Shuffle and select
+  for (let i = availableKanji.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [availableKanji[i], availableKanji[j]] = [
+      availableKanji[j],
+      availableKanji[i],
+    ];
+  }
+
+  const selectedKanji = availableKanji.slice(0, questionCount);
+
+  // Build questions
+  kanjiQuizState.questions = [];
+  kanjiQuizState.currentIndex = 0;
+  kanjiQuizState.correctCount = 0;
+  kanjiQuizState.incorrectCount = 0;
+  kanjiQuizState.totalCount = questionCount;
+  kanjiQuizState.score = 0;
+  kanjiQuizState.isActive = true;
+
+  for (const kanji of selectedKanji) {
+    let questionText = "";
+    let correctAnswer = "";
+    let answerType = "";
+
+    if (selectedMode === "kanji_to_reading") {
+      const readings = getReadingModes(kanji);
+      if (readings.length > 0) {
+        const reading = readings[Math.floor(Math.random() * readings.length)];
+        questionText = `What is the reading of: ${kanji.kanji} (${kanji.meaning})?`;
+        correctAnswer = reading.reading;
+        answerType = "reading";
+      }
+    } else if (selectedMode === "reading_to_kanji") {
+      const readings = getReadingModes(kanji);
+      if (readings.length > 0) {
+        const reading = readings[Math.floor(Math.random() * readings.length)];
+        questionText = `Which kanji has the reading: ${reading.reading}?`;
+        correctAnswer = kanji.kanji;
+        answerType = "kanji";
+      }
+    } else if (selectedMode === "in_context") {
+      if (kanji.examples && kanji.examples.length > 0) {
+        const example =
+          kanji.examples[Math.floor(Math.random() * kanji.examples.length)];
+        const sentenceWithBlank = example.sentence.replace(
+          kanji.kanji,
+          "_____",
+        );
+        questionText = `Fill in the blank: ${sentenceWithBlank}`;
+        correctAnswer = kanji.kanji;
+        answerType = "kanji";
+      }
+    }
+
+    if (questionText && correctAnswer) {
+      kanjiQuizState.questions.push({
+        question: questionText,
+        correctAnswer: correctAnswer,
+        kanjiId: kanji.id,
+        kanji: kanji.kanji,
+        answerType: answerType,
+        attempts: 0,
+        answered: false,
+      });
+    }
+  }
+
+  if (kanjiQuizState.questions.length === 0) {
+    quizArea.innerHTML = `
+            <p class="quiz-welcome" style="text-align: center; color: #c45d1e; padding: 40px;">
+                ⚠️ Could not generate questions. Please try a different mode.
+            </p>
+        `;
+    kanjiQuizState.isActive = false;
+    return;
+  }
+
+  renderKanjiQuizQuestion();
+}
+
+function checkKanjiQuizAnswer() {
+  const input = document.getElementById("quizAnswerInput");
+  if (!input) return;
+
+  const userAnswer = input.value.trim();
+  if (!userAnswer) return;
+
+  const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
+  if (!question || question.answered) return;
+
+  const isCorrect =
+    userAnswer.toLowerCase() === question.correctAnswer.toLowerCase();
+  question.attempts++;
+  question.answered = true;
+
+  if (isCorrect) {
+    if (question.attempts === 1) {
+      kanjiQuizState.score += 1;
+      markKanjiMastered(question.kanjiId, true);
+    } else {
+      kanjiQuizState.score += 0.5;
+    }
+    kanjiQuizState.correctCount++;
+  } else {
+    kanjiQuizState.incorrectCount++;
+  }
+
+  // Show feedback
+  const quizArea = document.getElementById("quizArea");
+  if (quizArea) {
+    const feedback = document.createElement("p");
+    feedback.style.textAlign = "center";
+    feedback.style.fontWeight = "bold";
+    feedback.style.color = isCorrect ? "#4CAF50" : "#f44336";
+    feedback.textContent = isCorrect
+      ? "✅ Correct!"
+      : `❌ Incorrect. Answer: ${question.correctAnswer}`;
+    quizArea.appendChild(feedback);
+
+    // Auto advance after delay
+    setTimeout(() => {
+      kanjiQuizState.currentIndex++;
+      if (kanjiQuizState.currentIndex < kanjiQuizState.questions.length) {
+        renderKanjiQuizQuestion();
+      } else {
+        showKanjiQuizResults();
+      }
+    }, 1500);
+  }
+}
+
+function toggleShowAnswer() {
+  const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
+  if (!question) return;
+
+  const quizArea = document.getElementById("quizArea");
+  if (quizArea) {
+    const answerP = document.createElement("p");
+    answerP.style.textAlign = "center";
+    answerP.style.color = "#2196F3";
+    answerP.textContent = `Answer: ${question.correctAnswer}`;
+    quizArea.appendChild(answerP);
+
+    // Mark as answered with 0 points
+    question.answered = true;
+    question.attempts = 1;
+    kanjiQuizState.usedShowAnswer = true;
+    kanjiQuizState.incorrectCount++;
+
+    // Auto advance
+    setTimeout(() => {
+      kanjiQuizState.currentIndex++;
+      if (kanjiQuizState.currentIndex < kanjiQuizState.questions.length) {
+        renderKanjiQuizQuestion();
+      } else {
+        showKanjiQuizResults();
+      }
+    }, 2000);
+  }
+}
+
+function showKanjiQuizResults() {
+  const resultsDiv = document.getElementById("quizResults");
+  const quizArea = document.getElementById("quizArea");
+  if (!resultsDiv) return;
+
+  kanjiQuizState.isActive = false;
+
+  const total = kanjiQuizState.totalCount || 1;
+  const percentage = Math.round((kanjiQuizState.score / total) * 100);
+
+  resultsDiv.style.display = "block";
+  resultsDiv.innerHTML = `
+        <div class="quiz-results-content">
+            <h3>📊 Quiz Complete!</h3>
+            <div class="result-stats">
+                <p><strong>Score:</strong> ${kanjiQuizState.score.toFixed(1)} / ${total}</p>
+                <p><strong>Percentage:</strong> ${percentage}%</p>
+                <p><strong>Correct:</strong> ${kanjiQuizState.correctCount}</p>
+                <p><strong>Incorrect:</strong> ${kanjiQuizState.incorrectCount}</p>
+                <p><strong>New Mastered:</strong> ${kanjiQuizState.correctCount} kanji</p>
+            </div>
+            <button class="small-btn" onclick="document.getElementById('quizResults').style.display='none'; generateKanjiQuiz();">🔄 Try Again</button>
+            <button class="small-btn" onclick="document.getElementById('quizResults').style.display='none';">Close</button>
+        </div>
+    `;
+
+  if (quizArea) {
+    quizArea.innerHTML = `
+            <p class="quiz-complete" style="text-align: center; padding: 20px; color: #4CAF50; font-size: 1.2rem;">
+                ✅ Quiz complete! Check your results below.
+            </p>
+        `;
+  }
+
+  updateMasteredCount();
+  renderMasteredList();
+}
+
+function stopKanjiQuiz() {
+  kanjiQuizState.isActive = false;
+  kanjiQuizState.questions = [];
+  kanjiQuizState.currentIndex = 0;
+
+  const quizArea = document.getElementById("quizArea");
+  if (quizArea) {
+    quizArea.innerHTML = `
+            <p class="quiz-welcome" style="text-align: center; color: #666; padding: 40px; font-size: 1rem;">
+                Quiz stopped. Select a mode and number of questions, then click <strong>"Start New Quiz"</strong>
+            </p>
+        `;
+  }
+
+  const resultsDiv = document.getElementById("quizResults");
+  if (resultsDiv) resultsDiv.style.display = "none";
+}
+
 // ========== EVENT DELEGATION ==========
 function setupDelegation() {
   const container = document.getElementById("kanjiList");
@@ -751,7 +1045,9 @@ function applyFuriganaHide() {
   renderLearnTab();
   renderMasteredList();
 
+  // Check if kanjiQuizState exists before using it
   if (
+    typeof kanjiQuizState !== "undefined" &&
     kanjiQuizState &&
     kanjiQuizState.isActive &&
     kanjiQuizState.questions.length > 0
