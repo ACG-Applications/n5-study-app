@@ -2,7 +2,7 @@
   "name": "N5 Study App",
   "short_name": "N5 Study",
   "description": "Study and practice JLPT N5 Japanese vocabulary and grammar",
-  "start_url": "/",
+  "start_url": "/n5-study-app/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a73e8",
