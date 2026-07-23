@@ -8,6 +8,12 @@
     />
     <title>N5 Japanese Study App</title>
     <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Noto+Serif+JP:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <!-- 1️⃣ Global variables -->
     <link rel="stylesheet" href="css/variables.css" />
     <!-- 2️⃣ Main styles -->
@@ -731,75 +737,403 @@
       </div>
     </div>
 
-    <!-- ===== PRINT MODAL ===== -->
+    <!-- ===== PRINT MODAL - COMPACT LAYOUT ===== -->
     <div id="printModal" class="modal">
-      <div class="modal-card" style="max-width: 450px">
-        <h3>🖨️ Print Options</h3>
-        <div class="print-option-group">
-          <h4>📝 Sentences</h4>
-          <div class="radio-group">
-            <label
-              ><input type="radio" name="sentenceMode" value="kanji" checked />
-              Kanji Only</label
-            >
-            <label
-              ><input type="radio" name="sentenceMode" value="furigana" /> With
-              Furigana</label
-            >
-            <label
-              ><input type="radio" name="sentenceMode" value="translation" />
-              With Translation</label
-            >
-          </div>
-        </div>
-        <div class="print-option-group">
-          <h4>📖 Kanji Stroke Reference</h4>
-          <div style="display: flex; flex-direction: column; gap: 8px">
-            <label>
-              <input type="checkbox" id="includeKanjiStrokes" />
-              Append stroke diagrams to sentences
-            </label>
-            <button
-              id="printKanjiStrokesBtn"
-              class="action-btn"
-              style="
-                padding: 8px 16px;
-                font-size: 0.85rem;
-                background: #8b6b6b;
-                width: 100%;
-              "
-            >
-              ✍️ Print Kanji Strokes Only
-            </button>
-            <span style="font-size: 11px; color: #999"
-              >(Prints ONLY stroke order diagrams for this sprint)</span
-            >
-          </div>
-        </div>
-        <div class="print-option-group">
-          <h4>📄 Export Format</h4>
-          <div class="radio-group">
-            <label
-              ><input type="radio" name="exportFormat" value="print" checked />
-              🖨️ Print</label
-            >
-            <label
-              ><input type="radio" name="exportFormat" value="pdf" /> 📥 PDF
-              (Save as PDF in print dialog)</label
-            >
-          </div>
-          <p style="font-size: 11px; color: #999; margin-top: 8px">
-            💡 For PDF: Select "Save as PDF" in the print dialog that appears.
-          </p>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 20px">
-          <button id="printActionBtn" class="action-btn" style="flex: 1">
-            🖨️ Print / PDF
+      <div
+        class="modal-card"
+        style="max-width: 620px; padding: 20px 24px; border-radius: 16px"
+      >
+        <!-- HEADER -->
+        <h3
+          style="
+            margin-top: 0;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #6c8b6b;
+            padding-bottom: 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c3e2f;
+          "
+        >
+          <span>🖨️ Print Options</span>
+          <button
+            id="cancelPrintBtn"
+            class="small-btn"
+            style="font-size: 0.75rem; padding: 4px 12px"
+          >
+            ✕ Close
           </button>
-          <button id="cancelPrintBtn" class="small-btn">Cancel</button>
+        </h3>
+
+        <!-- TWO-COLUMN LAYOUT -->
+        <div
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px"
+        >
+          <!-- LEFT COLUMN -->
+          <div>
+            <!-- Layout Style -->
+            <div style="margin: 0 0 6px 0">
+              <label
+                style="
+                  font-size: 0.85rem;
+                  font-weight: 600;
+                  color: #4a6741;
+                  display: block;
+                  margin-bottom: 4px;
+                "
+                >📐 Layout</label
+              >
+              <div style="display: flex; gap: 8px; font-size: 0.85rem">
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    cursor: pointer;
+                    padding: 4px 12px;
+                    border-radius: 12px;
+                    background: #f0ebe3;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="layoutStyle"
+                    value="western"
+                    checked
+                    style="
+                      width: 15px;
+                      height: 15px;
+                      accent-color: #6c8b6b;
+                      cursor: pointer;
+                    "
+                  />
+                  Western
+                </label>
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    cursor: pointer;
+                    padding: 4px 12px;
+                    border-radius: 12px;
+                    background: #f0ebe3;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="layoutStyle"
+                    value="genkouyoushi"
+                    style="
+                      width: 15px;
+                      height: 15px;
+                      accent-color: #6c8b6b;
+                      cursor: pointer;
+                    "
+                  />
+                  Genkou
+                </label>
+              </div>
+              <div
+                id="genkouyoushiNote"
+                style="
+                  font-size: 0.65rem;
+                  color: #8a7a6a;
+                  display: none;
+                  margin-top: 2px;
+                "
+              >
+                💡 In Genkouyoushi: Kanji Only or Kanji + Translation
+              </div>
+            </div>
+
+            <!-- Sentence Display -->
+            <div style="margin: 0 0 6px 0">
+              <label
+                style="
+                  font-size: 0.85rem;
+                  font-weight: 600;
+                  color: #4a6741;
+                  display: block;
+                  margin-bottom: 4px;
+                "
+                >📝 Display</label
+              >
+              <!-- 
+                OPTION GROUP - Radio buttons for display modes
+                - Kanji Only: Just the kanji
+                - + Furigana: Kanji + Furigana (no translation)
+                - + Translation: Kanji + Translation (no furigana)
+                - + Furigana + Translation: Kanji + Furigana + Translation
+              -->
+              <div
+                style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 5px;
+                  font-size: 0.75rem;
+                "
+              >
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    cursor: pointer;
+                    padding: 3px 8px;
+                    border-radius: 10px;
+                    background: #f0ebe3;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="sentenceMode"
+                    value="kanji"
+                    checked
+                    style="
+                      width: 14px;
+                      height: 14px;
+                      accent-color: #6c8b6b;
+                      cursor: pointer;
+                    "
+                  />
+                  Kanji Only
+                </label>
+                <label
+                  id="furiganaOption"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    cursor: pointer;
+                    padding: 3px 8px;
+                    border-radius: 10px;
+                    background: #f0ebe3;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="sentenceMode"
+                    value="furigana"
+                    style="
+                      width: 14px;
+                      height: 14px;
+                      accent-color: #6c8b6b;
+                      cursor: pointer;
+                    "
+                  />
+                  + Furigana
+                </label>
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    cursor: pointer;
+                    padding: 3px 8px;
+                    border-radius: 10px;
+                    background: #f0ebe3;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="sentenceMode"
+                    value="translation"
+                    style="
+                      width: 14px;
+                      height: 14px;
+                      accent-color: #6c8b6b;
+                      cursor: pointer;
+                    "
+                  />
+                  + Translation
+                </label>
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    cursor: pointer;
+                    padding: 3px 8px;
+                    border-radius: 10px;
+                    background: #f0ebe3;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="sentenceMode"
+                    value="furigana_translation"
+                    style="
+                      width: 14px;
+                      height: 14px;
+                      accent-color: #6c8b6b;
+                      cursor: pointer;
+                    "
+                  />
+                  + All
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div>
+            <!-- Kanji Strokes -->
+            <div style="margin: 0 0 6px 0">
+              <label
+                style="
+                  font-size: 0.85rem;
+                  font-weight: 600;
+                  color: #4a6741;
+                  display: block;
+                  margin-bottom: 4px;
+                "
+                >📖 Stroke Ref</label
+              >
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  font-size: 0.8rem;
+                  cursor: pointer;
+                  padding: 2px 0;
+                "
+              >
+                <input
+                  type="checkbox"
+                  id="includeKanjiStrokes"
+                  style="
+                    width: 16px;
+                    height: 16px;
+                    accent-color: #6c8b6b;
+                    cursor: pointer;
+                  "
+                />
+                Include stroke diagrams
+              </label>
+              <button
+                id="printKanjiStrokesBtn"
+                class="action-btn"
+                style="
+                  width: 100%;
+                  padding: 5px 12px;
+                  font-size: 0.7rem;
+                  background: #8b6b6b;
+                  border-radius: 14px;
+                  margin-top: 3px;
+                  color: white;
+                  border: none;
+                  cursor: pointer;
+                  font-weight: 500;
+                "
+              >
+                ✍️ Strokes Only
+              </button>
+            </div>
+
+            <!-- Blank Writing Paper -->
+            <div style="margin: 0 0 6px 0">
+              <label
+                style="
+                  font-size: 0.85rem;
+                  font-weight: 600;
+                  color: #4a6741;
+                  display: block;
+                  margin-bottom: 4px;
+                "
+                >📄 Blank Practice</label
+              >
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  font-size: 0.8rem;
+                  cursor: pointer;
+                  padding: 2px 0;
+                "
+              >
+                <input
+                  type="checkbox"
+                  id="includeBlankWritingPaper"
+                  style="
+                    width: 16px;
+                    height: 16px;
+                    accent-color: #6c8b6b;
+                    cursor: pointer;
+                  "
+                />
+                Print blank writing paper
+              </label>
+              <div style="font-size: 0.6rem; color: #999; margin-top: 1px">
+                Opens separate PDF for practice
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div
+          style="
+            display: flex;
+            gap: 12px;
+            margin-top: 14px;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+          "
+        >
+          <button
+            id="printActionBtn"
+            class="action-btn"
+            style="
+              flex: 2;
+              padding: 10px 24px;
+              font-size: 1rem;
+              border-radius: 30px;
+              background: #5a8a6a;
+              color: white;
+              border: none;
+              cursor: pointer;
+              font-weight: 700;
+            "
+          >
+            🖨️ Print
+          </button>
+          <button
+            id="cancelPrintBtn2"
+            class="small-btn"
+            style="
+              flex: 1;
+              padding: 10px 20px;
+              font-size: 0.85rem;
+              background: #e8e0d5;
+              color: #2c3e2f;
+              border: none;
+              border-radius: 30px;
+              cursor: pointer;
+            "
+          >
+            Cancel
+          </button>
+        </div>
+
+        <div
+          style="
+            font-size: 0.6rem;
+            color: #999;
+            text-align: center;
+            margin-top: 8px;
+          "
+        >
+          💡 Use "Save as PDF" in the print dialog to export as PDF
         </div>
       </div>
     </div>
+    <!-- ===== END PRINT MODAL ===== -->
 
     <!-- 1. DATA - All data files together ✅ -->
     <script src="js/data/sprints.js"></script>

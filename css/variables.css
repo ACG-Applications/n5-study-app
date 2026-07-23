@@ -66,9 +66,21 @@
     
     /* ===== TYPOGRAPHY ===== */
     
-    /* Font Families */
-    --font-family: 'Segoe UI', Roboto, 'Noto Sans', system-ui, -apple-system, sans-serif;
-    --font-family-jp: 'Hiragino Kaku Gothic Pro', 'Noto Sans JP', 'MS PGothic', sans-serif;
+    /* Font Families - Using Google Fonts */
+    /* Japanese fonts - serif (Mincho) for kanji/readings */
+    --font-jp-serif: "Shippori Mincho", "Noto Serif JP", "Hiragino Mincho ProN", "MS Mincho", serif;
+    
+    /* Japanese fonts - sans-serif for UI */
+    --font-jp-sans: "Noto Sans JP", "Zen Kaku Gothic New", "Hiragino Kaku Gothic Pro", "Yu Gothic", "Meiryo", sans-serif;
+    
+    /* English fonts - clean and modern */
+    --font-en: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    
+    /* Combined body font (English + Japanese fallback) */
+    --font-family: var(--font-en), var(--font-jp-sans);
+    
+    /* Keep this for backward compatibility */
+    --font-family-jp: var(--font-jp-sans);
     
     /* Font Sizes */
     --font-h1: 1.8rem;
