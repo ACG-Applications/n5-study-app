@@ -2,15 +2,15 @@
 let activeSprintIndex = 0;
 
 // DOM Elements
-const sprintSelect = document.getElementById('sprintSelect');
-const progressText = document.getElementById('progressText');
-const progressBar = document.getElementById('progressBar');
+const sprintSelect = document.getElementById("sprintSelect");
+const progressText = document.getElementById("progressText");
+const progressBar = document.getElementById("progressBar");
 
 // Populate Sprint Dropdown
 function populateSprintSelect() {
-  sprintSelect.innerHTML = '';
+  sprintSelect.innerHTML = "";
   sprints.forEach((sp, idx) => {
-    const option = document.createElement('option');
+    const option = document.createElement("option");
     option.value = idx;
     option.textContent = `${sp.displayName} (${sp.start + 1}-${sp.end + 1})`;
     if (idx === activeSprintIndex) option.selected = true;
@@ -20,7 +20,7 @@ function populateSprintSelect() {
 
 // Update Progress Display
 function updateProgressDisplay() {
-  const {start, end} = sprints[activeSprintIndex];
+  const { start, end } = sprints[activeSprintIndex];
   let total = end - start + 1;
   let mastered = 0;
   for (let i = start; i <= end; i++) {
@@ -33,56 +33,72 @@ function updateProgressDisplay() {
 
 // Override updateStats to also update progress bar
 const originalUpdateStats = updateStats;
-updateStats = function() {
+updateStats = function () {
   originalUpdateStats();
   updateProgressDisplay();
 };
 
 // Sprint Change Handler
-sprintSelect.addEventListener('change', (e) => {
+sprintSelect.addEventListener("change", (e) => {
   activeSprintIndex = parseInt(e.target.value);
   updateProgressDisplay();
   // Update flashcard view if open
-  if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+  if (typeof updateFlashcardsForSprint === "function")
+    updateFlashcardsForSprint();
   // Update story mode's current sprint variable
-  if (typeof currentStorySprint !== 'undefined') {
+  if (typeof currentStorySprint !== "undefined") {
     currentStorySprint = activeSprintIndex;
   }
 });
 
 // Mastered Controls - Check if elements exist before setting onclick
-const showMasteredBtn = document.getElementById('showMasteredBtn');
+const showMasteredBtn = document.getElementById("showMasteredBtn");
 if (showMasteredBtn) {
-  showMasteredBtn.onclick = () => { 
-    showMastered = true; 
-    if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+  showMasteredBtn.onclick = () => {
+    showMastered = true;
+    if (typeof updateFlashcardsForSprint === "function")
+      updateFlashcardsForSprint();
   };
 }
 
-const hideMasteredBtn = document.getElementById('hideMasteredBtn');
+const hideMasteredBtn = document.getElementById("hideMasteredBtn");
 if (hideMasteredBtn) {
-  hideMasteredBtn.onclick = () => { 
-    showMastered = false; 
-    if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+  hideMasteredBtn.onclick = () => {
+    showMastered = false;
+    if (typeof updateFlashcardsForSprint === "function")
+      updateFlashcardsForSprint();
   };
 }
 
-const resetMasteredBtn = document.getElementById('resetMasteredBtn');
+const resetMasteredBtn = document.getElementById("resetMasteredBtn");
 if (resetMasteredBtn) {
-  resetMasteredBtn.onclick = () => { 
-    resetMastered(); 
-    if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+  resetMasteredBtn.onclick = () => {
+    resetMastered();
+    if (typeof updateFlashcardsForSprint === "function")
+      updateFlashcardsForSprint();
   };
 }
 
 // CSV Export - Check if element exists
-const csvBtn = document.getElementById('csvBtn');
+const csvBtn = document.getElementById("csvBtn");
 if (csvBtn) {
   csvBtn.onclick = () => {
-    let csv = [["Sentence","Reading","Translation","Grammar"]];
-    sentencesData.forEach(s => csv.push([s.jp, s.reading, s.translation, s.grammarHint || ""]));
-    const blob = new Blob(["\uFEFF" + csv.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n")], {type: "text/csv"});
-    const a = document.createElement('a');
+    let csv = [["Sentence", "Reading", "Translation", "Grammar"]];
+    sentencesData.forEach((s) =>
+      csv.push([s.jp, s.reading, s.translation, s.grammarHint || ""]),
+    );
+    const blob = new Blob(
+      [
+        "\uFEFF" +
+          csv
+            .map((r) =>
+              r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","),
+            )
+            .join("\n"),
+      ],
+      { type: "text/csv" },
+    );
+    const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = `n5_sentences_${sprints[activeSprintIndex].name}.csv`;
     a.click();
@@ -90,13 +106,21 @@ if (csvBtn) {
   };
 }
 
+// ─── Directions Button ───
+const directionsBtn = document.getElementById("directionsBtn");
+if (directionsBtn) {
+  directionsBtn.addEventListener("click", function () {
+    window.open("directions.html", "_blank");
+  });
+}
+
 // Export/Import Mastered Data - Check if elements exist
-const exportMasteredBtn = document.getElementById('exportMasteredBtn');
+const exportMasteredBtn = document.getElementById("exportMasteredBtn");
 if (exportMasteredBtn) {
   exportMasteredBtn.onclick = () => {
     const data = JSON.stringify([...masteredSet]);
-    const blob = new Blob([data], {type: "application/json"});
-    const a = document.createElement('a');
+    const blob = new Blob([data], { type: "application/json" });
+    const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "n5_mastered_backup.json";
     a.click();
@@ -104,12 +128,12 @@ if (exportMasteredBtn) {
   };
 }
 
-const importMasteredBtn = document.getElementById('importMasteredBtn');
+const importMasteredBtn = document.getElementById("importMasteredBtn");
 if (importMasteredBtn) {
   importMasteredBtn.onclick = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
     input.onchange = (e) => {
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -119,10 +143,11 @@ if (importMasteredBtn) {
           masteredSet = new Set(imported);
           saveMastered();
           updateProgressDisplay();
-          if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+          if (typeof updateFlashcardsForSprint === "function")
+            updateFlashcardsForSprint();
           alert(`Imported ${masteredSet.size} mastered items!`);
         } catch (err) {
-          alert('Invalid file format');
+          alert("Invalid file format");
         }
       };
       reader.readAsText(file);
