@@ -1,14 +1,23 @@
 // ==================== ADJECTIVES MODULE ====================
 
 // DEBUG: Check if helpers are loaded
-console.log('=== ADJECTIVES MODULE LOADED ===');
-console.log('Testing helpers - getWordMeaningsForSentence:', typeof getWordMeaningsForSentence);
-console.log('Testing helpers - createQuizWordTooltips:', typeof createQuizWordTooltips);
-console.log('Testing helpers - attachQuizTooltipsGlobal:', typeof attachQuizTooltipsGlobal);
-console.log('Testing helpers - window.wordDict:', typeof window.wordDict);
-console.log('Testing speakText:', typeof speakText);
+console.log("=== ADJECTIVES MODULE LOADED ===");
+console.log(
+  "Testing helpers - getWordMeaningsForSentence:",
+  typeof getWordMeaningsForSentence,
+);
+console.log(
+  "Testing helpers - createQuizWordTooltips:",
+  typeof createQuizWordTooltips,
+);
+console.log(
+  "Testing helpers - attachQuizTooltipsGlobal:",
+  typeof attachQuizTooltipsGlobal,
+);
+console.log("Testing helpers - window.wordDict:", typeof window.wordDict);
+console.log("Testing speakText:", typeof speakText);
 
-let currentAdjTab = 'conjugation';
+let currentAdjTab = "conjugation";
 let furiganaHidden = false;
 let masteredAdjectives = new Set();
 let attemptedAdjectives = new Set();
@@ -16,26 +25,26 @@ let currentQuiz = [];
 let currentQuizIndex = 0;
 let quizAnswers = [];
 let quizActive = false;
-let quizMode = 'easy';
+let quizMode = "easy";
 let quizScore = 0;
 let quizAttemptsRemaining = {};
-let currentFilterType = 'all';
-let currentSearchTerm = '';
+let currentFilterType = "all";
+let currentSearchTerm = "";
 
 // DOM Elements
-const furiToggleBtn = document.getElementById('furiToggleBtn');
-const tabConjugationBtn = document.getElementById('tabConjugationBtn');
-const tabLearnBtn = document.getElementById('tabLearnBtn');
-const tabQuizBtn = document.getElementById('tabQuizBtn');
-const tabMasteredBtn = document.getElementById('tabMasteredBtn');
-const quizEasyModeBtn = document.getElementById('quizEasyModeBtn');
-const quizHardModeBtn = document.getElementById('quizHardModeBtn');
-const typeSelect = document.getElementById('typeSelect');
-const adjSearchInput = document.getElementById('adjSearchInput');
+const furiToggleBtn = document.getElementById("furiToggleBtn");
+const tabConjugationBtn = document.getElementById("tabConjugationBtn");
+const tabLearnBtn = document.getElementById("tabLearnBtn");
+const tabQuizBtn = document.getElementById("tabQuizBtn");
+const tabMasteredBtn = document.getElementById("tabMasteredBtn");
+const quizEasyModeBtn = document.getElementById("quizEasyModeBtn");
+const quizHardModeBtn = document.getElementById("quizHardModeBtn");
+const typeSelect = document.getElementById("typeSelect");
+const adjSearchInput = document.getElementById("adjSearchInput");
 
 // ========== TTS FUNCTION ==========
-function speakText(text, lang = 'ja-JP') {
-  if (!text || text === '-' || text.trim() === '') return;
+function speakText(text, lang = "ja-JP") {
+  if (!text || text === "-" || text.trim() === "") return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
@@ -51,26 +60,34 @@ function printLesson() {
 
 // Helper function to add furigana
 function addFuriganaToText(text) {
-  if (!text) return '';
+  if (!text) return "";
   if (furiganaHidden) {
-    return text.replace(/[（(][^）)]*[）)]/g, '');
+    return text.replace(/[（(][^）)]*[）)]/g, "");
   }
-  return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-    return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-  });
+  return text.replace(
+    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+    (_, kanji, furigana) => {
+      return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+    },
+  );
 }
 
 // ===== HELPER: Display sentence with proper furigana handling =====
 function displaySentenceWithFurigana(sentence) {
-  if (!sentence) return '';
+  if (!sentence) return "";
   // First, try to use the word meanings/tooltip approach
-  if (typeof getWordMeaningsForSentence === 'function' && typeof createQuizWordTooltips === 'function') {
+  if (
+    typeof getWordMeaningsForSentence === "function" &&
+    typeof createQuizWordTooltips === "function"
+  ) {
     const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
     if (wordMeanings && wordMeanings.length > 0) {
       // If furigana is hidden, strip furigana from the sentence before creating tooltips
       if (furiganaHidden) {
-        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
-        const cleanWordMeanings = getWordMeaningsForSentence({ jp: cleanSentence });
+        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
+        const cleanWordMeanings = getWordMeaningsForSentence({
+          jp: cleanSentence,
+        });
         return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
       }
       return createQuizWordTooltips(sentence, wordMeanings);
@@ -82,8 +99,8 @@ function displaySentenceWithFurigana(sentence) {
 
 // Strip furigana for dropdown
 function stripFuriganaForDropdown(text) {
-  if (!text) return '';
-  return text.replace(/[（(][^）)]*[）)]/g, '');
+  if (!text) return "";
+  return text.replace(/[（(][^）)]*[）)]/g, "");
 }
 
 // Format adjective for display with furigana
@@ -542,11 +559,11 @@ function renderLearnTab() {
 
 // Load mastered adjectives from localStorage
 function loadMasteredAdjectives() {
-  const stored = localStorage.getItem('masteredAdjectives');
+  const stored = localStorage.getItem("masteredAdjectives");
   if (stored) {
     masteredAdjectives = new Set(JSON.parse(stored));
   }
-  const storedAttempted = localStorage.getItem('attemptedAdjectives');
+  const storedAttempted = localStorage.getItem("attemptedAdjectives");
   if (storedAttempted) {
     attemptedAdjectives = new Set(JSON.parse(storedAttempted));
   }
@@ -554,8 +571,14 @@ function loadMasteredAdjectives() {
 }
 
 function saveMasteredAdjectives() {
-  localStorage.setItem('masteredAdjectives', JSON.stringify([...masteredAdjectives]));
-  localStorage.setItem('attemptedAdjectives', JSON.stringify([...attemptedAdjectives]));
+  localStorage.setItem(
+    "masteredAdjectives",
+    JSON.stringify([...masteredAdjectives]),
+  );
+  localStorage.setItem(
+    "attemptedAdjectives",
+    JSON.stringify([...attemptedAdjectives]),
+  );
   updateMasteredCount();
 }
 
@@ -563,15 +586,15 @@ function updateMasteredCount() {
   const total = adjectiveOrder.length;
   const mastered = masteredAdjectives.size;
   const attempted = attemptedAdjectives.size;
-  const countEl = document.getElementById('masteredCount');
-  const totalEl = document.getElementById('totalCount');
+  const countEl = document.getElementById("masteredCount");
+  const totalEl = document.getElementById("totalCount");
   if (countEl) countEl.innerText = mastered;
   if (totalEl) totalEl.innerText = total;
-  
-  const quizMasteredEl = document.getElementById('quizMasteredCount');
-  const quizAttemptedEl = document.getElementById('quizAttemptedCount');
-  const quizTotalEl = document.getElementById('quizTotalAdjs');
-  const quizTotalEl2 = document.getElementById('quizTotalAdjs2');
+
+  const quizMasteredEl = document.getElementById("quizMasteredCount");
+  const quizAttemptedEl = document.getElementById("quizAttemptedCount");
+  const quizTotalEl = document.getElementById("quizTotalAdjs");
+  const quizTotalEl2 = document.getElementById("quizTotalAdjs2");
   if (quizMasteredEl) quizMasteredEl.innerText = mastered;
   if (quizAttemptedEl) quizAttemptedEl.innerText = attempted;
   if (quizTotalEl) quizTotalEl.innerText = total;
@@ -600,7 +623,9 @@ function unmarkAdjectiveMastered(adjId) {
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
   if (furiToggleBtn) {
-    furiToggleBtn.innerText = furiganaHidden ? '🔤 Furigana On' : '🔤 Furigana Off';
+    furiToggleBtn.innerText = furiganaHidden
+      ? "🔤 Furigana On"
+      : "🔤 Furigana Off";
   }
   renderAdjectivesList();
   renderLearnTab();
@@ -611,54 +636,64 @@ function applyFuriganaHide() {
 }
 
 function renderAdjectivesList() {
-  const container = document.getElementById('adjectivesList');
+  const container = document.getElementById("adjectivesList");
   if (!container) return;
-  
+
   let filteredAdjs = [...adjectivesData];
-  
-  if (currentFilterType !== 'all') {
-    filteredAdjs = filteredAdjs.filter(a => a.type === currentFilterType);
+
+  if (currentFilterType !== "all") {
+    filteredAdjs = filteredAdjs.filter((a) => a.type === currentFilterType);
   }
-  
+
   if (currentSearchTerm) {
     const searchLower = currentSearchTerm.toLowerCase();
-    filteredAdjs = filteredAdjs.filter(a => 
-      a.dictionary.toLowerCase().includes(searchLower) ||
-      a.reading.toLowerCase().includes(searchLower) ||
-      a.meaning.toLowerCase().includes(searchLower)
+    filteredAdjs = filteredAdjs.filter(
+      (a) =>
+        a.dictionary.toLowerCase().includes(searchLower) ||
+        a.reading.toLowerCase().includes(searchLower) ||
+        a.meaning.toLowerCase().includes(searchLower),
     );
   }
-  
-  let html = '';
-  
+
+  let html = "";
+
   const conjugationDisplayNames = {
-    nai: 'Negative (ない)',
-    ta: 'Past (た)',
-    nakatta: 'Past Negative (なかった)',
-    masu: 'Present (です)',
-    masu_nai: 'Negative (じゃありません)',
-    masu_ta: 'Past (でした)',
-    masu_nakatta: 'Past Negative (じゃありませんでした)',
-    conditional: 'Conditional (ば/なら)',
-    te: 'Te-form (て/で)',
-    adverbial: 'Adverbial (く/に)'
+    nai: "NEGATIVE",
+    ta: "PAST",
+    nakatta: "PAST NEGATIVE",
+    masu: "PRESENT",
+    masu_nai: "NEGATIVE",
+    masu_ta: "PAST",
+    masu_nakatta: "PAST NEGATIVE",
+    conditional: "CONDITIONAL",
+    te: "TE-FORM",
+    adverbial: "ADVERBIAL",
   };
-  
-  const conjOrder = ['masu', 'nai', 'ta', 'nakatta', 'te', 'conditional', 'adverbial'];
-  
+
+  const conjOrder = [
+    "masu",
+    "nai",
+    "ta",
+    "nakatta",
+    "te",
+    "conditional",
+    "adverbial",
+  ];
+
   for (const adj of filteredAdjs) {
     const isMastered = masteredAdjectives.has(adj.id);
-    const typeClass = adj.type === 'i' ? 'type-i' : 'type-na';
-    const typeName = adj.type === 'i' ? 'い-adjective' : 'な-adjective';
-    
-    let examplesHtml = '';
+    const typeClass = adj.type === "i" ? "type-i" : "type-na";
+    const typeName = adj.type === "i" ? "い-adjective" : "な-adjective";
+
+    let examplesHtml = "";
     if (adj.examples && adj.examples.length > 0) {
       for (const ex of adj.examples) {
         // ===== Use the helper that respects furigana toggle =====
         let displayJp = displaySentenceWithFurigana(ex.sentence);
-        
-        const reading = ex.reading || ex.sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
-        
+
+        const reading =
+          ex.reading || ex.sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
+
         examplesHtml += `
           <div class="example-item" data-reading="${reading}">
             <div class="example-jp">${displayJp}</div>
@@ -668,17 +703,17 @@ function renderAdjectivesList() {
         `;
       }
     }
-    
+
     const dictDisplay = formatAdjectiveForDisplay(adj);
-    
+
     html += `
-      <div class="adj-card ${isMastered ? 'mastered' : ''}" data-adj-id="${adj.id}">
+      <div class="adj-card ${isMastered ? "mastered" : ""}" data-adj-id="${adj.id}">
         <div class="adj-header">
           <div>
             <span class="adj-title">${dictDisplay}</span>
             <span class="adj-reading">(${adj.reading})</span>
             <span class="type-badge ${typeClass}">${typeName}</span>
-            ${isMastered ? '<span class="mastered-badge">✓ Mastered</span>' : ''}
+            ${isMastered ? '<span class="mastered-badge">✓ Mastered</span>' : ""}
           </div>
           <div>
             <span class="adj-meaning">${adj.meaning}</span>
@@ -687,19 +722,34 @@ function renderAdjectivesList() {
         
         <div class="conjugation-table">
     `;
-    
+
+    // Define the parentheses text for each conjugation type
+    const conjParentheses = {
+      masu: "です",
+      nai: "ない",
+      ta: "た",
+      nakatta: "なかった",
+      te: "て/で",
+      conditional: "ば/なら",
+      adverbial: "く/に",
+    };
+
     for (const conjType of conjOrder) {
       const conjValue = adj.conjugations[conjType];
       if (conjValue) {
+        const parenText = conjParentheses[conjType] || "";
         html += `
-          <div class="conj-item">
-            <div class="conj-label">${conjugationDisplayNames[conjType]}</div>
-            <div class="conj-value">${addFuriganaToText(conjValue)}</div>
-          </div>
-        `;
+      <div class="conj-item">
+        <div class="conj-label">
+          <span class="conj-name">${conjugationDisplayNames[conjType]}</span>
+          ${parenText ? `<span class="conj-paren">(${parenText})</span>` : ""}
+        </div>
+        <div class="conj-value">${addFuriganaToText(conjValue)}</div>
+      </div>
+    `;
       }
     }
-    
+
     html += `
         </div>
         
@@ -709,51 +759,57 @@ function renderAdjectivesList() {
         </div>
         
         <button class="small-btn mark-mastered-btn" data-adj-id="${adj.id}">
-          ${isMastered ? '✓ Mastered' : '✓ Mark as Mastered'}
+          ${isMastered ? "✓ Mastered" : "✓ Mark as Mastered"}
         </button>
       </div>
     `;
   }
-  
+
   if (filteredAdjs.length === 0) {
-    html = '<p style="text-align: center; padding: 40px;">No adjectives match your filters.</p>';
+    html =
+      '<p style="text-align: center; padding: 40px;">No adjectives match your filters.</p>';
   }
-  
+
   container.innerHTML = html;
-  
+
   // ===== TTS SUPPORT: Add click listeners for example items and buttons =====
-  document.querySelectorAll('.example-item').forEach(el => {
+  document.querySelectorAll(".example-item").forEach((el) => {
     const reading = el.dataset.reading;
     if (reading) {
       // Click on the example item itself plays audio
-      el.addEventListener('click', (e) => {
-        if (e.target.closest('.example-tts-btn') || e.target.closest('.tooltip-text') || e.target.closest('.word-tooltip')) return;
-        console.log('TTS: Playing example sentence:', reading);
-        if (typeof speakText === 'function') {
+      el.addEventListener("click", (e) => {
+        if (
+          e.target.closest(".example-tts-btn") ||
+          e.target.closest(".tooltip-text") ||
+          e.target.closest(".word-tooltip")
+        )
+          return;
+        console.log("TTS: Playing example sentence:", reading);
+        if (typeof speakText === "function") {
           speakText(reading);
-        } else if (typeof window.speakText === 'function') {
+        } else if (typeof window.speakText === "function") {
           window.speakText(reading);
         }
       });
       // TTS button inside the example
-      const ttsBtn = el.querySelector('.example-tts-btn');
+      const ttsBtn = el.querySelector(".example-tts-btn");
       if (ttsBtn) {
-        ttsBtn.addEventListener('click', (e) => {
+        ttsBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           const btnReading = ttsBtn.dataset.reading || reading;
-          console.log('TTS: Playing from button:', btnReading);
-          if (typeof speakText === 'function') {
+          console.log("TTS: Playing from button:", btnReading);
+          if (typeof speakText === "function") {
             speakText(btnReading);
-          } else if (typeof window.speakText === 'function') {
+          } else if (typeof window.speakText === "function") {
             window.speakText(btnReading);
           }
         });
       }
     }
   });
-  
-  document.querySelectorAll('.mark-mastered-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+
+  document.querySelectorAll(".mark-mastered-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const adjId = btn.dataset.adjId;
       if (masteredAdjectives.has(adjId)) {
@@ -763,29 +819,30 @@ function renderAdjectivesList() {
       }
     });
   });
-  
+
   // ===== ATTACH TOOLTIPS =====
-  if (typeof attachQuizTooltipsGlobal === 'function') {
+  if (typeof attachQuizTooltipsGlobal === "function") {
     setTimeout(attachQuizTooltipsGlobal, 100);
-  } else if (typeof attachQuizTooltips === 'function') {
+  } else if (typeof attachQuizTooltips === "function") {
     setTimeout(attachQuizTooltips, 100);
-  } else if (typeof attachTooltipLongPress === 'function') {
+  } else if (typeof attachTooltipLongPress === "function") {
     setTimeout(() => attachTooltipLongPress(container), 100);
   }
 }
 
 function renderMasteredList() {
-  const container = document.getElementById('masteredList');
+  const container = document.getElementById("masteredList");
   if (!container) return;
-  
+
   const masteredIds = [...masteredAdjectives];
-  
+
   if (masteredIds.length === 0) {
-    container.innerHTML = '<p class="empty-message">No adjectives mastered yet. Complete a quiz to master adjectives!</p>';
+    container.innerHTML =
+      '<p class="empty-message">No adjectives mastered yet. Complete a quiz to master adjectives!</p>';
     return;
   }
-  
-  let html = '';
+
+  let html = "";
   for (const adjId of masteredIds) {
     const adj = getAdjectiveById(adjId);
     if (adj) {
@@ -801,11 +858,11 @@ function renderMasteredList() {
       `;
     }
   }
-  
+
   container.innerHTML = html;
-  
-  document.querySelectorAll('.unmaster-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+
+  document.querySelectorAll(".unmaster-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
       const adjId = btn.dataset.adjId;
       unmarkAdjectiveMastered(adjId);
     });
@@ -815,88 +872,113 @@ function renderMasteredList() {
 // ==================== QUIZ FUNCTIONS ====================
 
 function generateQuiz() {
-  console.log('generateQuiz called! Mode:', quizMode);
+  console.log("generateQuiz called! Mode:", quizMode);
   setModeButtonsEnabled(false);
-  
-  const questionCount = parseInt(document.getElementById('quizCountSelect').value);
+
+  const questionCount = parseInt(
+    document.getElementById("quizCountSelect").value,
+  );
   const allQuestions = [];
-  
-  const availableAdjs = adjectivesData.filter(a => a.examples && a.examples.length > 0);
-  
+
+  const availableAdjs = adjectivesData.filter(
+    (a) => a.examples && a.examples.length > 0,
+  );
+
   if (availableAdjs.length === 0) {
-    const quizArea = document.getElementById('quizArea');
+    const quizArea = document.getElementById("quizArea");
     if (quizArea) {
-      quizArea.innerHTML = '<p class="quiz-welcome" style="color: red;">No adjectives with examples available for quiz.</p>';
+      quizArea.innerHTML =
+        '<p class="quiz-welcome" style="color: red;">No adjectives with examples available for quiz.</p>';
     }
     setModeButtonsEnabled(true);
     return;
   }
-  
+
   // Shuffle
   for (let i = availableAdjs.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [availableAdjs[i], availableAdjs[j]] = [availableAdjs[j], availableAdjs[i]];
   }
-  
-  const conjugationTypes = ['masu', 'nai', 'ta', 'nakatta', 'te', 'conditional', 'adverbial'];
+
+  const conjugationTypes = [
+    "masu",
+    "nai",
+    "ta",
+    "nakatta",
+    "te",
+    "conditional",
+    "adverbial",
+  ];
   const displayNames = {
-    masu: 'Present (polite)',
-    nai: 'Negative',
-    ta: 'Past',
-    nakatta: 'Past Negative',
-    te: 'Te-form',
-    conditional: 'Conditional',
-    adverbial: 'Adverbial form'
+    masu: "Present (polite)",
+    nai: "Negative",
+    ta: "Past",
+    nakatta: "Past Negative",
+    te: "Te-form",
+    conditional: "Conditional",
+    adverbial: "Adverbial form",
   };
-  
+
   for (const adj of availableAdjs) {
     if (allQuestions.length >= questionCount) break;
-    
-    const randomConj = conjugationTypes[Math.floor(Math.random() * conjugationTypes.length)];
+
+    const randomConj =
+      conjugationTypes[Math.floor(Math.random() * conjugationTypes.length)];
     const correctForm = adj.conjugations[randomConj];
     const example = adj.examples[0];
     if (!example) continue;
-    
+
     // Create sentence with blank - replace the adjective with _______
     let sentenceWithBlank = example.sentence;
-    const adjFormInSentence = adj.type === 'i' ? `${adj.dictionary}い` : adj.dictionary;
-    
+    const adjFormInSentence =
+      adj.type === "i" ? `${adj.dictionary}い` : adj.dictionary;
+
     if (sentenceWithBlank.includes(adjFormInSentence)) {
-      sentenceWithBlank = sentenceWithBlank.replace(adjFormInSentence, '______');
+      sentenceWithBlank = sentenceWithBlank.replace(
+        adjFormInSentence,
+        "______",
+      );
     } else if (sentenceWithBlank.includes(adj.dictionary)) {
-      sentenceWithBlank = sentenceWithBlank.replace(adj.dictionary, '______');
+      sentenceWithBlank = sentenceWithBlank.replace(adj.dictionary, "______");
     } else {
-      const cleanAdj = adj.dictionary.replace(/[（(][^）)]*[）)]/g, '');
-      sentenceWithBlank = sentenceWithBlank.replace(cleanAdj, '______');
+      const cleanAdj = adj.dictionary.replace(/[（(][^）)]*[）)]/g, "");
+      sentenceWithBlank = sentenceWithBlank.replace(cleanAdj, "______");
     }
-    
+
     // Generate options for easy mode
     const easyOptions = [correctForm];
-    const otherAdjs = availableAdjs.filter(a => a.id !== adj.id);
-    
+    const otherAdjs = availableAdjs.filter((a) => a.id !== adj.id);
+
     while (easyOptions.length < 4 && otherAdjs.length > 0) {
       const randomAdj = otherAdjs[Math.floor(Math.random() * otherAdjs.length)];
-      const randomOtherConj = conjugationTypes[Math.floor(Math.random() * conjugationTypes.length)];
+      const randomOtherConj =
+        conjugationTypes[Math.floor(Math.random() * conjugationTypes.length)];
       const otherForm = randomAdj.conjugations[randomOtherConj];
       if (!easyOptions.includes(otherForm) && otherForm !== correctForm) {
         easyOptions.push(otherForm);
       }
     }
-    
-    const fallbacks = ['高いです', '安いです', '楽しいです', '難しいです', '綺麗です'];
+
+    const fallbacks = [
+      "高いです",
+      "安いです",
+      "楽しいです",
+      "難しいです",
+      "綺麗です",
+    ];
     while (easyOptions.length < 4) {
       const fb = fallbacks[Math.floor(Math.random() * fallbacks.length)];
       if (!easyOptions.includes(fb)) {
         easyOptions.push(fb);
       }
     }
-    
+
     // Shuffle easy options
     for (let i = easyOptions.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [easyOptions[i], easyOptions[j]] = [easyOptions[j], easyOptions[i]];
     }
-    
+
     allQuestions.push({
       sentence: sentenceWithBlank,
       translation: example.english,
@@ -911,27 +993,29 @@ function generateQuiz() {
       adjId: adj.id,
       type: adj.type,
       conjugations: adj.conjugations,
-      reading: example.reading || example.sentence.replace(/[（(][^）)]*[）)]/g, '').trim()
+      reading:
+        example.reading ||
+        example.sentence.replace(/[（(][^）)]*[）)]/g, "").trim(),
     });
   }
-  
+
   // Shuffle final questions
   for (let i = allQuestions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
   }
-  
+
   currentQuiz = allQuestions.slice(0, questionCount);
   currentQuizIndex = 0;
   quizAnswers = new Array(currentQuiz.length).fill(null);
   quizActive = true;
   quizScore = 0;
   quizAttemptsRemaining = {};
-  
+
   for (let i = 0; i < currentQuiz.length; i++) {
     quizAttemptsRemaining[i] = 2;
   }
-  
+
   updateQuizStatsDisplay();
   renderQuizQuestion();
 }
@@ -939,55 +1023,59 @@ function generateQuiz() {
 function setModeButtonsEnabled(enabled) {
   if (quizEasyModeBtn) {
     quizEasyModeBtn.disabled = !enabled;
-    quizEasyModeBtn.style.opacity = enabled ? '1' : '0.5';
+    quizEasyModeBtn.style.opacity = enabled ? "1" : "0.5";
   }
   if (quizHardModeBtn) {
     quizHardModeBtn.disabled = !enabled;
-    quizHardModeBtn.style.opacity = enabled ? '1' : '0.5';
+    quizHardModeBtn.style.opacity = enabled ? "1" : "0.5";
   }
 }
 
 function updateQuizStatsDisplay() {
   const totalPossible = currentQuiz.length;
-  const scoreEl = document.getElementById('quizRunningScore');
-  const totalEl = document.getElementById('quizTotalPossible');
+  const scoreEl = document.getElementById("quizRunningScore");
+  const totalEl = document.getElementById("quizTotalPossible");
   if (scoreEl) scoreEl.innerText = quizScore.toFixed(1);
   if (totalEl) totalEl.innerText = totalPossible;
   updateMasteredCount();
 }
 
 function renderQuizQuestion() {
-  console.log('=== renderQuizQuestion called ===');
-  const quizArea = document.getElementById('quizArea');
-  const resultsDiv = document.getElementById('quizResults');
+  console.log("=== renderQuizQuestion called ===");
+  const quizArea = document.getElementById("quizArea");
+  const resultsDiv = document.getElementById("quizResults");
   if (!quizArea) {
-    console.warn('quizArea not found!');
+    console.warn("quizArea not found!");
     return;
   }
-  
-  if (resultsDiv) resultsDiv.style.display = 'none';
-  
+
+  if (resultsDiv) resultsDiv.style.display = "none";
+
   if (!quizActive || currentQuizIndex >= currentQuiz.length) {
     showQuizResults();
     return;
   }
-  
+
   const q = currentQuiz[currentQuizIndex];
-  console.log('Current question:', q);
+  console.log("Current question:", q);
   const attemptsLeft = quizAttemptsRemaining[currentQuizIndex];
   const currentAnswer = quizAnswers[currentQuizIndex];
-  const reading = q.reading || '';
-  
-  const quizTitle = quizMode === 'easy' 
-    ? "📝 Adjective Conjugation Quiz - choose the correct form"
-    : "📝 Adjective Conjugation Quiz - select the correct form";
-  
-  const dictDisplay = formatAdjectiveForDisplay({dictionary: q.adjDict, reading: q.adjReading});
-  
+  const reading = q.reading || "";
+
+  const quizTitle =
+    quizMode === "easy"
+      ? "📝 Adjective Conjugation Quiz - choose the correct form"
+      : "📝 Adjective Conjugation Quiz - select the correct form";
+
+  const dictDisplay = formatAdjectiveForDisplay({
+    dictionary: q.adjDict,
+    reading: q.adjReading,
+  });
+
   // ===== Use the helper that respects furigana toggle =====
   let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
-  console.log('Final sentence display:', sentenceDisplay);
-  
+  console.log("Final sentence display:", sentenceDisplay);
+
   // Build the HTML
   let html = `
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
@@ -1009,15 +1097,15 @@ function renderQuizQuestion() {
         <div style="font-size: 1.1rem; font-weight: bold; color: #1e4b6e;">"${q.translation}"</div>
       </div>
   `;
-  
-  if (quizMode === 'easy') {
+
+  if (quizMode === "easy") {
     html += `
       <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0;">
     `;
     for (const opt of q.easyOptions) {
       const isSelected = currentAnswer && currentAnswer.selected === opt;
       html += `
-        <button class="quiz-option-btn" data-answer="${opt.replace(/"/g, '&quot;')}" style="background: ${isSelected ? '#6c8b6b' : '#fff'}; color: ${isSelected ? '#fff' : '#000'}; border: 2px solid #6c8b6b; border-radius: 40px; padding: 10px 18px; font-size: 1rem; cursor: pointer;">
+        <button class="quiz-option-btn" data-answer="${opt.replace(/"/g, "&quot;")}" style="background: ${isSelected ? "#6c8b6b" : "#fff"}; color: ${isSelected ? "#fff" : "#000"}; border: 2px solid #6c8b6b; border-radius: 40px; padding: 10px 18px; font-size: 1rem; cursor: pointer;">
           ${addFuriganaToText(opt)}
         </button>
       `;
@@ -1025,17 +1113,25 @@ function renderQuizQuestion() {
     html += `</div>`;
   } else {
     // HARD MODE - Shuffle the order of conjugations
-    const conjOrder = ['masu', 'nai', 'ta', 'nakatta', 'te', 'conditional', 'adverbial'];
+    const conjOrder = [
+      "masu",
+      "nai",
+      "ta",
+      "nakatta",
+      "te",
+      "conditional",
+      "adverbial",
+    ];
     const conjLabels = {
-      masu: 'Present',
-      nai: 'Negative',
-      ta: 'Past',
-      nakatta: 'Past Negative',
-      te: 'Te-form',
-      conditional: 'Conditional',
-      adverbial: 'Adverbial'
+      masu: "Present",
+      nai: "Negative",
+      ta: "Past",
+      nakatta: "Past Negative",
+      te: "Te-form",
+      conditional: "Conditional",
+      adverbial: "Adverbial",
     };
-    
+
     const conjugationButtons = [];
     for (const conjType of conjOrder) {
       const conjValue = q.conjugations[conjType];
@@ -1043,34 +1139,37 @@ function renderQuizQuestion() {
         conjugationButtons.push({
           type: conjLabels[conjType],
           value: conjValue,
-          display: addFuriganaToText(conjValue)
+          display: addFuriganaToText(conjValue),
         });
       }
     }
-    
+
     for (let i = conjugationButtons.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [conjugationButtons[i], conjugationButtons[j]] = [conjugationButtons[j], conjugationButtons[i]];
+      [conjugationButtons[i], conjugationButtons[j]] = [
+        conjugationButtons[j],
+        conjugationButtons[i],
+      ];
     }
-    
+
     html += `
       <div style="text-align: center; margin: 8px 0 4px 0;">
         <span style="font-size: 0.85rem; color: #666;">Select the correct form:</span>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0;">
     `;
-    
+
     for (const btn of conjugationButtons) {
       const isSelected = currentAnswer && currentAnswer.selected === btn.value;
       html += `
-        <button class="hard-opt-btn" data-answer="${btn.value.replace(/"/g, '&quot;')}" style="background: ${isSelected ? '#6c8b6b' : '#fff'}; color: ${isSelected ? '#fff' : '#000'}; border: 2px solid #6c8b6b; border-radius: 40px; padding: 10px 18px; font-size: 0.9rem; cursor: pointer;">
+        <button class="hard-opt-btn" data-answer="${btn.value.replace(/"/g, "&quot;")}" style="background: ${isSelected ? "#6c8b6b" : "#fff"}; color: ${isSelected ? "#fff" : "#000"}; border: 2px solid #6c8b6b; border-radius: 40px; padding: 10px 18px; font-size: 0.9rem; cursor: pointer;">
           ${btn.display}
         </button>
       `;
     }
     html += `</div>`;
   }
-  
+
   html += `
       <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px;">
         <button id="quizSubmitBtn" style="background: #1a2b4c; color: white; border: none; padding: 10px 22px; border-radius: 40px; cursor: pointer; font-size: 0.9rem;">✅ Check</button>
@@ -1081,143 +1180,155 @@ function renderQuizQuestion() {
       </div>
     </div>
   `;
-  
+
   quizArea.innerHTML = html;
-  console.log('Quiz HTML rendered');
-  
+  console.log("Quiz HTML rendered");
+
   // ===== TTS SUPPORT: Add click listener to the listen button =====
-  const ttsBtn = quizArea.querySelector('.quiz-tts-btn');
+  const ttsBtn = quizArea.querySelector(".quiz-tts-btn");
   if (ttsBtn) {
-    console.log('TTS: Found listen button');
+    console.log("TTS: Found listen button");
     const btnReading = ttsBtn.dataset.reading || reading;
-    ttsBtn.addEventListener('click', function(e) {
+    ttsBtn.addEventListener("click", function (e) {
       e.stopPropagation();
-      console.log('TTS: Button clicked, reading:', btnReading);
+      console.log("TTS: Button clicked, reading:", btnReading);
       if (btnReading) {
-        if (typeof speakText === 'function') {
+        if (typeof speakText === "function") {
           speakText(btnReading);
-        } else if (typeof window.speakText === 'function') {
+        } else if (typeof window.speakText === "function") {
           window.speakText(btnReading);
         } else if (window.speechSynthesis) {
-          console.log('TTS: Using fallback speechSynthesis');
+          console.log("TTS: Using fallback speechSynthesis");
           const utterance = new SpeechSynthesisUtterance(btnReading);
-          utterance.lang = 'ja-JP';
+          utterance.lang = "ja-JP";
           utterance.rate = 0.85;
           window.speechSynthesis.speak(utterance);
         } else {
-          console.warn('TTS: No speech synthesis available');
+          console.warn("TTS: No speech synthesis available");
         }
       }
     });
   } else {
-    console.log('TTS: Listen button not found or no reading available');
+    console.log("TTS: Listen button not found or no reading available");
   }
-  
+
   // ===== TTS SUPPORT: Click on sentence to play audio =====
-  const sentenceEl = quizArea.querySelector('.quiz-sentence');
+  const sentenceEl = quizArea.querySelector(".quiz-sentence");
   if (sentenceEl && reading) {
-    sentenceEl.style.cursor = 'pointer';
-    sentenceEl.title = 'Click to listen';
-    sentenceEl.addEventListener('click', function(e) {
-      if (e.target.closest('.tooltip-text') || e.target.closest('.particle-highlight') || e.target.closest('.word-tooltip')) {
-        console.log('TTS: Click on tooltip ignored');
+    sentenceEl.style.cursor = "pointer";
+    sentenceEl.title = "Click to listen";
+    sentenceEl.addEventListener("click", function (e) {
+      if (
+        e.target.closest(".tooltip-text") ||
+        e.target.closest(".particle-highlight") ||
+        e.target.closest(".word-tooltip")
+      ) {
+        console.log("TTS: Click on tooltip ignored");
         return;
       }
-      console.log('TTS: Playing from sentence click:', reading);
-      if (typeof speakText === 'function') {
+      console.log("TTS: Playing from sentence click:", reading);
+      if (typeof speakText === "function") {
         speakText(reading);
-      } else if (typeof window.speakText === 'function') {
+      } else if (typeof window.speakText === "function") {
         window.speakText(reading);
       } else if (window.speechSynthesis) {
         const utterance = new SpeechSynthesisUtterance(reading);
-        utterance.lang = 'ja-JP';
+        utterance.lang = "ja-JP";
         utterance.rate = 0.85;
         window.speechSynthesis.speak(utterance);
       }
     });
   }
-  
+
   // ===== ATTACH TOOLTIPS =====
-  console.log('Attaching tooltips...');
-  if (typeof attachQuizTooltipsGlobal === 'function') {
-    setTimeout(function() {
-      console.log('Calling attachQuizTooltipsGlobal');
+  console.log("Attaching tooltips...");
+  if (typeof attachQuizTooltipsGlobal === "function") {
+    setTimeout(function () {
+      console.log("Calling attachQuizTooltipsGlobal");
       attachQuizTooltipsGlobal();
     }, 150);
-  } else if (typeof attachQuizTooltips === 'function') {
-    setTimeout(function() {
-      console.log('Calling attachQuizTooltips');
+  } else if (typeof attachQuizTooltips === "function") {
+    setTimeout(function () {
+      console.log("Calling attachQuizTooltips");
       attachQuizTooltips();
     }, 150);
-  } else if (typeof attachTooltipLongPress === 'function') {
-    setTimeout(function() {
-      console.log('Calling attachTooltipLongPress');
+  } else if (typeof attachTooltipLongPress === "function") {
+    setTimeout(function () {
+      console.log("Calling attachTooltipLongPress");
       attachTooltipLongPress(quizArea);
     }, 150);
   }
-  
+
   // Option button event listeners
-  if (quizMode === 'easy') {
-    document.querySelectorAll('.quiz-option-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.quiz-option-btn').forEach(b => {
-          b.style.background = '#fff';
-          b.style.color = '#000';
-          b.classList.remove('selected');
+  if (quizMode === "easy") {
+    document.querySelectorAll(".quiz-option-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".quiz-option-btn").forEach((b) => {
+          b.style.background = "#fff";
+          b.style.color = "#000";
+          b.classList.remove("selected");
         });
-        this.style.background = '#6c8b6b';
-        this.style.color = '#fff';
-        this.classList.add('selected');
+        this.style.background = "#6c8b6b";
+        this.style.color = "#fff";
+        this.classList.add("selected");
         const selectedAnswer = this.dataset.answer;
         if (!quizAnswers[currentQuizIndex]) quizAnswers[currentQuizIndex] = {};
         quizAnswers[currentQuizIndex].selected = selectedAnswer;
       });
     });
   } else {
-    document.querySelectorAll('.hard-opt-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.hard-opt-btn').forEach(b => {
-          b.style.background = '#fff';
-          b.style.color = '#000';
-          b.classList.remove('selected');
+    document.querySelectorAll(".hard-opt-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".hard-opt-btn").forEach((b) => {
+          b.style.background = "#fff";
+          b.style.color = "#000";
+          b.classList.remove("selected");
         });
-        this.style.background = '#6c8b6b';
-        this.style.color = '#fff';
-        this.classList.add('selected');
+        this.style.background = "#6c8b6b";
+        this.style.color = "#fff";
+        this.classList.add("selected");
         const selectedAnswer = this.dataset.answer;
         if (!quizAnswers[currentQuizIndex]) quizAnswers[currentQuizIndex] = {};
         quizAnswers[currentQuizIndex].selected = selectedAnswer;
       });
     });
   }
-  
-  document.getElementById('quizSubmitBtn')?.addEventListener('click', () => checkAnswer());
-  document.getElementById('quizShowAnswerBtn')?.addEventListener('click', () => showAnswer());
-  document.getElementById('quizSkipBtn')?.addEventListener('click', () => {
+
+  document
+    .getElementById("quizSubmitBtn")
+    ?.addEventListener("click", () => checkAnswer());
+  document
+    .getElementById("quizShowAnswerBtn")
+    ?.addEventListener("click", () => showAnswer());
+  document.getElementById("quizSkipBtn")?.addEventListener("click", () => {
     currentQuizIndex++;
     renderQuizQuestion();
   });
-  document.getElementById('quizStopBtn')?.addEventListener('click', () => stopQuiz());
-  document.getElementById('quizResetBtn')?.addEventListener('click', () => resetQuiz());
+  document
+    .getElementById("quizStopBtn")
+    ?.addEventListener("click", () => stopQuiz());
+  document
+    .getElementById("quizResetBtn")
+    ?.addEventListener("click", () => resetQuiz());
 }
 
 function normalizeForCompare(str) {
-  if (!str) return '';
-  let cleaned = str.replace(/[（(][^）)]*[）)]/g, '');
-  cleaned = cleaned.replace(/\s+/g, '');
-  cleaned = cleaned.replace(/[〜〜]/g, '');
+  if (!str) return "";
+  let cleaned = str.replace(/[（(][^）)]*[）)]/g, "");
+  cleaned = cleaned.replace(/\s+/g, "");
+  cleaned = cleaned.replace(/[〜〜]/g, "");
   return cleaned;
 }
 
 function checkAnswer() {
   const q = currentQuiz[currentQuizIndex];
   const userAnswer = quizAnswers[currentQuizIndex];
-  const userChoice = userAnswer ? userAnswer.selected : '';
-  const isFirstAttempt = (quizAttemptsRemaining[currentQuizIndex] === 2);
+  const userChoice = userAnswer ? userAnswer.selected : "";
+  const isFirstAttempt = quizAttemptsRemaining[currentQuizIndex] === 2;
   let pointsEarned = 0;
-  
+
   if (!userChoice) {
-    const feedbackDiv = document.getElementById('quizFeedbackArea');
+    const feedbackDiv = document.getElementById("quizFeedbackArea");
     if (feedbackDiv) {
       feedbackDiv.innerHTML = `
         <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 16px; margin: 12px 0;">
@@ -1227,9 +1338,10 @@ function checkAnswer() {
     }
     return;
   }
-  
-  const isCorrect = normalizeForCompare(userChoice) === normalizeForCompare(q.correctAnswer);
-  
+
+  const isCorrect =
+    normalizeForCompare(userChoice) === normalizeForCompare(q.correctAnswer);
+
   if (isCorrect) {
     if (isFirstAttempt) {
       pointsEarned = 1;
@@ -1238,23 +1350,23 @@ function checkAnswer() {
       pointsEarned = 0.5;
     }
     quizScore += pointsEarned;
-    
+
     if (!attemptedAdjectives.has(q.adjId)) {
       attemptedAdjectives.add(q.adjId);
       saveMasteredAdjectives();
     }
-    
+
     updateQuizStatsDisplay();
-    
+
     // ===== Use the helper that respects furigana toggle =====
     let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
-    
-    const reading = q.reading || '';
+
+    const reading = q.reading || "";
     const feedbackHtml = `
       <div style="background: #d4edda; color: #155724; padding: 12px; border-radius: 16px; margin: 12px 0;">
-        ✅ ${isFirstAttempt ? 'Correct! +1 point' : 'Correct on 2nd try! +0.5 points'}
+        ✅ ${isFirstAttempt ? "Correct! +1 point" : "Correct on 2nd try! +0.5 points"}
         <div style="margin-top: 8px; font-size: 0.85rem;">
-          ${reading ? `<span style="cursor: pointer; background: #6c8b6b; color: white; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; display: inline-block; margin-right: 8px;" onclick="if(typeof speakText==='function'){speakText('${reading}')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('${reading}');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">🔊 Listen</span>` : ''}
+          ${reading ? `<span style="cursor: pointer; background: #6c8b6b; color: white; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; display: inline-block; margin-right: 8px;" onclick="if(typeof speakText==='function'){speakText('${reading}')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('${reading}');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">🔊 Listen</span>` : ""}
           ${sentenceDisplay} → ${q.translation}
         </div>
       </div>
@@ -1262,21 +1374,21 @@ function checkAnswer() {
         <button id="quizNextBtn" style="background: #1a2b4c; color: white; border: none; padding: 8px 24px; border-radius: 40px; cursor: pointer;">Next →</button>
       </div>
     `;
-    
-    const quizArea = document.getElementById('quizArea');
+
+    const quizArea = document.getElementById("quizArea");
     if (quizArea) {
       quizArea.innerHTML = feedbackHtml;
     }
-    
-    document.getElementById('quizNextBtn')?.addEventListener('click', () => {
+
+    document.getElementById("quizNextBtn")?.addEventListener("click", () => {
       currentQuizIndex++;
       renderQuizQuestion();
     });
   } else {
     quizAttemptsRemaining[currentQuizIndex]--;
-    
+
     if (quizAttemptsRemaining[currentQuizIndex] > 0) {
-      const feedbackDiv = document.getElementById('quizFeedbackArea');
+      const feedbackDiv = document.getElementById("quizFeedbackArea");
       if (feedbackDiv) {
         feedbackDiv.innerHTML = `
           <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 16px; margin: 12px 0;">
@@ -1286,27 +1398,27 @@ function checkAnswer() {
         `;
       }
       quizAnswers[currentQuizIndex] = null;
-      if (quizMode === 'easy') {
-        document.querySelectorAll('.quiz-option-btn').forEach(btn => {
-          btn.style.background = '#fff';
-          btn.style.color = '#000';
+      if (quizMode === "easy") {
+        document.querySelectorAll(".quiz-option-btn").forEach((btn) => {
+          btn.style.background = "#fff";
+          btn.style.color = "#000";
         });
       } else {
-        document.querySelectorAll('.hard-opt-btn').forEach(btn => {
-          btn.style.background = '#fff';
-          btn.style.color = '#000';
+        document.querySelectorAll(".hard-opt-btn").forEach((btn) => {
+          btn.style.background = "#fff";
+          btn.style.color = "#000";
         });
       }
     } else {
       // ===== Use the helper that respects furigana toggle =====
       let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
-      
-      const reading = q.reading || '';
+
+      const reading = q.reading || "";
       const feedbackHtml = `
         <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 16px; margin: 12px 0;">
           ❌ Correct: ${addFuriganaToText(q.correctAnswer)} (${q.conjugationDisplay})
           <div style="margin-top: 8px; font-size: 0.85rem;">
-            ${reading ? `<span style="cursor: pointer; background: #6c8b6b; color: white; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; display: inline-block; margin-right: 8px;" onclick="if(typeof speakText==='function'){speakText('${reading}')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('${reading}');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">🔊 Listen</span>` : ''}
+            ${reading ? `<span style="cursor: pointer; background: #6c8b6b; color: white; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; display: inline-block; margin-right: 8px;" onclick="if(typeof speakText==='function'){speakText('${reading}')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('${reading}');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">🔊 Listen</span>` : ""}
             ${sentenceDisplay} → ${q.translation}
           </div>
         </div>
@@ -1314,13 +1426,13 @@ function checkAnswer() {
           <button id="quizNextBtn" style="background: #1a2b4c; color: white; border: none; padding: 8px 24px; border-radius: 40px; cursor: pointer;">Next →</button>
         </div>
       `;
-      
-      const quizArea = document.getElementById('quizArea');
+
+      const quizArea = document.getElementById("quizArea");
       if (quizArea) {
         quizArea.innerHTML = feedbackHtml;
       }
-      
-      document.getElementById('quizNextBtn')?.addEventListener('click', () => {
+
+      document.getElementById("quizNextBtn")?.addEventListener("click", () => {
         currentQuizIndex++;
         renderQuizQuestion();
       });
@@ -1330,16 +1442,16 @@ function checkAnswer() {
 
 function showAnswer() {
   const q = currentQuiz[currentQuizIndex];
-  
+
   // ===== Use the helper that respects furigana toggle =====
   let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
-  
-  const reading = q.reading || '';
+
+  const reading = q.reading || "";
   const feedbackHtml = `
     <div style="background: #fff3e0; color: #856404; padding: 12px; border-radius: 16px; margin: 12px 0;">
       📖 Answer: ${addFuriganaToText(q.correctAnswer)} (${q.conjugationDisplay})
       <div style="margin-top: 8px; font-size: 0.85rem;">
-        ${reading ? `<span style="cursor: pointer; background: #6c8b6b; color: white; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; display: inline-block; margin-right: 8px;" onclick="if(typeof speakText==='function'){speakText('${reading}')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('${reading}');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">🔊 Listen</span>` : ''}
+        ${reading ? `<span style="cursor: pointer; background: #6c8b6b; color: white; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; display: inline-block; margin-right: 8px;" onclick="if(typeof speakText==='function'){speakText('${reading}')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('${reading}');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">🔊 Listen</span>` : ""}
         ${sentenceDisplay} → ${q.translation}
       </div>
       <p style="margin-top: 8px; font-size: 0.7rem;">No points awarded.</p>
@@ -1348,13 +1460,13 @@ function showAnswer() {
       <button id="quizNextBtn" style="background: #1a2b4c; color: white; border: none; padding: 8px 24px; border-radius: 40px; cursor: pointer;">Next →</button>
     </div>
   `;
-  
-  const quizArea = document.getElementById('quizArea');
+
+  const quizArea = document.getElementById("quizArea");
   if (quizArea) {
     quizArea.innerHTML = feedbackHtml;
   }
-  
-  document.getElementById('quizNextBtn')?.addEventListener('click', () => {
+
+  document.getElementById("quizNextBtn")?.addEventListener("click", () => {
     currentQuizIndex++;
     renderQuizQuestion();
   });
@@ -1362,14 +1474,14 @@ function showAnswer() {
 
 function stopQuiz() {
   if (!quizActive) return;
-  
+
   quizActive = false;
   setModeButtonsEnabled(true);
-  
-  const resultsDiv = document.getElementById('quizResults');
+
+  const resultsDiv = document.getElementById("quizResults");
   if (resultsDiv) {
     const percent = Math.round((quizScore / currentQuiz.length) * 100);
-    resultsDiv.style.display = 'block';
+    resultsDiv.style.display = "block";
     resultsDiv.innerHTML = `
       <div style="font-size: 1.8rem; font-weight: bold; color: #6c8b6b; text-align: center;">${quizScore.toFixed(1)} / ${currentQuiz.length} (${percent}%)</div>
       <p style="text-align: center;">Quiz stopped early.</p>
@@ -1377,15 +1489,16 @@ function stopQuiz() {
         <button id="quizRestartBtn" style="background: #1a2b4c; color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer;">Take Another Quiz</button>
       </div>
     `;
-    
-    const restartBtn = document.getElementById('quizRestartBtn');
+
+    const restartBtn = document.getElementById("quizRestartBtn");
     if (restartBtn) {
-      restartBtn.addEventListener('click', () => {
-        const quizArea = document.getElementById('quizArea');
+      restartBtn.addEventListener("click", () => {
+        const quizArea = document.getElementById("quizArea");
         if (quizArea) {
-          quizArea.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Select mode and number of questions, then click "Start New Quiz"</p>';
+          quizArea.innerHTML =
+            '<p style="text-align: center; color: #666; padding: 40px;">Select mode and number of questions, then click "Start New Quiz"</p>';
         }
-        resultsDiv.style.display = 'none';
+        resultsDiv.style.display = "none";
       });
     }
   }
@@ -1393,18 +1506,18 @@ function stopQuiz() {
 
 function resetQuiz() {
   if (!quizActive || currentQuiz.length === 0) return;
-  
+
   currentQuizIndex = 0;
   quizScore = 0;
   quizAnswers = new Array(currentQuiz.length).fill(null);
-  
+
   for (let i = 0; i < currentQuiz.length; i++) {
     quizAttemptsRemaining[i] = 2;
   }
-  
-  const feedbackDiv = document.getElementById('quizFeedbackArea');
-  if (feedbackDiv) feedbackDiv.innerHTML = '';
-  
+
+  const feedbackDiv = document.getElementById("quizFeedbackArea");
+  if (feedbackDiv) feedbackDiv.innerHTML = "";
+
   updateQuizStatsDisplay();
   renderQuizQuestion();
 }
@@ -1412,41 +1525,46 @@ function resetQuiz() {
 function showQuizResults() {
   quizActive = false;
   setModeButtonsEnabled(true);
-  
+
   const percent = Math.round((quizScore / currentQuiz.length) * 100);
-  const resultsDiv = document.getElementById('quizResults');
+  const resultsDiv = document.getElementById("quizResults");
   if (!resultsDiv) return;
-  
-  resultsDiv.style.display = 'block';
+
+  resultsDiv.style.display = "block";
   resultsDiv.innerHTML = `
     <div style="font-size: 1.8rem; font-weight: bold; color: #6c8b6b; text-align: center;">${quizScore.toFixed(1)} / ${currentQuiz.length} (${percent}%)</div>
-    <p style="text-align: center;">${percent >= 80 ? '🎉 Excellent!' : percent >= 60 ? '👍 Good job!' : '📚 Keep studying!'}</p>
+    <p style="text-align: center;">${percent >= 80 ? "🎉 Excellent!" : percent >= 60 ? "👍 Good job!" : "📚 Keep studying!"}</p>
     <div style="text-align: center; margin-top: 16px;">
       <button id="quizRestartBtn" style="background: #1a2b4c; color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer;">Take Another Quiz</button>
     </div>
   `;
-  
-  const restartBtn = document.getElementById('quizRestartBtn');
+
+  const restartBtn = document.getElementById("quizRestartBtn");
   if (restartBtn) {
-    restartBtn.addEventListener('click', () => {
-      const quizArea = document.getElementById('quizArea');
+    restartBtn.addEventListener("click", () => {
+      const quizArea = document.getElementById("quizArea");
       if (quizArea) {
-        quizArea.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Select mode and number of questions, then click "Start New Quiz"</p>';
+        quizArea.innerHTML =
+          '<p style="text-align: center; color: #666; padding: 40px;">Select mode and number of questions, then click "Start New Quiz"</p>';
       }
-      resultsDiv.style.display = 'none';
+      resultsDiv.style.display = "none";
     });
   }
 }
 
 function resetAllProgress() {
-  if (confirm('⚠️ Are you sure? This will reset ALL mastered and attempted adjectives. This cannot be undone.')) {
+  if (
+    confirm(
+      "⚠️ Are you sure? This will reset ALL mastered and attempted adjectives. This cannot be undone.",
+    )
+  ) {
     masteredAdjectives.clear();
     attemptedAdjectives.clear();
     saveMasteredAdjectives();
     renderAdjectivesList();
     renderMasteredList();
     updateMasteredCount();
-    
+
     if (quizActive) {
       stopQuiz();
     }
@@ -1454,7 +1572,11 @@ function resetAllProgress() {
 }
 
 function resetMasteredOnly() {
-  if (confirm('⚠️ Reset mastered adjectives only? Attempted adjectives will be preserved.')) {
+  if (
+    confirm(
+      "⚠️ Reset mastered adjectives only? Attempted adjectives will be preserved.",
+    )
+  ) {
     masteredAdjectives.clear();
     saveMasteredAdjectives();
     renderAdjectivesList();
@@ -1465,63 +1587,72 @@ function resetMasteredOnly() {
 
 function switchTab(tabId) {
   currentAdjTab = tabId;
-  
-  const tabButtons = [tabConjugationBtn, tabLearnBtn, tabQuizBtn, tabMasteredBtn];
-  tabButtons.forEach(btn => {
-    if (btn) btn.classList.remove('active');
+
+  const tabButtons = [
+    tabConjugationBtn,
+    tabLearnBtn,
+    tabQuizBtn,
+    tabMasteredBtn,
+  ];
+  tabButtons.forEach((btn) => {
+    if (btn) btn.classList.remove("active");
   });
-  
-  const activeBtn = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Btn`);
-  if (activeBtn) activeBtn.classList.add('active');
-  
-  document.querySelectorAll('.tab-content').forEach(content => {
-    content.classList.remove('active');
+
+  const activeBtn = document.getElementById(
+    `tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Btn`,
+  );
+  if (activeBtn) activeBtn.classList.add("active");
+
+  document.querySelectorAll(".tab-content").forEach((content) => {
+    content.classList.remove("active");
   });
-  
-  const activeContent = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
-  if (activeContent) activeContent.classList.add('active');
-  
-  if (tabId === 'conjugation') {
+
+  const activeContent = document.getElementById(
+    `tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`,
+  );
+  if (activeContent) activeContent.classList.add("active");
+
+  if (tabId === "conjugation") {
     renderAdjectivesList();
-  } else if (tabId === 'learn') {
+  } else if (tabId === "learn") {
     renderLearnTab();
-  } else if (tabId === 'mastered') {
+  } else if (tabId === "mastered") {
     renderMasteredList();
-  } else if (tabId === 'quiz') {
+  } else if (tabId === "quiz") {
     updateMasteredCount();
   }
 }
 
 function attachStartQuizListener() {
-  const startQuizBtn = document.getElementById('startQuizBtn');
+  const startQuizBtn = document.getElementById("startQuizBtn");
   if (startQuizBtn) {
     const newBtn = startQuizBtn.cloneNode(true);
     startQuizBtn.parentNode.replaceChild(newBtn, startQuizBtn);
-    newBtn.addEventListener('click', function(e) {
+    newBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log('Start Quiz button clicked! Mode:', quizMode);
+      console.log("Start Quiz button clicked! Mode:", quizMode);
       generateQuiz();
     });
-    console.log('Start Quiz button listener attached');
+    console.log("Start Quiz button listener attached");
   } else {
-    console.log('Start Quiz button not found, retrying...');
+    console.log("Start Quiz button not found, retrying...");
     setTimeout(attachStartQuizListener, 100);
   }
 }
 
 // Event Listeners
 if (furiToggleBtn) {
-  furiToggleBtn.addEventListener('click', () => {
+  furiToggleBtn.addEventListener("click", () => {
     applyFuriganaHide();
   });
 }
 
 if (quizEasyModeBtn) {
-  quizEasyModeBtn.addEventListener('click', () => {
-    quizMode = 'easy';
-    quizEasyModeBtn.classList.add('active');
-    quizHardModeBtn.classList.remove('active');
-    console.log('Switched to Easy Mode');
+  quizEasyModeBtn.addEventListener("click", () => {
+    quizMode = "easy";
+    quizEasyModeBtn.classList.add("active");
+    quizHardModeBtn.classList.remove("active");
+    console.log("Switched to Easy Mode");
     if (quizActive && currentQuiz.length > 0) {
       renderQuizQuestion();
     }
@@ -1529,11 +1660,11 @@ if (quizEasyModeBtn) {
 }
 
 if (quizHardModeBtn) {
-  quizHardModeBtn.addEventListener('click', () => {
-    quizMode = 'hard';
-    quizHardModeBtn.classList.add('active');
-    quizEasyModeBtn.classList.remove('active');
-    console.log('Switched to Hard Mode');
+  quizHardModeBtn.addEventListener("click", () => {
+    quizMode = "hard";
+    quizHardModeBtn.classList.add("active");
+    quizEasyModeBtn.classList.remove("active");
+    console.log("Switched to Hard Mode");
     if (quizActive && currentQuiz.length > 0) {
       renderQuizQuestion();
     }
@@ -1541,70 +1672,74 @@ if (quizHardModeBtn) {
 }
 
 if (typeSelect) {
-  typeSelect.addEventListener('change', () => {
+  typeSelect.addEventListener("change", () => {
     currentFilterType = typeSelect.value;
     renderAdjectivesList();
   });
 }
 
 if (adjSearchInput) {
-  adjSearchInput.addEventListener('input', () => {
+  adjSearchInput.addEventListener("input", () => {
     currentSearchTerm = adjSearchInput.value;
     renderAdjectivesList();
   });
 }
 
-const resetAllProgressBtn = document.getElementById('resetAllProgressBtn');
+const resetAllProgressBtn = document.getElementById("resetAllProgressBtn");
 if (resetAllProgressBtn) {
-  resetAllProgressBtn.addEventListener('click', resetAllProgress);
+  resetAllProgressBtn.addEventListener("click", resetAllProgress);
 }
 
-const resetMasteredOnlyBtn = document.getElementById('resetMasteredOnlyBtn');
+const resetMasteredOnlyBtn = document.getElementById("resetMasteredOnlyBtn");
 if (resetMasteredOnlyBtn) {
-  resetMasteredOnlyBtn.addEventListener('click', resetMasteredOnly);
+  resetMasteredOnlyBtn.addEventListener("click", resetMasteredOnly);
 }
 
 // Stats help
-const statHelpIcon = document.getElementById('statHelpIcon');
+const statHelpIcon = document.getElementById("statHelpIcon");
 if (statHelpIcon) {
-  statHelpIcon.addEventListener('click', () => {
-    const explanation = document.getElementById('quizStatsExplanation');
+  statHelpIcon.addEventListener("click", () => {
+    const explanation = document.getElementById("quizStatsExplanation");
     if (explanation) {
-      explanation.style.display = explanation.style.display === 'none' ? 'block' : 'none';
+      explanation.style.display =
+        explanation.style.display === "none" ? "block" : "none";
     }
   });
 }
 
-const closeStatsHelp = document.getElementById('closeStatsHelp');
+const closeStatsHelp = document.getElementById("closeStatsHelp");
 if (closeStatsHelp) {
-  closeStatsHelp.addEventListener('click', () => {
-    const explanation = document.getElementById('quizStatsExplanation');
-    if (explanation) explanation.style.display = 'none';
+  closeStatsHelp.addEventListener("click", () => {
+    const explanation = document.getElementById("quizStatsExplanation");
+    if (explanation) explanation.style.display = "none";
   });
 }
 
-if (tabConjugationBtn) tabConjugationBtn.addEventListener('click', () => switchTab('conjugation'));
-if (tabLearnBtn) tabLearnBtn.addEventListener('click', () => switchTab('learn'));
-if (tabQuizBtn) tabQuizBtn.addEventListener('click', () => switchTab('quiz'));
-if (tabMasteredBtn) tabMasteredBtn.addEventListener('click', () => switchTab('mastered'));
+if (tabConjugationBtn)
+  tabConjugationBtn.addEventListener("click", () => switchTab("conjugation"));
+if (tabLearnBtn)
+  tabLearnBtn.addEventListener("click", () => switchTab("learn"));
+if (tabQuizBtn) tabQuizBtn.addEventListener("click", () => switchTab("quiz"));
+if (tabMasteredBtn)
+  tabMasteredBtn.addEventListener("click", () => switchTab("mastered"));
 
 function initAdjectives() {
   loadMasteredAdjectives();
   renderAdjectivesList();
   renderLearnTab();
-  switchTab('conjugation');
-  
+  switchTab("conjugation");
+
   const totalAdjs = adjectiveOrder.length;
-  const totalEls = document.querySelectorAll('#quizTotalAdjs, #quizTotalAdjs2');
-  totalEls.forEach(el => {
+  const totalEls = document.querySelectorAll("#quizTotalAdjs, #quizTotalAdjs2");
+  totalEls.forEach((el) => {
     if (el) el.innerText = totalAdjs;
   });
-  
+
   attachStartQuizListener();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAdjectives);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAdjectives);
 } else {
   initAdjectives();
 }
