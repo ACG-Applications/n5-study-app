@@ -282,6 +282,8 @@ const wordDict = {
   木: { reading: "き", meaning: "tree" },
   花: { reading: "はな", meaning: "flower" },
   階段: { reading: "かいだん", meaning: "stairs / staircase" },
+  川: { reading: "かわ", meaning: "river" },
+
   // ============================================================
   // SECTION 8: VERBS (Group 1: う-verbs / Godan)
   // ============================================================
@@ -512,6 +514,10 @@ const wordDict = {
   },
   取りたい: { reading: "とりたい", meaning: "want to take / get" },
   つけて: { reading: "つけて", meaning: "turn on / attach (te-form)" },
+  通り過ぎて: {
+    reading: "とおりすぎて",
+    meaning: "pass by / go past (te-form)",
+  },
   // ============================================================
   // SECTION 9: VERBS (Group 2: る-verbs / Ichidan)
   // ============================================================
@@ -615,6 +621,9 @@ const wordDict = {
   荷物: { reading: "にもつ", meaning: "luggage / baggage" },
   あげます: { reading: "あげます", meaning: "give (polite)" },
   お願い: { reading: "おねがい", meaning: "favor / request / please" },
+  開いています: { reading: "あいています", meaning: "is open" },
+  閉まっています: { reading: "しまっています", meaning: "is closed" },
+  通った: { reading: "とおった", meaning: "passed (past)" },
   // ============================================================
   // SECTION 10: SURU-VERBS (する verbs)
   // ============================================================
@@ -1118,6 +1127,12 @@ const wordDict = {
   幸い: { reading: "さいわい", meaning: "fortunately / luckily" },
   のち: { reading: "のち", meaning: "later / after / then" },
   夏: { reading: "なつ", meaning: "summer" },
+  たまに: { reading: "たまに", meaning: "occasionally / sometimes" },
+  もしよかったら: {
+    reading: "もしよかったら",
+    meaning: "if you like / if it's okay",
+  },
+  以前: { reading: "いぜん", meaning: "before / previously" },
   // ============================================================
   // SECTION 25: DIRECTION & LOCATION WORDS
   // ============================================================
@@ -1142,7 +1157,7 @@ const wordDict = {
   先: { reading: "さき", meaning: "ahead / before / previous" },
   ここ: { reading: "ここ", meaning: "here" },
   それ: { reading: "それ", meaning: "that" },
-
+  手前: { reading: "てまえ", meaning: "in front of / before / this side" },
   // ============================================================
   // SECTION 26: GRAMMAR & EXPRESSION PATTERNS
   // ============================================================
@@ -1188,7 +1203,10 @@ const wordDict = {
     meaning: "makes me think",
   },
   ため: { reading: "ため", meaning: "for / for the sake of" },
-
+  ことがあります: {
+    reading: "ことがあります",
+    meaning: "have done before / there are times when",
+  },
   // ============================================================
   // SECTION 27: COMMON PHRASES & EXPRESSIONS
   // ============================================================
