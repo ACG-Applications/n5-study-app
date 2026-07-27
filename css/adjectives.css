@@ -1,10 +1,16 @@
-/* ==================== FORCE LIGHT MODE ==================== */
+/* ==================== ADJECTIVES PAGE STYLES ==================== */
+/* ================================================================ 
+   📍 LOCATION: Adjectives module - LAYOUT ONLY
+   🔧 TO CUSTOMIZE: Change layout/header/controls only
+   📝 SHARED STYLES: All shared styles are in components.css
+   ================================================================ */
+
+/* Force light mode */
 * {
   color-scheme: only light;
 }
 
-/* ==================== ADJECTIVES PAGE STYLES ==================== */
-
+/* ─── CONTAINER ─────────────────────────────────────────────────── */
 .adjectives-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -13,7 +19,7 @@
   min-height: 100vh;
 }
 
-/* ===== HEADER (unified) ===== */
+/* ─── HEADER ───────────────────────────────────────────────────── */
 .adjectives-header {
   display: flex;
   justify-content: space-between;
@@ -30,6 +36,7 @@
   margin: 0;
 }
 
+/* ─── BACK BUTTON ─────────────────────────────────────────────── */
 .back-button {
   background: #6c8b6b;
   color: white;
@@ -38,9 +45,7 @@
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
-  transition:
-    background 0.2s,
-    transform 0.1s;
+  transition: background 0.2s, transform 0.1s;
   display: inline-block;
 }
 
@@ -49,7 +54,7 @@
   transform: translateY(-1px);
 }
 
-/* ===== CONTROLS BAR (unified) ===== */
+/* ─── CONTROLS BAR ────────────────────────────────────────────── */
 .adjectives-controls {
   display: flex;
   flex-wrap: wrap;
@@ -63,6 +68,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* ─── CONTROL GROUP ───────────────────────────────────────────── */
 .control-group {
   display: flex;
   align-items: center;
@@ -87,6 +93,7 @@
   min-width: 180px;
 }
 
+/* ─── SMALL BUTTON ────────────────────────────────────────────── */
 .small-btn {
   background: #e8e0d5;
   border: none;
@@ -105,211 +112,13 @@
   transform: translateY(-1px);
 }
 
+/* ─── PROGRESS INDICATOR ──────────────────────────────────────── */
+/* Note: Core styles are in components.css - Layout only here */
 .progress-indicator {
-  background: #e8e0d5;
-  padding: 6px 16px;
-  border-radius: 40px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #2c3e2f;
-  white-space: nowrap;
+  margin-left: auto;
 }
 
-.progress-indicator span {
-  font-weight: 700;
-  color: #6c8b6b;
-}
-
-/* ===== TAB BAR – PILL STYLE ===== */
-.tab-bar {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 20px;
-  background: white;
-  padding: 6px;
-  border-radius: 50px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.tab-btn {
-  background: transparent;
-  border: none;
-  padding: 10px 24px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  border-radius: 40px;
-  transition: all 0.2s;
-  font-family: inherit;
-  color: #8a7b6e;
-}
-
-.tab-btn:hover {
-  background: #e8e0d5;
-  color: #4a6741;
-}
-
-.tab-btn.active {
-  background: #6c8b6b;
-  color: white;
-  box-shadow: 0 2px 6px rgba(108, 139, 107, 0.3);
-}
-
-.tab-content {
-  display: none;
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-/* ================================================================
-   RUBY FURIGANA - FORCE ABOVE KANJI
-   ================================================================ */
-
-/* ===== FORCE RUBY TO DISPLAY ABOVE ===== */
-ruby {
-  display: ruby !important;
-  ruby-align: center !important;
-  ruby-position: over !important;
-  line-height: 1.2 !important;
-  white-space: nowrap !important;
-}
-
-/* ===== ALL FURIGANA (rt tags) ===== */
-ruby rt,
-rt {
-  display: ruby-text !important;
-  font-size: 0.8rem !important;
-  color: #290101 !important;
-  font-weight: 700 !important;
-  padding-bottom: 2px !important;
-  letter-spacing: 0.5px;
-  position: static !important;
-  top: auto !important;
-  left: auto !important;
-}
-
-/* ===== FURIGANA INSIDE CONJUGATION PILLS ===== */
-.conj-item ruby {
-  display: ruby !important;
-  ruby-position: over !important;
-  ruby-align: center !important;
-}
-
-.conj-item ruby rt,
-.conj-item rt {
-  display: ruby-text !important;
-  font-size: 0.7rem !important;
-  color: #290101 !important;
-  font-weight: 700 !important;
-  padding-bottom: 5px !important; /* ===== Space below Furigana ===== */
-}
-
-/* ===== FURIGANA IN ADJECTIVE TITLES ===== */
-.adj-title ruby {
-  display: ruby !important;
-  ruby-position: over !important;
-}
-
-.adj-title ruby rt,
-.adj-title rt {
-  display: ruby-text !important;
-  font-size: 0.6rem !important;
-  color: #290101 !important;
-  font-weight: 700 !important;
-  padding-bottom: 4px !important;
-}
-
-/* ===== FURIGANA IN EXAMPLE SENTENCES ===== */
-.example-jp ruby {
-  display: ruby !important;
-  ruby-position: over !important;
-  line-height: 1.2 !important; /* ADD: Match the container */
-}
-
-.example-jp ruby rt,
-.example-jp rt {
-  display: ruby-text !important;
-  font-size: 0.8rem !important;
-  color: #290101 !important;
-  font-weight: 600 !important;
-  padding-bottom: 2px !important;
-}
-
-/* ===== FURIGANA IN QUIZ ===== */
-.quiz-sentence ruby,
-.quiz-option-btn ruby,
-.hard-opt-btn ruby {
-  display: ruby !important;
-  ruby-position: over !important;
-}
-
-.quiz-sentence ruby rt,
-.quiz-sentence rt,
-.quiz-option-btn ruby rt,
-.quiz-option-btn rt,
-.hard-opt-btn ruby rt,
-.hard-opt-btn rt {
-  display: ruby-text !important;
-  font-size: 0.9rem !important;
-  color: #290101 !important;
-  font-weight: 600 !important;
-  padding-bottom: 4px !important;
-}
-
-/* Hide furigana when toggled */
-.hide-furigana rt {
-  display: none !important;
-}
-
-/* ===== ADJECTIVE CARD ===== */
-.adj-card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #6c8b6b;
-}
-
-.adj-card.mastered {
-  background: #e8f5e9;
-  border-left-color: #4caf50;
-}
-
-.adj-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.adj-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #1e4b6e;
-}
-
-.adj-reading {
-  font-size: 1.5rem;
-  color: #666;
-  margin-left: 10px;
-}
-
-.adj-meaning {
-  font-size: 1rem;
-  color: #c45d1e;
-  background: #fff1e0;
-  padding: 4px 12px;
-  border-radius: 40px;
-}
-
+/* ─── TYPE BADGES (Adjectives-specific) ──────────────────────── */
 .type-badge {
   padding: 4px 12px;
   border-radius: 40px;
@@ -317,459 +126,59 @@ rt {
   font-weight: bold;
   margin-left: 10px;
 }
+
 .type-i {
   background: #e3f2fd;
   color: #1565c0;
 }
+
 .type-na {
   background: #e8f5e9;
   color: #2e7d32;
 }
 
-.mastered-badge {
-  background: #4caf50;
-  color: white;
-  border-radius: 40px;
-  padding: 4px 12px;
-  font-size: 0.7rem;
-  display: inline-block;
-  margin-left: 10px;
-}
-
-/* ================================================================
-   CONJUGATION TABLE - VERTICAL STACKING
-   ================================================================ */
-
-.conjugation-table {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 10px;
-  margin: 15px 0;
-}
-
-.conj-item {
+/* ─── ADJECTIVE LIST (Container) ──────────────────────────────── */
+.adjectives-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: #f9fcff;
-  border: 1px solid #e8e0d5;
-  border-radius: 16px;
-  padding: 12px 10px 10px 10px;
-  min-height: 75px;
-  transition: all 0.2s ease;
-}
-
-.conj-item:hover {
-  background: #f0f4f8;
-  border-color: #6c8b6b;
-  transform: translateY(-1px);
-}
-
-/* ===== ENGLISH LABEL - TOP LINE ===== */
-.conj-label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 4px;
-}
-
-.conj-name {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  display: block;
-  width: 100%;
-  text-align: center;
-}
-
-.conj-paren {
-  font-size: 0.6rem;
-  font-weight: 500;
-  color: #999;
-  display: block;
-  width: 100%;
-  text-align: center;
-  margin-top: 1px;
-}
-
-/* ===== JAPANESE FORM - BOTTOM LINE ===== */
-.conj-value {
-  font-size: 1.2rem;
-  color: #1e4b6e;
-  font-weight: 600;
-  line-height: 1.6;
-  font-family: "Shippori Mincho", "Noto Serif JP", serif;
-  display: block;
-  width: 100%;
-  text-align: center;
-}
-
-/* ===== EXAMPLES ===== */
-.adj-examples {
-  margin: 15px 0;
-  padding: 12px;
-  background: #f0f4f8;
-  border-radius: 16px;
-}
-
-.example-item {
-  background: white;
-  border-radius: 12px;
-  padding: 10px;
-  margin: 8px 0;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.example-item:hover {
-  background: #e6f2ff;
-}
-.example-jp {
-  font-size: 1.7rem;
-  margin-bottom: 5px;
-  font-weight: 450;
-  color: #000000; /* solid black #000000 */
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 4px;
-  line-height: 1.2; /* ADD: Consistent line-height */
-}
-
-/* ===== FIX: Particles - same background, red color ===== */
-.example-jp .particle,
-.example-jp span.particle,
-.particle {
-  background: #ffffff !important; /* White background */
-  color: #ff0000 !important; /* Red particles */
-  font-weight: 700;
-  display: inline;
-  vertical-align: bottom;
-  line-height: 1.2; /* Match ruby line-height */
-  padding: 0 2px; /* Optional: adds a tiny bit of space around the particle */
-}
-
-.example-trans {
-  font-size: 0.9rem;
-  color: #2601f8;
-}
-
-/* ===== BUTTONS ===== */
-.action-btn {
-  background: #6c8b6b;
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-.action-btn:hover {
-  background: #5a7a59;
-}
-
-/* ===== QUIZ STYLES ===== */
-.quiz-container {
-  background: transparent;
-}
-.quiz-header {
-  margin-bottom: 25px;
-}
-.quiz-header h3 {
-  font-size: 1.2rem;
-  color: #2c3e2f;
-}
-.quiz-instructions {
-  background: #e6f2ff;
-  border-radius: 16px;
-  padding: 12px 20px;
-  margin-bottom: 20px;
-  font-size: 0.85rem;
-  color: #333;
-}
-.quiz-settings {
-  display: flex;
-  flex-wrap: wrap;
   gap: 20px;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 15px;
-}
-.quiz-mode-selector {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.mode-btn {
-  background: #e8e8e8;
-  border: none;
-  padding: 6px 16px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  color: #333;
-  transition: all 0.2s;
-}
-.mode-btn.active {
-  background: #6c8b6b;
-  color: white;
-}
-.quiz-count-selector {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.quiz-settings select {
-  padding: 6px 12px;
-  border-radius: 40px;
-  border: 1px solid #ccc;
-  background: white;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-.quiz-stats-panel {
-  background: #e8f0fe;
-  border-radius: 20px;
-  padding: 12px 20px;
-  margin: 15px 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-}
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.9rem;
-  color: #333;
-}
-.stat-label {
-  font-weight: normal;
-  color: #1e4b6e;
-}
-.stat-value {
-  font-weight: bold;
-  color: #c45d1e;
-  font-size: 1.1rem;
-}
-.stat-help-icon {
-  background: #6c8b6b;
-  color: white;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-.stats-explanation {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  margin-top: 15px;
-  border: 2px solid #6c8b6b;
-}
-.quiz-header-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-  color: #333;
-}
-.quiz-question-counter {
-  font-weight: bold;
-  color: #1e4b6e;
-  font-size: 0.95rem;
-}
-.quiz-score-display {
-  font-weight: bold;
-  color: #6c8b6b;
-  font-size: 0.95rem;
-}
-.attempts-left {
-  font-weight: bold;
-  color: #c45d1e;
-  font-size: 0.95rem;
-}
-.quiz-question {
-  background: #f9fcff;
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 20px;
-}
-.quiz-sentence {
-  font-size: 1.2rem;
-  text-align: center;
-  margin: 20px 0;
-  line-height: 1.6;
-  color: #1a2b4c;
-}
-.quiz-translation {
-  text-align: center;
-  color: #5a6e55;
-  margin: 10px 0;
-  font-size: 0.95rem;
-}
-.quiz-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin: 20px 0;
-}
-.quiz-option-btn {
-  background: white;
-  color: #333;
-  border: 2px solid #6c8b6b;
-  border-radius: 60px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.quiz-option-btn:hover {
-  background: #e8f5e9;
-  transform: scale(1.02);
-}
-.quiz-option-btn.selected {
-  background: #6c8b6b;
-  color: white;
-}
-.hard-opt-btn {
-  background: white;
-  color: #333;
-  border: 2px solid #6c8b6b;
-  border-radius: 40px;
-  padding: 10px 18px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-.hard-opt-btn.selected {
-  background: #6c8b6b;
-  color: white;
-}
-.quiz-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
-}
-.quiz-feedback {
-  padding: 15px;
-  border-radius: 16px;
-  margin: 15px 0;
-}
-.quiz-feedback.correct {
-  background: #d4edda;
-  color: #155724;
-  border-left: 4px solid #28a745;
-}
-.quiz-feedback.incorrect {
-  background: #f8d7da;
-  color: #721c24;
-  border-left: 4px solid #dc3545;
-}
-.quiz-score {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #6c8b6b;
-  text-align: center;
-}
-.quiz-welcome {
-  text-align: center;
-  color: #666;
-  padding: 40px;
-  font-size: 1rem;
-}
-.quiz-results {
-  background: #e6f2ff;
-  border-radius: 20px;
-  padding: 20px;
-  text-align: center;
-  margin-top: 20px;
 }
 
-/* ===== MASTERED LIST ===== */
-.mastered-list {
-  background: white;
-  border-radius: 24px;
-  padding: 20px;
-}
-.mastered-adj-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-}
-.mastered-adj-dict {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #1e4b6e;
-}
-.mastered-adj-meaning {
-  margin-left: 15px;
-  color: #666;
-  font-size: 0.85rem;
-}
-.unmaster-btn {
-  background: #ffebee;
-  color: #c62828;
-  border: none;
-  padding: 5px 12px;
-  border-radius: 40px;
-  cursor: pointer;
-}
-.empty-message {
-  text-align: center;
-  color: #999;
-  padding: 40px;
-  font-size: 1rem;
-}
-
-/* ===== RESPONSIVE ===== */
+/* ─── RESPONSIVE ───────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .adjectives-container {
     padding: 12px;
   }
+
   .adjectives-header {
     flex-direction: column;
     text-align: center;
   }
+
   .adjectives-controls {
     flex-direction: column;
     align-items: stretch;
   }
+
   .back-button {
     padding: 6px 16px;
     font-size: 0.8rem;
   }
-  .tab-bar {
-    flex-wrap: wrap;
-    justify-content: center;
+
+  .control-group select,
+  .control-group input {
+    min-width: 100%;
   }
-  .tab-btn {
-    padding: 8px 16px;
-    font-size: 0.8rem;
+
+  .progress-indicator {
+    margin-left: 0;
+    text-align: center;
   }
 
   .adj-title {
     font-size: 1.3rem;
   }
+
   .conjugation-table {
     grid-template-columns: 1fr 1fr;
   }
@@ -778,52 +187,55 @@ rt {
     padding: 10px 8px 8px 8px;
     min-height: 55px;
   }
+
   .conj-name {
     font-size: 0.6rem;
   }
+
   .conj-paren {
     font-size: 0.5rem;
   }
+
   .conj-value {
     font-size: 1rem;
   }
 
-  /* Responsive furigana */
-  ruby rt,
-  rt {
-    font-size: 0.8rem !important;
-  }
-  .conj-item ruby rt,
-  .conj-item rt {
-    font-size: 0.7rem !important;
+  .example-jp {
+    font-size: 1.3rem !important;
   }
 
   .quiz-sentence {
     font-size: 1.1rem;
   }
+
   .quiz-option-btn,
   .hard-opt-btn {
     padding: 8px 14px;
     font-size: 0.85rem;
   }
+
   .quiz-settings {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
   }
+
   .quiz-mode-selector,
   .quiz-count-selector {
     justify-content: space-between;
   }
+
   .action-btn,
   .small-btn {
     padding: 8px 16px;
     font-size: 0.8rem;
   }
+
   .quiz-stats-panel {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .mastered-adj-item {
     flex-direction: column;
     gap: 8px;
@@ -835,50 +247,31 @@ rt {
   .adj-title {
     font-size: 1.1rem;
   }
+
   .quiz-sentence {
     font-size: 1rem;
   }
+
   .conj-name {
     font-size: 0.55rem;
   }
+
   .conj-paren {
     font-size: 0.45rem;
   }
+
   .conj-value {
     font-size: 0.9rem;
   }
+
   .conj-item {
     padding: 8px 6px 6px 6px;
     min-height: 50px;
   }
 
-  /* Phone furigana */
-  ruby rt,
-  rt {
-    font-size: 0.7rem !important;
-  }
-  .conj-item ruby rt,
-  .conj-item rt {
-    font-size: 0.6rem !important;
+  .example-jp {
+    font-size: 1.1rem !important;
   }
 }
 
-/* ================================================================
-   QUICK CUSTOMIZATION REFERENCE
-   ================================================================
-   
-   SEARCH FOR "CHANGE:" IN COMMENTS TO FIND CUSTOMIZABLE PROPERTIES
-   
-   KEY CUSTOMIZATIONS:
-   -------------------
-   1. FURIGANA SIZE (all): ruby rt → font-size
-   2. FURIGANA COLOR (all): ruby rt → color
-   3. FURIGANA WEIGHT (all): ruby rt → font-weight
-   4. FURIGANA GAP (all): ruby rt → padding-bottom
-   5. FURIGANA SIZE (pills): .conj-item ruby rt → font-size
-   6. FURIGANA GAP (pills): .conj-item ruby rt → padding-bottom
-   7. JAPANESE TEXT SIZE: .conj-value → font-size
-   8. JAPANESE TEXT COLOR: .conj-value → color
-   9. PILL BACKGROUND: .conj-item → background
-   10. ENGLISH LABEL SIZE: .conj-name → font-size
-   ================================================================ */
+/* < END of ADJECTIVES.CSS > */

@@ -26,47 +26,17 @@
     <script src="js/modules/audio.js"></script>
     <script src="js/managers/masteryManager.js"></script>
     <script src="js/modules/sentenceBuilder.js"></script>
-
-    <style>
-      .back-to-app {
-        display: inline-block;
-        padding: 8px 20px;
-        background: #8a7a6a;
-        color: white;
-        border: none;
-        border-radius: 40px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        font-family: inherit;
-        transition: 0.15s;
-        text-decoration: none;
-      }
-      .back-to-app:hover {
-        background: #7a6a5a;
-        transform: scale(0.97);
-      }
-      .builder-header-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        flex-wrap: wrap;
-        margin-bottom: 16px;
-      }
-    </style>
   </head>
   <body>
     <div class="app-container" id="app">
-      <!-- Back to Main App Button -->
-      <div class="builder-header-wrapper">
-        <a href="index.html" class="back-to-app">⬅ Back to Main App</a>
-        <span style="font-size: 0.8rem; color: #7a6f60"
-          >N5 Sentence Builder</span
-        >
+      <!-- Header with Back Button (matches adjectives.css style) -->
+      <div class="builder-header">
+        <h1>🧩 N5 Sentence Builder <span>— Master the sentences!</span></h1>
+        <a href="index.html" class="back-button">← Back to Main Menu</a>
       </div>
 
-      <!-- HEADER -->
+      <!-- HEADER CONTROLS -->
       <div class="app-header">
-        <h1>🧩 N5 Sentence Builder <span>— Master the sentences!</span></h1>
         <div class="header-controls">
           <label for="sprintSelect">Sprint:</label>
           <select id="sprintSelect">

@@ -1526,3 +1526,47 @@ body {
     padding: 1px 4px;
   }
 }
+/* ============================================================
+   25. BUILDER HEADER - Matches adjectives.css style
+   ============================================================ */
+.builder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.builder-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e2f;
+  margin: 0;
+}
+
+.builder-header h1 span {
+  font-weight: 300;
+  color: #7a6f60;
+  font-size: 1rem;
+}
+
+/* Back button - matches adjectives.css exactly */
+.builder-header .back-button {
+  background: #6c8b6b;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+  display: inline-block;
+}
+
+.builder-header .back-button:hover {
+  background: #5a7a59;
+  transform: translateY(-1px);
+}

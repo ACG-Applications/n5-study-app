@@ -139,6 +139,16 @@
         --conv-bg: var(--bg-conversation); /* Pill background */
         --conv-border-left: 4px solid var(--accent-blue); /* Left border color */
         --conv-border-left-expressions: 4px solid var(--accent-purple); /* Expressions border */
+
+        /* ──────────────────────────────────────────────────────────────
+             BACK BUTTON - Matches adjectives.css
+             ────────────────────────────────────────────────────────────── */
+        --back-btn-bg: #6c8b6b;
+        --back-btn-bg-hover: #5a7a59;
+        --back-btn-text: #ffffff;
+        --back-btn-radius: 40px;
+        --back-btn-padding: 8px 20px;
+        --back-btn-font-size: 0.9rem;
       }
 
       /* ============================================================
@@ -173,48 +183,87 @@
       }
 
       /* ============================================================
-           TITLE
+           HEADER - Matches adjectives.css style
            ============================================================ */
-      .title {
+      .directions-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .directions-header .title-group {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .directions-header .title {
         font-size: var(--fs-title);
         font-weight: 700;
         color: var(--text-title);
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 4px;
         flex-wrap: wrap;
         font-family: var(--font-japanese);
+        margin: 0;
       }
-      .title .en {
+
+      .directions-header .title .en {
         font-size: 1rem;
         font-weight: 400;
         color: var(--text-subtitle);
-        margin-left: auto;
         font-family: var(--font-english);
       }
-      .title .en small {
+
+      .directions-header .title .en small {
         font-weight: 300;
         opacity: 0.7;
       }
 
-      .subtitle {
+      .directions-header .subtitle {
         color: var(--text-subtitle);
         font-size: 0.95rem;
-        margin-bottom: var(--spacing-gap);
-        padding-bottom: 12px;
-        border-bottom: 2px solid var(--border-light);
         font-family: var(--font-japanese);
+        margin: 0;
       }
-      .subtitle .en {
+
+      .directions-header .subtitle .en {
         opacity: 0.6;
         font-weight: 300;
         font-family: var(--font-english);
       }
 
+      /* ─── BACK BUTTON - Matches adjectives.css exactly ─── */
+      .directions-header .back-button {
+        background: var(--back-btn-bg);
+        color: var(--back-btn-text);
+        padding: var(--back-btn-padding);
+        border-radius: var(--back-btn-radius);
+        text-decoration: none;
+        font-size: var(--back-btn-font-size);
+        font-weight: 500;
+        transition:
+          background 0.2s,
+          transform 0.1s;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+        font-family: var(--font-english);
+        flex-shrink: 0;
+      }
+
+      .directions-header .back-button:hover {
+        background: var(--back-btn-bg-hover);
+        transform: translateY(-1px);
+      }
+
       /* ============================================================
-   MODE TABS
-   ============================================================ */
+           MODE TABS
+           ============================================================ */
       .mode-tabs {
         display: flex;
         gap: var(--spacing-small);
@@ -225,7 +274,7 @@
         padding: 8px 18px;
         border-radius: var(--radius-button);
         border: 2px solid var(--border-light);
-        background: var(--bg-controls); /* ← Matches controls (#c1f3f3) */
+        background: var(--bg-controls);
         font-weight: 600;
         font-size: 0.85rem;
         color: var(--text-subtitle);
@@ -248,10 +297,8 @@
         border-color: var(--border-medium);
       }
       .mode-tabs .tab.active {
-        background: var(
-          --accent-blue
-        ); /* ← NEW: Matches active controls (#3b82f6) */
-        border-color: var(--accent-blue); /* ← NEW: Matches active controls */
+        background: var(--accent-blue);
+        border-color: var(--accent-blue);
         color: var(--text-controls-active);
       }
       .mode-tabs .tab.active .en {
@@ -411,7 +458,6 @@
            CONVERSATION PILL
            ============================================================ */
       .conversation-pill {
-        /* ─── PILL BACKGROUND & BORDER ─── */
         background: var(--conv-bg);
         border-radius: var(--radius-pill);
         padding: var(--spacing-pill);
@@ -420,7 +466,6 @@
         transition: 0.3s;
       }
 
-      /* ─── PILL LABEL (e.g., "💬 会話 (Conversation)") ─── */
       .conversation-pill .pill-label {
         font-size: var(--fs-tiny);
         font-weight: 700;
@@ -440,59 +485,48 @@
         font-size: 0.65rem;
       }
 
-      /* ─── PILL CONTENT CONTAINER ─── */
       .conversation-pill .pill-content {
         font-size: 1rem;
         line-height: 1.8;
         font-family: var(--font-japanese);
       }
 
-      /* ─── EACH LINE OF DIALOGUE ─── */
       .conversation-pill .pill-content .line {
         padding: 3px 0;
         display: flex;
-        flex-direction: column; /* ← English UNDER Japanese */
-        gap: 2px; /* ← Gap between JP and EN */
+        flex-direction: column;
+        gap: 2px;
       }
 
-      /* ─── SPEAKER ICON + JAPANESE WRAPPER ─── */
       .conversation-pill .pill-content .line .jp-wrapper {
         display: flex;
         align-items: baseline;
         gap: 8px;
       }
 
-      /* ─── SPEAKER ICON (👤 or 🗣️) ─── */
       .conversation-pill .pill-content .line .speaker {
         font-weight: 700;
         font-size: var(--conv-speaker-size);
         font-family: var(--font-english);
-        flex-shrink: 0; /* Prevents speaker from shrinking */
-        min-width: 30px; /* Consistent width for alignment */
+        flex-shrink: 0;
+        min-width: 30px;
       }
       .conversation-pill .pill-content .line .speaker.a {
-        color: var(--conv-speaker-color-a); /* Speaker A (questioner) */
+        color: var(--conv-speaker-color-a);
       }
       .conversation-pill .pill-content .line .speaker.b {
-        color: var(--conv-speaker-color-b); /* Speaker B (responder) */
+        color: var(--conv-speaker-color-b);
       }
       .conversation-pill .pill-content .line .speaker.c {
-        color: var(--conv-speaker-color-c); /* Speaker C (expressions) */
+        color: var(--conv-speaker-color-c);
       }
 
-      /* ─── JAPANESE TEXT ─── */
       .conversation-pill .pill-content .line .jp {
         font-size: var(--conv-japanese-size);
         color: var(--conv-japanese-color);
         font-family: var(--font-japanese);
       }
 
-      /* ─── FURIGANA IN CONVERSATIONS ───
-           Change these variables in :root above!
-           --conv-furigana-size: size
-           --conv-furigana-color: color
-           --conv-furigana-weight: font weight
-           ─────────────────────────────────── */
       .conversation-pill .pill-content .line .jp ruby rt {
         font-size: var(--conv-furigana-size) !important;
         color: var(--conv-furigana-color) !important;
@@ -503,20 +537,18 @@
         display: none !important;
       }
 
-      /* ─── ENGLISH TRANSLATION (UNDER Japanese) ─── */
       .conversation-pill .pill-content .line .en-text {
         font-size: var(--conv-english-size);
         color: var(--conv-english-color);
         opacity: 0;
         transition: opacity 0.3s ease;
         font-family: var(--font-english);
-        padding-left: 38px; /* Aligns under the Japanese text (30px + 8px gap) */
+        padding-left: 38px;
       }
       .conversation-pill .pill-content .line .en-text.show {
         opacity: 1;
       }
 
-      /* ─── PLAY BUTTON INSIDE PILL ─── */
       .conversation-pill .pill-play-btn {
         margin-top: 10px;
         background: var(--border-light);
@@ -547,7 +579,6 @@
         color: white;
       }
 
-      /* ── EXPRESSION PILL (purple accent) ── */
       .conversation-pill.expression {
         border-left: var(--conv-border-left-expressions);
       }
@@ -660,8 +691,8 @@
       }
 
       /* ============================================================
-   CATEGORIES
-   ============================================================ */
+           CATEGORIES
+           ============================================================ */
       .categories {
         display: flex;
         gap: var(--spacing-small);
@@ -673,9 +704,7 @@
         padding: 6px 16px;
         border-radius: var(--radius-small);
         border: 2px solid var(--border-light);
-        background: var(
-          --bg-controls
-        ); /* Light teal - matches all other inactive buttons */
+        background: var(--bg-controls);
         font-size: 0.8rem;
         font-weight: 600;
         color: var(--text-subtitle);
@@ -693,15 +722,11 @@
         font-family: var(--font-english);
       }
       .categories .cat-btn:hover {
-        background: var(
-          --bg-conversation
-        ); /* Light gray - matches all hover states */
+        background: var(--bg-conversation);
         border-color: var(--border-medium);
       }
       .categories .cat-btn.active {
-        background: var(
-          --accent-blue
-        ); /* Blue - NOW MATCHES active tabs & controls! */
+        background: var(--accent-blue);
         border-color: var(--accent-blue);
         color: var(--text-controls-active);
       }
@@ -723,6 +748,15 @@
           --spacing-container: 20px 16px;
           --spacing-card: 24px 18px;
           --spacing-pill: 12px 14px;
+        }
+
+        .directions-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .directions-header .back-button {
+          align-self: flex-end;
         }
 
         .card {
@@ -756,38 +790,37 @@
           padding-left: 30px;
         }
       }
+
+      @media (max-width: 400px) {
+        .directions-header .title {
+          font-size: 1.2rem;
+        }
+        .directions-header .back-button {
+          font-size: 0.8rem;
+          padding: 6px 14px;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <!-- ==========================================================
-      TITLE
-      ========================================================== -->
-      <div class="title">
-        🧭 方角練習
-        <span class="en"
-          ><small>(</small>Direction Practice<small>)</small></span
-        >
-      </div>
-      <div class="subtitle">
-        🎧 聞いて・読んで・覚える
-        <span class="en">(Listen, Read, Learn)</span>
-      </div>
-
-      <!-- ─── BACK BUTTON ─── -->
-      <div style="margin-bottom: 16px; text-align: left">
-        <button
-          onclick="window.close()"
-          class="btn-nav"
-          style="
-            min-width: auto;
-            padding: 8px 20px;
-            background: var(--bg-controls);
-            border: 2px solid var(--border-light);
-          "
-        >
-          ⬅ 戻る <span class="en">(Close)</span>
-        </button>
+           HEADER - with Back Button top right
+           ========================================================== -->
+      <div class="directions-header">
+        <div class="title-group">
+          <div class="title">
+            🧭 方角練習
+            <span class="en"
+              ><small>(</small>Direction Practice<small>)</small></span
+            >
+          </div>
+          <div class="subtitle">
+            🎧 聞いて・読んで・覚える
+            <span class="en">(Listen, Read, Learn)</span>
+          </div>
+        </div>
+        <a href="index.html" class="back-button">← Back to Main Menu</a>
       </div>
 
       <!-- ==========================================================
@@ -1564,7 +1597,6 @@
           isPlaying = false;
         }
 
-        // ─── UPDATED: Speaker icon NOW inline with Japanese ───
         function renderConversation() {
           card.style.display = "none";
           conversationPill.style.display = "block";
@@ -1599,7 +1631,6 @@
           isConvPlaying = false;
         }
 
-        // ─── UPDATED: Expression with speaker inline ───
         function renderExpression() {
           card.style.display = "none";
           conversationPill.style.display = "none";

@@ -368,6 +368,323 @@ const grammarData = [
                 explanation: "それから = and then / after that"
             }
         ]
+    },
+
+    // ============================================================
+    // NEW: Additional N5 Grammar Points Added from JLPT N5 List
+    // ============================================================
+
+    {
+        id: "g35",
+        pattern: "〜おく",
+        meaning: "to do in advance (preparatory action)",
+        explanation: "Used to indicate that an action is done in advance or as preparation for something.",
+        examples: [
+            { sentence: "明日（あした）の試験（しけん）のために、勉強（べんきょう）しておく。", reading: "あしたのしけんのために、べんきょうしておく。", english: "I'll study in advance for tomorrow's exam." },
+            { sentence: "お客（きゃく）さんが来（く）る前（まえ）に、部屋（へや）を掃除（そうじ）しておく。", reading: "おきゃくさんがくるまえに、へやをそうじしておく。", english: "I'll clean the room before the guests come." }
+        ],
+        questions: [
+            {
+                sentence: "友達（ともだち）が来（く）る前（まえ）に、ケーキを買（か）って（ ）。",
+                correctAnswer: "おく",
+                options: ["おく", "いる", "ある", "しまう"],
+                explanation: "〜おく means to do something in advance as preparation."
+            },
+            {
+                sentence: "旅行（りょこう）の前（まえ）に、切符（きっぷ）を予約（よやく）して（ ）。",
+                correctAnswer: "おく",
+                options: ["おく", "みる", "いく", "ある"],
+                explanation: "〜おく indicates doing something in advance for future convenience."
+            }
+        ]
+    },
+    {
+        id: "g36",
+        pattern: "〜とか",
+        meaning: "and/or, things like (non-exhaustive listing)",
+        explanation: "Used to list examples of things, similar to 〜や but more casual. Often used with 〜とか～とか.",
+        examples: [
+            { sentence: "りんごとかバナナとか、果物（くだもの）が好（す）きです。", reading: "りんごとかばななとか、くだものがすきです。", english: "I like fruits like apples and bananas." },
+            { sentence: "週末（しゅうまつ）は映画（えいが）とか音楽（おんがく）とかを楽（たの）しみます。", reading: "しゅうまつはえいがとかおんがくとかをたのしみます。", english: "I enjoy things like movies and music on weekends." }
+        ],
+        questions: [
+            {
+                sentence: "休（やす）みの日（ひ）は、テレビを見（み）る（ ）本（ほん）を読（よ）む（ ）して過（す）ごします。",
+                correctAnswer: "とか",
+                options: ["とか", "や", "と", "も"],
+                explanation: "〜とか～とか is used to list non-exhaustive examples."
+            },
+            {
+                sentence: "彼（かれ）はサッカー（ ）バスケットボール（ ）が好（す）きです。",
+                correctAnswer: "とか",
+                options: ["とか", "や", "と", "の"],
+                explanation: "〜とか is used to list multiple examples in a casual way."
+            }
+        ]
+    },
+    {
+        id: "g37",
+        pattern: "〜ましょうか",
+        meaning: "shall I? (offering to do something)",
+        explanation: "Used when offering to do something for someone. It's a polite way to ask 'Shall I...?'",
+        examples: [
+            { sentence: "荷物（にもつ）を持（も）ちましょうか。", reading: "にもつをもちましょうか。", english: "Shall I carry your luggage?" },
+            { sentence: "窓（まど）を開（あ）けましょうか。", reading: "まどをあけましょうか。", english: "Shall I open the window?" }
+        ],
+        questions: [
+            {
+                sentence: "重（おも）いスーツケースです。私（わたし）が（ ）か。",
+                correctAnswer: "持ちましょう",
+                options: ["持（も）ちましょう", "持（も）ちます", "持（も）ちません", "持（も）ちました"],
+                explanation: "〜ましょうか is used when offering to do something for someone."
+            },
+            {
+                sentence: "エアコンがついていません。（ ）か。",
+                correctAnswer: "つけましょう",
+                options: ["つけましょう", "つけます", "つけません", "つけた"],
+                explanation: "〜ましょうか is a polite offer to do something."
+            }
+        ]
+    },
+    {
+        id: "g38",
+        pattern: "〜かもしれない",
+        meaning: "may be, might, maybe",
+        explanation: "Used to express uncertainty or possibility. Means 'might be' or 'maybe'.",
+        examples: [
+            { sentence: "明日（あした）は雨（あめ）が降（ふ）るかもしれない。", reading: "あしたはあめがふるかもしれない。", english: "It might rain tomorrow." },
+            { sentence: "彼（かれ）は来（こ）ないかもしれない。", reading: "かれはこないかもしれない。", english: "He might not come." }
+        ],
+        questions: [
+            {
+                sentence: "明日（あした）は試験（しけん）がある（ ）。",
+                correctAnswer: "かもしれない",
+                options: ["かもしれない", "でしょう", "にちがいない", "はずだ"],
+                explanation: "〜かもしれない expresses possibility or uncertainty."
+            },
+            {
+                sentence: "あのレストランはもう閉（し）まっている（ ）。",
+                correctAnswer: "かもしれない",
+                options: ["かもしれない", "でしょう", "にちがいない", "はずだ"],
+                explanation: "〜かもしれない is used when you're not sure about something."
+            }
+        ]
+    },
+    {
+        id: "g39",
+        pattern: "〜なければならない",
+        meaning: "must, have to (obligation)",
+        explanation: "Used to express obligation. Means 'must' or 'have to'.",
+        examples: [
+            { sentence: "毎日（まいにち）日本語（にほんご）を勉強（べんきょう）しなければならない。", reading: "まいにちにほんごをべんきょうしなければならない。", english: "I must study Japanese every day." },
+            { sentence: "宿題（しゅくだい）を出（だ）さなければならない。", reading: "しゅくだいをださなければならない。", english: "I have to submit my homework." }
+        ],
+        questions: [
+            {
+                sentence: "学生（がくせい）は規則（きそく）を守（まも）ら（ ）。",
+                correctAnswer: "なければならない",
+                options: ["なければならない", "なくてもいい", "ないでください", "なければなりませんでした"],
+                explanation: "〜なければならない expresses obligation or necessity."
+            },
+            {
+                sentence: "明日（あした）は早（はや）く起（お）き（ ）。",
+                correctAnswer: "なければならない",
+                options: ["なければならない", "なくてもいい", "ないでください", "なければなりませんでした"],
+                explanation: "〜なければならない means 'must' or 'have to'."
+            }
+        ]
+    },
+    {
+        id: "g40",
+        pattern: "〜やすい / 〜にくい",
+        meaning: "easy to do / hard to do",
+        explanation: "〜やすい means 'easy to do', 〜にくい means 'difficult to do'.",
+        examples: [
+            { sentence: "この本（ほん）は読（よ）みやすいです。", reading: "このほんはよみやすいです。", english: "This book is easy to read." },
+            { sentence: "漢字（かんじ）は覚（おぼ）えにくいです。", reading: "かんじはおぼえにくいです。", english: "Kanji are hard to memorize." }
+        ],
+        questions: [
+            {
+                sentence: "このペンは書（か）き（ ）です。",
+                correctAnswer: "やすい",
+                options: ["やすい", "にくい", "づらい", "がち"],
+                explanation: "〜やすい means 'easy to do'."
+            },
+            {
+                sentence: "彼（かれ）は話（はな）し（ ）人（ひと）です。",
+                correctAnswer: "にくい",
+                options: ["やすい", "にくい", "づらい", "がち"],
+                explanation: "〜にくい means 'difficult to do'."
+            }
+        ]
+    },
+    {
+        id: "g41",
+        pattern: "〜せる / 〜させる",
+        meaning: "causative (make/let someone do something)",
+        explanation: "Used to express causation - making or letting someone do something.",
+        examples: [
+            { sentence: "母（はは）は私（わたし）に野菜（やさい）を食（た）べさせる。", reading: "はははわたしにやさいをたべさせる。", english: "My mother makes me eat vegetables." },
+            { sentence: "先生（せんせい）は生徒（せいと）に本（ほん）を読（よ）ませる。", reading: "せんせいはせいとにほんをよませる。", english: "The teacher makes the students read the book." }
+        ],
+        questions: [
+            {
+                sentence: "母（はは）は子供（こども）に野菜（やさい）を食（た）べ（ ）。",
+                correctAnswer: "させる",
+                options: ["させる", "られる", "てくれる", "てもらう"],
+                explanation: "〜させる is the causative form meaning 'make/let someone do'."
+            },
+            {
+                sentence: "上司（じょうし）は社員（しゃいん）に残業（ざんぎょう）を（ ）。",
+                correctAnswer: "させる",
+                options: ["させる", "られる", "てくれる", "てもらう"],
+                explanation: "Causative form 〜させる means 'make someone do'."
+            }
+        ]
+    },
+    {
+        id: "g42",
+        pattern: "〜られる",
+        meaning: "passive / potential (can do / is done)",
+        explanation: "〜られる has two uses: passive (is done by) and potential (can do).",
+        examples: [
+            { sentence: "弟（おとうと）にケーキを食（た）べられた。", reading: "おとうとにけーきをたべられた。", english: "My cake was eaten by my little brother." },
+            { sentence: "日本語（にほんご）が話（はな）せます。", reading: "にほんごがはなせます。", english: "I can speak Japanese." }
+        ],
+        questions: [
+            {
+                sentence: "友達（ともだち）に笑（わら）われ（ ）。",
+                correctAnswer: "た",
+                options: ["た", "る", "ない", "て"],
+                explanation: "〜られる passive form: 'was laughed at by friend'."
+            },
+            {
+                sentence: "私（わたし）は刺身（さしみ）が食（た）べ（ ）。",
+                correctAnswer: "られる",
+                options: ["られる", "させる", "てくれる", "てもらう"],
+                explanation: "〜られる potential form: 'can eat'."
+            }
+        ]
+    },
+    {
+        id: "g43",
+        pattern: "〜という",
+        meaning: "called, named, that (quotation)",
+        explanation: "Used to introduce names, quotations, or to explain meaning.",
+        examples: [
+            { sentence: "これは「桜（さくら）」という花（はな）です。", reading: "これは「さくら」というはなです。", english: "This is a flower called 'Sakura'." },
+            { sentence: "田中（たなか）さんという人（ひと）を知（し）っていますか。", reading: "たなかさんというひとをしっていますか。", english: "Do you know a person named Tanaka?" }
+        ],
+        questions: [
+            {
+                sentence: "これが「富士山（ふじさん）」という（ ）です。",
+                correctAnswer: "山",
+                options: ["山", "川", "湖", "海"],
+                explanation: "〜という introduces the name of something."
+            },
+            {
+                sentence: "「ありがとう」という（ ）は感謝（かんしゃ）を表（あらわ）します。",
+                correctAnswer: "言葉（ことば）",
+                options: ["言葉（ことば）", "名前（なまえ）", "場所（ばしょ）", "人（ひと）"],
+                explanation: "〜という is used to explain the meaning of a word."
+            }
+        ]
+    },
+    {
+        id: "g44",
+        pattern: "〜について",
+        meaning: "about, concerning",
+        explanation: "Used to indicate the topic of discussion or thought.",
+        examples: [
+            { sentence: "日本（にほん）について話（はな）しましょう。", reading: "にほんについてはなしましょう。", english: "Let's talk about Japan." },
+            { sentence: "その件（けん）について考（かんが）えています。", reading: "そのけんについてかんがえています。", english: "I'm thinking about that matter." }
+        ],
+        questions: [
+            {
+                sentence: "今日（きょう）の授業（じゅぎょう）は世界（せかい）の環境問題（かんきょうもんだい）（ ）です。",
+                correctAnswer: "について",
+                options: ["について", "にとって", "として", "によって"],
+                explanation: "〜について means 'about' or 'concerning'."
+            },
+            {
+                sentence: "この本（ほん）は日本（にほん）の文化（ぶんか）（ ）書（か）かれています。",
+                correctAnswer: "について",
+                options: ["について", "にとって", "として", "によって"],
+                explanation: "〜について indicates the topic being discussed."
+            }
+        ]
+    },
+    {
+        id: "g45",
+        pattern: "〜にとって",
+        meaning: "for, to (from someone's perspective)",
+        explanation: "Used to express someone's perspective or opinion.",
+        examples: [
+            { sentence: "私（わたし）にとって、日本語（にほんご）は難（むずか）しいです。", reading: "わたしにとって、にほんごはむずかしいです。", english: "For me, Japanese is difficult." },
+            { sentence: "学生（がくせい）にとって、この本（ほん）は役（やく）に立（た）ちます。", reading: "がくせいにとって、このほんはやくにたちます。", english: "This book is useful for students." }
+        ],
+        questions: [
+            {
+                sentence: "（ ）、健康（けんこう）が一番（いちばん）大切（たいせつ）です。",
+                correctAnswer: "私（わたし）にとって",
+                options: ["私（わたし）にとって", "私（わたし）について", "私（わたし）として", "私（わたし）によって"],
+                explanation: "〜にとって expresses 'from my perspective'."
+            },
+            {
+                sentence: "子供（こども）（ ）この映画（えいが）は少（すこ）し怖（こわ）いかもしれません。",
+                correctAnswer: "にとって",
+                options: ["にとって", "について", "として", "によって"],
+                explanation: "〜にとって = 'for' or 'from the perspective of'."
+            }
+        ]
+    },
+    {
+        id: "g46",
+        pattern: "〜として",
+        meaning: "as, in the capacity of",
+        explanation: "Used to express someone's role, status, or position.",
+        examples: [
+            { sentence: "先生（せんせい）として、生徒（せいと）を指導（しどう）します。", reading: "せんせいとして、せいとをしどうします。", english: "I guide students as a teacher." },
+            { sentence: "彼（かれ）は医者（いしゃ）として働（はたら）いています。", reading: "かれはいしゃとしてはたらいています。", english: "He works as a doctor." }
+        ],
+        questions: [
+            {
+                sentence: "彼（かれ）は日本人（にほんじん）（ ）日本語（にほんご）を教（おし）えています。",
+                correctAnswer: "として",
+                options: ["として", "にとって", "について", "によって"],
+                explanation: "〜として = 'as' or 'in the capacity of'."
+            },
+            {
+                sentence: "私（わたし）は父（ちち）の代理（だいり）（ ）会議（かいぎ）に出席（しゅっせき）しました。",
+                correctAnswer: "として",
+                options: ["として", "にとって", "について", "によって"],
+                explanation: "〜として indicates acting in a certain role."
+            }
+        ]
+    },
+    {
+        id: "g47",
+        pattern: "〜によって",
+        meaning: "by, according to, depending on",
+        explanation: "Used to indicate means, cause, or depending on something.",
+        examples: [
+            { sentence: "この絵（え）は有名（ゆうめい）な画家（がか）によって描（か）かれました。", reading: "このえはゆうめいながかによってかかれました。", english: "This painting was done by a famous artist." },
+            { sentence: "人（ひと）によって考（かんが）え方（かた）が違（ちが）います。", reading: "ひとによってかんがえかたがちがいます。", english: "People have different ways of thinking." }
+        ],
+        questions: [
+            {
+                sentence: "この商品（しょうひん）は高（たか）い（ ）生産（せいさん）されています。",
+                correctAnswer: "技術（ぎじゅつ）によって",
+                options: ["技術（ぎじゅつ）によって", "技術（ぎじゅつ）にとって", "技術（ぎじゅつ）について", "技術（ぎじゅつ）として"],
+                explanation: "〜によって indicates the means or method."
+            },
+            {
+                sentence: "結果（けっか）は状況（じょうきょう）（ ）変（か）わります。",
+                correctAnswer: "によって",
+                options: ["によって", "にとって", "について", "として"],
+                explanation: "〜によって = 'depending on'."
+            }
+        ]
     }
 ];
 

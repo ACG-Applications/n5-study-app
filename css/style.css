@@ -729,3 +729,275 @@ ruby rt {
     padding: 8px 14px;
   }
 }
+/* ================================================================
+   PRINT STYLES (from learn.css)
+   ================================================================ */
+
+@media print {
+  /* Hide all UI elements from all modules */
+  .adjectives-header,
+  .adjectives-controls,
+  .verbs-header,
+  .verbs-controls,
+  .adverbs-header,
+  .adverbs-controls,
+  .grammar-header,
+  .grammar-controls,
+  .particles-header,
+  .particles-controls,
+  .kanji-header,
+  .kanji-controls,
+  .listening-header,
+  .listening-controls,
+  .practice-header,
+  .practice-controls,
+  .tab-bar,
+  .back-button,
+  #furiToggleBtn,
+  .progress-indicator,
+  .control-group,
+  .quiz-container,
+  .mastered-list,
+  #tabList,
+  #tabConjugation,
+  #tabParticles,
+  #tabPairs,
+  #tabQuiz,
+  #tabMastered,
+  .tab-content:not(#tabLearn):not(.active) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Show ONLY learn tab */
+  #tabLearn.tab-content.active {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  /* Hide print button */
+  .learn-print-btn,
+  button[onclick="printLesson()"],
+  [onclick*="printLesson"],
+  .learn-container button[onclick*="printLesson"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+  }
+
+  /* Clean learn container */
+  .learn-container {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  /* Ensure furigana renders properly in print */
+  ruby {
+    ruby-align: center;
+    display: ruby;
+  }
+
+  rt {
+    font-size: 0.55rem !important;
+    color: #333333 !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.02em;
+  }
+
+  /* Tables - keep together and styled */
+  .learn-table {
+    page-break-inside: avoid !important;
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  .learn-table th,
+  .learn-table td {
+    border: 1px solid #d4cbbc !important;
+    padding: 8px 12px !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+
+  .learn-table thead {
+    display: table-header-group !important;
+  }
+
+  .learn-table tr {
+    page-break-inside: avoid !important;
+  }
+
+  .learn-table th {
+    background: #e8e0d5 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Hide listen indicators */
+  .listen-hint,
+  [class*="Listen"],
+  [style*="Click to listen"],
+  [style*="🔊 Click to listen"],
+  .example-box .listen-hint,
+  .example-box div[style*="color: #888888"],
+  .example-click div[style*="color: #888888"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Remove hover effects */
+  .example-box:hover {
+    background: #f5f5f0 !important;
+    cursor: default !important;
+    transform: none !important;
+  }
+
+  .example-box {
+    cursor: default !important;
+  }
+
+  /* Keep sections together */
+  .learn-section {
+    page-break-inside: avoid !important;
+  }
+
+  /* Summary box */
+  .summary-box,
+  div[style*="background: #e8f0e7"],
+  div[style*="background:#e8f0e7"] {
+    border: 2px solid #6c8b6b !important;
+    page-break-inside: avoid !important;
+    background: #f9fcff !important;
+    padding: 16px !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+  }
+
+  /* Summary grid */
+  .summary-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px 16px !important;
+    page-break-inside: avoid !important;
+  }
+
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+
+  /* Hide scrollbars */
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  /* Ensure learn content is fully visible */
+  #learnContent {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  /* Force the learn tab to show */
+  #tabLearn.tab-content {
+    display: block !important;
+  }
+
+  /* Hide any remaining interactive elements */
+  .small-btn,
+  .mark-mastered-btn,
+  .unmaster-btn,
+  .example-tts-btn,
+  .quiz-nav-btn,
+  .start-quiz-btn,
+  .mode-btn,
+  .action-btn,
+  .quiz-option-btn,
+  .hard-opt-btn,
+  button:not(.no-print) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+  }
+
+  /* White background for everything */
+  .adjectives-container,
+  .verbs-container,
+  .adverbs-container,
+  .grammar-container,
+  .particles-container,
+  .kanji-container,
+  .listening-container,
+  .practice-container,
+  body,
+  html {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+  }
+
+  /* Hide any remaining tab content */
+  .tab-content {
+    display: none !important;
+  }
+
+  .tab-content.active#tabLearn {
+    display: block !important;
+  }
+
+  /* Ensure proper text colors */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  div,
+  span,
+  li,
+  td,
+  th,
+  strong,
+  em {
+    color: #000000 !important;
+  }
+
+  /* Fix overflow issues */
+  .overflow-x-auto,
+  .learn-table-wrap,
+  div[style*="overflow-x: auto"] {
+    overflow: visible !important;
+    max-width: 100% !important;
+  }
+}

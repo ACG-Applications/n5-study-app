@@ -1,0 +1,1246 @@
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║              COMPONENT 1: FURIGANA (ruby, rt)              ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL furigana (ruby) styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules (adjectives, verbs, grammar, etc.)
+   ================================================================ */
+
+/* ─── FURIGANA CUSTOMIZATION ──────────────────────────────────── */
+/*  font-size:     Size of furigana text above kanji             */
+/*  font-weight:   Boldness of furigana (400=normal, 700=bold)   */
+/*  font-color:    Color of furigana text                        */
+/*  text-align:    Alignment of furigana text                    */
+/*  letter-spacing: Space between furigana characters            */
+/*  background:    Background color behind furigana             */
+/*  padding:       Space around furigana text                   */
+/* ──────────────────────────────────────────────────────────────── */
+
+ruby {
+  display: ruby !important;
+  ruby-align: center !important;
+  ruby-position: over !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+ruby rt,
+rt {
+  display: ruby-text !important;
+  font-size: 0.8rem !important; /* ← FONT SIZE */
+  font-weight: 700 !important; /* ← FONT WEIGHT */
+  color: #290101 !important; /* ← FONT COLOR */
+  text-align: center !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.5px !important; /* ← LETTER SPACING */
+  background: transparent !important; /* ← BACKGROUND */
+  padding-bottom: 2px !important; /* ← PADDING */
+  padding-left: 0 !important; /* ← PADDING */
+  padding-right: 0 !important; /* ← PADDING */
+  padding-top: 0 !important; /* ← PADDING */
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* ─── FURIGANA IN CONJUGATION PILLS ──────────────────────────── */
+.conj-item ruby rt,
+.conj-item rt {
+  font-size: 0.7rem !important; /* ← FONT SIZE */
+  font-weight: 700 !important; /* ← FONT WEIGHT */
+  color: #290101 !important; /* ← FONT COLOR */
+  text-align: center !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.3px !important; /* ← LETTER SPACING */
+  background: transparent !important; /* ← BACKGROUND */
+  padding-bottom: 5px !important; /* ← PADDING */
+}
+
+/* ─── FURIGANA IN TITLES ──────────────────────────────────────── */
+.adj-title ruby rt,
+.adj-title rt,
+.verb-title ruby rt,
+.verb-title rt,
+.adverb-title ruby rt,
+.adverb-title rt,
+.grammar-pattern ruby rt,
+.grammar-pattern rt,
+.mastered-adj-dict ruby rt,
+.mastered-adj-dict rt,
+.mastered-verb-dict ruby rt,
+.mastered-verb-dict rt,
+.mastered-adverb-dict ruby rt,
+.mastered-adverb-dict rt {
+  font-size: 0.6rem !important; /* ← FONT SIZE */
+  font-weight: 700 !important; /* ← FONT WEIGHT */
+  color: #290101 !important; /* ← FONT COLOR */
+  text-align: center !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.3px !important; /* ← LETTER SPACING */
+  background: transparent !important; /* ← BACKGROUND */
+  padding-bottom: 4px !important; /* ← PADDING */
+}
+
+/* ─── FURIGANA IN EXAMPLE SENTENCES ──────────────────────────── */
+.example-jp ruby,
+.example-jp ruby {
+  display: ruby !important;
+  ruby-position: over !important;
+  line-height: 1.2 !important;
+}
+
+.example-jp ruby rt,
+.example-jp rt {
+  font-size: 0.8rem !important; /* ← FONT SIZE */
+  font-weight: 600 !important; /* ← FONT WEIGHT */
+  color: #290101 !important; /* ← FONT COLOR */
+  text-align: center !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.5px !important; /* ← LETTER SPACING */
+  background: transparent !important; /* ← BACKGROUND */
+  padding-bottom: 2px !important; /* ← PADDING */
+}
+
+/* ─── FURIGANA IN QUIZ ────────────────────────────────────────── */
+.quiz-sentence ruby,
+.quiz-option-btn ruby,
+.hard-opt-btn ruby {
+  display: ruby !important;
+  ruby-position: over !important;
+}
+
+.quiz-sentence ruby rt,
+.quiz-sentence rt,
+.quiz-option-btn ruby rt,
+.quiz-option-btn rt,
+.hard-opt-btn ruby rt,
+.hard-opt-btn rt {
+  font-size: 0.9rem !important; /* ← FONT SIZE */
+  font-weight: 600 !important; /* ← FONT WEIGHT */
+  color: #290101 !important; /* ← FONT COLOR */
+  text-align: center !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.5px !important; /* ← LETTER SPACING */
+  background: transparent !important; /* ← BACKGROUND */
+  padding-bottom: 4px !important; /* ← PADDING */
+}
+
+/* ─── HIDE FURIGANA (toggle) ──────────────────────────────────── */
+.hide-furigana rt {
+  display: none !important;
+}
+
+/* < END of FURIGANA COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║                    COMPONENT 2: PARTICLES                   ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL particle styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules with example sentences
+   ================================================================ */
+
+/* ─── PARTICLE CUSTOMIZATION ──────────────────────────────────── */
+/*  font-size:     Size of particle text                         */
+/*  font-weight:   Boldness of particle text (700=bold)          */
+/*  font-color:    Color of particle text (red = #ff0000)        */
+/*  text-align:    Alignment of particle text                    */
+/*  letter-spacing: Space between particle characters            */
+/*  background:    Background color behind particle              */
+/*  padding:       Space around particle text                    */
+/*  border-radius: Roundness of particle background              */
+/* ──────────────────────────────────────────────────────────────── */
+
+.example-jp .particle,
+.example-jp span.particle,
+.particle {
+  font-size: inherit !important; /* ← FONT SIZE (inherits from parent) */
+  font-weight: 700 !important; /* ← FONT WEIGHT */
+  color: #ff0000 !important; /* ← FONT COLOR */
+  text-align: center !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.3px !important; /* ← LETTER SPACING */
+  background: #ffffff !important; /* ← BACKGROUND */
+  display: inline !important;
+  vertical-align: bottom !important;
+  line-height: 1.2 !important;
+  padding: 0 2px !important; /* ← PADDING */
+  border-radius: 0 !important; /* ← BORDER RADIUS */
+}
+
+/* ─── PARTICLE HIGHLIGHT (for quiz) ──────────────────────────── */
+.particle-highlight {
+  font-size: inherit !important; /* ← FONT SIZE */
+  font-weight: 700 !important; /* ← FONT WEIGHT */
+  color: #cc0000 !important; /* ← FONT COLOR */
+  text-align: center !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.3px !important; /* ← LETTER SPACING */
+  background: #ffd6d6 !important; /* ← BACKGROUND (light pink) */
+  padding: 0 4px !important; /* ← PADDING */
+  border-radius: 4px !important; /* ← BORDER RADIUS */
+}
+
+/* < END of PARTICLES COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║                COMPONENT 3: EXAMPLE SENTENCES               ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL example sentence styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules (conjugation tabs, learn tabs, etc.)
+   ================================================================ */
+
+/* ─── EXAMPLE SENTENCE CUSTOMIZATION ──────────────────────────── */
+/*  font-size:     Size of Japanese text in examples             */
+/*  font-weight:   Boldness of Japanese text (450)               */
+/*  font-color:    Color of Japanese text (black = #000000)      */
+/*  text-align:    Alignment of Japanese text                    */
+/*  letter-spacing: Space between characters                     */
+/*  background:    Background color behind examples              */
+/*  padding:       Space around examples                         */
+/*  line-height:   Space between lines                           */
+/* ──────────────────────────────────────────────────────────────── */
+
+.example-jp {
+  font-size: 1.7rem !important; /* ← FONT SIZE */
+  font-weight: 450 !important; /* ← FONT WEIGHT */
+  color: #000000 !important; /* ← FONT COLOR */
+  text-align: left !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.3px !important; /* ← LETTER SPACING */
+  background: transparent !important; /* ← BACKGROUND */
+  padding: 0 !important; /* ← PADDING */
+  margin-bottom: 5px !important; /* ← MARGIN */
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-end !important;
+  gap: 4px !important;
+  line-height: 1.2 !important; /* ← LINE HEIGHT */
+}
+
+/* ─── EXAMPLE ITEM CONTAINER ──────────────────────────────────── */
+.example-item {
+  background: white !important; /* ← BACKGROUND */
+  border-radius: 12px !important; /* ← BORDER RADIUS */
+  padding: 10px !important; /* ← PADDING */
+  margin: 8px 0 !important; /* ← MARGIN */
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+  border: 1px solid #e8e0d5 !important; /* ← BORDER */
+}
+
+.example-item:hover {
+  background: #e6f2ff !important; /* ← BACKGROUND (hover) */
+  border-color: #6c8b6b !important; /* ← BORDER (hover) */
+}
+
+/* ─── EXAMPLE TRANSLATION ──────────────────────────────────────── */
+.example-trans {
+  font-size: 0.9rem !important; /* ← FONT SIZE */
+  font-weight: 400 !important; /* ← FONT WEIGHT */
+  color: #2601f8 !important; /* ← FONT COLOR */
+  text-align: left !important; /* ← TEXT ALIGN */
+  letter-spacing: 0.2px !important; /* ← LETTER SPACING */
+  background: transparent !important; /* ← BACKGROUND */
+  padding: 0 !important; /* ← PADDING */
+}
+
+/* < END of EXAMPLE SENTENCES COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║              COMPONENT 4: CONJUGATION TABLES               ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL conjugation table styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: Adjectives, Verbs modules
+   ================================================================ */
+
+/* ─── CONJUGATION TABLE CUSTOMIZATION ────────────────────────── */
+/*  background:   Background color of each conjugation pill      */
+/*  border:       Border color of each conjugation pill          */
+/*  padding:      Space inside each conjugation pill             */
+/*  border-radius: Roundness of each conjugation pill            */
+/*  font-size:    Size of Japanese text in pills                 */
+/*  font-weight:  Boldness of Japanese text in pills             */
+/*  font-color:   Color of Japanese text in pills                */
+/*  label-size:   Size of English label text                    */
+/*  label-color:  Color of English label text                   */
+/* ──────────────────────────────────────────────────────────────── */
+
+.conjugation-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.conj-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #f9fcff !important; /* ← BACKGROUND */
+  border: 1px solid #e8e0d5 !important; /* ← BORDER */
+  border-radius: 16px !important; /* ← BORDER RADIUS */
+  padding: 12px 10px 10px 10px !important; /* ← PADDING */
+  min-height: 75px !important;
+  transition: all 0.2s ease !important;
+}
+
+.conj-item:hover {
+  background: #f0f4f8 !important; /* ← BACKGROUND (hover) */
+  border-color: #6c8b6b !important; /* ← BORDER (hover) */
+  transform: translateY(-1px) !important;
+}
+
+/* ─── ENGLISH LABEL - TOP LINE ────────────────────────────────── */
+.conj-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.conj-name {
+  font-size: 0.7rem !important; /* ← LABEL SIZE */
+  font-weight: 600 !important; /* ← LABEL WEIGHT */
+  color: #888 !important; /* ← LABEL COLOR */
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important; /* ← LABEL SPACING */
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.conj-paren {
+  font-size: 0.6rem !important; /* ← PAREN SIZE */
+  font-weight: 500 !important; /* ← PAREN WEIGHT */
+  color: #999 !important; /* ← PAREN COLOR */
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1px;
+}
+
+/* ─── JAPANESE FORM - BOTTOM LINE ────────────────────────────── */
+.conj-value {
+  font-size: 1.2rem !important; /* ← JAPANESE SIZE */
+  font-weight: 600 !important; /* ← JAPANESE WEIGHT */
+  color: #1e4b6e !important; /* ← JAPANESE COLOR */
+  line-height: 1.6 !important;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* < END of CONJUGATION TABLES COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║                    COMPONENT 5: TABS                       ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL tab bar styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules
+   ================================================================ */
+
+/* ─── TAB CUSTOMIZATION ───────────────────────────────────────── */
+/*  tab-bg:        Background color of tab bar                   */
+/*  tab-padding:   Padding inside tab bar                        */
+/*  tab-radius:    Roundness of tab bar                          */
+/*  btn-font-size: Size of tab button text                       */
+/*  btn-padding:   Padding inside tab buttons                    */
+/*  btn-radius:    Roundness of tab buttons                      */
+/*  btn-active-bg: Background color of active tab               */
+/*  btn-active-color: Text color of active tab                  */
+/*  btn-hover-bg:  Background color of tab on hover             */
+/* ──────────────────────────────────────────────────────────────── */
+
+.tab-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  background: white !important; /* ← TAB BG */
+  padding: 6px !important; /* ← TAB PADDING */
+  border-radius: 50px !important; /* ← TAB RADIUS */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.tab-btn {
+  background: transparent !important;
+  border: none !important;
+  padding: 10px 24px !important; /* ← BUTTON PADDING */
+  font-size: 0.9rem !important; /* ← BUTTON FONT SIZE */
+  font-weight: 400 !important; /* ← BUTTON FONT WEIGHT */
+  color: #8a7b6e !important; /* ← BUTTON COLOR */
+  cursor: pointer !important;
+  border-radius: 40px !important; /* ← BUTTON RADIUS */
+  transition: all 0.2s !important;
+  font-family: inherit;
+}
+
+.tab-btn:hover {
+  background: #e8e0d5 !important; /* ← HOVER BG */
+  color: #4a6741 !important; /* ← HOVER COLOR */
+}
+
+.tab-btn.active {
+  background: #6c8b6b !important; /* ← ACTIVE BG */
+  color: white !important; /* ← ACTIVE COLOR */
+  box-shadow: 0 2px 6px rgba(108, 139, 107, 0.3) !important;
+}
+
+/* ─── TAB CONTENT ──────────────────────────────────────────────── */
+.tab-content {
+  display: none;
+  background: white !important; /* ← CONTENT BG */
+  border-radius: 20px !important; /* ← CONTENT RADIUS */
+  padding: 20px !important; /* ← CONTENT PADDING */
+}
+
+.tab-content.active {
+  display: block !important;
+}
+
+/* < END of TABS COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║                    COMPONENT 6: CARDS                      ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL card styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: Adjectives, Verbs, Adverbs, Grammar modules
+   ================================================================ */
+
+/* ─── CARD CUSTOMIZATION ──────────────────────────────────────── */
+/*  background:   Background color of cards                      */
+/*  padding:      Space inside cards                             */
+/*  border-radius: Roundness of cards                           */
+/*  border-left:  Left border color                              */
+/*  box-shadow:   Shadow effect of cards                         */
+/*  margin:       Space between cards                            */
+/* ──────────────────────────────────────────────────────────────── */
+
+.adj-card,
+.verb-card,
+.adverb-card,
+.grammar-card {
+  background: white !important; /* ← BACKGROUND */
+  border-radius: 16px !important; /* ← BORDER RADIUS */
+  padding: 20px !important; /* ← PADDING */
+  margin-bottom: 20px !important; /* ← MARGIN */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-left: 4px solid #6c8b6b !important; /* ← BORDER LEFT */
+}
+
+/* ─── MASTERED CARD STATE ──────────────────────────────────────── */
+.adj-card.mastered,
+.verb-card.mastered,
+.adverb-card.mastered,
+.grammar-card.mastered {
+  background: #e8f5e9 !important; /* ← MASTERED BG */
+  border-left-color: #4caf50 !important; /* ← MASTERED BORDER */
+}
+
+/* ─── CARD HEADERS ────────────────────────────────────────────── */
+.adj-header,
+.verb-header,
+.adverb-header,
+.grammar-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd !important; /* ← HEADER BORDER */
+}
+
+/* ─── CARD TITLES ────────────────────────────────────────────── */
+.adj-title,
+.verb-title,
+.adverb-title,
+.grammar-pattern {
+  font-size: 1.5rem !important; /* ← TITLE SIZE */
+  font-weight: 700 !important; /* ← TITLE WEIGHT */
+  color: #1e4b6e !important; /* ← TITLE COLOR */
+}
+
+/* ─── CARD MEANINGS ───────────────────────────────────────────── */
+.adj-meaning,
+.verb-meaning,
+.adverb-meaning,
+.grammar-meaning {
+  font-size: 1rem !important; /* ← MEANING SIZE */
+  font-weight: 400 !important; /* ← MEANING WEIGHT */
+  color: #c45d1e !important; /* ← MEANING COLOR */
+  background: #fff1e0 !important; /* ← MEANING BG */
+  padding: 4px 12px !important; /* ← MEANING PADDING */
+  border-radius: 40px !important; /* ← MEANING RADIUS */
+}
+
+/* ─── MASTERED BADGE ───────────────────────────────────────────── */
+.mastered-badge {
+  background: #4caf50 !important; /* ← BADGE BG */
+  color: white !important; /* ← BADGE COLOR */
+  border-radius: 40px !important; /* ← BADGE RADIUS */
+  padding: 4px 12px !important; /* ← BADGE PADDING */
+  font-size: 0.7rem !important; /* ← BADGE SIZE */
+  display: inline-block;
+  margin-left: 10px;
+}
+
+/* < END of CARDS COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║                    COMPONENT 7: QUIZ                       ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL quiz styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules with quizzes
+   ================================================================ */
+
+/* ─── QUIZ CUSTOMIZATION ──────────────────────────────────────── */
+/*  question-bg:   Background color of question area             */
+/*  option-bg:     Background color of options                   */
+/*  option-border: Border color of options                       */
+/*  option-active: Background color of selected option           */
+/*  feedback-correct: Background color of correct feedback       */
+/*  feedback-incorrect: Background color of incorrect feedback   */
+/* ──────────────────────────────────────────────────────────────── */
+
+.quiz-container {
+  background: transparent !important;
+}
+
+.quiz-header h3 {
+  font-size: 1.2rem !important; /* ← HEADER SIZE */
+  font-weight: 700 !important; /* ← HEADER WEIGHT */
+  color: #2c3e2f !important; /* ← HEADER COLOR */
+}
+
+.quiz-instructions {
+  background: #e6f2ff !important; /* ← INSTRUCTIONS BG */
+  border-radius: 16px !important; /* ← INSTRUCTIONS RADIUS */
+  padding: 12px 20px !important; /* ← INSTRUCTIONS PADDING */
+  margin-bottom: 20px !important;
+  font-size: 0.85rem !important; /* ← INSTRUCTIONS SIZE */
+  color: #333 !important; /* ← INSTRUCTIONS COLOR */
+}
+
+/* ─── QUIZ SETTINGS ────────────────────────────────────────────── */
+.quiz-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px; /* ← INCREASED for more space */
+  align-items: center;
+  margin-top: 15px;
+}
+
+/* ─── QUIZ SETTINGS ROW ────────────────────────────────────────── */
+.quiz-settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px; /* ← Added for spacing between items */
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setting-item label {
+  font-weight: 600;
+  color: #4a6741;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* ─── START QUIZ BUTTON ────────────────────────────────────────── */
+.start-quiz-btn {
+  background: #6c8b6b !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 28px !important;
+  border-radius: 40px !important;
+  cursor: pointer !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  transition:
+    background 0.2s,
+    transform 0.1s !important;
+  font-family: inherit !important;
+  white-space: nowrap !important;
+}
+
+.start-quiz-btn:hover {
+  background: #5a7a59 !important;
+  transform: translateY(-2px);
+}
+
+.quiz-mode-selector {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.mode-btn {
+  background: #e8e8e8 !important; /* ← MODE BG */
+  border: none !important;
+  padding: 6px 16px !important; /* ← MODE PADDING */
+  border-radius: 40px !important; /* ← MODE RADIUS */
+  cursor: pointer !important;
+  font-size: 0.85rem !important; /* ← MODE SIZE */
+  color: #333 !important; /* ← MODE COLOR */
+  transition: all 0.2s !important;
+}
+
+.mode-btn.active {
+  background: #6c8b6b !important; /* ← MODE ACTIVE BG */
+  color: white !important; /* ← MODE ACTIVE COLOR */
+}
+
+.quiz-settings select {
+  padding: 6px 12px !important; /* ← SELECT PADDING */
+  border-radius: 40px !important; /* ← SELECT RADIUS */
+  border: 1px solid #ccc !important; /* ← SELECT BORDER */
+  background: white !important; /* ← SELECT BG */
+  font-size: 0.85rem !important; /* ← SELECT SIZE */
+  cursor: pointer;
+}
+
+/* ─── QUIZ STATS PANEL ────────────────────────────────────────── */
+.quiz-stats-panel {
+  background: #e8f0fe !important; /* ← STATS BG */
+  border-radius: 20px !important; /* ← STATS RADIUS */
+  padding: 12px 20px !important; /* ← STATS PADDING */
+  margin: 15px 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem !important; /* ← STAT SIZE */
+  color: #333 !important; /* ← STAT COLOR */
+}
+
+.stat-label {
+  font-weight: 400 !important; /* ← STAT LABEL WEIGHT */
+  color: #1e4b6e !important; /* ← STAT LABEL COLOR */
+}
+
+.stat-value {
+  font-weight: 700 !important; /* ← STAT VALUE WEIGHT */
+  color: #c45d1e !important; /* ← STAT VALUE COLOR */
+  font-size: 1.1rem !important; /* ← STAT VALUE SIZE */
+}
+
+.stat-help-icon {
+  background: #6c8b6b !important; /* ← HELP ICON BG */
+  color: white !important; /* ← HELP ICON COLOR */
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important; /* ← HELP ICON RADIUS */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem !important; /* ← HELP ICON SIZE */
+  cursor: pointer;
+}
+
+.stats-explanation {
+  background: white !important; /* ← EXPLANATION BG */
+  border-radius: 20px !important; /* ← EXPLANATION RADIUS */
+  padding: 20px !important; /* ← EXPLANATION PADDING */
+  margin-top: 15px !important;
+  border: 2px solid #6c8b6b !important; /* ← EXPLANATION BORDER */
+}
+
+/* ─── QUIZ QUESTION ────────────────────────────────────────────── */
+.quiz-question {
+  background: #f9fcff !important; /* ← QUESTION BG */
+  border-radius: 20px !important; /* ← QUESTION RADIUS */
+  padding: 25px !important; /* ← QUESTION PADDING */
+  margin-bottom: 20px !important;
+}
+
+.quiz-sentence {
+  font-size: 1.2rem !important; /* ← SENTENCE SIZE */
+  font-weight: 500 !important; /* ← SENTENCE WEIGHT */
+  color: #1a2b4c !important; /* ← SENTENCE COLOR */
+  text-align: center !important; /* ← SENTENCE ALIGN */
+  margin: 20px 0 !important;
+  line-height: 1.6 !important;
+}
+
+.quiz-translation {
+  text-align: center !important; /* ← TRANSLATION ALIGN */
+  color: #5a6e55 !important; /* ← TRANSLATION COLOR */
+  margin: 10px 0 !important;
+  font-size: 0.95rem !important; /* ← TRANSLATION SIZE */
+}
+
+/* ─── QUIZ OPTIONS ────────────────────────────────────────────── */
+.quiz-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.quiz-option-btn {
+  background: white !important; /* ← OPTION BG */
+  color: #333 !important; /* ← OPTION COLOR */
+  border: 2px solid #6c8b6b !important; /* ← OPTION BORDER */
+  border-radius: 60px !important; /* ← OPTION RADIUS */
+  padding: 10px 20px !important; /* ← OPTION PADDING */
+  font-size: 1rem !important; /* ← OPTION SIZE */
+  font-weight: 500 !important; /* ← OPTION WEIGHT */
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+
+.quiz-option-btn:hover {
+  background: #e8f5e9 !important; /* ← OPTION HOVER BG */
+  transform: scale(1.02) !important;
+}
+
+.quiz-option-btn.selected {
+  background: #6c8b6b !important; /* ← OPTION SELECTED BG */
+  color: white !important; /* ← OPTION SELECTED COLOR */
+}
+
+/* ─── HARD MODE OPTIONS ───────────────────────────────────────── */
+.hard-opt-btn {
+  background: white !important; /* ← HARD OPTION BG */
+  color: #333 !important; /* ← HARD OPTION COLOR */
+  border: 2px solid #6c8b6b !important; /* ← HARD OPTION BORDER */
+  border-radius: 40px !important; /* ← HARD OPTION RADIUS */
+  padding: 10px 18px !important; /* ← HARD OPTION PADDING */
+  font-size: 0.9rem !important; /* ← HARD OPTION SIZE */
+  cursor: pointer !important;
+}
+
+.hard-opt-btn.selected {
+  background: #6c8b6b !important; /* ← HARD OPTION SELECTED BG */
+  color: white !important; /* ← HARD OPTION SELECTED COLOR */
+}
+
+/* ─── QUIZ NAVIGATION ──────────────────────────────────────────── */
+.quiz-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* ─── QUIZ FEEDBACK ───────────────────────────────────────────── */
+.quiz-feedback {
+  padding: 15px !important; /* ← FEEDBACK PADDING */
+  border-radius: 16px !important; /* ← FEEDBACK RADIUS */
+  margin: 15px 0 !important;
+}
+
+.quiz-feedback.correct {
+  background: #d4edda !important; /* ← CORRECT BG */
+  color: #155724 !important; /* ← CORRECT COLOR */
+  border-left: 4px solid #28a745 !important; /* ← CORRECT BORDER */
+}
+
+.quiz-feedback.incorrect {
+  background: #f8d7da !important; /* ← INCORRECT BG */
+  color: #721c24 !important; /* ← INCORRECT COLOR */
+  border-left: 4px solid #dc3545 !important; /* ← INCORRECT BORDER */
+}
+
+.quiz-score {
+  font-size: 2rem !important; /* ← SCORE SIZE */
+  font-weight: 700 !important; /* ← SCORE WEIGHT */
+  color: #6c8b6b !important; /* ← SCORE COLOR */
+  text-align: center !important;
+}
+
+.quiz-welcome {
+  text-align: center !important;
+  color: #666 !important;
+  padding: 40px !important;
+  font-size: 1rem !important;
+}
+
+.quiz-results {
+  background: #e6f2ff !important; /* ← RESULTS BG */
+  border-radius: 20px !important; /* ← RESULTS RADIUS */
+  padding: 20px !important; /* ← RESULTS PADDING */
+  text-align: center !important;
+  margin-top: 20px !important;
+}
+
+/* ─── QUIZ TTS BUTTON ──────────────────────────────────────────── */
+.quiz-tts-btn {
+  background: #6c8b6b !important; /* ← TTS BG */
+  color: white !important; /* ← TTS COLOR */
+  border: none !important;
+  padding: 4px 14px !important; /* ← TTS PADDING */
+  border-radius: 30px !important; /* ← TTS RADIUS */
+  font-size: 0.8rem !important; /* ← TTS SIZE */
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+}
+
+.quiz-tts-btn:hover {
+  background: #5a7a59 !important; /* ← TTS HOVER BG */
+}
+
+/* < END of QUIZ COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║                  COMPONENT 8: LEARN TAB                    ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL Learn tab styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules
+   ================================================================ */
+
+/* ─── LEARN TAB CUSTOMIZATION ────────────────────────────────── */
+/*  container-bg:   Background color of learn container          */
+/*  container-padding: Padding inside learn container            */
+/*  container-radius: Roundness of learn container               */
+/*  container-border: Left border color of learn container       */
+/*  heading-size:   Size of section headings                     */
+/*  heading-color:  Color of section headings                    */
+/*  text-size:      Size of body text                           */
+/*  text-color:     Color of body text                          */
+/*  example-bg:     Background color of example boxes            */
+/*  example-border: Border color of example boxes                */
+/* ──────────────────────────────────────────────────────────────── */
+
+.learn-container {
+  background: white !important; /* ← CONTAINER BG */
+  border-radius: 16px !important; /* ← CONTAINER RADIUS */
+  padding: 20px !important; /* ← CONTAINER PADDING */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-left: 4px solid #6c8b6b !important; /* ← CONTAINER BORDER */
+}
+
+/* ─── LEARN HEADER ────────────────────────────────────────────── */
+.learn-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd !important;
+}
+
+.learn-header h2 {
+  color: #1e4b6e !important; /* ← HEADING COLOR */
+  font-weight: 700 !important; /* ← HEADING WEIGHT */
+  font-size: 1.5rem !important; /* ← HEADING SIZE */
+  margin: 0 !important;
+}
+
+.learn-subtitle {
+  color: #666 !important; /* ← SUBTITLE COLOR */
+  font-weight: 400 !important; /* ← SUBTITLE WEIGHT */
+  margin-bottom: 20px !important;
+}
+
+/* ─── LEARN SECTIONS ───────────────────────────────────────────── */
+.learn-section {
+  margin-bottom: 24px !important;
+}
+
+.learn-section h3 {
+  color: #1e4b6e !important; /* ← SECTION HEADING COLOR */
+  font-weight: 700 !important; /* ← SECTION HEADING WEIGHT */
+  font-size: 1.2rem !important; /* ← SECTION HEADING SIZE */
+  margin-bottom: 12px !important;
+}
+
+.learn-section h4 {
+  color: #1e4b6e !important; /* ← SUB-HEADING COLOR */
+  font-weight: 600 !important; /* ← SUB-HEADING WEIGHT */
+  font-size: 1rem !important; /* ← SUB-HEADING SIZE */
+  margin-bottom: 8px !important;
+}
+
+.learn-section p {
+  color: #333 !important; /* ← TEXT COLOR */
+  font-weight: 400 !important; /* ← TEXT WEIGHT */
+  font-size: 1rem !important; /* ← TEXT SIZE */
+  margin-bottom: 8px !important;
+}
+
+.learn-section .note {
+  color: #777 !important; /* ← NOTE COLOR */
+  font-weight: 400 !important; /* ← NOTE WEIGHT */
+  font-size: 0.95rem !important; /* ← NOTE SIZE */
+  margin-bottom: 12px !important;
+}
+
+/* ─── EXAMPLE BOXES IN LEARN TAB ─────────────────────────────── */
+.learn-container .example-box {
+  background: white !important; /* ← EXAMPLE BG */
+  border-radius: 12px !important; /* ← EXAMPLE RADIUS */
+  padding: 12px 15px !important; /* ← EXAMPLE PADDING */
+  margin: 8px 0 !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+  border: 1px solid #e8e0d5 !important; /* ← EXAMPLE BORDER */
+}
+
+.learn-container .example-box:hover {
+  background: #e6f2ff !important; /* ← EXAMPLE HOVER BG */
+  border-color: #6c8b6b !important; /* ← EXAMPLE HOVER BORDER */
+}
+
+.learn-container .example-box .jp {
+  font-size: 1.2rem !important; /* ← JAPANESE SIZE */
+  font-weight: 500 !important; /* ← JAPANESE WEIGHT */
+  color: #000000 !important; /* ← JAPANESE COLOR */
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-end !important;
+  gap: 4px !important;
+  line-height: 1.2 !important;
+}
+
+.learn-container .example-box .en {
+  color: #2601f8 !important; /* ← ENGLISH COLOR */
+  font-weight: 400 !important; /* ← ENGLISH WEIGHT */
+  font-size: 0.9rem !important; /* ← ENGLISH SIZE */
+  margin-top: 4px !important;
+}
+
+.learn-container .example-box .listen-hint {
+  color: #888 !important; /* ← HINT COLOR */
+  font-size: 0.7rem !important; /* ← HINT SIZE */
+  margin-top: 4px !important;
+}
+
+/* ─── LEARN TABLES ────────────────────────────────────────────── */
+.learn-table-wrap {
+  overflow-x: auto !important;
+  margin-bottom: 16px !important;
+}
+
+.learn-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  background: #f9fcff !important; /* ← TABLE BG */
+  border-radius: 12px !important; /* ← TABLE RADIUS */
+  overflow: hidden !important;
+}
+
+.learn-table thead tr {
+  background: #e8e0d5 !important; /* ← TABLE HEADER BG */
+}
+
+.learn-table th {
+  padding: 10px 16px !important; /* ← HEADER PADDING */
+  text-align: left !important;
+  color: #2c3e2f !important; /* ← HEADER COLOR */
+  font-weight: 600 !important; /* ← HEADER WEIGHT */
+  border-bottom: 2px solid #d4cbbc !important;
+}
+
+.learn-table th .sub {
+  font-weight: 400 !important;
+  font-size: 0.8rem !important;
+}
+
+.learn-table td {
+  padding: 8px 16px !important; /* ← CELL PADDING */
+  color: #1e4b6e !important; /* ← CELL COLOR */
+  font-weight: 400 !important; /* ← CELL WEIGHT */
+  border-bottom: 1px solid #e8e0d5 !important;
+}
+
+.learn-table td.clickable {
+  cursor: pointer !important;
+}
+
+.learn-table td.clickable:hover {
+  background: #e6f2ff !important; /* ← CELL HOVER BG */
+}
+
+.learn-table .incorrect {
+  color: #d9534f !important; /* ← INCORRECT COLOR */
+}
+
+.learn-table .correct {
+  color: #28a745 !important; /* ← CORRECT COLOR */
+}
+
+/* ─── LEARN SUMMARY BOX ────────────────────────────────────────── */
+.learn-container .summary-box {
+  background: #f9fcff !important; /* ← SUMMARY BG */
+  border-radius: 16px !important; /* ← SUMMARY RADIUS */
+  padding: 16px 20px !important; /* ← SUMMARY PADDING */
+  margin-top: 24px !important;
+  border: 1px solid #e8e0d5 !important; /* ← SUMMARY BORDER */
+}
+
+.learn-container .summary-box h4 {
+  color: #1e4b6e !important; /* ← SUMMARY HEADING COLOR */
+  font-weight: 700 !important; /* ← SUMMARY HEADING WEIGHT */
+  font-size: 1rem !important; /* ← SUMMARY HEADING SIZE */
+  margin-bottom: 12px !important;
+  border-bottom: 1px solid #e8e0d5 !important;
+  padding-bottom: 8px !important;
+}
+
+.learn-container .summary-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4px 16px !important;
+}
+
+.learn-container .summary-grid .label {
+  color: #888 !important; /* ← LABEL COLOR */
+  font-weight: 500 !important; /* ← LABEL WEIGHT */
+  font-size: 0.9rem !important; /* ← LABEL SIZE */
+}
+
+.learn-container .summary-grid .label .sub {
+  font-weight: 400 !important;
+  font-size: 0.75rem !important;
+}
+
+.learn-container .summary-grid .value {
+  color: #1e4b6e !important; /* ← VALUE COLOR */
+  font-weight: 600 !important; /* ← VALUE WEIGHT */
+  font-size: 1rem !important; /* ← VALUE SIZE */
+}
+
+/* < END of LEARN TAB COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║              COMPONENT 9: MASTERED LIST                    ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL mastered list styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules
+   ================================================================ */
+
+/* ─── MASTERED LIST CUSTOMIZATION ────────────────────────────── */
+/*  background:    Background color of mastered list             */
+/*  padding:       Padding inside mastered list                  */
+/*  border-radius: Roundness of mastered list                    */
+/*  item-padding:  Padding inside each mastered item             */
+/*  item-border:   Border between mastered items                 */
+/* ──────────────────────────────────────────────────────────────── */
+
+.mastered-list {
+  background: white !important; /* ← LIST BG */
+  border-radius: 24px !important; /* ← LIST RADIUS */
+  padding: 20px !important; /* ← LIST PADDING */
+}
+
+.mastered-adj-item,
+.mastered-verb-item,
+.mastered-adverb-item,
+.mastered-grammar-item,
+.mastered-kanji-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px !important; /* ← ITEM PADDING */
+  border-bottom: 1px solid #eee !important; /* ← ITEM BORDER */
+}
+
+.mastered-adj-dict,
+.mastered-verb-dict,
+.mastered-adverb-dict,
+.mastered-grammar-pattern,
+.mastered-kanji-char {
+  font-size: 1.1rem !important; /* ← DICT SIZE */
+  font-weight: 700 !important; /* ← DICT WEIGHT */
+  color: #1e4b6e !important; /* ← DICT COLOR */
+}
+
+.mastered-adj-meaning,
+.mastered-verb-meaning,
+.mastered-adverb-meaning,
+.mastered-grammar-meaning,
+.mastered-kanji-meaning {
+  font-size: 0.85rem !important; /* ← MEANING SIZE */
+  color: #666 !important; /* ← MEANING COLOR */
+  margin-left: 10px;
+}
+
+.unmaster-btn {
+  background: #ffebee !important; /* ← UNMASTER BG */
+  color: #c62828 !important; /* ← UNMASTER COLOR */
+  border: none !important;
+  padding: 5px 12px !important; /* ← UNMASTER PADDING */
+  border-radius: 40px !important; /* ← UNMASTER RADIUS */
+  cursor: pointer !important;
+}
+
+.empty-message {
+  text-align: center !important;
+  color: #999 !important;
+  padding: 40px !important;
+  font-size: 1rem !important;
+}
+
+/* < END of MASTERED LIST COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║              COMPONENT 10: PROGRESS INDICATOR              ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL progress indicator styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules
+   ================================================================ */
+
+/* ─── PROGRESS CUSTOMIZATION ──────────────────────────────────── */
+/*  background:    Background color of progress indicator        */
+/*  text-size:     Size of progress text                        */
+/*  text-weight:   Boldness of progress text                    */
+/*  text-color:    Color of progress text                       */
+/*  padding:       Space inside progress indicator              */
+/*  border-radius: Roundness of progress indicator              */
+/* ──────────────────────────────────────────────────────────────── */
+
+.progress-indicator {
+  background: #e8e0d5 !important; /* ← PROGRESS BG */
+  padding: 6px 16px !important; /* ← PROGRESS PADDING */
+  border-radius: 40px !important; /* ← PROGRESS RADIUS */
+  font-size: 0.9rem !important; /* ← PROGRESS SIZE */
+  font-weight: 500 !important; /* ← PROGRESS WEIGHT */
+  color: #2c3e2f !important; /* ← PROGRESS COLOR */
+  white-space: nowrap !important;
+}
+
+.progress-indicator span {
+  font-weight: 700 !important;
+  color: #6c8b6b !important; /* ← PROGRESS HIGHLIGHT COLOR */
+}
+
+/* < END of PROGRESS INDICATOR COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║               COMPONENT 11: STATS PANEL                    ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL stats panel styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules with quizzes
+   ================================================================ */
+
+/* ─── STATS PANEL CUSTOMIZATION ──────────────────────────────── */
+/*  background:    Background color of stats panel              */
+/*  padding:       Space inside stats panel                     */
+/*  border-radius: Roundness of stats panel                     */
+/*  text-size:     Size of stats text                          */
+/*  text-color:    Color of stats text                         */
+/* ──────────────────────────────────────────────────────────────── */
+
+/* Note: Stats panel styles are in the QUIZ component above */
+/* This is a placeholder for any additional stats panel styles */
+
+/* < END of STATS PANEL COMPONENT > */
+
+/* ================================================================
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                                                              ║
+   ║                COMPONENT 12: FEEDBACK                      ║
+   ║                                                              ║
+   ╚══════════════════════════════════════════════════════════════╝
+   ================================================================ 
+   📍 LOCATION: This block controls ALL feedback styling
+   🔧 TO CUSTOMIZE: Change values in the "CUSTOMIZE" section below
+   📝 USED IN: All modules with quizzes
+   ================================================================ */
+
+/* ─── FEEDBACK CUSTOMIZATION ──────────────────────────────────── */
+/*  font-size:     Size of feedback text                        */
+/*  font-weight:   Boldness of feedback text                    */
+/*  font-color:    Color of feedback text                       */
+/*  text-align:    Alignment of feedback text                   */
+/*  letter-spacing: Space between characters                    */
+/*  background:    Background color of feedback area            */
+/*  padding:       Space inside feedback area                   */
+/*  border-radius: Roundness of feedback area                   */
+/* ──────────────────────────────────────────────────────────────── */
+
+/* Note: Feedback styles are in the QUIZ component above */
+/* This is a placeholder for any additional feedback styles */
+
+/* ─── FEEDBACK TTS BUTTON ────────────────────────────────────── */
+.feedback-tts-btn {
+  background: #6c8b6b !important; /* ← FEEDBACK TTS BG */
+  color: white !important; /* ← FEEDBACK TTS COLOR */
+  border: none !important;
+  padding: 4px 14px !important; /* ← FEEDBACK TTS PADDING */
+  border-radius: 30px !important; /* ← FEEDBACK TTS RADIUS */
+  font-size: 0.75rem !important; /* ← FEEDBACK TTS SIZE */
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+}
+
+.feedback-tts-btn:hover {
+  background: #5a7a59 !important; /* ← FEEDBACK TTS HOVER BG */
+}
+
+/* < END of FEEDBACK COMPONENT > */
+
+/* ================================================================
+   ════════════════════════════════════════════════════════════════
+   END OF COMPONENTS.CSS - All shared styles are now in one place
+   ════════════════════════════════════════════════════════════════
+   ================================================================ */

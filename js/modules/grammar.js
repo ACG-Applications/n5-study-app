@@ -53,6 +53,8 @@ function printLesson() {
     window.print();
 }
 
+// ========== FURIGANA FUNCTIONS - MUST BE DEFINED BEFORE renderLearnTab ==========
+
 // Add furigana to text based on toggle state
 function addFuriganaToText(text) {
     if (!text) return '';
@@ -64,14 +66,53 @@ function addFuriganaToText(text) {
     });
 }
 
-// ===== HELPER: Display sentence with proper furigana handling =====
-function displaySentenceWithFurigana(sentence) {
+// Strip furigana for comparison and audio
+function stripFurigana(text) {
+    if (!text) return '';
+    return text.replace(/[（(][^）)]*[）)]/g, '');
+}
+
+// ===== HELPER: Display sentence with furigana AND highlighted particles =====
+function displaySentenceWithFuriganaAndParticles(sentence) {
     if (!sentence) return '';
-    // First, try to use the word meanings/tooltip approach
+    
+    let result = '';
+    
+    // Step 1: Get the sentence with furigana using existing function
     if (typeof getWordMeaningsForSentence === 'function' && typeof createQuizWordTooltips === 'function') {
         const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
         if (wordMeanings && wordMeanings.length > 0) {
-            // If furigana is hidden, strip furigana from the sentence before creating tooltips
+            if (furiganaHidden) {
+                const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
+                const cleanWordMeanings = getWordMeaningsForSentence({ jp: cleanSentence });
+                result = createQuizWordTooltips(cleanSentence, cleanWordMeanings);
+            } else {
+                result = createQuizWordTooltips(sentence, wordMeanings);
+            }
+        } else {
+            result = addFuriganaToText(sentence);
+        }
+    } else {
+        result = addFuriganaToText(sentence);
+    }
+    
+    // Step 2: Highlight ALL particles
+    const particles = ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'や'];
+    
+    for (const particle of particles) {
+        const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, 'g');
+        result = result.replace(regex, '<span class="particle">$1</span>');
+    }
+    
+    return result;
+}
+
+// ===== HELPER: Display sentence with proper furigana handling (legacy) =====
+function displaySentenceWithFurigana(sentence) {
+    if (!sentence) return '';
+    if (typeof getWordMeaningsForSentence === 'function' && typeof createQuizWordTooltips === 'function') {
+        const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
+        if (wordMeanings && wordMeanings.length > 0) {
             if (furiganaHidden) {
                 const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, '').trim();
                 const cleanWordMeanings = getWordMeaningsForSentence({ jp: cleanSentence });
@@ -80,20 +121,16 @@ function displaySentenceWithFurigana(sentence) {
             return createQuizWordTooltips(sentence, wordMeanings);
         }
     }
-    // Fallback to basic furigana
     return addFuriganaToText(sentence);
-}
-
-// Strip furigana for comparison and audio
-function stripFurigana(text) {
-    if (!text) return '';
-    return text.replace(/[（(][^）)]*[）)]/g, '');
 }
 
 // ===== RENDER LEARN TAB =====
 function renderLearnTab() {
     const container = document.getElementById("learnContent");
-    if (!container) return;
+    if (!container) {
+        console.error("❌ learnContent element not found!");
+        return;
+    }
 
     const content = `
         <div class="learn-container" style="background: #ffffff; border-radius: 20px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e8e0d5;">
@@ -473,11 +510,168 @@ function renderLearnTab() {
                         💡 <strong>違い（ちがい） / Difference:</strong> ませんか = 相手（あいて）に 尋（たず）ねる (asking someone) &nbsp;|&nbsp; ましょう = みんなで する (doing together as a group)
                     </div>
                 </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">～ましょうか - "Shall I...?" (Offering)</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> ます → ましょうか (offering to do for someone)
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('にもつ を もちましょうか')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('にもつ を もちましょうか');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">荷物（にもつ）を 持（も）ち<strong>ましょうか</strong>。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">Shall I carry your luggage?</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('まど を あけましょうか')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('まど を あけましょうか');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">窓（まど）を 開（あ）け<strong>ましょうか</strong>。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">Shall I open the window?</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
             </div>
             
-            <!-- SECTION 9: Common Mistakes -->
+            <!-- SECTION 9: Expressing Obligation & Possibility -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">9. 義務（ぎむ）と 可能性（かのうせい） / Expressing Obligation &amp; Possibility</h3>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜なければならない - "Must / Have to"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Verb (ない-form) + なければならない
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('まいにち にほんご を べんきょうしなければならない')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('まいにち にほんご を べんきょうしなければならない');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">毎日（まいにち）日本語（にほんご）を 勉強（べんきょう）し<strong>なければならない</strong>。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I must study Japanese every day.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜かもしれない - "Might / Maybe"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Verb (plain form) + かもしれない
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あした は あめ が ふる かもしれない')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あした は あめ が ふる かもしれない');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">明日（あした）は 雨（あめ）が 降（ふ）る<strong>かもしれない</strong>。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">It might rain tomorrow.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('かれ は こない かもしれない')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('かれ は こない かもしれない');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">彼（かれ）は 来（こ）ない<strong>かもしれない</strong>。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">He might not come.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+            </div>
+            
+            <!-- SECTION 10: Additional N5 Grammar Patterns -->
+            <div class="learn-section" style="margin-bottom: 28px;">
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">10. N5 の その他（ほか）の 文法（ぶんぽう）パターン / Additional N5 Grammar Patterns</h3>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜おく - "To do in advance" (Preparatory)</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Verb (te-form) + おく
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あしたのしけんのためにべんきょうしておく')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あしたのしけんのためにべんきょうしておく');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">明日（あした）の試験（しけん）のために、勉強（べんきょう）して<strong>おく</strong>。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I'll study in advance for tomorrow's exam.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜とか - "Things like..." (Listing examples)</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> NounA + とか + NounB + とか
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('りんご とか バナナ とか が すき です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('りんご とか バナナ とか が すき です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">りんご<strong>とか</strong> バナナ<strong>とか</strong> が 好（す）きです。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I like things like apples and bananas.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜やすい / 〜にくい - "Easy/Hard to do"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Verb (stem) + やすい (easy) / にくい (hard)
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('この ほん は よみやすい です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('この ほん は よみやすい です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">この 本（ほん）は 読（よ）み<strong>やすい</strong>です。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">This book is easy to read.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('かんじ は おぼえにくい です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('かんじ は おぼえにくい です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">漢字（かんじ）は 覚（おぼ）え<strong>にくい</strong>です。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">Kanji are hard to memorize.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜について - "About, concerning"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Noun + について
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('にほん に ついて はなしましょう')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('にほん に ついて はなしましょう');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">日本（にほん）<strong>について</strong> 話（はな）しましょう。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">Let's talk about Japan.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜にとって - "For / From the perspective of"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Noun + にとって
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('わたし に とって にほんご は むずかしい')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('わたし に とって にほんご は むずかしい');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">私（わたし）<strong>にとって</strong>、日本語（にほんご）は 難（むずか）しいです。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">For me, Japanese is difficult.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜として - "As / In the capacity of"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Noun + として
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('せんせい と して せいと を しどうします')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('せんせい と して せいと を しどうします');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">先生（せんせい）<strong>として</strong>、生徒（せいと）を 指導（しどう）します。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I guide students as a teacher.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜によって - "By / Depending on"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Noun + によって
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('ひと に よって かんがえかた が ちがいます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('ひと に よって かんがえかた が ちがいます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">人（ひと）<strong>によって</strong> 考（かんが）え方（かた）が 違（ちが）います。</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">People have different ways of thinking.</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+                
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜という - "Called / Named"</h4>
+                <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-size: 1rem; color: #000000; font-weight: 400;">
+                        <strong>ルール / Rule:</strong> Noun + という + Noun
+                    </div>
+                </div>
+                <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('さくら と いう はな')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('さくら と いう はな');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">「桜（さくら）」<strong>という</strong> 花（はな）</div>
+                    <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">A flower called "Sakura"</div>
+                    <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
+                </div>
+            </div>
+            
+            <!-- SECTION 11: Common Mistakes -->
             <div class="learn-section" style="margin-bottom: 20px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">9. よくある 間違（まちが）い / Common Mistakes</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">11. よくある 間違（まちが）い / Common Mistakes</h3>
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
@@ -508,6 +702,16 @@ function renderLearnTab() {
                                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">本（ほん）<strong>を</strong> 読（よ）みます</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">読む は 他動詞（たどうし）(transitive)</td>
                             </tr>
+                            <tr style="border-bottom: 1px solid #e8e0d5;">
+                                <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">明日（あした）は 雨（あめ）が 降（ふ）る でしょう（？）</td>
+                                <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">明日（あした）は 雨（あめ）が 降（ふ）る <strong>かもしれない</strong></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">かもしれない = possibility, でしょう = probability</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">日本（にほん）に ついて 話（はな）します</td>
+                                <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">日本（にほん）<strong>について</strong> 話（はな）します</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜について is the correct pattern for "about"</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -535,7 +739,11 @@ function renderLearnTab() {
                     <div style="color: #000000; font-weight: 500;">✅ 接続（せつぞく）<br><span style="font-weight: 400; font-size: 0.85rem;">Connectors</span></div>
                     <div style="color: #000000; font-weight: 400;">そして, でも, それから</div>
                     <div style="color: #000000; font-weight: 500;">✅ 誘（さそ）い<br><span style="font-weight: 400; font-size: 0.85rem;">Invitations</span></div>
-                    <div style="color: #000000; font-weight: 400;">～ませんか, ～ましょう</div>
+                    <div style="color: #000000; font-weight: 400;">～ませんか, ～ましょう, ～ましょうか</div>
+                    <div style="color: #000000; font-weight: 500;">✅ 義務（ぎむ）と 可能性（かのうせい）<br><span style="font-weight: 400; font-size: 0.85rem;">Obligation &amp; Possibility</span></div>
+                    <div style="color: #000000; font-weight: 400;">〜なければならない, 〜かもしれない</div>
+                    <div style="color: #000000; font-weight: 500;">✅ その他（ほか）の パターン<br><span style="font-weight: 400; font-size: 0.85rem;">Other Patterns</span></div>
+                    <div style="color: #000000; font-weight: 400;">〜おく, 〜とか, 〜やすい/にくい, 〜について, 〜にとって, 〜として, 〜によって, 〜という</div>
                 </div>
             </div>
             
@@ -639,6 +847,7 @@ function applyFuriganaHide() {
     }
 }
 
+// ===== RENDER GRAMMAR LIST =====
 function renderGrammarList() {
     const container = document.getElementById('grammarList');
     if (!container) return;
@@ -662,9 +871,7 @@ function renderGrammarList() {
         let examplesHtml = '';
         if (grammar.examples && grammar.examples.length > 0) {
             for (const ex of grammar.examples) {
-                // ===== Use the helper that respects furigana toggle =====
-                let displayJp = displaySentenceWithFurigana(ex.sentence);
-                
+                let displayJp = displaySentenceWithFuriganaAndParticles(ex.sentence);
                 const reading = stripFurigana(ex.sentence);
                 
                 examplesHtml += `
@@ -816,7 +1023,6 @@ function generateQuiz() {
                 grammarId: grammar.id,
                 grammarPattern: grammar.pattern,
                 grammarMeaning: grammar.meaning,
-                // Add reading for TTS
                 reading: q.sentence.replace(/[（(][^）)]*[）)]/g, '').trim()
             });
         }
@@ -872,8 +1078,7 @@ function renderQuizQuestion() {
     const currentAnswer = quizAnswers[currentQuizIndex];
     const reading = q.reading || '';
     
-    // ===== Use the helper that respects furigana toggle =====
-    let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
+    let sentenceDisplay = displaySentenceWithFuriganaAndParticles(q.sentence);
     
     let html = `
         <div class="quiz-header-info">
@@ -1038,8 +1243,7 @@ function checkAnswer() {
         
         updateQuizStatsDisplay();
         
-        // ===== Use the helper that respects furigana toggle =====
-        let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
+        let sentenceDisplay = displaySentenceWithFuriganaAndParticles(q.sentence);
         
         const feedbackHtml = `
             <div class="quiz-feedback correct">
@@ -1079,8 +1283,7 @@ function checkAnswer() {
                 btn.classList.remove('selected');
             });
         } else {
-            // ===== Use the helper that respects furigana toggle =====
-            let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
+            let sentenceDisplay = displaySentenceWithFuriganaAndParticles(q.sentence);
             
             const feedbackHtml = `
                 <div class="quiz-feedback incorrect">
@@ -1108,8 +1311,7 @@ function checkAnswer() {
 function showAnswer() {
     const q = currentQuiz[currentQuizIndex];
     
-    // ===== Use the helper that respects furigana toggle =====
-    let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
+    let sentenceDisplay = displaySentenceWithFuriganaAndParticles(q.sentence);
     
     const feedbackHtml = `
         <div class="quiz-feedback incorrect">
