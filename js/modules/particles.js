@@ -1,30 +1,34 @@
 // ==================== PARTICLE MODULE ====================
 // Try to find wordDict from multiple sources
 let wordDictRef = null;
-if (typeof window !== 'undefined' && window.wordDict) {
+if (typeof window !== "undefined" && window.wordDict) {
   wordDictRef = window.wordDict;
-} else if (typeof wordDict !== 'undefined') {
+} else if (typeof wordDict !== "undefined") {
   wordDictRef = wordDict;
 } else {
   // Try to load from the global scope
   try {
     // Check if it was loaded but not assigned to window
-    if (typeof window.wordDict === 'undefined') {
-      console.warn('wordDict not found. Tooltips will be disabled.');
+    if (typeof window.wordDict === "undefined") {
+      console.warn("wordDict not found. Tooltips will be disabled.");
     }
-  } catch(e) {
-    console.warn('Error accessing wordDict:', e);
+  } catch (e) {
+    console.warn("Error accessing wordDict:", e);
   }
 }
 
 // Log status
 if (wordDictRef) {
-  console.log('wordDict found with', Object.keys(wordDictRef).length, 'entries');
+  console.log(
+    "wordDict found with",
+    Object.keys(wordDictRef).length,
+    "entries",
+  );
 } else {
-  console.warn('wordDict NOT found. Word tooltips will be disabled.');
+  console.warn("wordDict NOT found. Word tooltips will be disabled.");
 }
 
-let currentParticleTab = 'structure';
+let currentParticleTab = "structure";
 let furiganaHidden = false;
 let masteredParticles = new Set();
 let attemptedParticles = new Set();
@@ -32,26 +36,26 @@ let currentQuiz = [];
 let currentQuizIndex = 0;
 let quizAnswers = [];
 let quizActive = false;
-let quizMode = 'easy';
+let quizMode = "easy";
 let quizScore = 0;
 let quizAttemptsRemaining = {};
 let currentQuestionState = null;
 
 // DOM Elements
-const sprintSelect = document.getElementById('sprintSelect');
-const quizSprintSelect = document.getElementById('quizSprintSelect');
-const furiToggleBtn = document.getElementById('furiToggleBtn');
-const tabStructureBtn = document.getElementById('tabStructureBtn');
-const tabLearnBtn = document.getElementById('tabLearnBtn');
-const tabParticlesBtn = document.getElementById('tabParticlesBtn');
-const tabPairsBtn = document.getElementById('tabPairsBtn');
-const tabQuizBtn = document.getElementById('tabQuizBtn');
-const quizEasyModeBtn = document.getElementById('quizEasyModeBtn');
-const quizHardModeBtn = document.getElementById('quizHardModeBtn');
+const sprintSelect = document.getElementById("sprintSelect");
+const quizSprintSelect = document.getElementById("quizSprintSelect");
+const furiToggleBtn = document.getElementById("furiToggleBtn");
+const tabStructureBtn = document.getElementById("tabStructureBtn");
+const tabLearnBtn = document.getElementById("tabLearnBtn");
+const tabParticlesBtn = document.getElementById("tabParticlesBtn");
+const tabPairsBtn = document.getElementById("tabPairsBtn");
+const tabQuizBtn = document.getElementById("tabQuizBtn");
+const quizEasyModeBtn = document.getElementById("quizEasyModeBtn");
+const quizHardModeBtn = document.getElementById("quizHardModeBtn");
 
 // ========== TTS FUNCTION ==========
-function speakText(text, lang = 'ja-JP') {
-  if (!text || text === '-' || text.trim() === '') return;
+function speakText(text, lang = "ja-JP") {
+  if (!text || text === "-" || text.trim() === "") return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
@@ -67,13 +71,16 @@ function printLesson() {
 
 // Add furigana to text based on toggle state
 function addFuriganaToText(text) {
-  if (!text) return '';
+  if (!text) return "";
   if (furiganaHidden) {
-    return text.replace(/[（(][^）)]*[）)]/g, '');
+    return text.replace(/[（(][^）)]*[）)]/g, "");
   }
-  return text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-    return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-  });
+  return text.replace(
+    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+    (_, kanji, furigana) => {
+      return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+    },
+  );
 }
 
 // ===== RENDER LEARN TAB =====
@@ -434,8 +441,13 @@ function renderLearnTab() {
       if (!el.hasAttribute("onclick")) {
         const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
         if (text) {
-          el.addEventListener("click", function(e) {
-            if (e.target.closest(".tooltip-text") || e.target.closest(".particle-highlight") || e.target.closest(".word-tooltip")) return;
+          el.addEventListener("click", function (e) {
+            if (
+              e.target.closest(".tooltip-text") ||
+              e.target.closest(".particle-highlight") ||
+              e.target.closest(".word-tooltip")
+            )
+              return;
             const cleanText = text.replace(/[→].*$/, "").trim();
             if (cleanText && typeof speakText === "function") {
               speakText(cleanText);
@@ -448,12 +460,12 @@ function renderLearnTab() {
 
   // Re-apply furigana hide state
   if (furiganaHidden) {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = 'none';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
     });
   } else {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = '';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
     });
   }
 }
@@ -462,23 +474,23 @@ function renderLearnTab() {
 function setModeButtonsEnabled(enabled) {
   if (quizEasyModeBtn) {
     quizEasyModeBtn.disabled = !enabled;
-    quizEasyModeBtn.style.opacity = enabled ? '1' : '0.5';
-    quizEasyModeBtn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+    quizEasyModeBtn.style.opacity = enabled ? "1" : "0.5";
+    quizEasyModeBtn.style.cursor = enabled ? "pointer" : "not-allowed";
   }
   if (quizHardModeBtn) {
     quizHardModeBtn.disabled = !enabled;
-    quizHardModeBtn.style.opacity = enabled ? '1' : '0.5';
-    quizHardModeBtn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+    quizHardModeBtn.style.opacity = enabled ? "1" : "0.5";
+    quizHardModeBtn.style.cursor = enabled ? "pointer" : "not-allowed";
   }
 }
 
 // Load mastered particles from localStorage
 function loadMasteredParticles() {
-  const stored = localStorage.getItem('masteredParticles');
+  const stored = localStorage.getItem("masteredParticles");
   if (stored) {
     masteredParticles = new Set(JSON.parse(stored));
   }
-  const storedAttempted = localStorage.getItem('attemptedParticles');
+  const storedAttempted = localStorage.getItem("attemptedParticles");
   if (storedAttempted) {
     attemptedParticles = new Set(JSON.parse(storedAttempted));
   }
@@ -486,8 +498,14 @@ function loadMasteredParticles() {
 }
 
 function saveMasteredParticles() {
-  localStorage.setItem('masteredParticles', JSON.stringify([...masteredParticles]));
-  localStorage.setItem('attemptedParticles', JSON.stringify([...attemptedParticles]));
+  localStorage.setItem(
+    "masteredParticles",
+    JSON.stringify([...masteredParticles]),
+  );
+  localStorage.setItem(
+    "attemptedParticles",
+    JSON.stringify([...attemptedParticles]),
+  );
   updateMasteredCount();
 }
 
@@ -495,13 +513,13 @@ function updateMasteredCount() {
   const total = particleOrder.length;
   const mastered = masteredParticles.size;
   const attempted = attemptedParticles.size;
-  const countEl = document.getElementById('masteredCount');
-  const totalEl = document.getElementById('totalCount');
+  const countEl = document.getElementById("masteredCount");
+  const totalEl = document.getElementById("totalCount");
   if (countEl) countEl.innerText = mastered;
   if (totalEl) totalEl.innerText = total;
-  
-  const quizMasteredEl = document.getElementById('quizMasteredCount');
-  const quizAttemptedEl = document.getElementById('quizAttemptedCount');
+
+  const quizMasteredEl = document.getElementById("quizMasteredCount");
+  const quizAttemptedEl = document.getElementById("quizAttemptedCount");
   if (quizMasteredEl) quizMasteredEl.innerText = mastered;
   if (quizAttemptedEl) quizAttemptedEl.innerText = attempted;
 }
@@ -524,10 +542,10 @@ function populateSprintDropdowns() {
   sprints.forEach((sp, idx) => {
     options.push(`<option value="${idx}">${sp.displayName}</option>`);
   });
-  sprintSelect.innerHTML = options.join('');
-  
+  sprintSelect.innerHTML = options.join("");
+
   if (quizSprintSelect) {
-    quizSprintSelect.innerHTML = options.join('');
+    quizSprintSelect.innerHTML = options.join("");
   }
 }
 
@@ -535,24 +553,26 @@ function populateSprintDropdowns() {
 function extractExamplesForParticle(particle, sprintIndex = null) {
   const examples = [];
   let sentencesToSearch = sentencesData;
-  
-  if (sprintIndex !== null && sprintIndex !== 'all') {
-    const {start, end} = sprints[parseInt(sprintIndex)];
+
+  if (sprintIndex !== null && sprintIndex !== "all") {
+    const { start, end } = sprints[parseInt(sprintIndex)];
     sentencesToSearch = sentencesData.slice(start, end + 1);
   }
-  
+
   sentencesToSearch.forEach((sentence) => {
-    const pattern = new RegExp(`\\s${particle}\\s|^${particle}\\s|\\s${particle}$`);
+    const pattern = new RegExp(
+      `\\s${particle}\\s|^${particle}\\s|\\s${particle}$`,
+    );
     if (pattern.test(sentence.jp)) {
       examples.push(sentence);
     }
   });
-  
+
   return examples.slice(0, 5);
 }
 
 function getSprintForSentence(sentence) {
-  const index = sentencesData.findIndex(s => s === sentence);
+  const index = sentencesData.findIndex((s) => s === sentence);
   for (let i = 0; i < sprints.length; i++) {
     if (index >= sprints[i].start && index <= sprints[i].end) {
       return sprints[i].displayName;
@@ -561,74 +581,119 @@ function getSprintForSentence(sentence) {
   return "Unknown";
 }
 
-// Wrap particle examples with highlighting - FIXED furigana
+// In particles.js - Updated wrapParticleExample function
 function wrapParticleExample(text, particle) {
-  if (!text) return '';
-  
-  // First, preserve furigana by wrapping in ruby tags
-  let rubyText = text.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-    return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-  });
-  
-  // Also handle furigana with different pattern: 漢字(かんじ)
-  rubyText = rubyText.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => {
-    return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-  });
-  
-  if (particle && particle !== '___') {
-    const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, 'g');
-    rubyText = rubyText.replace(regex, `<span class="particle-highlight">$1</span>`);
-  } else if (particle === '___') {
+  if (!text) return "";
+
+  // If furigana is hidden, remove ALL furigana markers first
+  let rubyText = text;
+  if (furiganaHidden) {
+    // Remove all furigana from kanji AND katakana
+    rubyText = rubyText.replace(/[（(][^）)]*[）)]/g, "");
+    // Then we're done - no ruby tags needed
+  } else {
+    // Only process furigana when visible
+    rubyText = rubyText.replace(
+      /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+      (_, kanji, furigana) => {
+        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+      },
+    );
+
+    // Also handle furigana with different pattern: 漢字(かんじ)
+    rubyText = rubyText.replace(
+      /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
+      (_, kanji, furigana) => {
+        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+      },
+    );
+
+    // Remove any leftover furigana from katakana words (like コンビニ（こんぴに）)
+    rubyText = rubyText.replace(
+      /[\u30A0-\u30FF]+[（(][^）)]+[）)]/g,
+      (match) => {
+        return match.replace(/[（(][^）)]*[）)]/g, "");
+      },
+    );
+  }
+
+  if (particle && particle !== "___") {
+    const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, "g");
+    rubyText = rubyText.replace(
+      regex,
+      `<span class="particle-highlight">$1</span>`,
+    );
+  } else if (particle === "___") {
     rubyText = rubyText.replace(/___/g, '<span class="quiz-blank">___</span>');
   }
-  
+
   return rubyText;
 }
 
-// Apply furigana hide - FIXED to re-render Learn tab
+// In particles.js - Updated applyFuriganaHide function
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
   if (furiToggleBtn) {
-    furiToggleBtn.innerText = furiganaHidden ? '🔤 Furigana On' : '🔤 Furigana Off';
+    furiToggleBtn.innerText = furiganaHidden
+      ? "🔤 Furigana On"
+      : "🔤 Furigana Off";
   }
-  
-  // Re-render Learn tab to apply furigana toggle
+
+  // Re-render everything
   renderLearnTab();
-  
-  // Apply to other elements
   renderParticleDetails();
   renderPairDetails();
   renderStructureExamples();
   populateParticleReference();
-  
+
   if (quizActive && currentQuiz.length > 0) {
     renderQuizQuestion();
   }
+
+  // Update all rt elements
+  document
+    .querySelectorAll(
+      "#structureExamples .example-jp, .particle-ref-example .example-jp, #particleDetails .example-jp, .pair-example, .quiz-sentence, .quiz-feedback .example-jp",
+    )
+    .forEach((el) => {
+      if (furiganaHidden) {
+        el.querySelectorAll("rt").forEach((rt) => (rt.style.display = "none"));
+      } else {
+        el.querySelectorAll("rt").forEach((rt) => (rt.style.display = ""));
+      }
+    });
 }
 
 function renderParticleDetails() {
-  const container = document.getElementById('particleDetails');
+  const container = document.getElementById("particleDetails");
   if (!container) return;
-  
-  const selectedSprint = sprintSelect ? sprintSelect.value : 'all';
-  let html = '';
-  
+
+  const selectedSprint = sprintSelect ? sprintSelect.value : "all";
+  let html = "";
+
   for (const particle of particleOrder) {
     const data = particlesData[particle];
     const examples = extractExamplesForParticle(particle, selectedSprint);
     const isMastered = masteredParticles.has(particle);
-    
-    let examplesHtml = '';
+
+    let examplesHtml = "";
     for (const ex of examples) {
-      let displayHtml = '';
-      if (typeof wrapWordsWithTooltips === 'function' && ex.splitWords && ex.wordMeanings) {
+      let displayHtml = "";
+      if (
+        typeof wrapWordsWithTooltips === "function" &&
+        ex.splitWords &&
+        ex.wordMeanings
+      ) {
         displayHtml = wrapWordsWithTooltips(ex);
-        const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, 'g');
-        displayHtml = displayHtml.replace(regex, `<span class="particle-highlight">$1</span>`);
+        const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, "g");
+        displayHtml = displayHtml.replace(
+          regex,
+          `<span class="particle-highlight">$1</span>`,
+        );
       } else {
         displayHtml = wrapParticleExample(ex.jp, particle);
       }
-      
+
       examplesHtml += `
         <div class="example-item n5-example" data-reading="${ex.reading}">
           <div class="example-jp">${displayHtml}</div>
@@ -637,11 +702,11 @@ function renderParticleDetails() {
         </div>
       `;
     }
-    
+
     if (examples.length === 0 && data.supplementaryExample) {
       const supp = data.supplementaryExample;
       let displayHtml = wrapParticleExample(supp.jp, particle);
-      
+
       examplesHtml += `
         <div class="example-item supplementary-example" data-reading="${supp.reading}">
           <div class="example-jp">${displayHtml}</div>
@@ -650,90 +715,122 @@ function renderParticleDetails() {
         </div>
       `;
     }
-    
+
     html += `
       <div class="particle-card" id="particle-${particle}">
         <h2>${particle} <span class="particle-name">${data.name}</span>
-          ${isMastered ? '<span class="mastered-badge">✓ Mastered</span>' : ''}
+          ${isMastered ? '<span class="mastered-badge">✓ Mastered</span>' : ""}
         </h2>
         <div class="particle-function">${data.function}</div>
         <div class="particle-position">Position: ${data.position}</div>
         <div class="usage-note">
           <strong>📖 Usage Note:</strong> ${data.usageNote}
         </div>
-        ${data.confusingWith ? `<div class="usage-note"><strong>⚠️ Confusing with:</strong> ${data.confusingWith}</div>` : ''}
+        ${data.confusingWith ? `<div class="usage-note"><strong>⚠️ Confusing with:</strong> ${data.confusingWith}</div>` : ""}
         <div class="example-section">
           <h4>📝 Examples</h4>
-          ${examplesHtml || '<p>No examples found for this particle.</p>'}
+          ${examplesHtml || "<p>No examples found for this particle.</p>"}
         </div>
         <button class="small-btn mark-mastered-btn" data-particle="${particle}">✓ Mark as Mastered</button>
       </div>
     `;
   }
-  
+
   container.innerHTML = html;
-  
-  document.querySelectorAll('.example-item').forEach(el => {
+
+  document.querySelectorAll(".example-item").forEach((el) => {
     const reading = el.dataset.reading;
-    if (reading && typeof speakText === 'function') {
-      el.addEventListener('click', (e) => {
-        if (e.target.closest('.tooltip-text')) return;
+    if (reading && typeof speakText === "function") {
+      el.addEventListener("click", (e) => {
+        if (e.target.closest(".tooltip-text")) return;
         speakText(reading);
       });
     }
   });
-  
-  document.querySelectorAll('.mark-mastered-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+
+  document.querySelectorAll(".mark-mastered-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const particle = btn.dataset.particle;
       markParticleMastered(particle, true);
     });
   });
-  
+
   // Apply furigana hide state
   if (furiganaHidden) {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = 'none';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
     });
   } else {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = '';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
     });
   }
 }
 
 function renderPairDetails() {
-  const container = document.getElementById('pairDetails');
+  const container = document.getElementById("pairDetails");
   if (!container) return;
-  
-  let html = '';
-  
+
+  let html = "";
+
   for (const pairKey of particlePairOrder) {
     const data = particlesData[pairKey];
-    
+
     let example1Html = data.example1;
     let example2Html = data.example2;
-    
-    example1Html = example1Html.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-      return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-    });
-    
-    example2Html = example2Html.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-      return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-    });
-    
-    if (pairKey === 'pair_wa_ga') {
-      example1Html = example1Html.replace(/は/g, '<span class="particle-highlight">は</span>');
-      example2Html = example2Html.replace(/が/g, '<span class="particle-highlight">が</span>');
-    } else if (pairKey === 'pair_ni_de') {
-      example1Html = example1Html.replace(/に/g, '<span class="particle-highlight">に</span>');
-      example2Html = example2Html.replace(/で/g, '<span class="particle-highlight">で</span>');
-    } else if (pairKey === 'pair_ni_e') {
-      example1Html = example1Html.replace(/に/g, '<span class="particle-highlight">に</span>');
-      example2Html = example2Html.replace(/へ/g, '<span class="particle-highlight">へ</span>');
+
+    // Only add furigana if NOT hidden
+    if (!furiganaHidden) {
+      example1Html = example1Html.replace(
+        /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+        (_, kanji, furigana) => {
+          return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+        },
+      );
+
+      example2Html = example2Html.replace(
+        /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+        (_, kanji, furigana) => {
+          return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+        },
+      );
+    } else {
+      // Remove all furigana markers
+      example1Html = example1Html.replace(/[（(][^）)]*[）)]/g, "");
+      example2Html = example2Html.replace(/[（(][^）)]*[）)]/g, "");
     }
-    
+
+    // Highlight particles
+    if (pairKey === "pair_wa_ga") {
+      example1Html = example1Html.replace(
+        /は/g,
+        '<span class="particle-highlight">は</span>',
+      );
+      example2Html = example2Html.replace(
+        /が/g,
+        '<span class="particle-highlight">が</span>',
+      );
+    } else if (pairKey === "pair_ni_de") {
+      example1Html = example1Html.replace(
+        /に/g,
+        '<span class="particle-highlight">に</span>',
+      );
+      example2Html = example2Html.replace(
+        /で/g,
+        '<span class="particle-highlight">で</span>',
+      );
+    } else if (pairKey === "pair_ni_e") {
+      example1Html = example1Html.replace(
+        /に/g,
+        '<span class="particle-highlight">に</span>',
+      );
+      example2Html = example2Html.replace(
+        /へ/g,
+        '<span class="particle-highlight">へ</span>',
+      );
+    }
+
     html += `
       <div class="pair-card">
         <h2>${data.name}</h2>
@@ -750,64 +847,90 @@ function renderPairDetails() {
         <div class="pair-example">
           <strong>✅ </strong> ${example2Html}
         </div>
-        ${data.additionalNote ? `<div class="usage-note">💡 ${data.additionalNote}</div>` : ''}
+        ${data.additionalNote ? `<div class="usage-note">💡 ${data.additionalNote}</div>` : ""}
       </div>
     `;
   }
-  
+
   container.innerHTML = html;
-  
-  // Apply furigana hide state
+
+  // Apply furigana hide state to pair examples
   if (furiganaHidden) {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = 'none';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
     });
   } else {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = '';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
     });
   }
 }
 
+// In particles.js - Updated renderStructureExamples
 function renderStructureExamples() {
-  const container = document.getElementById('structureExamples');
+  const container = document.getElementById("structureExamples");
   if (!container) return;
-  
-  const allParticles = ['は', 'が', 'を', 'に', 'で', 'へ', 'と', 'から', 'まで', 'の'];
+
+  const allParticles = [
+    "は",
+    "が",
+    "を",
+    "に",
+    "で",
+    "へ",
+    "と",
+    "から",
+    "まで",
+    "の",
+  ];
   const exampleIndices = [0, 7, 14, 21, 28];
-  
+
   let html = '<div class="example-list">';
-  
+
   for (const idx of exampleIndices) {
     const s = sentencesData[idx];
     if (!s) continue;
-    
+
+    // Get the raw text without furigana markers for display
+    let rawJp = s.jp;
+
+    // Remove existing furigana parentheses from katakana first
+    rawJp = rawJp.replace(/[\u30A0-\u30FF]+[（(][^）)]+[）)]/g, (match) => {
+      return match.replace(/[（(][^）)]*[）)]/g, "");
+    });
+
     const particlesInSentence = [];
     for (const particle of allParticles) {
-      const pattern = new RegExp(`\\s${particle}\\s|^${particle}\\s|\\s${particle}$`);
-      if (pattern.test(s.jp)) {
+      const pattern = new RegExp(
+        `\\s${particle}\\s|^${particle}\\s|\\s${particle}$`,
+      );
+      if (pattern.test(rawJp)) {
         particlesInSentence.push(particle);
       }
     }
-    
-    let displayHtml = '';
-    if (typeof wrapWordsWithTooltips === 'function' && s.splitWords && s.wordMeanings) {
-      displayHtml = wrapWordsWithTooltips(s);
-      for (const particle of particlesInSentence) {
-        const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, 'g');
-        displayHtml = displayHtml.replace(regex, `<span class="particle-highlight">$1</span>`);
-      }
+
+    let displayHtml = rawJp;
+
+    // Apply furigana to kanji only
+    if (!furiganaHidden) {
+      displayHtml = displayHtml.replace(
+        /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+        (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
+      );
     } else {
-      displayHtml = s.jp;
-      for (const particle of particlesInSentence) {
-        const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, 'g');
-        displayHtml = displayHtml.replace(regex, `<span class="particle-highlight">$1</span>`);
-      }
-      displayHtml = displayHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-      });
+      // Remove all furigana markers
+      displayHtml = displayHtml.replace(/[（(][^）)]*[）)]/g, "");
     }
-    
+
+    // Highlight particles
+    for (const particle of particlesInSentence) {
+      const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, "g");
+      displayHtml = displayHtml.replace(
+        regex,
+        `<span class="particle-highlight">$1</span>`,
+      );
+    }
+
     html += `
       <div class="example-item n5-example" data-reading="${s.reading}">
         <div class="example-jp">${displayHtml}</div>
@@ -816,68 +939,82 @@ function renderStructureExamples() {
       </div>
     `;
   }
-  html += '</div>';
+  html += "</div>";
   container.innerHTML = html;
-  
-  document.querySelectorAll('#structureExamples .example-item').forEach(el => {
-    const reading = el.dataset.reading;
-    if (reading && typeof speakText === 'function') {
-      el.addEventListener('click', (e) => {
-        if (e.target.closest('.tooltip-text')) return;
-        speakText(reading);
-      });
-    }
-  });
-  
-  // Apply furigana hide state
+
+  document
+    .querySelectorAll("#structureExamples .example-item")
+    .forEach((el) => {
+      const reading = el.dataset.reading;
+      if (reading && typeof speakText === "function") {
+        el.addEventListener("click", (e) => {
+          if (e.target.closest(".tooltip-text")) return;
+          speakText(reading);
+        });
+      }
+    });
+
+  // Apply furigana hide state to structure examples
   if (furiganaHidden) {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = 'none';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
     });
   } else {
-    container.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = '';
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
     });
   }
 }
 
-// Populate particle reference table
+// In particles.js - Updated populateParticleReference
 function populateParticleReference() {
   const particles = [
-    { char: 'は', id: 'wa' },
-    { char: 'が', id: 'ga' },
-    { char: 'を', id: 'wo' },
-    { char: 'に', id: 'ni' },
-    { char: 'で', id: 'de' },
-    { char: 'へ', id: 'e' },
-    { char: 'と', id: 'to' },
-    { char: 'から', id: 'kara' },
-    { char: 'まで', id: 'made' },
-    { char: 'の', id: 'no' },
-    { char: 'も', id: 'mo' },
-    { char: 'か', id: 'ka' },
-    { char: 'よ', id: 'yo' },
-    { char: 'ね', id: 'ne' },
-    { char: 'や', id: 'ya' }
+    { char: "は", id: "wa" },
+    { char: "が", id: "ga" },
+    { char: "を", id: "wo" },
+    { char: "に", id: "ni" },
+    { char: "で", id: "de" },
+    { char: "へ", id: "e" },
+    { char: "と", id: "to" },
+    { char: "から", id: "kara" },
+    { char: "まで", id: "made" },
+    { char: "の", id: "no" },
+    { char: "も", id: "mo" },
+    { char: "か", id: "ka" },
+    { char: "よ", id: "yo" },
+    { char: "ね", id: "ne" },
+    { char: "や", id: "ya" },
   ];
-  
+
   for (const p of particles) {
     const container = document.getElementById(`ref-example-${p.id}`);
     if (!container) continue;
-    
-    const examples = extractExamplesForParticle(p.char, 'all');
-    
+
+    const examples = extractExamplesForParticle(p.char, "all");
+
     if (examples.length > 0) {
       const ex = examples[0];
-      let displayHtml = '';
-      if (typeof wrapWordsWithTooltips === 'function' && ex.splitWords && ex.wordMeanings) {
+      let displayHtml = "";
+      if (
+        typeof wrapWordsWithTooltips === "function" &&
+        ex.splitWords &&
+        ex.wordMeanings
+      ) {
         displayHtml = wrapWordsWithTooltips(ex);
-        const regex = new RegExp(`(${p.char})(?![^<]*>|[^<]*<\\/rt>)`, 'g');
-        displayHtml = displayHtml.replace(regex, `<span class="particle-highlight">$1</span>`);
+        const regex = new RegExp(`(${p.char})(?![^<]*>|[^<]*<\\/rt>)`, "g");
+        displayHtml = displayHtml.replace(
+          regex,
+          `<span class="particle-highlight">$1</span>`,
+        );
+        // If furigana hidden, strip it from the wrapped text
+        if (furiganaHidden) {
+          displayHtml = displayHtml.replace(/<rt>.*?<\/rt>/g, "");
+        }
       } else {
+        // Pass the current furigana state to wrapParticleExample
         displayHtml = wrapParticleExample(ex.jp, p.char);
       }
-      
+
       container.innerHTML = `
         <div class="example-item n5-example" data-reading="${ex.reading}" style="margin: 0; padding: 0;">
           <div class="example-jp">${displayHtml}</div>
@@ -885,11 +1022,11 @@ function populateParticleReference() {
           <div class="example-sprint" style="font-size: 0.65rem;">📚 N5</div>
         </div>
       `;
-      
-      const exampleDiv = container.querySelector('.example-item');
-      if (exampleDiv && typeof speakText === 'function') {
-        exampleDiv.addEventListener('click', (e) => {
-          if (e.target.closest('.tooltip-text')) return;
+
+      const exampleDiv = container.querySelector(".example-item");
+      if (exampleDiv && typeof speakText === "function") {
+        exampleDiv.addEventListener("click", (e) => {
+          if (e.target.closest(".tooltip-text")) return;
           speakText(ex.reading);
         });
       }
@@ -898,7 +1035,7 @@ function populateParticleReference() {
       if (particleData && particleData.supplementaryExample) {
         const supp = particleData.supplementaryExample;
         let displayHtml = wrapParticleExample(supp.jp, p.char);
-        
+
         container.innerHTML = `
           <div class="example-item supplementary-example" data-reading="${supp.reading}" style="margin: 0; padding: 0;">
             <div class="example-jp">${displayHtml}</div>
@@ -906,29 +1043,38 @@ function populateParticleReference() {
             <div class="example-sprint" style="font-size: 0.65rem;">📖 Extra</div>
           </div>
         `;
-        
-        const exampleDiv = container.querySelector('.example-item');
-        if (exampleDiv && typeof speakText === 'function') {
-          exampleDiv.addEventListener('click', (e) => {
-            if (e.target.closest('.tooltip-text')) return;
+
+        const exampleDiv = container.querySelector(".example-item");
+        if (exampleDiv && typeof speakText === "function") {
+          exampleDiv.addEventListener("click", (e) => {
+            if (e.target.closest(".tooltip-text")) return;
             speakText(supp.reading);
           });
         }
       } else {
-        container.innerHTML = '<div class="example-jp" style="color: #999;">No example found</div>';
+        container.innerHTML =
+          '<div class="example-jp" style="color: #999;">No example found</div>';
       }
     }
   }
-  
-  // Apply furigana hide state
+
+  // ✅ Apply furigana hide state to all examples in the reference
   if (furiganaHidden) {
-    document.querySelectorAll('.particle-ref-example rt').forEach(rt => {
-      rt.style.display = 'none';
-    });
+    document
+      .querySelectorAll(
+        ".particle-ref-example rt, #structureExamples rt, #particleDetails rt",
+      )
+      .forEach((rt) => {
+        rt.style.display = "none";
+      });
   } else {
-    document.querySelectorAll('.particle-ref-example rt').forEach(rt => {
-      rt.style.display = '';
-    });
+    document
+      .querySelectorAll(
+        ".particle-ref-example rt, #structureExamples rt, #particleDetails rt",
+      )
+      .forEach((rt) => {
+        rt.style.display = "";
+      });
   }
 }
 
@@ -936,10 +1082,26 @@ function populateParticleReference() {
 
 function findAllParticlesInSentence(sentenceText) {
   const particles = [];
-  const allParticles = ['は', 'が', 'を', 'に', 'で', 'へ', 'と', 'から', 'まで', 'の', 'も', 'か', 'よ', 'ね', 'や'];
-  
+  const allParticles = [
+    "は",
+    "が",
+    "を",
+    "に",
+    "で",
+    "へ",
+    "と",
+    "から",
+    "まで",
+    "の",
+    "も",
+    "か",
+    "よ",
+    "ね",
+    "や",
+  ];
+
   const words = sentenceText.split(/\s+/);
-  
+
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
     for (const particle of allParticles) {
@@ -947,39 +1109,41 @@ function findAllParticlesInSentence(sentenceText) {
         particles.push({
           particle: particle,
           position: i,
-          beforeWord: word.replace(particle, ''),
-          fullSegment: word
+          beforeWord: word.replace(particle, ""),
+          fullSegment: word,
         });
         break;
       }
     }
   }
-  
+
   return particles;
 }
 
 function generateQuiz() {
   if (!quizSprintSelect) return;
-  
+
   setModeButtonsEnabled(false);
-  
+
   const sprintValue = quizSprintSelect.value;
-  const questionCount = parseInt(document.getElementById('quizCountSelect').value);
+  const questionCount = parseInt(
+    document.getElementById("quizCountSelect").value,
+  );
   const allQuestions = [];
-  
+
   let sentencesToUse = sentencesData;
-  if (sprintValue !== 'all') {
-    const {start, end} = sprints[parseInt(sprintValue)];
+  if (sprintValue !== "all") {
+    const { start, end } = sprints[parseInt(sprintValue)];
     sentencesToUse = sentencesData.slice(start, end + 1);
   }
-  
+
   for (const sentence of sentencesToUse) {
     const particles = findAllParticlesInSentence(sentence.jp);
-    
-    if (quizMode === 'easy') {
+
+    if (quizMode === "easy") {
       if (particles.length > 0) {
         allQuestions.push({
-          type: 'easy',
+          type: "easy",
           sentence: sentence.jp,
           reading: sentence.reading,
           translation: sentence.translation,
@@ -988,33 +1152,33 @@ function generateQuiz() {
           originalSentence: sentence.jp,
           wordMeanings: sentence.wordMeanings || null,
           splitWords: sentence.splitWords || null,
-          sentenceData: sentence
+          sentenceData: sentence,
         });
       }
     } else {
       if (particles.length > 0 && particles.length <= 4) {
         allQuestions.push({
-          type: 'hard',
+          type: "hard",
           sentence: sentence.jp,
           reading: sentence.reading,
           translation: sentence.translation,
           particles: particles,
           blankCount: particles.length,
-          correctAnswers: particles.map(p => p.particle),
+          correctAnswers: particles.map((p) => p.particle),
           originalSentence: sentence.jp,
           wordMeanings: sentence.wordMeanings || null,
           splitWords: sentence.splitWords || null,
-          sentenceData: sentence
+          sentenceData: sentence,
         });
       }
     }
   }
-  
+
   for (let i = allQuestions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
   }
-  
+
   currentQuiz = allQuestions.slice(0, questionCount);
   currentQuizIndex = 0;
   quizAnswers = new Array(currentQuiz.length).fill(null);
@@ -1022,19 +1186,30 @@ function generateQuiz() {
   quizScore = 0;
   quizAttemptsRemaining = {};
   currentQuestionState = null;
-  
+
   for (let i = 0; i < currentQuiz.length; i++) {
     quizAttemptsRemaining[i] = 2;
   }
-  
+
   updateQuizStatsDisplay();
   renderQuizQuestion();
 }
 
 function generateOptions(correctParticle) {
-  const allParticles = ['は', 'が', 'を', 'に', 'で', 'へ', 'と', 'から', 'まで', 'の'];
+  const allParticles = [
+    "は",
+    "が",
+    "を",
+    "に",
+    "で",
+    "へ",
+    "と",
+    "から",
+    "まで",
+    "の",
+  ];
   const options = [correctParticle];
-  const available = allParticles.filter(p => p !== correctParticle);
+  const available = allParticles.filter((p) => p !== correctParticle);
   while (options.length < 4 && available.length > 0) {
     const random = available[Math.floor(Math.random() * available.length)];
     if (!options.includes(random)) {
@@ -1049,16 +1224,18 @@ function generateOptions(correctParticle) {
 }
 
 function createEasyDisplayText(sentence, correctParticle) {
-  const pattern = new RegExp(`(\\s${correctParticle}\\s|^${correctParticle}\\s|\\s${correctParticle}$)`);
+  const pattern = new RegExp(
+    `(\\s${correctParticle}\\s|^${correctParticle}\\s|\\s${correctParticle}$)`,
+  );
   const match = sentence.match(pattern);
   if (match) {
-    return sentence.replace(pattern, ' ___ ');
+    return sentence.replace(pattern, " ___ ");
   }
-  const simplePattern = new RegExp(`${correctParticle}`, 'g');
+  const simplePattern = new RegExp(`${correctParticle}`, "g");
   if (simplePattern.test(sentence)) {
-    return sentence.replace(simplePattern, ' ___ ');
+    return sentence.replace(simplePattern, " ___ ");
   }
-  return sentence + ' ___ ';
+  return sentence + " ___ ";
 }
 
 function createHardDisplayText(sentence, particles) {
@@ -1066,7 +1243,9 @@ function createHardDisplayText(sentence, particles) {
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
     const blankNum = i + 1;
-    const pattern = new RegExp(`(\\s${p.particle}\\s|^${p.particle}\\s|\\s${p.particle}$)`);
+    const pattern = new RegExp(
+      `(\\s${p.particle}\\s|^${p.particle}\\s|\\s${p.particle}$)`,
+    );
     displayText = displayText.replace(pattern, ` [${blankNum}] `);
   }
   return displayText;
@@ -1074,76 +1253,86 @@ function createHardDisplayText(sentence, particles) {
 
 function updateQuizStatsDisplay() {
   const totalPossible = currentQuiz.length;
-  const scoreEl = document.getElementById('quizRunningScore');
-  const totalEl = document.getElementById('quizTotalPossible');
+  const scoreEl = document.getElementById("quizRunningScore");
+  const totalEl = document.getElementById("quizTotalPossible");
   if (scoreEl) scoreEl.innerText = quizScore.toFixed(1);
   if (totalEl) totalEl.innerText = totalPossible;
   updateMasteredCount();
 }
 
 function showStatsExplanation() {
-  const explanation = document.getElementById('quizStatsExplanation');
+  const explanation = document.getElementById("quizStatsExplanation");
   if (explanation) {
-    explanation.style.display = explanation.style.display === 'none' ? 'block' : 'none';
+    explanation.style.display =
+      explanation.style.display === "none" ? "block" : "none";
   }
 }
 
 // Helper: Get word meanings for a sentence - IMPROVED VERSION
 function getWordMeaningsForSentence(sentence) {
   // Try to get wordDict from multiple sources
-  const dict = wordDictRef || 
-               (typeof window !== 'undefined' && window.wordDict) || 
-               (typeof wordDict !== 'undefined' ? wordDict : null);
-  
+  const dict =
+    wordDictRef ||
+    (typeof window !== "undefined" && window.wordDict) ||
+    (typeof wordDict !== "undefined" ? wordDict : null);
+
   if (!dict) {
     return [];
   }
-  
+
   // If we have a sentenceData object with wordMeanings, use it
   if (sentence && sentence.wordMeanings && sentence.wordMeanings.length > 0) {
     return sentence.wordMeanings;
   }
-  
+
   // If we have a sentenceData object, use it to get meanings
   const sentenceObj = sentence.sentenceData || sentence;
-  if (sentenceObj && sentenceObj.wordMeanings && sentenceObj.wordMeanings.length > 0) {
+  if (
+    sentenceObj &&
+    sentenceObj.wordMeanings &&
+    sentenceObj.wordMeanings.length > 0
+  ) {
     return sentenceObj.wordMeanings;
   }
-  
+
   // Get the text to parse
-  const text = sentence.originalSentence || sentence.jp || sentence.sentence || '';
+  const text =
+    sentence.originalSentence || sentence.jp || sentence.sentence || "";
   if (!text) {
     return [];
   }
-  
+
   // Split the text into words
   const words = text.split(/\s+/);
   const meanings = [];
   const usedKeys = new Set();
-  
+
   for (const word of words) {
     // Clean the word (remove furigana)
-    const cleanWord = word.replace(/（[^）]+）/g, '').replace(/\([^)]+\)/g, '').trim();
-    
+    const cleanWord = word
+      .replace(/（[^）]+）/g, "")
+      .replace(/\([^)]+\)/g, "")
+      .trim();
+
     // Try exact match first
     if (dict[cleanWord] && !usedKeys.has(cleanWord)) {
       meanings.push({
         word: cleanWord,
-        meaning: dict[cleanWord].meaning
+        meaning: dict[cleanWord].meaning,
       });
       usedKeys.add(cleanWord);
       continue;
     }
-    
+
     if (dict[word] && !usedKeys.has(word)) {
       meanings.push({
         word: word,
-        meaning: dict[word].meaning
+        meaning: dict[word].meaning,
       });
       usedKeys.add(word);
       continue;
     }
-    
+
     // Try partial match - find if any dictionary key is contained in this word
     let found = false;
     const sortedKeys = Object.keys(dict).sort((a, b) => b.length - a.length);
@@ -1153,174 +1342,218 @@ function getWordMeaningsForSentence(sentence) {
       if (cleanWord.includes(key) && key.length > 1) {
         meanings.push({
           word: key,
-          meaning: dict[key].meaning
+          meaning: dict[key].meaning,
         });
         usedKeys.add(key);
         found = true;
         break;
       }
     }
-    
+
     if (!found) {
       // No meaning found
     }
   }
-  
+
   return meanings;
 }
 
 // Helper: Create word tooltip HTML for quiz sentences
 function createQuizWordTooltips(text, wordMeanings) {
-  if (!text) return '';
+  if (!text) return "";
   if (!wordMeanings || !wordMeanings.length) {
     // Still wrap furigana even without tooltips
-    return wrapParticleExample(text, '');
+    return wrapParticleExample(text, "");
   }
-  
+
   // Split text by spaces while preserving particles
   const words = text.split(/\s+/);
-  let result = '';
+  let result = "";
   let usedMeanings = [];
-  
+
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
-    let meaning = '';
+    let meaning = "";
     let found = false;
-    
+
     // Clean the word (remove furigana)
-    const cleanWord = word.replace(/（[^）]+）/g, '').replace(/\([^)]+\)/g, '').trim();
-    
+    const cleanWord = word
+      .replace(/（[^）]+）/g, "")
+      .replace(/\([^)]+\)/g, "")
+      .trim();
+
     // Try to find meaning for this word
     for (let j = 0; j < wordMeanings.length; j++) {
       if (usedMeanings.includes(j)) continue;
       const w = wordMeanings[j];
-      const cleanW = w.word ? w.word.replace(/（[^）]+）/g, '').replace(/\([^)]+\)/g, '').trim() : '';
-      
+      const cleanW = w.word
+        ? w.word
+            .replace(/（[^）]+）/g, "")
+            .replace(/\([^)]+\)/g, "")
+            .trim()
+        : "";
+
       if (cleanW === cleanWord || w.word === word || cleanW === word) {
-        meaning = w.meaning || w.meaning_en || '';
+        meaning = w.meaning || w.meaning_en || "";
         usedMeanings.push(j);
         found = true;
         break;
       }
     }
-    
+
     // If not found, try to match partially
     if (!found) {
       for (let j = 0; j < wordMeanings.length; j++) {
         if (usedMeanings.includes(j)) continue;
         const w = wordMeanings[j];
-        const cleanW = w.word ? w.word.replace(/（[^）]+）/g, '').replace(/\([^)]+\)/g, '').trim() : '';
+        const cleanW = w.word
+          ? w.word
+              .replace(/（[^）]+）/g, "")
+              .replace(/\([^)]+\)/g, "")
+              .trim()
+          : "";
         if (cleanW && cleanWord.includes(cleanW)) {
-          meaning = w.meaning || w.meaning_en || '';
+          meaning = w.meaning || w.meaning_en || "";
           usedMeanings.push(j);
           found = true;
           break;
         }
       }
     }
-    
+
     // Build the word with furigana
     let displayWord = word;
     // Wrap furigana
-    displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-      return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-    });
-    displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => {
-      return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-    });
-    
+    displayWord = displayWord.replace(
+      /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+      (_, kanji, furigana) => {
+        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+      },
+    );
+    displayWord = displayWord.replace(
+      /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
+      (_, kanji, furigana) => {
+        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+      },
+    );
+
     if (meaning) {
       // Check if this word contains a particle that should be highlighted
-      const particleMatch = word.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
+      const particleMatch = word.match(
+        /^(.*?)([はがをにでへとかからまでのもよねや])$/,
+      );
       if (particleMatch) {
         const before = particleMatch[1];
         const particle = particleMatch[2];
         // Rebuild with furigana for the before part
         let beforeHtml = before;
-        beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-          return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-        });
-        beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => {
-          return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-        });
+        beforeHtml = beforeHtml.replace(
+          /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+          (_, kanji, furigana) => {
+            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+          },
+        );
+        beforeHtml = beforeHtml.replace(
+          /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
+          (_, kanji, furigana) => {
+            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+          },
+        );
         result += `<span class="word-tooltip">${beforeHtml}<span class="particle-highlight">${particle}</span><span class="tooltip-text">${meaning}</span></span> `;
       } else {
         result += `<span class="word-tooltip">${displayWord}<span class="tooltip-text">${meaning}</span></span> `;
       }
     } else {
       // Check if this word contains a particle that should be highlighted
-      const particleMatch = word.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
+      const particleMatch = word.match(
+        /^(.*?)([はがをにでへとかからまでのもよねや])$/,
+      );
       if (particleMatch) {
         const before = particleMatch[1];
         const particle = particleMatch[2];
         let beforeHtml = before;
-        beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => {
-          return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-        });
-        beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => {
-          return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-        });
+        beforeHtml = beforeHtml.replace(
+          /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+          (_, kanji, furigana) => {
+            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+          },
+        );
+        beforeHtml = beforeHtml.replace(
+          /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
+          (_, kanji, furigana) => {
+            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
+          },
+        );
         result += `${beforeHtml}<span class="particle-highlight">${particle}</span> `;
       } else {
         result += `${displayWord} `;
       }
     }
   }
-  
+
   return result.trim();
 }
 
 function renderQuizQuestion() {
-  const quizArea = document.getElementById('quizArea');
-  const resultsDiv = document.getElementById('quizResults');
+  const quizArea = document.getElementById("quizArea");
+  const resultsDiv = document.getElementById("quizResults");
   if (!quizArea) return;
-  
-  if (resultsDiv) resultsDiv.style.display = 'none';
-  
+
+  if (resultsDiv) resultsDiv.style.display = "none";
+
   if (!quizActive || currentQuizIndex >= currentQuiz.length) {
     showQuizResults();
     return;
   }
-  
+
   const q = currentQuiz[currentQuizIndex];
   const attemptsLeft = quizAttemptsRemaining[currentQuizIndex];
   const currentAnswer = quizAnswers[currentQuizIndex];
-  
+
   // Get word meanings for tooltips
   const wordMeanings = getWordMeaningsForSentence(q);
-  
+
+  // ✅ NEW: Check furigana state for quiz display
+  const displayText = furiganaHidden
+    ? q.originalSentence.replace(/[（(][^）)]*[）)]/g, "") // Strip furigana
+    : q.originalSentence; // Keep original
+
   let html = `
     <div class="quiz-header-info">
       <span class="quiz-question-counter">Question ${currentQuizIndex + 1} / ${currentQuiz.length}</span>
       <span class="quiz-score-display">Score: ${quizScore.toFixed(1)}</span>
       <span class="attempts-left">Attempts left: ${attemptsLeft}</span>
-      <button class="small-btn quiz-tts-btn" data-reading="${q.reading || ''}" style="margin-left: auto;">🔊 Listen</button>
+      <button class="small-btn quiz-tts-btn" data-reading="${q.reading || ""}" style="margin-left: auto;">🔊 Listen</button>
     </div>
     <div id="quizFeedbackArea"></div>
   `;
-  
-  if (quizMode === 'easy') {
-    const displayText = createEasyDisplayText(q.originalSentence, q.correctParticle);
-    const displayHtml = wordMeanings && wordMeanings.length > 0 
-      ? createQuizWordTooltips(displayText, wordMeanings)
-      : wrapParticleExample(displayText, '___');
-    
+
+  if (quizMode === "easy") {
+    const displayTextWithBlank = createEasyDisplayText(
+      displayText, // ← Use the stripped version if furigana is hidden
+      q.correctParticle,
+    );
+    const displayHtml =
+      wordMeanings && wordMeanings.length > 0 && !furiganaHidden
+        ? createQuizWordTooltips(displayTextWithBlank, wordMeanings)
+        : wrapParticleExample(displayTextWithBlank, "___");
+
     html += `
       <div class="quiz-question easy-question">
-        <div class="quiz-sentence" data-reading="${q.reading || ''}">${displayHtml}</div>
+        <div class="quiz-sentence" data-reading="${q.reading || ""}">${displayHtml}</div>
         <div class="quiz-translation">📖 ${q.translation}</div>
         <div class="quiz-options">
     `;
-    
+
     for (const opt of q.options) {
       const isSelected = currentAnswer && currentAnswer.selected === opt;
       html += `
-        <button class="quiz-option-btn ${isSelected ? 'selected' : ''}" data-particle="${opt}">
+        <button class="quiz-option-btn ${isSelected ? "selected" : ""}" data-particle="${opt}">
           ${opt}
         </button>
       `;
     }
-    
+
     html += `
         </div>
         <div class="quiz-nav">
@@ -1332,46 +1565,51 @@ function renderQuizQuestion() {
         </div>
       </div>
     `;
-    
   } else {
-    const displayText = createHardDisplayText(q.originalSentence, q.particles);
-    const displayHtml = wordMeanings && wordMeanings.length > 0 
-      ? createQuizWordTooltips(displayText, wordMeanings)
-      : wrapParticleExample(displayText, '');
-    
-    const blankAnswers = currentAnswer && currentAnswer.blanks ? currentAnswer.blanks : {};
-    
+    // Hard mode
+    const displayTextWithBlanks = createHardDisplayText(
+      displayText,
+      q.particles,
+    );
+    const displayHtml =
+      wordMeanings && wordMeanings.length > 0 && !furiganaHidden
+        ? createQuizWordTooltips(displayTextWithBlanks, wordMeanings)
+        : wrapParticleExample(displayTextWithBlanks, "");
+
+    const blankAnswers =
+      currentAnswer && currentAnswer.blanks ? currentAnswer.blanks : {};
+
     html += `
       <div class="quiz-question hard-question">
-        <div class="quiz-sentence hard-question-text" data-reading="${q.reading || ''}">${displayHtml}</div>
+        <div class="quiz-sentence hard-question-text" data-reading="${q.reading || ""}">${displayHtml}</div>
         <div class="quiz-translation">📖 ${q.translation}</div>
         <div class="quiz-blanks-container">
     `;
-    
+
     for (let i = 0; i < q.particles.length; i++) {
       const blankNum = i + 1;
-      const selectedValue = blankAnswers[blankNum] || '';
-      
+      const selectedValue = blankAnswers[blankNum] || "";
+
       html += `
         <div class="blank-row">
           <label class="blank-label">Blank [${blankNum}]:</label>
           <select class="blank-select" data-blank="${blankNum}">
             <option value="">-- Select particle --</option>
-            <option value="は" ${selectedValue === 'は' ? 'selected' : ''}>は (topic)</option>
-            <option value="が" ${selectedValue === 'が' ? 'selected' : ''}>が (subject)</option>
-            <option value="を" ${selectedValue === 'を' ? 'selected' : ''}>を (object)</option>
-            <option value="に" ${selectedValue === 'に' ? 'selected' : ''}>に (time/direction/location)</option>
-            <option value="で" ${selectedValue === 'で' ? 'selected' : ''}>で (location/means)</option>
-            <option value="へ" ${selectedValue === 'へ' ? 'selected' : ''}>へ (direction)</option>
-            <option value="と" ${selectedValue === 'と' ? 'selected' : ''}>と (and/with)</option>
-            <option value="から" ${selectedValue === 'から' ? 'selected' : ''}>から (from)</option>
-            <option value="まで" ${selectedValue === 'まで' ? 'selected' : ''}>まで (until/to)</option>
-            <option value="の" ${selectedValue === 'の' ? 'selected' : ''}>の (possession)</option>
+            <option value="は" ${selectedValue === "は" ? "selected" : ""}>は (topic)</option>
+            <option value="が" ${selectedValue === "が" ? "selected" : ""}>が (subject)</option>
+            <option value="を" ${selectedValue === "を" ? "selected" : ""}>を (object)</option>
+            <option value="に" ${selectedValue === "に" ? "selected" : ""}>に (time/direction/location)</option>
+            <option value="で" ${selectedValue === "で" ? "selected" : ""}>で (location/means)</option>
+            <option value="へ" ${selectedValue === "へ" ? "selected" : ""}>へ (direction)</option>
+            <option value="と" ${selectedValue === "と" ? "selected" : ""}>と (and/with)</option>
+            <option value="から" ${selectedValue === "から" ? "selected" : ""}>から (from)</option>
+            <option value="まで" ${selectedValue === "まで" ? "selected" : ""}>まで (until/to)</option>
+            <option value="の" ${selectedValue === "の" ? "selected" : ""}>の (possession)</option>
           </select>
         </div>
       `;
     }
-    
+
     html += `
         </div>
         <div class="quiz-nav">
@@ -1385,117 +1623,122 @@ function renderQuizQuestion() {
       </div>
     `;
   }
-  
+
   quizArea.innerHTML = html;
-  
+
   // ATTACH TOOLTIPS
-  if (typeof attachQuizTooltips === 'function') {
-    setTimeout(function() {
+  if (typeof attachQuizTooltips === "function") {
+    setTimeout(function () {
       attachQuizTooltips();
     }, 100);
     try {
       attachQuizTooltips();
-    } catch(e) {
+    } catch (e) {
       // ignore
     }
-  } else if (typeof attachTooltipLongPress === 'function') {
-    setTimeout(function() {
+  } else if (typeof attachTooltipLongPress === "function") {
+    setTimeout(function () {
       if (quizArea) attachTooltipLongPress(quizArea);
     }, 100);
   }
-  
+
   // Add TTS to the listen button
-  const ttsBtn = quizArea.querySelector('.quiz-tts-btn');
+  const ttsBtn = quizArea.querySelector(".quiz-tts-btn");
   if (ttsBtn) {
-    ttsBtn.addEventListener('click', (e) => {
+    ttsBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const reading = ttsBtn.dataset.reading || q.reading || '';
-      if (reading && typeof speakText === 'function') {
+      const reading = ttsBtn.dataset.reading || q.reading || "";
+      if (reading && typeof speakText === "function") {
         speakText(reading);
       }
     });
   }
-  
+
   // Apply furigana hide state to quiz
   if (furiganaHidden) {
-    quizArea.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = 'none';
+    quizArea.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
     });
   } else {
-    quizArea.querySelectorAll('rt').forEach(rt => {
-      rt.style.display = '';
+    quizArea.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
     });
   }
-  
-  if (quizMode === 'easy') {
-    document.querySelectorAll('.quiz-option-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.quiz-option-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
+
+  if (quizMode === "easy") {
+    document.querySelectorAll(".quiz-option-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document
+          .querySelectorAll(".quiz-option-btn")
+          .forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
         const selectedParticle = btn.dataset.particle;
         if (!quizAnswers[currentQuizIndex]) quizAnswers[currentQuizIndex] = {};
         quizAnswers[currentQuizIndex].selected = selectedParticle;
       });
     });
   } else {
-    document.querySelectorAll('.blank-select').forEach(select => {
-      select.addEventListener('change', () => {
-        if (!quizAnswers[currentQuizIndex]) quizAnswers[currentQuizIndex] = { blanks: {} };
-        if (!quizAnswers[currentQuizIndex].blanks) quizAnswers[currentQuizIndex].blanks = {};
-        quizAnswers[currentQuizIndex].blanks[select.dataset.blank] = select.value;
+    document.querySelectorAll(".blank-select").forEach((select) => {
+      select.addEventListener("change", () => {
+        if (!quizAnswers[currentQuizIndex])
+          quizAnswers[currentQuizIndex] = { blanks: {} };
+        if (!quizAnswers[currentQuizIndex].blanks)
+          quizAnswers[currentQuizIndex].blanks = {};
+        quizAnswers[currentQuizIndex].blanks[select.dataset.blank] =
+          select.value;
       });
     });
-    
-    const clearBtn = document.getElementById('quizClearBtn');
+
+    const clearBtn = document.getElementById("quizClearBtn");
     if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        document.querySelectorAll('.blank-select').forEach(select => {
-          select.value = '';
+      clearBtn.addEventListener("click", () => {
+        document.querySelectorAll(".blank-select").forEach((select) => {
+          select.value = "";
         });
         quizAnswers[currentQuizIndex] = { blanks: {} };
       });
     }
   }
-  
-  const submitBtn = document.getElementById('quizSubmitBtn');
+
+  const submitBtn = document.getElementById("quizSubmitBtn");
   if (submitBtn) {
-    submitBtn.addEventListener('click', () => checkAnswer());
+    submitBtn.addEventListener("click", () => checkAnswer());
   }
-  
-  const showAnswerBtn = document.getElementById('quizShowAnswerBtn');
+
+  const showAnswerBtn = document.getElementById("quizShowAnswerBtn");
   if (showAnswerBtn) {
-    showAnswerBtn.addEventListener('click', () => showAnswer());
+    showAnswerBtn.addEventListener("click", () => showAnswer());
   }
-  
-  const skipBtn = document.getElementById('quizSkipBtn');
+
+  const skipBtn = document.getElementById("quizSkipBtn");
   if (skipBtn) {
-    skipBtn.addEventListener('click', () => {
+    skipBtn.addEventListener("click", () => {
       currentQuizIndex++;
       renderQuizQuestion();
     });
   }
-  
-  const stopQuizBtn = document.getElementById('quizStopBtn');
+
+  const stopQuizBtn = document.getElementById("quizStopBtn");
   if (stopQuizBtn) {
-    stopQuizBtn.addEventListener('click', () => stopQuiz());
+    stopQuizBtn.addEventListener("click", () => stopQuiz());
   }
-  
-  const resetQuizBtn = document.getElementById('quizResetBtn');
+
+  const resetQuizBtn = document.getElementById("quizResetBtn");
   if (resetQuizBtn) {
-    resetQuizBtn.addEventListener('click', () => resetQuiz());
+    resetQuizBtn.addEventListener("click", () => resetQuiz());
   }
 }
 
 function stopQuiz() {
   if (!quizActive) return;
-  
+
   quizActive = false;
   setModeButtonsEnabled(true);
-  
-  const resultsDiv = document.getElementById('quizResults');
+
+  const resultsDiv = document.getElementById("quizResults");
   if (resultsDiv) {
     const percent = Math.round((quizScore / currentQuiz.length) * 100);
-    resultsDiv.style.display = 'block';
+    resultsDiv.style.display = "block";
     resultsDiv.innerHTML = `
       <div class="quiz-score">${quizScore.toFixed(1)} / ${currentQuiz.length} (${percent}%)</div>
       <p>Quiz stopped early. You answered ${quizScore.toFixed(1)} out of ${currentQuiz.length} points.</p>
@@ -1510,57 +1753,62 @@ function stopQuiz() {
       </div>
       <button id="quizRestartBtn" class="action-btn">Take Another Quiz</button>
     `;
-    
-    const restartBtn = document.getElementById('quizRestartBtn');
+
+    const restartBtn = document.getElementById("quizRestartBtn");
     if (restartBtn) {
-      restartBtn.addEventListener('click', () => {
-        const quizArea = document.getElementById('quizArea');
+      restartBtn.addEventListener("click", () => {
+        const quizArea = document.getElementById("quizArea");
         if (quizArea) {
-          quizArea.innerHTML = '<p class="quiz-welcome">Select mode, sprint, and number of questions, then click "Start New Quiz"</p>';
+          quizArea.innerHTML =
+            '<p class="quiz-welcome">Select mode, sprint, and number of questions, then click "Start New Quiz"</p>';
         }
-        resultsDiv.style.display = 'none';
+        resultsDiv.style.display = "none";
       });
     }
   }
-  
-  const quizArea = document.getElementById('quizArea');
+
+  const quizArea = document.getElementById("quizArea");
   if (quizArea) {
-    quizArea.innerHTML = '';
+    quizArea.innerHTML = "";
   }
 }
 
 function resetQuiz() {
   if (!quizActive || currentQuiz.length === 0) return;
-  
+
   currentQuizIndex = 0;
   quizScore = 0;
   quizAnswers = new Array(currentQuiz.length).fill(null);
-  
+
   for (let i = 0; i < currentQuiz.length; i++) {
     quizAttemptsRemaining[i] = 2;
   }
-  
-  const feedbackDiv = document.getElementById('quizFeedbackArea');
-  if (feedbackDiv) feedbackDiv.innerHTML = '';
-  
+
+  const feedbackDiv = document.getElementById("quizFeedbackArea");
+  if (feedbackDiv) feedbackDiv.innerHTML = "";
+
   updateQuizStatsDisplay();
   renderQuizQuestion();
 }
 
 // Reset all progress (mastered and attempted particles)
 function resetAllProgress() {
-  if (confirm('⚠️ Are you sure? This will reset ALL mastered and attempted particles. This cannot be undone.')) {
+  if (
+    confirm(
+      "⚠️ Are you sure? This will reset ALL mastered and attempted particles. This cannot be undone.",
+    )
+  ) {
     masteredParticles.clear();
     attemptedParticles.clear();
     saveMasteredParticles();
     renderParticleDetails();
     updateMasteredCount();
-    
+
     if (quizActive) {
       stopQuiz();
     }
-    
-    const feedbackDiv = document.getElementById('quizFeedbackArea');
+
+    const feedbackDiv = document.getElementById("quizFeedbackArea");
     if (feedbackDiv) {
       feedbackDiv.innerHTML = `
         <div class="quiz-feedback correct" style="background: #d4edda; color: #155724;">
@@ -1568,23 +1816,27 @@ function resetAllProgress() {
         </div>
       `;
       setTimeout(() => {
-        if (feedbackDiv) feedbackDiv.innerHTML = '';
+        if (feedbackDiv) feedbackDiv.innerHTML = "";
       }, 3000);
     } else {
-      alert('✅ All progress has been reset.');
+      alert("✅ All progress has been reset.");
     }
   }
 }
 
 // Reset only mastered particles (keep attempted)
 function resetMasteredOnly() {
-  if (confirm('⚠️ Reset mastered particles only? Attempted particles will be preserved.')) {
+  if (
+    confirm(
+      "⚠️ Reset mastered particles only? Attempted particles will be preserved.",
+    )
+  ) {
     masteredParticles.clear();
     saveMasteredParticles();
     renderParticleDetails();
     updateMasteredCount();
-    
-    const feedbackDiv = document.getElementById('quizFeedbackArea');
+
+    const feedbackDiv = document.getElementById("quizFeedbackArea");
     if (feedbackDiv) {
       feedbackDiv.innerHTML = `
         <div class="quiz-feedback correct" style="background: #d4edda; color: #155724;">
@@ -1592,28 +1844,31 @@ function resetMasteredOnly() {
         </div>
       `;
       setTimeout(() => {
-        if (feedbackDiv) feedbackDiv.innerHTML = '';
+        if (feedbackDiv) feedbackDiv.innerHTML = "";
       }, 3000);
     }
   }
 }
 
+// ===== SHOW ANSWER - CORRECT =====
 function showAnswer() {
   const q = currentQuiz[currentQuizIndex];
-  let answerText = '';
-  
-  if (quizMode === 'easy') {
+  let answerText = "";
+
+  if (quizMode === "easy") {
     answerText = `The correct particle is "${q.correctParticle}".`;
   } else {
-    const correctList = q.particles.map((p, i) => `${i + 1}: ${p.particle}`).join(', ');
+    const correctList = q.particles
+      .map((p, i) => `${i + 1}: ${p.particle}`)
+      .join(", ");
     answerText = `The correct particles are: ${correctList}.`;
   }
-  
+
   const feedbackHtml = `
     <div class="quiz-feedback incorrect">
       📖 Answer revealed: ${answerText}<br>
       <div class="example-item" style="margin-top: 15px;">
-        <div class="example-jp">${wrapParticleExample(q.originalSentence, '')}</div>
+        <div class="example-jp">${wrapParticleExample(q.originalSentence, "")}</div>
         <div class="example-trans">→ ${q.translation}</div>
       </div>
       <p style="margin-top: 10px; font-size: 0.8rem;">No points awarded for using Show Answer.</p>
@@ -1622,34 +1877,35 @@ function showAnswer() {
       <button id="quizNextBtn" class="action-btn">Next Question →</button>
     </div>
   `;
-  
-  const quizArea = document.getElementById('quizArea');
+
+  const quizArea = document.getElementById("quizArea");
   if (quizArea) {
     quizArea.innerHTML = feedbackHtml;
   }
-  
-  const nextBtn = document.getElementById('quizNextBtn');
+
+  const nextBtn = document.getElementById("quizNextBtn");
   if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener("click", () => {
       currentQuizIndex++;
       renderQuizQuestion();
     });
   }
 }
 
+// ===== CHECK ANSWER - CORRECT =====
 function checkAnswer() {
   const q = currentQuiz[currentQuizIndex];
   const userAnswer = quizAnswers[currentQuizIndex];
   let isCorrect = false;
-  let feedbackMessage = '';
+  let feedbackMessage = "";
   let pointsEarned = 0;
   let masteryParticles = [];
-  const isFirstAttempt = (quizAttemptsRemaining[currentQuizIndex] === 2);
-  
-  if (quizMode === 'easy') {
-    const userParticle = userAnswer ? userAnswer.selected : '';
+  const isFirstAttempt = quizAttemptsRemaining[currentQuizIndex] === 2;
+
+  if (quizMode === "easy") {
+    const userParticle = userAnswer ? userAnswer.selected : "";
     isCorrect = userParticle === q.correctParticle;
-    
+
     if (isCorrect) {
       if (isFirstAttempt) {
         pointsEarned = 1;
@@ -1659,11 +1915,17 @@ function checkAnswer() {
         pointsEarned = 0.5;
         feedbackMessage = `✅ Correct on second attempt! +0.5 points.`;
       }
-      showFeedbackAndNext(feedbackMessage, q, true, pointsEarned, masteryParticles);
+      showFeedbackAndNext(
+        feedbackMessage,
+        q,
+        true,
+        pointsEarned,
+        masteryParticles,
+      );
     } else {
       quizAttemptsRemaining[currentQuizIndex]--;
       if (quizAttemptsRemaining[currentQuizIndex] > 0) {
-        const feedbackDiv = document.getElementById('quizFeedbackArea');
+        const feedbackDiv = document.getElementById("quizFeedbackArea");
         if (feedbackDiv) {
           feedbackDiv.innerHTML = `
             <div class="quiz-feedback incorrect" style="background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545;">
@@ -1671,8 +1933,8 @@ function checkAnswer() {
             </div>
           `;
         }
-        document.querySelectorAll('.quiz-option-btn').forEach(btn => {
-          btn.classList.remove('selected');
+        document.querySelectorAll(".quiz-option-btn").forEach((btn) => {
+          btn.classList.remove("selected");
         });
         quizAnswers[currentQuizIndex] = null;
         return;
@@ -1686,61 +1948,76 @@ function checkAnswer() {
     let allCorrect = true;
     const correctList = [];
     const wrongList = [];
-    
+
     for (let i = 0; i < q.particles.length; i++) {
       const blankNum = i + 1;
-      const userChoice = userBlanks[blankNum] || '';
+      const userChoice = userBlanks[blankNum] || "";
       const correctChoice = q.correctAnswers[i];
-      
+
       if (userChoice === correctChoice) {
         correctList.push(`${blankNum}: ${correctChoice}`);
       } else {
         allCorrect = false;
-        wrongList.push(`${blankNum}: ${userChoice || 'empty'} (correct: ${correctChoice})`);
+        wrongList.push(
+          `${blankNum}: ${userChoice || "empty"} (correct: ${correctChoice})`,
+        );
       }
     }
-    
+
     isCorrect = allCorrect;
-    
+
     if (isCorrect) {
       if (isFirstAttempt) {
         pointsEarned = q.particles.length;
         masteryParticles = q.correctAnswers;
-        feedbackMessage = `✅ All particles correct on first attempt! +${q.particles.length} points. Particles mastered: ${masteryParticles.join(', ')}`;
+        feedbackMessage = `✅ All particles correct on first attempt! +${q.particles.length} points. Particles mastered: ${masteryParticles.join(", ")}`;
       } else {
         pointsEarned = q.particles.length * 0.5;
         feedbackMessage = `✅ All particles correct on second attempt! +${(q.particles.length * 0.5).toFixed(1)} points.`;
       }
-      showFeedbackAndNext(feedbackMessage, q, true, pointsEarned, masteryParticles);
+      showFeedbackAndNext(
+        feedbackMessage,
+        q,
+        true,
+        pointsEarned,
+        masteryParticles,
+      );
     } else {
       quizAttemptsRemaining[currentQuizIndex]--;
       if (quizAttemptsRemaining[currentQuizIndex] > 0) {
-        const feedbackDiv = document.getElementById('quizFeedbackArea');
+        const feedbackDiv = document.getElementById("quizFeedbackArea");
         if (feedbackDiv) {
           feedbackDiv.innerHTML = `
             <div class="quiz-feedback incorrect" style="background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545;">
-              ❌ Some answers were incorrect.<br>✓ Correct: ${correctList.join(', ')}<br>✗ Wrong: ${wrongList.join(', ')}<br>You have ${quizAttemptsRemaining[currentQuizIndex]} attempt(s) left. Try again!
+              ❌ Some answers were incorrect.<br>✓ Correct: ${correctList.join(", ")}<br>✗ Wrong: ${wrongList.join(", ")}<br>You have ${quizAttemptsRemaining[currentQuizIndex]} attempt(s) left. Try again!
             </div>
           `;
         }
         return;
       } else {
-        feedbackMessage = `❌ Some answers were incorrect.<br>✓ Correct: ${correctList.join(', ')}<br>✗ Wrong: ${wrongList.join(', ')}<br>The correct particles are: ${q.correctAnswers.join(', ')}. No points awarded.`;
+        feedbackMessage = `❌ Some answers were incorrect.<br>✓ Correct: ${correctList.join(", ")}<br>✗ Wrong: ${wrongList.join(", ")}<br>The correct particles are: ${q.correctAnswers.join(", ")}. No points awarded.`;
         showFeedbackAndNext(feedbackMessage, q, false, 0, []);
       }
     }
   }
 }
 
-function showFeedbackAndNext(message, q, isCorrect, pointsEarned, masteryParticles) {
+// ===== SHOW FEEDBACK AND NEXT - CORRECT =====
+function showFeedbackAndNext(
+  message,
+  q,
+  isCorrect,
+  pointsEarned,
+  masteryParticles,
+) {
   if (pointsEarned > 0) {
     quizScore += pointsEarned;
     for (const particle of masteryParticles) {
       markParticleMastered(particle, true);
     }
   }
-  
-  if (quizMode === 'easy') {
+
+  if (quizMode === "easy") {
     if (!attemptedParticles.has(q.correctParticle)) {
       attemptedParticles.add(q.correctParticle);
     }
@@ -1753,18 +2030,25 @@ function showFeedbackAndNext(message, q, isCorrect, pointsEarned, masteryParticl
   }
   saveMasteredParticles();
   updateQuizStatsDisplay();
-  
+
   // Get word meanings for tooltips in feedback
   const wordMeanings = getWordMeaningsForSentence(q);
-  const displayHtml = wordMeanings && wordMeanings.length > 0 
-    ? createQuizWordTooltips(q.originalSentence, wordMeanings)
-    : wrapParticleExample(q.originalSentence, '');
-  
+
+  // Check furigana state for feedback display
+  const displayText = furiganaHidden
+    ? q.originalSentence.replace(/[（(][^）)]*[）)]/g, "")
+    : q.originalSentence;
+
+  const displayHtml =
+    wordMeanings && wordMeanings.length > 0 && !furiganaHidden
+      ? createQuizWordTooltips(displayText, wordMeanings)
+      : wrapParticleExample(displayText, "");
+
   const feedbackHtml = `
-    <div class="quiz-feedback ${isCorrect && pointsEarned > 0 ? 'correct' : 'incorrect'}">
+    <div class="quiz-feedback ${isCorrect && pointsEarned > 0 ? "correct" : "incorrect"}">
       ${message}
       <div class="example-item" style="margin-top: 15px;">
-        <div class="example-jp" data-reading="${q.reading || ''}">${displayHtml}</div>
+        <div class="example-jp" data-reading="${q.reading || ""}">${displayHtml}</div>
         <div class="example-trans">→ ${q.translation}</div>
         <button class="small-btn feedback-tts-btn" style="margin-top: 8px;">🔊 Listen</button>
       </div>
@@ -1773,37 +2057,37 @@ function showFeedbackAndNext(message, q, isCorrect, pointsEarned, masteryParticl
       <button id="quizNextBtn" class="action-btn">Next Question →</button>
     </div>
   `;
-  
-  const quizArea = document.getElementById('quizArea');
+
+  const quizArea = document.getElementById("quizArea");
   if (quizArea) {
     quizArea.innerHTML = feedbackHtml;
-    
+
     // Apply furigana hide state
     if (furiganaHidden) {
-      quizArea.querySelectorAll('rt').forEach(rt => {
-        rt.style.display = 'none';
+      quizArea.querySelectorAll("rt").forEach((rt) => {
+        rt.style.display = "none";
       });
     } else {
-      quizArea.querySelectorAll('rt').forEach(rt => {
-        rt.style.display = '';
+      quizArea.querySelectorAll("rt").forEach((rt) => {
+        rt.style.display = "";
       });
     }
-    
-    const feedbackTtsBtn = quizArea.querySelector('.feedback-tts-btn');
+
+    const feedbackTtsBtn = quizArea.querySelector(".feedback-tts-btn");
     if (feedbackTtsBtn) {
-      feedbackTtsBtn.addEventListener('click', (e) => {
+      feedbackTtsBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        const reading = q.reading || '';
-        if (reading && typeof speakText === 'function') {
+        const reading = q.reading || "";
+        if (reading && typeof speakText === "function") {
           speakText(reading);
         }
       });
     }
   }
-  
-  const nextBtn = document.getElementById('quizNextBtn');
+
+  const nextBtn = document.getElementById("quizNextBtn");
   if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener("click", () => {
       currentQuizIndex++;
       renderQuizQuestion();
     });
@@ -1813,15 +2097,15 @@ function showFeedbackAndNext(message, q, isCorrect, pointsEarned, masteryParticl
 function showQuizResults() {
   quizActive = false;
   setModeButtonsEnabled(true);
-  
+
   const percent = Math.round((quizScore / currentQuiz.length) * 100);
-  const resultsDiv = document.getElementById('quizResults');
+  const resultsDiv = document.getElementById("quizResults");
   if (!resultsDiv) return;
-  
-  resultsDiv.style.display = 'block';
+
+  resultsDiv.style.display = "block";
   resultsDiv.innerHTML = `
     <div class="quiz-score">${quizScore.toFixed(1)} / ${currentQuiz.length} (${percent}%)</div>
-    <p>${percent >= 80 ? '🎉 Excellent! You know your particles well!' : percent >= 60 ? '👍 Good job! Keep practicing!' : '📚 Keep studying! Review the particles and try again.'}</p>
+    <p>${percent >= 80 ? "🎉 Excellent! You know your particles well!" : percent >= 60 ? "👍 Good job! Keep practicing!" : "📚 Keep studying! Review the particles and try again."}</p>
     <div class="stats-explanation" style="margin-top: 15px;">
       <h4>📖 How Scoring Worked</h4>
       <ul>
@@ -1833,15 +2117,16 @@ function showQuizResults() {
     </div>
     <button id="quizRestartBtn" class="action-btn">Take Another Quiz</button>
   `;
-  
-  const restartBtn = document.getElementById('quizRestartBtn');
+
+  const restartBtn = document.getElementById("quizRestartBtn");
   if (restartBtn) {
-    restartBtn.addEventListener('click', () => {
-      const quizArea = document.getElementById('quizArea');
+    restartBtn.addEventListener("click", () => {
+      const quizArea = document.getElementById("quizArea");
       if (quizArea) {
-        quizArea.innerHTML = '<p class="quiz-welcome">Select mode, sprint, and number of questions, then click "Start New Quiz"</p>';
+        quizArea.innerHTML =
+          '<p class="quiz-welcome">Select mode, sprint, and number of questions, then click "Start New Quiz"</p>';
       }
-      resultsDiv.style.display = 'none';
+      resultsDiv.style.display = "none";
     });
   }
 }
@@ -1849,105 +2134,119 @@ function showQuizResults() {
 // Tab switching
 function switchTab(tabId) {
   currentParticleTab = tabId;
-  
-  const tabButtons = [tabStructureBtn, tabLearnBtn, tabParticlesBtn, tabPairsBtn, tabQuizBtn];
-  tabButtons.forEach(btn => {
-    if (btn) btn.classList.remove('active');
+
+  const tabButtons = [
+    tabStructureBtn,
+    tabLearnBtn,
+    tabParticlesBtn,
+    tabPairsBtn,
+    tabQuizBtn,
+  ];
+  tabButtons.forEach((btn) => {
+    if (btn) btn.classList.remove("active");
   });
-  
-  const activeBtn = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Btn`);
-  if (activeBtn) activeBtn.classList.add('active');
-  
-  document.querySelectorAll('.tab-content').forEach(content => {
-    content.classList.remove('active');
+
+  const activeBtn = document.getElementById(
+    `tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}Btn`,
+  );
+  if (activeBtn) activeBtn.classList.add("active");
+
+  document.querySelectorAll(".tab-content").forEach((content) => {
+    content.classList.remove("active");
   });
-  
-  const activeContent = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
-  if (activeContent) activeContent.classList.add('active');
-  
-  if (tabId === 'structure') {
+
+  const activeContent = document.getElementById(
+    `tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`,
+  );
+  if (activeContent) activeContent.classList.add("active");
+
+  if (tabId === "structure") {
     renderStructureExamples();
     populateParticleReference();
-  } else if (tabId === 'learn') {
+  } else if (tabId === "learn") {
     renderLearnTab();
-  } else if (tabId === 'particles') {
+  } else if (tabId === "particles") {
     renderParticleDetails();
-  } else if (tabId === 'pairs') {
+  } else if (tabId === "pairs") {
     renderPairDetails();
   }
 }
 
 // Quiz mode toggle
 if (quizEasyModeBtn) {
-  quizEasyModeBtn.addEventListener('click', () => {
-    quizMode = 'easy';
-    quizEasyModeBtn.classList.add('active');
-    quizHardModeBtn.classList.remove('active');
+  quizEasyModeBtn.addEventListener("click", () => {
+    quizMode = "easy";
+    quizEasyModeBtn.classList.add("active");
+    quizHardModeBtn.classList.remove("active");
   });
 }
 
 if (quizHardModeBtn) {
-  quizHardModeBtn.addEventListener('click', () => {
-    quizMode = 'hard';
-    quizHardModeBtn.classList.add('active');
-    quizEasyModeBtn.classList.remove('active');
+  quizHardModeBtn.addEventListener("click", () => {
+    quizMode = "hard";
+    quizHardModeBtn.classList.add("active");
+    quizEasyModeBtn.classList.remove("active");
   });
 }
 
 // Furigana toggle
 if (furiToggleBtn) {
-  furiToggleBtn.addEventListener('click', () => {
+  furiToggleBtn.addEventListener("click", () => {
     applyFuriganaHide();
   });
 }
 
 // Stats help icon
-const statHelpIcon = document.getElementById('statHelpIcon');
+const statHelpIcon = document.getElementById("statHelpIcon");
 if (statHelpIcon) {
-  statHelpIcon.addEventListener('click', showStatsExplanation);
+  statHelpIcon.addEventListener("click", showStatsExplanation);
 }
 
-const closeStatsHelp = document.getElementById('closeStatsHelp');
+const closeStatsHelp = document.getElementById("closeStatsHelp");
 if (closeStatsHelp) {
-  closeStatsHelp.addEventListener('click', () => {
-    const explanation = document.getElementById('quizStatsExplanation');
-    if (explanation) explanation.style.display = 'none';
+  closeStatsHelp.addEventListener("click", () => {
+    const explanation = document.getElementById("quizStatsExplanation");
+    if (explanation) explanation.style.display = "none";
   });
 }
 
 // Event Listeners
 if (sprintSelect) {
-  sprintSelect.addEventListener('change', () => {
-    if (currentParticleTab === 'particles') {
+  sprintSelect.addEventListener("change", () => {
+    if (currentParticleTab === "particles") {
       renderParticleDetails();
     }
   });
 }
 
-const startQuizBtn = document.getElementById('startQuizBtn');
+const startQuizBtn = document.getElementById("startQuizBtn");
 if (startQuizBtn) {
-  startQuizBtn.addEventListener('click', () => {
+  startQuizBtn.addEventListener("click", () => {
     generateQuiz();
   });
 }
 
 // Reset All Progress button
-const resetAllProgressBtn = document.getElementById('resetAllProgressBtn');
+const resetAllProgressBtn = document.getElementById("resetAllProgressBtn");
 if (resetAllProgressBtn) {
-  resetAllProgressBtn.addEventListener('click', resetAllProgress);
+  resetAllProgressBtn.addEventListener("click", resetAllProgress);
 }
 
 // Reset Mastered Only button
-const resetMasteredOnlyBtn = document.getElementById('resetMasteredOnlyBtn');
+const resetMasteredOnlyBtn = document.getElementById("resetMasteredOnlyBtn");
 if (resetMasteredOnlyBtn) {
-  resetMasteredOnlyBtn.addEventListener('click', resetMasteredOnly);
+  resetMasteredOnlyBtn.addEventListener("click", resetMasteredOnly);
 }
 
-if (tabStructureBtn) tabStructureBtn.addEventListener('click', () => switchTab('structure'));
-if (tabLearnBtn) tabLearnBtn.addEventListener('click', () => switchTab('learn'));
-if (tabParticlesBtn) tabParticlesBtn.addEventListener('click', () => switchTab('particles'));
-if (tabPairsBtn) tabPairsBtn.addEventListener('click', () => switchTab('pairs'));
-if (tabQuizBtn) tabQuizBtn.addEventListener('click', () => switchTab('quiz'));
+if (tabStructureBtn)
+  tabStructureBtn.addEventListener("click", () => switchTab("structure"));
+if (tabLearnBtn)
+  tabLearnBtn.addEventListener("click", () => switchTab("learn"));
+if (tabParticlesBtn)
+  tabParticlesBtn.addEventListener("click", () => switchTab("particles"));
+if (tabPairsBtn)
+  tabPairsBtn.addEventListener("click", () => switchTab("pairs"));
+if (tabQuizBtn) tabQuizBtn.addEventListener("click", () => switchTab("quiz"));
 
 // Initialize
 function initParticles() {
@@ -1956,17 +2255,19 @@ function initParticles() {
   renderStructureExamples();
   populateParticleReference();
   renderLearnTab();
-  switchTab('structure');
-  
+  switchTab("structure");
+
   const totalParticles = particleOrder.length;
-  const totalEls = document.querySelectorAll('#quizTotalParticles, #quizTotalParticles2');
-  totalEls.forEach(el => {
+  const totalEls = document.querySelectorAll(
+    "#quizTotalParticles, #quizTotalParticles2",
+  );
+  totalEls.forEach((el) => {
     if (el) el.innerText = totalParticles;
   });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initParticles);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initParticles);
 } else {
   initParticles();
 }

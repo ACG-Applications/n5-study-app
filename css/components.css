@@ -159,7 +159,7 @@ rt {
 .particle {
   font-size: inherit !important; /* ← FONT SIZE (inherits from parent) */
   font-weight: 700 !important; /* ← FONT WEIGHT */
-  color: #ff0000 !important; /* ← FONT COLOR */
+  color: #8b0000 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
   letter-spacing: 0.3px !important; /* ← LETTER SPACING */
   background: #ffffff !important; /* ← BACKGROUND */
@@ -174,10 +174,10 @@ rt {
 .particle-highlight {
   font-size: inherit !important; /* ← FONT SIZE */
   font-weight: 700 !important; /* ← FONT WEIGHT */
-  color: #cc0000 !important; /* ← FONT COLOR */
+  color: #8b0000 !important; /* ← FONT COLOR (dark red) */
   text-align: center !important; /* ← TEXT ALIGN */
   letter-spacing: 0.3px !important; /* ← LETTER SPACING */
-  background: #ffd6d6 !important; /* ← BACKGROUND (light pink) */
+  background: #ffffff !important; /* ← BACKGROUND (white) */
   padding: 0 4px !important; /* ← PADDING */
   border-radius: 4px !important; /* ← BORDER RADIUS */
 }
@@ -1238,6 +1238,134 @@ rt {
 }
 
 /* < END of FEEDBACK COMPONENT > */
+
+/* ===== PARTICLES LEARN TAB - FONT ENHANCEMENTS ===== */
+/* Add this to the end of components.css */
+
+/* Make Learn tab content bigger */
+.learn-container {
+  font-size: 1.35rem !important;
+  line-height: 2 !important;
+}
+
+/* Example sentences - bigger */
+.learn-container .example-box {
+  font-size: 1.2rem !important;
+  padding: 18px 20px !important;
+}
+
+/* Japanese text in examples (the main sentence) */
+.learn-container .example-box div:first-child {
+  font-size: 1.6rem !important;
+  font-weight: 500;
+}
+
+/* English translation */
+.learn-container .example-box div:nth-child(2) {
+  font-size: 1.05rem !important;
+}
+
+/* Table cells */
+.learn-container table td,
+.learn-container table th {
+  font-size: 1.15rem !important;
+  padding: 12px 18px !important;
+}
+
+/* Section headings */
+.learn-container h3 {
+  font-size: 1.6rem !important;
+  margin-bottom: 12px !important;
+}
+
+.learn-container h4 {
+  font-size: 1.3rem !important;
+  margin-bottom: 8px !important;
+}
+
+/* Description / paragraph text */
+.learn-container p {
+  font-size: 1.15rem !important;
+  line-height: 1.8 !important;
+}
+
+/* Example click elements (inline examples) */
+.learn-container .example-click {
+  font-size: 1.1rem !important;
+}
+
+/* Summary box */
+.learn-container .summary-box,
+.learn-container .summary-box div {
+  font-size: 1.2rem !important;
+}
+
+/* List items */
+.learn-container ul li,
+.learn-container ol li {
+  font-size: 1.15rem !important;
+  line-height: 1.8 !important;
+}
+
+/* Code/pre elements */
+.learn-container code,
+.learn-container pre {
+  font-size: 1rem !important;
+}
+
+/* Ruby text (furigana) */
+.learn-container ruby rt {
+  font-size: 0.7em !important;
+}
+
+/* ===== END OF PARTICLES LEARN TAB - FONT ENHANCEMENTS ===== */
+
+/* ===== PARTICLE HIGHLIGHT COLORS ===== */
+/* Add to components.css */
+
+/* Particle highlight - dark red */
+.particle-highlight {
+  color: #8b0000 !important; /* Dark red */
+  font-weight: 700 !important; /* Bold for visibility */
+}
+
+/* Also update any other particle highlight variants */
+.particle-highlight.quiz-blank {
+  color: #8b0000 !important;
+  font-weight: 700 !important;
+}
+
+/* In Learn tab examples */
+.learn-container .particle-highlight {
+  color: #8b0000 !important;
+  font-weight: 700 !important;
+}
+
+/* In Structure tab examples */
+#structureExamples .particle-highlight {
+  color: #8b0000 !important;
+  font-weight: 700 !important;
+}
+
+/* In Particle Reference cards */
+.particle-ref-example .particle-highlight {
+  color: #8b0000 !important;
+  font-weight: 700 !important;
+}
+
+/* In quiz questions */
+.quiz-sentence .particle-highlight {
+  color: #8b0000 !important;
+  font-weight: 700 !important;
+}
+
+/* In feedback examples */
+.feedback-area .particle-highlight {
+  color: #8b0000 !important;
+  font-weight: 700 !important;
+}
+
+/* ===== END PARTICLE HIGHLIGHT COLORS ===== */
 
 /* ================================================================
    ════════════════════════════════════════════════════════════════
