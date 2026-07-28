@@ -656,7 +656,31 @@
     <!-- Flashcard Modal -->
     <div id="flashcardModal" class="modal">
       <div class="modal-card">
-        <h3 id="flashcardTitle">📇 N5 Flashcards</h3>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+          "
+        >
+          <h3 id="flashcardTitle" style="margin: 0">📇 N5 Flashcards</h3>
+          <button
+            id="closeFlashBtn"
+            class="small-btn"
+            style="
+              background: #8b5a5a;
+              color: white;
+              border: none;
+              padding: 6px 16px;
+              border-radius: 40px;
+              cursor: pointer;
+              font-size: 0.8rem;
+            "
+          >
+            ✕ Close
+          </button>
+        </div>
         <div id="flashJp" class="flash-jp"></div>
         <div id="flashTranslation" class="flash-translation">???</div>
         <div class="flash-controls">
@@ -671,7 +695,6 @@
           </button>
           <button id="flashSpeed075Btn" class="small-btn">🐢 0.75x</button>
           <button id="flashSpeed100Btn" class="small-btn">⚡ 1.0x</button>
-          <button id="closeFlashBtn" class="small-btn">Close</button>
         </div>
         <p><span id="flashIndex">0</span> / <span id="flashTotal">0</span></p>
       </div>
@@ -1151,11 +1174,13 @@
     <!-- 3. MODULES ✅ -->
     <script src="js/modules/audio.js"></script>
     <script src="js/modules/mastered.js"></script>
+    <script src="js/modules/kanji-stroke.js"></script>
+    <!-- ← MOVED HERE -->
     <script src="js/modules/flashcards.js"></script>
+    <!-- ← Now after kanji-stroke -->
     <script src="js/modules/storyMode.js"></script>
     <script src="js/modules/print.js"></script>
     <script src="js/modules/ui.js"></script>
-    <script src="js/modules/kanji-stroke.js"></script>
     <script src="js/modules/kanji-helper.js"></script>
 
     <!-- 4. WORD SEARCH MODULE ✅ -->

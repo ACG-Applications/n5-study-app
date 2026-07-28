@@ -33,11 +33,11 @@ rt {
   display: ruby-text !important;
   font-size: 0.8rem !important; /* ← FONT SIZE */
   font-weight: 700 !important; /* ← FONT WEIGHT */
-  color: #290101 !important; /* ← FONT COLOR */
+  color: #8b0000 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
   letter-spacing: 0.5px !important; /* ← LETTER SPACING */
   background: transparent !important; /* ← BACKGROUND */
-  padding-bottom: 2px !important; /* ← PADDING */
+  padding-bottom: 8px !important; /* ← PADDING */
   padding-left: 0 !important; /* ← PADDING */
   padding-right: 0 !important; /* ← PADDING */
   padding-top: 0 !important; /* ← PADDING */

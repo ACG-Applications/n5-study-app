@@ -8,6 +8,128 @@ const flashJpDiv = document.getElementById("flashJp");
 const flashTransDiv = document.getElementById("flashTranslation");
 const flashModal = document.getElementById("flashcardModal");
 
+// ==================== KANJI HELPER FUNCTIONS ====================
+
+// Get Unicode hex for a kanji character
+function getUnicodeHex(kanji) {
+  return kanji.codePointAt(0).toString(16).toUpperCase();
+}
+
+// Get kanji definition from available sources
+function getKanjiDefinition(kanji) {
+  if (typeof getWordMeaning === "function") {
+    const meaning = getWordMeaning(kanji);
+    if (meaning) return meaning;
+  }
+
+  if (typeof kanjiData !== "undefined" && kanjiData.length) {
+    const found = kanjiData.find((k) => k.kanji === kanji);
+    if (found) return found.meaning;
+  }
+
+  return null;
+}
+
+// Extract unique kanji from text
+function extractKanjiFromSentence(text) {
+  if (!text) return [];
+  const clean = text.replace(/[（(][^）)]*[）)]/g, "");
+  const matches = clean.match(/[\u4e00-\u9faf\u3400-\u4dbf]/g);
+  return matches ? [...new Set(matches)] : [];
+}
+
+// ==================== KANJI CHIPS ====================
+
+function addKanjiChips() {
+  const idx = flashIndices[flashPos];
+  if (idx === undefined) return;
+
+  const sentence = sentencesData[idx].jp || "";
+  const kanjiList = extractKanjiFromSentence(sentence);
+
+  // Find the flashcard counter specifically
+  const counterP = document.querySelector("#flashcardModal p");
+  if (!counterP) {
+    console.warn("⚠️ Could not find flashcard counter");
+    return;
+  }
+
+  // Remove existing chips container
+  const existingContainer = document.getElementById("flashKanjiChips");
+  if (existingContainer) {
+    existingContainer.remove();
+  }
+
+  if (kanjiList.length === 0) return;
+
+  // Create chips container
+  const container = document.createElement("span");
+  container.id = "flashKanjiChips";
+  container.style.cssText = `
+        display: inline-flex;
+        gap: 4px;
+        margin-left: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+    `;
+
+  // Add label
+  const label = document.createElement("span");
+  label.textContent = "🖌️";
+  label.style.cssText = `
+        font-size: 0.75rem;
+        color: #8a7b6e;
+        margin-right: 2px;
+    `;
+  container.appendChild(label);
+
+  // Add each kanji as a clickable chip
+  kanjiList.forEach((kanji) => {
+    const chip = document.createElement("span");
+    chip.textContent = kanji;
+    chip.style.cssText = `
+            display: inline-block;
+            padding: 2px 10px;
+            background: #6c8b6b;
+            color: white;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        `;
+    chip.onmouseover = () => {
+      chip.style.background = "#5a7a59";
+      chip.style.transform = "translateY(-1px)";
+      chip.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
+    };
+    chip.onmouseout = () => {
+      chip.style.background = "#6c8b6b";
+      chip.style.transform = "translateY(0)";
+      chip.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+    };
+    chip.onclick = (e) => {
+      e.stopPropagation();
+      const unicode = getUnicodeHex(kanji);
+      if (typeof showStrokeOrder === "function") {
+        showStrokeOrder(kanji, unicode, "");
+      } else {
+        alert(
+          `✍️ ${kanji}\nUnicode: ${unicode}\n\n(Stroke order viewer loading...)`,
+        );
+      }
+    };
+    container.appendChild(chip);
+  });
+
+  // Append to the flashcard counter
+  counterP.appendChild(container);
+}
+
+// ==================== END KANJI CHIPS ====================
+
 // Update flashcard modal title with current sprint name
 function updateFlashcardTitle() {
   const sprintName = sprints[activeSprintIndex].displayName;
@@ -60,10 +182,8 @@ function getWordMeaning(word) {
   const dict = window.wordDict || null;
   if (!dict) return null;
 
-  // Clean the word (remove furigana markers)
   const cleanWord = word.replace(/[（(][^）)]*[）)]/g, "").trim();
 
-  // Try exact match
   if (dict[cleanWord]) {
     return dict[cleanWord].meaning;
   }
@@ -71,7 +191,6 @@ function getWordMeaning(word) {
     return dict[word].meaning;
   }
 
-  // Try partial match - look for dictionary keys that are substrings
   const sortedKeys = Object.keys(dict).sort((a, b) => b.length - a.length);
   for (const key of sortedKeys) {
     if (key.length > 1 && cleanWord.includes(key)) {
@@ -79,7 +198,6 @@ function getWordMeaning(word) {
     }
   }
 
-  // Try removing common suffixes
   if (cleanWord.endsWith("い")) {
     const base = cleanWord.slice(0, -1);
     if (dict[base]) return dict[base].meaning;
@@ -96,10 +214,8 @@ function getWordMeaning(word) {
  * Wrap a word with tooltip HTML
  */
 function wrapWordWithTooltip(word, meaning) {
-  // Build display with furigana
   let displayWord = word;
 
-  // Handle furigana format: kanji（ふりがな）
   displayWord = displayWord.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
@@ -109,16 +225,14 @@ function wrapWordWithTooltip(word, meaning) {
     (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
   );
 
-  // Check if this word contains a particle at the end
   const cleanWord = word.replace(/[（(][^）)]*[）)]/g, "").trim();
-  // UPDATED: Match the whole particle (1-3 characters) at the end
   const particleMatch = cleanWord.match(
     /^(.*?)([はがをにでへとかからまでのもよねや]{1,3})$/,
   );
 
   if (particleMatch) {
     const before = particleMatch[1];
-    const particle = particleMatch[2]; // Now captures the FULL particle (e.g., "から", "まで", "から")
+    const particle = particleMatch[2];
     let beforeHtml = before;
     beforeHtml = beforeHtml.replace(
       /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
@@ -149,7 +263,6 @@ function wrapWordsWithTooltips(sentence) {
     if (meaning) {
       result += wrapWordWithTooltip(part, meaning);
     } else {
-      // No meaning found - just display with furigana
       let displayPart = part;
       displayPart = displayPart.replace(
         /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
@@ -180,7 +293,10 @@ function showFlash(pos) {
   flashJpDiv.onclick = () => speakText(s.reading);
   flashTranslationRevealed = false;
   const revealBtn = document.getElementById("revealTransBtn");
-  if (revealBtn) revealBtn.innerText = "🔎 Reveal On";
+  if (revealBtn) revealBtn.innerText = "🔎 Reveal";
+
+  // Add kanji chips
+  addKanjiChips();
 }
 
 // Update flashcard content when sprint changes
@@ -191,6 +307,8 @@ function updateFlashcardsForSprint() {
     if (flashIndices.length) showFlash(0);
   }
 }
+
+// ==================== EVENT LISTENERS ====================
 
 // Flashcard Speed Controls
 document.getElementById("flashSpeed075Btn").onclick = () => {
@@ -228,11 +346,11 @@ document.getElementById("revealTransBtn").onclick = () => {
     if (idx !== undefined)
       flashTransDiv.innerHTML = sentencesData[idx].translation;
     flashTranslationRevealed = true;
-    btn.innerText = "🙈 Reveal Off";
+    btn.innerText = "🙈 Hide";
   } else {
     flashTransDiv.innerHTML = "???";
     flashTranslationRevealed = false;
-    btn.innerText = "🔎 Reveal On";
+    btn.innerText = "🔎 Reveal";
   }
 };
 
