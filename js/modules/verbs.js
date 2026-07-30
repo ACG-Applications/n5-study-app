@@ -42,27 +42,11 @@ function printLesson() {
 }
 
 // Add furigana to text based on toggle state
-const furiganaCache = new Map();
 function addFuriganaToText(text) {
   if (!text) return "";
-
-  // If furigana is hidden, strip it
   if (furiganaHidden) {
     return text.replace(/[（(][^）)]*[）)]/g, "");
   }
-
-  // Try to use tooltips if the function is available
-  if (
-    typeof createQuizWordTooltips === "function" &&
-    typeof getWordMeaningsForSentence === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: text });
-    if (wordMeanings && wordMeanings.length > 0) {
-      return createQuizWordTooltips(text, wordMeanings);
-    }
-  }
-
-  // Fallback: basic furigana
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -137,6 +121,40 @@ function formatDictionaryForDisplay(verb) {
 
   const displayText = `${dict}（${reading}）`;
   return addFuriganaToText(displayText);
+}
+
+// ===== WRAPPER: Apply furigana safely to HTML nodes =====
+function wrapFuriganaInHTML(htmlString) {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlString;
+
+  function walkNodes(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent;
+      if (text.trim()) {
+        const processed = addFuriganaToText(text);
+        if (processed !== text) {
+          const wrapper = document.createElement('span');
+          wrapper.innerHTML = processed;
+          node.parentNode.replaceChild(wrapper, node);
+          while (wrapper.firstChild) {
+            wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+          }
+          wrapper.remove();
+        }
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === 'SCRIPT' || node.tagName === 'STYLE') return;
+      if (node.tagName === 'RUBY') return;
+      const children = Array.from(node.childNodes);
+      for (const child of children) {
+        walkNodes(child);
+      }
+    }
+  }
+
+  walkNodes(tempDiv);
+  return tempDiv.innerHTML;
 }
 
 // ===== RENDER LEARN TAB =====
@@ -702,8 +720,8 @@ function renderLearnTab() {
         </div>
     `;
 
-  // Apply furigana to all Japanese text in the content
-  container.innerHTML = addFuriganaToText(content);
+  // ===== CRITICAL FIX: Wrap the HTML safely =====
+  container.innerHTML = wrapFuriganaInHTML(content);
 
   // Add TTS click listeners to all example elements
   document.querySelectorAll(".example-box, .example-click").forEach((el) => {
@@ -788,11 +806,6 @@ function unmarkVerbMastered(verbId) {
 
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
-  // Clear the cache
-  furiganaCache.clear();
-  if (typeof meaningCache !== "undefined") {
-    meaningCache.clear();
-  }
   if (furiToggleBtn) {
     furiToggleBtn.innerText = furiganaHidden
       ? "🔤 Furigana On"

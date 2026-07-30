@@ -40,95 +40,28 @@ function printLesson() {
 }
 
 // Add furigana to text based on toggle state
+// Add furigana to text based on toggle state
 const furiganaCache = new Map();
 function addFuriganaToText(text) {
-    if (!text) return "";
-    
-    // If furigana is hidden, strip it
-    if (furiganaHidden) {
-        return text.replace(/[（(][^）)]*[）)]/g, "");
-    }
-    
-    // Try to use tooltips if the function is available
-    if (typeof createQuizWordTooltips === 'function' && typeof getWordMeaningsForSentence === 'function') {
-        const wordMeanings = getWordMeaningsForSentence({ jp: text });
-        if (wordMeanings && wordMeanings.length > 0) {
-            return createQuizWordTooltips(text, wordMeanings);
-        }
-    }
-    
-    // Fallback: basic furigana
-    return text.replace(
-        /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-        (_, kanji, furigana) => {
-            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-        }
-    );
-}
+  if (!text) return "";
 
-  // Special handling for specific adverbs that have complex kanji patterns
-  // 時々 -> 時々（ときどき）
-  if (text === "時々（ときどき）") {
-    return "<ruby>時々<rt>ときどき</rt></ruby>";
-  }
-  // 真っ直ぐ -> 真っ直ぐ（まっすぐ）
-  if (text === "真っ直ぐ（まっすぐ）") {
-    return "<ruby>真っ直ぐ<rt>まっすぐ</rt></ruby>";
-  }
-  // 一緒に -> 一緒（いっしょ）に
-  if (text === "一緒（いっしょ）に") {
-    return "<ruby>一緒<rt>いっしょ</rt></ruby>に";
-  }
-  // 段々 -> 段々（だんだん）
-  if (text === "段々（だんだん）") {
-    return "<ruby>段々<rt>だんだん</rt></ruby>";
-  }
-  // 色々 -> 色々（いろいろ）
-  if (text === "色々（いろいろ）") {
-    return "<ruby>色々<rt>いろいろ</rt></ruby>";
-  }
-  // 一番 -> 一番（いちばん）
-  if (text === "一番（いちばん）") {
-    return "<ruby>一番<rt>いちばん</rt></ruby>";
-  }
-  // 何故 -> 何故（なぜ）
-  if (text === "何故（なぜ）") {
-    return "<ruby>何故<rt>なぜ</rt></ruby>";
-  }
-  // 同じ -> 同じ（おなじ）
-  if (text === "同じ（おなじ）") {
-    return "<ruby>同じ<rt>おなじ</rt></ruby>";
-  }
-  // 直ぐに -> 直ぐに（すぐに）
-  if (text === "直ぐに（すぐに）") {
-    return "<ruby>直ぐに<rt>すぐに</rt></ruby>";
-  }
-  // 大丈夫 -> 大丈夫（だいじょうぶ）
-  if (text === "大丈夫（だいじょうぶ）") {
-    return "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>";
-  }
-  // 結構 -> 結構（けっこう）
-  if (text === "結構（けっこう）") {
-    return "<ruby>結構<rt>けっこう</rt></ruby>";
-  }
-  // 多分 -> 多分（たぶん）
-  if (text === "多分（たぶん）") {
-    return "<ruby>多分<rt>たぶん</rt></ruby>";
-  }
-  // 大変 -> 大変（たいへん）
-  if (text === "大変（たいへん）") {
-    return "<ruby>大変<rt>たいへん</rt></ruby>";
-  }
-  // 一人 -> 一人（ひとり）
-  if (text === "一人（ひとり）") {
-    return "<ruby>一人<rt>ひとり</rt></ruby>";
-  }
-  // 皆 -> 皆（みんな）
-  if (text === "皆（みんな）") {
-    return "<ruby>皆<rt>みんな</rt></ruby>";
+  // If furigana is hidden, strip it
+  if (furiganaHidden) {
+    return text.replace(/[（(][^）)]*[）)]/g, "");
   }
 
-  // General pattern: 漢字（ふりがな）
+  // Try to use tooltips if the function is available
+  if (
+    typeof createQuizWordTooltips === "function" &&
+    typeof getWordMeaningsForSentence === "function"
+  ) {
+    const wordMeanings = getWordMeaningsForSentence({ jp: text });
+    if (wordMeanings && wordMeanings.length > 0) {
+      return createQuizWordTooltips(text, wordMeanings);
+    }
+  }
+
+  // Fallback: basic furigana
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -160,6 +93,40 @@ function displaySentenceWithFurigana(sentence) {
   }
   // Fallback to basic furigana
   return addFuriganaToText(sentence);
+}
+
+// ===== HELPER: Apply furigana only to text nodes inside HTML =====
+function wrapFuriganaInHTML(htmlString) {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = htmlString;
+
+  function walkNodes(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent;
+      if (text.trim()) {
+        const processed = addFuriganaToText(text);
+        if (processed !== text) {
+          const wrapper = document.createElement("span");
+          wrapper.innerHTML = processed;
+          node.parentNode.replaceChild(wrapper, node);
+          while (wrapper.firstChild) {
+            wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+          }
+          wrapper.remove();
+        }
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === "SCRIPT" || node.tagName === "STYLE") return;
+      if (node.tagName === "RUBY") return;
+      const children = Array.from(node.childNodes);
+      for (const child of children) {
+        walkNodes(child);
+      }
+    }
+  }
+
+  walkNodes(tempDiv);
+  return tempDiv.innerHTML;
 }
 
 // ===== RENDER LEARN TAB =====
@@ -566,7 +533,7 @@ function renderLearnTab() {
     `;
 
   // Apply furigana to all Japanese text in the content
-  container.innerHTML = addFuriganaToText(content);
+  container.innerHTML = wrapFuriganaInHTML(content);
 
   // Add TTS click listeners to all example elements
   document.querySelectorAll(".example-box, .example-click").forEach((el) => {
@@ -668,9 +635,9 @@ function unmarkAdverbMastered(advId) {
 
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
-    // Clear the cache
+  // Clear the cache
   furiganaCache.clear();
-  if (typeof meaningCache !== 'undefined') {
+  if (typeof meaningCache !== "undefined") {
     meaningCache.clear();
   }
   if (furiToggleBtn) {

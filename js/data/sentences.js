@@ -170,7 +170,7 @@ const sentencesData = [
     grammarHint: "🎯 持っています = has"
   },
   {
-    jp: "飲（の）み物（もの） を 買（か）い に コンビニ（こんびに） へ 行（い）きます",
+    jp: "飲（の）み物（もの） を 買（か）い に コンビニ へ 行（い）きます",
     reading: "のみもの を かい に こんびに へ いきます",
     translation: "I go to the convenience store to buy a drink.",
     grammarHint: "📘 〜に + 行く = go to do"

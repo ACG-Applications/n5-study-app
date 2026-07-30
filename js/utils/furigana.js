@@ -84,21 +84,3 @@ function buildRubyHTML(text) {
   
   return result;
 }
-
-function wrapWordsWithTooltips(sentence) {
-  const words = sentence.splitWords;
-  const meanings = sentence.wordMeanings;
-  let result = '';
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
-    const meaning = meanings[i];
-    if (word.original.includes('（')) {
-      const rubyHtml = buildRubyHTML(word.original);
-      result += `<span class="word-tooltip">${rubyHtml}<span class="tooltip-text">${meaning}</span></span>`;
-    } else {
-      result += `<span class="word-tooltip">${word.original}<span class="tooltip-text">${meaning}</span></span>`;
-    }
-    if (i < words.length - 1) result += ' ';
-  }
-  return result;
-}

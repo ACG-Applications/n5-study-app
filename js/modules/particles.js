@@ -99,6 +99,40 @@ function addFuriganaToText(text) {
   );
 }
 
+// ===== HELPER: Apply furigana only to text nodes inside HTML =====
+function wrapFuriganaInHTML(htmlString) {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = htmlString;
+
+  function walkNodes(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent;
+      if (text.trim()) {
+        const processed = addFuriganaToText(text);
+        if (processed !== text) {
+          const wrapper = document.createElement("span");
+          wrapper.innerHTML = processed;
+          node.parentNode.replaceChild(wrapper, node);
+          while (wrapper.firstChild) {
+            wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+          }
+          wrapper.remove();
+        }
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === "SCRIPT" || node.tagName === "STYLE") return;
+      if (node.tagName === "RUBY") return;
+      const children = Array.from(node.childNodes);
+      for (const child of children) {
+        walkNodes(child);
+      }
+    }
+  }
+
+  walkNodes(tempDiv);
+  return tempDiv.innerHTML;
+}
+
 // ===== RENDER LEARN TAB =====
 function renderLearnTab() {
   const container = document.getElementById("learnContent");
@@ -448,7 +482,7 @@ function renderLearnTab() {
   `;
 
   // Apply furigana to all Japanese text in the content
-  container.innerHTML = addFuriganaToText(content);
+  container.innerHTML = wrapFuriganaInHTML(content);
 
   // Add TTS click listeners to all example elements
   document.querySelectorAll(".example-box, .example-click").forEach((el) => {
@@ -700,20 +734,8 @@ function renderParticleDetails() {
     let examplesHtml = "";
     for (const ex of examples) {
       let displayHtml = "";
-      if (
-        typeof wrapWordsWithTooltips === "function" &&
-        ex.splitWords &&
-        ex.wordMeanings
-      ) {
-        displayHtml = wrapWordsWithTooltips(ex);
-        const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, "g");
-        displayHtml = displayHtml.replace(
-          regex,
-          `<span class="particle-highlight">$1</span>`,
-        );
-      } else {
-        displayHtml = wrapParticleExample(ex.jp, particle);
-      }
+      // Tooltips have been removed, always use the fallback
+      displayHtml = wrapParticleExample(ex.jp, particle);
 
       examplesHtml += `
         <div class="example-item n5-example" data-reading="${ex.reading}">

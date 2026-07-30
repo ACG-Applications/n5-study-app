@@ -27,7 +27,7 @@
     <meta name="theme-color" content="#1a73e8" />
     <link rel="apple-touch-icon" href="images/icons/icon-192x19202.png" />
 
-    <!-- Word Search Styles -->
+    <!-- Word Search & Global Search Styles -->
     <style>
       /* ===== WORD SEARCH MODAL STYLES ===== */
       #wordSearchModal .modal-card {
@@ -553,6 +553,133 @@
           padding: 4px 8px;
         }
       }
+
+      /* ===== GLOBAL SEARCH BAR STYLES - COMPACT ===== */
+      .global-search-wrapper {
+        display: flex;
+        align-items: center;
+        position: relative;
+        margin-left: auto;
+        flex-shrink: 0;
+        padding-left: 8px;
+      }
+      .global-search-wrapper input {
+        padding: 4px 12px;
+        border-radius: 40px;
+        border: 1px solid #d4c9b8;
+        background: rgba(255, 255, 255, 0.95);
+        font-family: inherit;
+        font-size: 0.8rem;
+        width: 140px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        transition:
+          width 0.2s ease,
+          box-shadow 0.2s ease;
+        color: #2c241c;
+        height: 28px;
+      }
+      .global-search-wrapper input:focus {
+        outline: none;
+        width: 180px;
+        box-shadow: 0 0 0 3px rgba(108, 139, 107, 0.25);
+      }
+      .global-search-wrapper input::placeholder {
+        color: #8a7e6e;
+        font-size: 0.75rem;
+      }
+      #globalSearchResults {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        margin-top: 8px;
+        max-height: 350px;
+        overflow-y: auto;
+        display: none;
+        z-index: 1000;
+        border: 1px solid #e3dbd0;
+        padding: 8px 0;
+      }
+      #globalSearchResults.active {
+        display: block;
+      }
+      #globalSearchResults .gs-result-item {
+        padding: 10px 16px;
+        border-bottom: 1px solid #f0ebe3;
+        cursor: pointer;
+        transition: background 0.1s;
+      }
+      #globalSearchResults .gs-result-item:last-child {
+        border-bottom: none;
+      }
+      #globalSearchResults .gs-result-item:hover {
+        background: #f5f0eb;
+      }
+      #globalSearchResults .gs-word {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: #000000;
+      }
+      #globalSearchResults .gs-reading {
+        font-size: 0.8rem;
+        color: #8b0000;
+        margin-left: 6px;
+      }
+      #globalSearchResults .gs-meaning {
+        font-size: 0.85rem;
+        color: #5a5a5a;
+        margin-left: 10px;
+      }
+      #globalSearchResults .gs-root {
+        font-size: 0.75rem;
+        color: #6c8b6b;
+        margin-left: 10px;
+        font-style: italic;
+      }
+      #globalSearchResults .gs-empty {
+        padding: 16px;
+        text-align: center;
+        color: #999;
+        font-style: italic;
+      }
+
+      @media (max-width: 700px) {
+        .global-search-wrapper input {
+          width: 110px;
+          font-size: 0.75rem;
+          height: 26px;
+          padding: 3px 10px;
+        }
+        .global-search-wrapper input:focus {
+          width: 150px;
+        }
+        .global-search-wrapper {
+          padding-left: 6px;
+        }
+      }
+      @media (max-width: 480px) {
+        .global-search-wrapper {
+          width: 100%;
+          margin-left: 0;
+          padding-left: 0;
+          margin-top: 6px;
+          justify-content: flex-end;
+        }
+        .global-search-wrapper input {
+          width: 100%;
+          max-width: 140px;
+          font-size: 0.7rem;
+          padding: 3px 8px;
+          height: 24px;
+        }
+        .global-search-wrapper input:focus {
+          width: 100%;
+          max-width: 160px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -568,6 +695,7 @@
           <label>Sprint:</label>
           <select id="sprintSelect"></select>
         </div>
+
         <div class="control-group">
           <label>Mastered:</label>
           <button id="showMasteredBtn" class="small-btn">👁️ Show</button>
@@ -576,11 +704,23 @@
           <button id="exportMasteredBtn" class="small-btn">📤 Export</button>
           <button id="importMasteredBtn" class="small-btn">📥 Import</button>
         </div>
+
+        <!-- Global Search -->
+        <div class="global-search-wrapper">
+          <input
+            type="text"
+            id="globalSearchInput"
+            placeholder="🔍 Look up a word..."
+            autocomplete="off"
+          />
+          <div id="globalSearchResults"></div>
+        </div>
       </div>
 
       <!-- Main Action Buttons -->
       <div class="action-buttons">
         <button id="flashcardBtn" class="action-btn">📇 Flashcards</button>
+        <button id="vocabBtn" class="action-btn">📖 Vocab</button>
         <button id="sentenceBuilderBtn" class="action-btn">
           🧩 Sentence Builder
         </button>
@@ -1159,6 +1299,130 @@
     </div>
     <!-- ===== END PRINT MODAL ===== -->
 
+    <!-- ===== VOCAB FLASHCARD MODAL ===== -->
+    <div id="vocabModal" class="modal">
+      <div class="modal-card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #6c8b6b;
+            padding-bottom: 8px;
+          "
+        >
+          <h3 id="vocabTitle" style="margin: 0">📖 Vocabulary Flashcards</h3>
+          <button
+            id="closeVocabBtn"
+            class="small-btn"
+            style="
+              background: #8b5a5a;
+              color: white;
+              border: none;
+              padding: 6px 16px;
+              border-radius: 40px;
+              cursor: pointer;
+              font-size: 0.8rem;
+            "
+          >
+            ✕ Close
+          </button>
+        </div>
+
+        <!-- The Flashcard -->
+        <div
+          id="vocabCard"
+          class="vocab-card"
+          style="
+            cursor: pointer;
+            text-align: center;
+            padding: 30px 20px;
+            margin: 10px 0;
+            min-height: 200px;
+            background: #fdfcfa;
+            border-radius: 16px;
+            border: 2px solid #e8e0d5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s;
+          "
+        >
+          <div
+            id="vocabWord"
+            class="vocab-word"
+            style="
+              font-size: 2.5rem;
+              font-weight: 700;
+              color: #000;
+              line-height: 1.4;
+            "
+          ></div>
+          <div
+            id="vocabReading"
+            class="vocab-reading"
+            style="font-size: 1.1rem; color: #8b0000; margin-top: 4px"
+          ></div>
+          <div
+            id="vocabMeaning"
+            class="vocab-meaning"
+            style="
+              font-size: 1.3rem;
+              color: #1a2b4c;
+              margin-top: 12px;
+              display: none;
+            "
+          ></div>
+        </div>
+
+        <!-- Controls -->
+        <div
+          class="vocab-controls"
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 8px;
+          "
+        >
+          <button id="vocabPrevBtn" class="small-btn">◀ Prev</button>
+          <button id="vocabFlipBtn" class="small-btn">🔄 Flip</button>
+          <button id="vocabNextBtn" class="small-btn">Next ▶</button>
+          <button id="vocabAudioBtn" class="small-btn">🔊 Listen</button>
+          <button id="vocabShuffleBtn" class="small-btn">🎲 Shuffle</button>
+          <button id="vocabResetBtn" class="small-btn">🔄 Reset</button>
+          <button
+            id="vocabMasteredBtn"
+            class="small-btn"
+            style="background: #4caf50; color: white; border: none"
+          >
+            ⭐ Mastered
+          </button>
+        </div>
+
+        <!-- Progress / Stats -->
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+          "
+        >
+          <span
+            >Card <span id="vocabIndex">0</span> /
+            <span id="vocabTotal">0</span></span
+          >
+          <span>✅ <span id="vocabMasteredCount">0</span> Mastered</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== END Vocab MODAL ===== -->
+
     <!-- 1. DATA - All data files together ✅ -->
     <script src="js/data/sprints.js"></script>
     <script src="js/data/sentences.js"></script>
@@ -1168,7 +1432,7 @@
     <!-- 2. UTILITIES ✅ -->
     <script src="js/utils/helpers.js"></script>
     <script src="js/utils/furigana.js"></script>
-    <script src="js/utils/tooltips.js"></script>
+
     <script src="js/utils/kanaHelper.js"></script>
 
     <!-- 3. MODULES ✅ -->
@@ -1177,6 +1441,7 @@
     <script src="js/modules/kanji-stroke.js"></script>
     <!-- ← MOVED HERE -->
     <script src="js/modules/flashcards.js"></script>
+    <script src="js/modules/vocab.js"></script>
     <!-- ← Now after kanji-stroke -->
     <script src="js/modules/storyMode.js"></script>
     <script src="js/modules/print.js"></script>
@@ -2142,6 +2407,111 @@
             '<li style="color: #a02020; text-align: center; padding: 20px;">⚠️ No data loaded</li>';
         }
       })();
+    </script>
+
+    <!-- 5. GLOBAL SEARCH BAR SCRIPT (JISHO) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("globalSearchInput");
+        const resultsContainer = document.getElementById("globalSearchResults");
+
+        // Ensure wordDict is available
+        if (typeof wordDict === "undefined") {
+          console.warn("Global Search: wordDict not found.");
+          return;
+        }
+
+        // Function to build the HTML for a single result
+        function createResultHTML(key, data) {
+          let displayText = `<span class="gs-word">${key}</span>`;
+          if (data.reading && data.reading !== key) {
+            displayText += ` <span class="gs-reading">(${data.reading})</span>`;
+          }
+
+          let meaningText = data.meaning || "";
+          let rootInfo = "";
+
+          // If it's a conjugated form, link it back to the root
+          if (data.is_conjugation && data.root) {
+            const rootData = wordDict[data.root];
+            const rootMeaning = rootData ? rootData.meaning : "";
+            rootInfo = ` <span class="gs-root">← from ${data.root} (${rootMeaning})</span>`;
+          }
+
+          return `
+                <div class="gs-result-item">
+                    <div>
+                        ${displayText}
+                        <span class="gs-meaning">${meaningText}</span>
+                        ${rootInfo}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Search function
+        searchInput.addEventListener("input", function () {
+          const query = this.value.trim().toLowerCase();
+          resultsContainer.innerHTML = "";
+
+          if (query.length === 0) {
+            resultsContainer.classList.remove("active");
+            return;
+          }
+
+          const matches = [];
+          // Search through the dictionary keys
+          for (const [key, data] of Object.entries(wordDict)) {
+            // Skip if the key is a counter suffix (like "～えき") to avoid clutter
+            if (key.startsWith("～")) continue;
+
+            // Check exact/partial match on dictionary word, reading, or meaning
+            const matchKey = key.toLowerCase();
+            const matchReading = (data.reading || "").toLowerCase();
+            const matchMeaning = (data.meaning || "").toLowerCase();
+
+            if (
+              matchKey.includes(query) ||
+              matchReading.includes(query) ||
+              matchMeaning.includes(query)
+            ) {
+              matches.push({ key, data });
+            }
+
+            // Stop after 15 results to keep it fast
+            if (matches.length >= 15) break;
+          }
+
+          if (matches.length === 0) {
+            resultsContainer.innerHTML = `<div class="gs-empty">No results found for "${query}"</div>`;
+            resultsContainer.classList.add("active");
+            return;
+          }
+
+          // Render results
+          let html = "";
+          for (const match of matches) {
+            html += createResultHTML(match.key, match.data);
+          }
+          resultsContainer.innerHTML = html;
+          resultsContainer.classList.add("active");
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".global-search-wrapper")) {
+            resultsContainer.classList.remove("active");
+          }
+        });
+
+        // Close dropdown with Escape key
+        searchInput.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            resultsContainer.classList.remove("active");
+            this.blur();
+          }
+        });
+      });
     </script>
 
     <script>
