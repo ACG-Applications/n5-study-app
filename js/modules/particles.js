@@ -70,11 +70,27 @@ function printLesson() {
 }
 
 // Add furigana to text based on toggle state
+const furiganaCache = new Map();
 function addFuriganaToText(text) {
   if (!text) return "";
+
+  // If furigana is hidden, strip it
   if (furiganaHidden) {
     return text.replace(/[（(][^）)]*[）)]/g, "");
   }
+
+  // Try to use tooltips if the function is available
+  if (
+    typeof createQuizWordTooltips === "function" &&
+    typeof getWordMeaningsForSentence === "function"
+  ) {
+    const wordMeanings = getWordMeaningsForSentence({ jp: text });
+    if (wordMeanings && wordMeanings.length > 0) {
+      return createQuizWordTooltips(text, wordMeanings);
+    }
+  }
+
+  // Fallback: basic furigana
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -633,6 +649,11 @@ function wrapParticleExample(text, particle) {
 // In particles.js - Updated applyFuriganaHide function
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
+  // Clear the cache
+  furiganaCache.clear();
+  if (typeof meaningCache !== "undefined") {
+    meaningCache.clear();
+  }
   if (furiToggleBtn) {
     furiToggleBtn.innerText = furiganaHidden
       ? "🔤 Furigana On"
@@ -891,6 +912,12 @@ function renderStructureExamples() {
     const s = sentencesData[idx];
     if (!s) continue;
 
+    // Get word meanings for tooltips
+    let wordMeanings = [];
+    if (typeof getWordMeaningsForSentence === "function") {
+      wordMeanings = getWordMeaningsForSentence(s);
+    }
+
     // Get the raw text without furigana markers for display
     let rawJp = s.jp;
 
@@ -911,15 +938,19 @@ function renderStructureExamples() {
 
     let displayHtml = rawJp;
 
-    // Apply furigana to kanji only
-    if (!furiganaHidden) {
+    // Use createQuizWordTooltips if available
+    if (
+      wordMeanings &&
+      wordMeanings.length > 0 &&
+      typeof createQuizWordTooltips === "function"
+    ) {
+      displayHtml = createQuizWordTooltips(rawJp, wordMeanings);
+    } else {
+      // Apply furigana to kanji only
       displayHtml = displayHtml.replace(
         /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
         (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
       );
-    } else {
-      // Remove all furigana markers
-      displayHtml = displayHtml.replace(/[（(][^）)]*[）)]/g, "");
     }
 
     // Highlight particles
@@ -965,7 +996,6 @@ function renderStructureExamples() {
     });
   }
 }
-
 // In particles.js - Updated populateParticleReference
 function populateParticleReference() {
   const particles = [
@@ -995,24 +1025,34 @@ function populateParticleReference() {
     if (examples.length > 0) {
       const ex = examples[0];
       let displayHtml = "";
+
+      // Get word meanings for tooltips
+      let wordMeanings = [];
+      if (typeof getWordMeaningsForSentence === "function") {
+        wordMeanings = getWordMeaningsForSentence(ex);
+      }
+
+      // Use createQuizWordTooltips if available for tooltips
       if (
-        typeof wrapWordsWithTooltips === "function" &&
-        ex.splitWords &&
-        ex.wordMeanings
+        wordMeanings &&
+        wordMeanings.length > 0 &&
+        typeof createQuizWordTooltips === "function"
       ) {
-        displayHtml = wrapWordsWithTooltips(ex);
+        displayHtml = createQuizWordTooltips(ex.jp, wordMeanings);
+        // Highlight the particle
         const regex = new RegExp(`(${p.char})(?![^<]*>|[^<]*<\\/rt>)`, "g");
         displayHtml = displayHtml.replace(
           regex,
           `<span class="particle-highlight">$1</span>`,
         );
-        // If furigana hidden, strip it from the wrapped text
-        if (furiganaHidden) {
-          displayHtml = displayHtml.replace(/<rt>.*?<\/rt>/g, "");
-        }
       } else {
-        // Pass the current furigana state to wrapParticleExample
+        // Fallback: use wrapParticleExample
         displayHtml = wrapParticleExample(ex.jp, p.char);
+      }
+
+      // If furigana hidden, strip it from the display
+      if (furiganaHidden) {
+        displayHtml = displayHtml.replace(/<rt>.*?<\/rt>/g, "");
       }
 
       container.innerHTML = `
@@ -1058,7 +1098,7 @@ function populateParticleReference() {
     }
   }
 
-  // ✅ Apply furigana hide state to all examples in the reference
+  // Apply furigana hide state to all examples in the reference
   if (furiganaHidden) {
     document
       .querySelectorAll(
@@ -1077,7 +1117,6 @@ function populateParticleReference() {
       });
   }
 }
-
 // ==================== QUIZ FUNCTIONS ====================
 
 function findAllParticlesInSentence(sentenceText) {

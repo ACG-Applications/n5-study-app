@@ -59,11 +59,27 @@ function printLesson() {
 }
 
 // Helper function to add furigana
+const furiganaCache = new Map();
 function addFuriganaToText(text) {
   if (!text) return "";
+
+  // If furigana is hidden, strip it
   if (furiganaHidden) {
     return text.replace(/[（(][^）)]*[）)]/g, "");
   }
+
+  // Try to use tooltips if the function is available
+  if (
+    typeof createQuizWordTooltips === "function" &&
+    typeof getWordMeaningsForSentence === "function"
+  ) {
+    const wordMeanings = getWordMeaningsForSentence({ jp: text });
+    if (wordMeanings && wordMeanings.length > 0) {
+      return createQuizWordTooltips(text, wordMeanings);
+    }
+  }
+
+  // Fallback: basic furigana
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -622,6 +638,11 @@ function unmarkAdjectiveMastered(adjId) {
 
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
+  // Clear the cache
+  furiganaCache.clear();
+  if (typeof meaningCache !== "undefined") {
+    meaningCache.clear();
+  }
   if (furiToggleBtn) {
     furiToggleBtn.innerText = furiganaHidden
       ? "🔤 Furigana On"
