@@ -1,3 +1,141 @@
+/* ===== APP LINKS SECTION ===== */
+.app-links-section {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: #f8f5f0;
+  border-radius: 16px;
+  border: 1px solid #e3dbd0;
+}
+
+.app-links-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #d4c9b8;
+  padding-bottom: 8px;
+}
+
+.app-links-header h2 {
+  font-size: 1.1rem;
+  color: #2c241c;
+  margin: 0;
+  font-weight: 600;
+}
+
+.app-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.app-link-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e3dbd0;
+  text-decoration: none;
+  color: #2c241c;
+  transition: all 0.2s ease;
+  gap: 2px;
+}
+
+.app-link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #b8a58b;
+}
+
+.app-link-card .app-icon {
+  font-size: 1.6rem;
+}
+
+.app-link-card .app-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.app-link-card .app-desc {
+  font-size: 0.65rem;
+  color: #8a7e6e;
+  text-align: center;
+}
+
+.app-link-card .app-badge {
+  font-size: 0.5rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+.app-badge.pwa {
+  background: #4a8a6a;
+  color: white;
+}
+
+.app-badge.github {
+  background: #e8e8e8;
+  color: #333;
+}
+
+.app-badge.external {
+  background: #6b6b8a;
+  color: white;
+}
+
+.app-links-footer {
+  font-size: 0.7rem;
+  color: #8a7e6e;
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid #e5ddd2;
+}
+
+/* Collapsed state */
+.app-links-section.collapsed .app-links-grid,
+.app-links-section.collapsed .app-links-footer {
+  display: none;
+}
+
+#toggleAppLinks {
+  background: none;
+  border: 1px solid #d4c9b8;
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+#toggleAppLinks:hover {
+  background: #e8e0d5;
+}
+
+@media (max-width: 600px) {
+  .app-links-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 8px;
+  }
+  .app-link-card .app-name {
+    font-size: 0.75rem;
+  }
+  .app-link-card .app-icon {
+    font-size: 1.4rem;
+  }
+  .app-link-card .app-desc {
+    font-size: 0.6rem;
+  }
+}
+
 /* ===== GLOBAL STYLES ===== */
 * {
   box-sizing: border-box;

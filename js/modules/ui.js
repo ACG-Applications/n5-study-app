@@ -169,3 +169,24 @@ function init() {
 }
 
 init();
+// ==================== APP LINKS TOGGLE ====================
+function initAppLinksToggle() {
+  const toggleBtn = document.getElementById("toggleAppLinks");
+  const section = document.querySelector(".app-links-section");
+
+  if (toggleBtn && section) {
+    toggleBtn.addEventListener("click", function () {
+      section.classList.toggle("collapsed");
+      this.textContent = section.classList.contains("collapsed")
+        ? "▶ Expand"
+        : "▼ Collapse";
+    });
+  }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAppLinksToggle);
+} else {
+  initAppLinksToggle();
+}
