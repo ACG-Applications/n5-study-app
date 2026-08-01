@@ -119,11 +119,27 @@ function showStrokeOrder(kanji, unicode, meaning) {
                     display: flex;
                     gap: 12px;
                     justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
                     padding: 16px 20px;
                     border-top: 1px solid #e8e0d5;
                     background: #faf8f5;
                     border-radius: 0 0 24px 24px;
                 ">
+                    <button id="strokeReplayBtn" class="small-btn" style="
+                        background: #6c8b6b;
+                        color: white;
+                        border: none;
+                        padding: 8px 20px;
+                        border-radius: 40px;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                        display: none;
+                        font-family: inherit;
+                        line-height: 1.5;
+                        text-align: center;
+                        vertical-align: middle;
+                    ">▶️ Replay</button>
                     <button id="strokePrintBtn" class="small-btn" style="
                         background: #6c8b6b;
                         color: white;
@@ -132,6 +148,10 @@ function showStrokeOrder(kanji, unicode, meaning) {
                         border-radius: 40px;
                         cursor: pointer;
                         font-size: 0.9rem;
+                        font-family: inherit;
+                        line-height: 1.5;
+                        text-align: center;
+                        vertical-align: middle;
                     ">🖨️ Print</button>
                     <button id="strokeCloseBtn" class="small-btn" style="
                         background: #e8e0d5;
@@ -140,6 +160,10 @@ function showStrokeOrder(kanji, unicode, meaning) {
                         border-radius: 40px;
                         cursor: pointer;
                         font-size: 0.9rem;
+                        font-family: inherit;
+                        line-height: 1.5;
+                        text-align: center;
+                        vertical-align: middle;
                     ">Close</button>
                 </div>
             </div>
@@ -154,6 +178,12 @@ function showStrokeOrder(kanji, unicode, meaning) {
             }
             .stroke-modal-content {
                 animation: strokeFadeIn 0.2s ease;
+            }
+            #strokeReplayBtn, #strokePrintBtn, #strokeCloseBtn {
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                white-space: nowrap !important;
             }
         `;
     document.head.appendChild(style);
@@ -172,6 +202,9 @@ function showStrokeOrder(kanji, unicode, meaning) {
     modal.querySelector("#strokePrintBtn").addEventListener("click", () => {
       printStrokeDiagram(kanji, unicode, meaning);
     });
+    modal.querySelector("#strokeReplayBtn").addEventListener("click", () => {
+      replayAnimation();
+    });
   }
 
   // Update title
@@ -186,6 +219,15 @@ function showStrokeOrder(kanji, unicode, meaning) {
   // Clear container and show loading
   container.innerHTML =
     '<div class="stroke-loading" style="text-align: center; color: #8a7b6e; padding: 40px;">Loading stroke order...</div>';
+
+  // Store current kanji data for replay
+  window._currentStrokeData = {
+    kanji: kanji,
+    unicode: unicode,
+    meaning: meaning,
+    paths: paths,
+    isAnimated: false,
+  };
 
   // Create an image element that tries both paths
   let img = document.createElement("img");
@@ -221,6 +263,8 @@ function showStrokeOrder(kanji, unicode, meaning) {
                     </div>
                 </div>
             `;
+      // Hide replay button if both failed
+      document.getElementById("strokeReplayBtn").style.display = "none";
     }
   };
 
@@ -229,17 +273,17 @@ function showStrokeOrder(kanji, unicode, meaning) {
     container.innerHTML = "";
     container.appendChild(img);
 
-    // Add indicator if animated version is being shown
+    const replayBtn = document.getElementById("strokeReplayBtn");
+
+    // Check if animated version is being shown
     if (this.src.includes("kanji-animated")) {
-      const indicator = document.createElement("div");
-      indicator.style.cssText = `
-                font-size: 0.7rem;
-                color: #6c8b6b;
-                margin-top: 4px;
-                font-weight: 500;
-            `;
-      indicator.textContent = "▶️ Animated stroke order";
-      container.appendChild(indicator);
+      window._currentStrokeData.isAnimated = true;
+      replayBtn.style.display = "inline-flex";
+      replayBtn.textContent = "▶️ Replay";
+      replayBtn.title = "Replay the stroke order animation";
+    } else {
+      window._currentStrokeData.isAnimated = false;
+      replayBtn.style.display = "none";
     }
   };
 
@@ -253,6 +297,33 @@ function showStrokeOrder(kanji, unicode, meaning) {
   modal.style.visibility = "visible";
   modal.style.opacity = "1";
   console.log("🖼️ Modal displayed");
+}
+
+// Replay the animation
+function replayAnimation() {
+  const data = window._currentStrokeData;
+  if (!data || !data.isAnimated) return;
+
+  console.log("🔄 Replaying animation for:", data.kanji);
+
+  const container = document.getElementById("strokeSvgContainer");
+  const img = container.querySelector("img");
+
+  if (img) {
+    // Force reload by adding timestamp to URL
+    const src = img.src.split("?")[0];
+    img.src = src + "?t=" + Date.now();
+
+    // Also update the replay button to show it's replaying
+    const replayBtn = document.getElementById("strokeReplayBtn");
+    replayBtn.textContent = "🔄 Replaying...";
+    replayBtn.style.opacity = "0.7";
+
+    setTimeout(() => {
+      replayBtn.textContent = "▶️ Replay";
+      replayBtn.style.opacity = "1";
+    }, 1500);
+  }
 }
 
 // Print stroke diagram - uses static SVG for better print quality
