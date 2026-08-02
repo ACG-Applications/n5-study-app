@@ -4,6 +4,7 @@ let vocabDeck = [];
 let vocabCurrentIndex = 0;
 let vocabIsFlipped = false;
 let vocabMastered = new Set();
+let vocabFuriganaHidden = false;  // false = furigana visible, true = furigana hidden
 
 // DOM Elements
 const vocabModal = document.getElementById("vocabModal");
@@ -23,6 +24,7 @@ const vocabShuffleBtn = document.getElementById("vocabShuffleBtn");
 const vocabResetBtn = document.getElementById("vocabResetBtn");
 const vocabAudioBtn = document.getElementById("vocabAudioBtn");
 const vocabMasteredBtn = document.getElementById("vocabMasteredBtn");
+const vocabFuriToggleBtn = document.getElementById("vocabFuriToggleBtn");
 
 // ==================== HELPER FUNCTIONS ====================
 
@@ -59,6 +61,72 @@ function extractWordsFromSentence(text) {
   return words
     .map(w => w.replace(/[、。，,、！!？?、]/g, "").trim())
     .filter(w => w.length > 0);
+}
+
+// Check if a character is Kanji (CJK Unified Ideographs)
+function isKanji(char) {
+  const code = char.charCodeAt(0);
+  return (code >= 0x4E00 && code <= 0x9FAF) || // CJK Unified Ideographs
+         (code >= 0x3400 && code <= 0x4DBF);   // CJK Extension A
+}
+
+// Build HTML with furigana only for kanji characters
+function buildVocabFuriganaHTML(word, reading) {
+  if (!word) return word;
+  if (!reading) return word;
+  
+  // Split word into characters
+  const chars = word.split('');
+  let result = '';
+  
+  // Find which characters are kanji
+  const kanjiIndices = [];
+  chars.forEach((char, idx) => {
+    if (isKanji(char)) {
+      kanjiIndices.push(idx);
+    }
+  });
+  
+  // If no kanji, return plain text
+  if (kanjiIndices.length === 0) {
+    return word;
+  }
+  
+  // Get reading as characters (remove any existing parentheses or furigana markers)
+  let readingChars = reading.replace(/[（）()]/g, '').split('');
+  
+  if (kanjiIndices.length === 1) {
+    // Single kanji - assign the entire reading to it
+    const idx = kanjiIndices[0];
+    for (let i = 0; i < chars.length; i++) {
+      if (i === idx) {
+        result += `<ruby>${chars[i]}<rt>${reading}</rt></ruby>`;
+      } else {
+        result += chars[i];
+      }
+    }
+    return result;
+  }
+  
+  // Multiple kanji - distribute reading across them
+  const totalKanji = kanjiIndices.length;
+  const baseLen = Math.floor(readingChars.length / totalKanji);
+  let extra = readingChars.length - (baseLen * totalKanji);
+  
+  let readingPos = 0;
+  for (let i = 0; i < chars.length; i++) {
+    if (kanjiIndices.includes(i)) {
+      let len = baseLen + (extra > 0 ? 1 : 0);
+      if (extra > 0) extra--;
+      const furigana = readingChars.slice(readingPos, readingPos + len).join('');
+      result += `<ruby>${chars[i]}<rt>${furigana}</rt></ruby>`;
+      readingPos += len;
+    } else {
+      result += chars[i];
+    }
+  }
+  
+  return result;
 }
 
 // ==================== CORE FUNCTIONS ====================
@@ -112,9 +180,7 @@ function initVocabDeck() {
   if (available.length === 0) {
     // If everything is mastered, show all words again
     available = buildVocabDeck();
-    // But don't clear mastered - just show them as already mastered
     if (available.length === 0) {
-      // If still empty, fallback to all words
       available = buildFullDeck();
     }
   }
@@ -128,9 +194,17 @@ function initVocabDeck() {
   vocabDeck = available;
   vocabCurrentIndex = 0;
   vocabIsFlipped = false;
+  vocabFuriganaHidden = false; // Default: furigana visible
   updateVocabUI();
   updateVocabSprintInfo();
   showVocabCard();
+  
+  // Update furigana toggle button
+  if (vocabFuriToggleBtn) {
+    vocabFuriToggleBtn.textContent = "🔤 Furigana Off";
+    vocabFuriToggleBtn.style.backgroundColor = "#6c8b6b";
+    vocabFuriToggleBtn.style.color = "white";
+  }
 }
 
 // Fallback: build from all words if sprint-based fails
@@ -170,23 +244,28 @@ function showVocabCard() {
 
   const card = vocabDeck[vocabCurrentIndex];
   
-  // Use your existing furigana logic if available
-  if (typeof addFuriganaToText === "function") {
-    vocabWord.innerHTML = addFuriganaToText(card.word);
+  // Build word with furigana above kanji
+  const wordWithFurigana = buildVocabFuriganaHTML(card.word, card.reading);
+  vocabWord.innerHTML = wordWithFurigana;
+  
+  // Toggle furigana visibility via CSS class
+  if (vocabFuriganaHidden) {
+    vocabWord.classList.add('hide-furigana');
   } else {
-    vocabWord.textContent = card.word;
+    vocabWord.classList.remove('hide-furigana');
   }
   
-  vocabReading.textContent = `(${card.reading})`;
+  // ALWAYS hide the reading text below - it's never needed
+  vocabReading.textContent = "";
+  vocabReading.style.display = "none";
+  
   vocabMeaning.textContent = card.meaning;
 
-  // Update UI based on flipped state
+  // When flipped, show the meaning
   if (vocabIsFlipped) {
     vocabMeaning.style.display = "block";
-    vocabReading.style.display = "none";
   } else {
     vocabMeaning.style.display = "none";
-    vocabReading.style.display = "block";
   }
 
   // Update mastered button
@@ -203,7 +282,6 @@ function showVocabCard() {
     }
 
     const kanjiList = extractKanjiFromWord(card.word);
-    const originalText = statsDiv.textContent || "";
     statsDiv.innerHTML = '';
     
     const flexContainer = document.createElement("div");
@@ -368,7 +446,6 @@ function toggleVocabMastered() {
     vocabMastered.add(card.word);
   }
   saveMasteredVocab();
-  // Reload deck to hide mastered cards
   initVocabDeck();
 }
 
@@ -387,6 +464,45 @@ function playVocabAudio() {
     window.speechSynthesis.speak(utterance);
   } else {
     console.warn("TTS not available.");
+  }
+}
+
+// Toggle furigana visibility
+function toggleVocabFurigana() {
+  vocabFuriganaHidden = !vocabFuriganaHidden;
+  
+  // Update the word display
+  if (vocabDeck.length > 0) {
+    const card = vocabDeck[vocabCurrentIndex];
+    if (card) {
+      const wordWithFurigana = buildVocabFuriganaHTML(card.word, card.reading);
+      vocabWord.innerHTML = wordWithFurigana;
+      
+      if (vocabFuriganaHidden) {
+        // Furigana is hidden - just show plain text (no furigana, no parentheses)
+        vocabWord.classList.add('hide-furigana');
+        vocabReading.textContent = "";
+        vocabReading.style.display = "none";
+        vocabFuriToggleBtn.textContent = "🔤 Furigana On";
+        vocabFuriToggleBtn.style.backgroundColor = "#555";
+        vocabFuriToggleBtn.style.color = "white";
+      } else {
+        // Furigana is visible - show furigana above kanji
+        vocabWord.classList.remove('hide-furigana');
+        vocabReading.textContent = "";
+        vocabReading.style.display = "none";
+        vocabFuriToggleBtn.textContent = "🔤 Furigana Off";
+        vocabFuriToggleBtn.style.backgroundColor = "#6c8b6b";
+        vocabFuriToggleBtn.style.color = "white";
+      }
+      
+      // If flipped, show meaning
+      if (vocabIsFlipped) {
+        vocabMeaning.style.display = "block";
+      } else {
+        vocabMeaning.style.display = "none";
+      }
+    }
   }
 }
 
@@ -419,6 +535,10 @@ if (vocabModal) {
   });
 }
 
+if (vocabFuriToggleBtn) {
+  vocabFuriToggleBtn.addEventListener("click", toggleVocabFurigana);
+}
+
 if (vocabCard) vocabCard.addEventListener("click", flipVocabCard);
 if (vocabFlipBtn) vocabFlipBtn.addEventListener("click", flipVocabCard);
 if (vocabNextBtn) vocabNextBtn.addEventListener("click", nextVocabCard);
@@ -436,6 +556,7 @@ document.addEventListener("keydown", function (e) {
     if (e.key === " " || e.key === "Space") { e.preventDefault(); flipVocabCard(); }
     if (e.key === "m" || e.key === "M") toggleVocabMastered();
     if (e.key === "Escape") vocabCloseBtn.click();
+    if (e.key === "f" || e.key === "F") toggleVocabFurigana();
   }
 });
 

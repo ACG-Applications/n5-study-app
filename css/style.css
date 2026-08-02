@@ -1,5 +1,5 @@
 /* ===== APP LINKS SECTION ===== */
-.app-links-section {
+.app-links-section {#flashJp rt,
   margin-top: 24px;
   padding: 16px 20px;
   background: #f8f5f0;
@@ -482,7 +482,8 @@ button.action-btn {
   margin: 20px 0;
   text-align: center;
   line-height: 1.4;
-}
+  color: #000000 !important;  /* ← ADD THIS - pure black */
+  font-weight: 500 !important;  /* ← ADD THIS - makes it bold/darker */
 
 .flash-translation {
   font-size: 1.2rem;
@@ -504,7 +505,7 @@ button.action-btn {
 .flash-jp ruby rt,
 .flash-jp rt {
   font-size: 0.7rem !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   color: #8b0000 !important;
   padding-bottom: 8px !important;
 }
@@ -856,18 +857,6 @@ button.action-btn {
     padding: 8px 10px;
     bottom: 135%;
   }
-}
-
-/* Furigana styling */
-ruby {
-  ruby-align: center;
-}
-
-ruby rt {
-  font-size: 0.55em;
-  color: #8a9a8a;
-  font-weight: normal;
-  letter-spacing: 0.5px;
 }
 
 /* Active state for long press */
@@ -1356,12 +1345,17 @@ ruby rt,
 .mastered-verb-dict ruby rt {
   color: #8b0000 !important;
   padding-bottom: 8px !important;
-  font-size: 0.7rem !important;
-  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
   background: transparent !important;
   text-align: center !important;
   letter-spacing: 0.5px !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
   padding-top: 0 !important;
+}
+/* Vocab furigana - dark red */
+#vocabWord ruby rt,
+#vocabWord rt {
+  color: #8b0000 !important;
 }

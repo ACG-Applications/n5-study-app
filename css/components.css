@@ -31,7 +31,7 @@ ruby {
 ruby rt,
 rt {
   display: ruby-text !important;
-  font-size: 0.8rem !important; /* ← FONT SIZE */
+  font-size: 1.2rem !important; /* ← FONT SIZE */
   font-weight: 700 !important; /* ← FONT WEIGHT */
   color: #8b0000 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
