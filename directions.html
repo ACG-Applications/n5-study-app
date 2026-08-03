@@ -1034,7 +1034,7 @@
             jp: "バス停で止まって",
             en: "Stop at the bus stop",
             category: "landmarks",
-            ruby: "<ruby>バス停<rt>ばすてい</rt></ruby>で<ruby>止<rt>と</rt></ruby>まって",
+            ruby: "バス<ruby>停<rt>てい</rt></ruby>で<ruby>止<rt>と</rt></ruby>まって",
           },
           {
             jp: "交差点で止まって",
@@ -1473,6 +1473,10 @@
         // 5. FURIGANA HELPER
         // ──────────────────────────────────────────────────────────────
 
+        // ──────────────────────────────────────────────────────────────
+        // 5. FURIGANA HELPER
+        // ──────────────────────────────────────────────────────────────
+
         function addFurigana(text) {
           const map = {
             すみません: "すみません",
@@ -1480,7 +1484,7 @@
             図書館: "<ruby>図書館<rt>としょかん</rt></ruby>",
             公園: "<ruby>公園<rt>こうえん</rt></ruby>",
             マクドナルド: "マクドナルド",
-            バス停: "<ruby>バス停<rt>ばすてい</rt></ruby>",
+            バス停: "バス<ruby>停<rt>てい</rt></ruby>", // ← FIXED: katakana has no furigana
             橋: "<ruby>橋<rt>はし</rt></ruby>",
             交差点: "<ruby>交差点<rt>こうさてん</rt></ruby>",
             北門: "<ruby>北門<rt>きたもん</rt></ruby>",
