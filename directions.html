@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ============================================================
-         FONTS
-         - Shippori Mincho: Elegant traditional Japanese font
-         - Noto Serif JP: Clean Japanese serif
-         - Zen Kaku Gothic New: Modern Japanese sans-serif
-         - Inter: Clean English font
+         FONTS - Match app fonts
          ============================================================ -->
     <link
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Noto+Serif+JP:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap"
@@ -18,180 +14,35 @@
 
     <title>Japanese Direction Practice - 方角練習</title>
 
+    <!-- ============================================================
+         STYLES - Use components.css first, then local overrides
+         ============================================================ -->
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/variables.css" />
+
     <style>
       /* ============================================================
-           ROOT VARIABLES - Customize colors, fonts, sizes here!
+           DIRECTIONS - Local styles only (minimal)
+           Everything else uses components.css
            ============================================================ */
-      :root {
-        /* ──────────────────────────────────────────────────────────────
-             BACKGROUND COLORS
-             ────────────────────────────────────────────────────────────── */
-        --bg-body: #7deef1; /* Main page background */
-        --bg-container: #ffffff; /* Card container background */
-        --bg-card: #021738; /* Dark card background (phrase display) */
-        --bg-conversation: #f4f5f7; /* ← Conversation pill background & tab hover */
-        --bg-controls: #bef3f3; /* ← Tab & button backgrounds (inactive) */
-        --bg-progress-done: #11d157; /* Completed progress dots */
-        --bg-progress-active: #3b82f6; /* Current progress dot */
-        --bg-progress-empty: #e2e8f0; /* Empty progress dots */
 
-        /* ──────────────────────────────────────────────────────────────
-             TEXT COLORS
-             ────────────────────────────────────────────────────────────── */
-        --text-title: #000000; /* Main title color */
-        --text-subtitle: #080000; /* Subtitle color */
-        --text-card-japanese: #ffffff; /* Japanese text on dark card */
-        --text-card-furigana: #93c5fd; /* Furigana color on dark card */
-        --text-card-english: #aac6ee; /* English text on dark card */
-        --text-conversation: #020202; /* Conversation text color */
-        --text-conversation-en: #132850; /* English in conversation */
-        --text-controls: #000000; /* Control button text */
-        --text-controls-active: #fdf901; /* Active control button text */
-
-        /* ──────────────────────────────────────────────────────────────
-             ACCENT COLORS
-             ────────────────────────────────────────────────────────────── */
-        --accent-blue: #021e4d; /* Blue accent (buttons, active states) */
-        --accent-blue-hover: #043192; /* Blue hover */
-        --accent-green: #02742c; /* Green accent (speaker B) */
-        --accent-purple: #1b0157; /* Purple accent (expressions) */
-        --accent-red: #ff0000; /* Red accent (errors, stop) */
-
-        /* ──────────────────────────────────────────────────────────────
-             BORDER COLORS
-             ────────────────────────────────────────────────────────────── */
-        --border-light: #e2e8f0; /* Light borders */
-        --border-medium: #cbd5e1; /* Medium borders */
-        --border-dark: #0f172a; /* Dark borders (card shadow) */
-        --border-card: #94a3b8; /* Card border */
-
-        /* ──────────────────────────────────────────────────────────────
-             FONT FAMILIES
-             ────────────────────────────────────────────────────────────── */
-        --font-japanese:
-          "Shippori Mincho", "Noto Serif JP", "Zen Kaku Gothic New",
-          "Noto Sans JP", serif;
-        --font-english: "Inter", "Segoe UI", system-ui, sans-serif;
-
-        /* ──────────────────────────────────────────────────────────────
-             FONT SIZES
-             ────────────────────────────────────────────────────────────── */
-        --fs-title: 1.8rem;
-        --fs-japanese-large: 2.6rem;
-        --fs-japanese-medium: 1.4rem;
-        --fs-english: 1.2rem;
-        --fs-furigana: 1.5rem;
-        --fs-small: 1rem;
-        --fs-tiny: 1rem;
-
-        /* ──────────────────────────────────────────────────────────────
-             SPACING
-             ────────────────────────────────────────────────────────────── */
-        --spacing-container: 30px 25px 35px;
-        --spacing-card: 30px 25px 25px;
-        --spacing-pill: 16px 20px;
-        --spacing-gap: 16px;
-        --spacing-small: 8px;
-
-        /* ──────────────────────────────────────────────────────────────
-             BORDER RADIUS
-             ────────────────────────────────────────────────────────────── */
-        --radius-container: 32px;
-        --radius-card: 24px;
-        --radius-pill: 20px;
-        --radius-button: 30px;
-        --radius-small: 20px;
-
-        /* ──────────────────────────────────────────────────────────────
-             CONVERSATION PILL FURIGANA - CUSTOMIZE HERE
-             ────────────────────────────────────────────────────────────── */
-        --conv-furigana-size: 0.9rem; /* Size of furigana in conversation pill */
-        --conv-furigana-color: #8b0000; /* Dark red - change to any color */
-        --conv-furigana-weight: 600; /* Font weight (400=normal, 600=bold) */
-
-        /* ──────────────────────────────────────────────────────────────
-             CONVERSATION PILL TEXT - CUSTOMIZE HERE
-             ────────────────────────────────────────────────────────────── */
-        --conv-japanese-size: var(
-          --fs-japanese-medium
-        ); /* Japanese text size */
-        --conv-japanese-color: var(
-          --text-conversation
-        ); /* Japanese text color */
-        --conv-english-size: var(--fs-small); /* English text size */
-        --conv-english-color: var(
-          --text-conversation-en
-        ); /* English text color */
-        --conv-speaker-size: var(--fs-small); /* Speaker icon size */
-        --conv-speaker-color-a: var(
-          --accent-blue
-        ); /* Speaker A (questioner) color */
-        --conv-speaker-color-b: var(
-          --accent-green
-        ); /* Speaker B (responder) color */
-        --conv-speaker-color-c: var(
-          --accent-purple
-        ); /* Speaker C (expressions) color */
-
-        /* ──────────────────────────────────────────────────────────────
-             CONVERSATION PILL BACKGROUND - CUSTOMIZE HERE
-             ────────────────────────────────────────────────────────────── */
-        --conv-bg: var(--bg-conversation); /* Pill background */
-        --conv-border-left: 4px solid var(--accent-blue); /* Left border color */
-        --conv-border-left-expressions: 4px solid var(--accent-purple); /* Expressions border */
-
-        /* ──────────────────────────────────────────────────────────────
-             BACK BUTTON - Matches adjectives.css
-             ────────────────────────────────────────────────────────────── */
-        --back-btn-bg: #6c8b6b;
-        --back-btn-bg-hover: #5a7a59;
-        --back-btn-text: #ffffff;
-        --back-btn-radius: 40px;
-        --back-btn-padding: 8px 20px;
-        --back-btn-font-size: 0.9rem;
-      }
-
-      /* ============================================================
-           RESET & BASE
-           ============================================================ */
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        font-family: var(--font-english);
-        background: var(--bg-body);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      /* ─── CONTAINER ───────────────────────────────────────────── */
+      .directions-container {
+        max-width: 900px;
+        margin: 0 auto;
         padding: 20px;
+        background: var(--bg-main, #f5f0eb);
+        min-height: 100vh;
       }
 
-      /* ============================================================
-           CONTAINER
-           ============================================================ */
-      .container {
-        max-width: 750px;
-        width: 100%;
-        background: var(--bg-container);
-        border-radius: var(--radius-container);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        padding: var(--spacing-container);
-      }
-
-      /* ============================================================
-           HEADER - Matches adjectives.css style
-           ============================================================ */
+      /* ─── HEADER - Matches adjectives.css ────────────────────── */
       .directions-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 16px;
-        margin-bottom: 16px;
+        margin-bottom: 24px;
       }
 
       .directions-header .title-group {
@@ -201,22 +52,22 @@
       }
 
       .directions-header .title {
-        font-size: var(--fs-title);
+        font-size: 1.8rem;
         font-weight: 700;
-        color: var(--text-title);
+        color: #2c3e2f;
         display: flex;
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
-        font-family: var(--font-japanese);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
         margin: 0;
       }
 
       .directions-header .title .en {
         font-size: 1rem;
         font-weight: 400;
-        color: var(--text-subtitle);
-        font-family: var(--font-english);
+        color: #8a7b6e;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
 
       .directions-header .title .en small {
@@ -225,26 +76,26 @@
       }
 
       .directions-header .subtitle {
-        color: var(--text-subtitle);
+        color: #4a6741;
         font-size: 0.95rem;
-        font-family: var(--font-japanese);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
         margin: 0;
       }
 
       .directions-header .subtitle .en {
         opacity: 0.6;
         font-weight: 300;
-        font-family: var(--font-english);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
 
-      /* ─── BACK BUTTON - Matches adjectives.css exactly ─── */
+      /* ─── BACK BUTTON - Matches adjectives.css exactly ──────── */
       .directions-header .back-button {
-        background: var(--back-btn-bg);
-        color: var(--back-btn-text);
-        padding: var(--back-btn-padding);
-        border-radius: var(--back-btn-radius);
+        background: #6c8b6b;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 40px;
         text-decoration: none;
-        font-size: var(--back-btn-font-size);
+        font-size: 0.9rem;
         font-weight: 500;
         transition:
           background 0.2s,
@@ -252,118 +103,184 @@
         display: inline-block;
         border: none;
         cursor: pointer;
-        font-family: var(--font-english);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
         flex-shrink: 0;
       }
 
       .directions-header .back-button:hover {
-        background: var(--back-btn-bg-hover);
+        background: #5a7a59;
         transform: translateY(-1px);
       }
 
-      /* ============================================================
-           MODE TABS
-           ============================================================ */
-      .mode-tabs {
+      /* ─── CONTROLS BAR - Matches adjectives controls ────────── */
+      .directions-controls {
         display: flex;
-        gap: var(--spacing-small);
-        margin-bottom: var(--spacing-gap);
         flex-wrap: wrap;
-      }
-      .mode-tabs .tab {
-        padding: 8px 18px;
-        border-radius: var(--radius-button);
-        border: 2px solid var(--border-light);
-        background: var(--bg-controls);
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: var(--text-subtitle);
-        cursor: pointer;
-        transition: 0.2s;
-        display: inline-flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 6px;
-        font-family: var(--font-japanese);
-      }
-      .mode-tabs .tab .en {
-        font-weight: 400;
-        opacity: 0.5;
-        font-size: 0.65rem;
-        font-family: var(--font-english);
-        color: var(--text-subtitle);
-      }
-      .mode-tabs .tab:hover {
-        background: var(--bg-conversation);
-        border-color: var(--border-medium);
-      }
-      .mode-tabs .tab.active {
-        background: var(--accent-blue);
-        border-color: var(--accent-blue);
-        color: var(--text-controls-active);
-      }
-      .mode-tabs .tab.active .en {
-        opacity: 0.7;
+        gap: 16px;
+        background: white;
+        padding: 12px 20px;
+        border-radius: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
-      /* ============================================================
-           CONTROLS
-           ============================================================ */
-      .controls {
+      .directions-controls .control-group {
         display: flex;
+        align-items: center;
         gap: 10px;
         flex-wrap: wrap;
-        margin-bottom: var(--spacing-gap);
       }
 
-      .controls .btn {
-        padding: 8px 18px;
-        border-radius: var(--radius-button);
-        border: 2px solid var(--border-light);
-        background: var(--bg-controls);
+      .directions-controls .control-group label {
         font-weight: 600;
+        color: #4a6741;
         font-size: 0.9rem;
-        color: var(--text-controls);
+      }
+
+      /* ─── MODE TABS ───────────────────────────────────────────── */
+      .mode-tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .mode-tabs .tab {
+        background: #e8e0d5;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 40px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #2c3e2f;
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.2s;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        font-family: var(--font-japanese);
-      }
-      .controls .btn:hover {
-        background: var(--bg-conversation);
-        border-color: var(--border-medium);
-        transform: translateY(-1px);
-      }
-      .controls .btn .en {
-        font-size: 0.7rem;
-        font-weight: 400;
-        opacity: 0.6;
-        font-family: var(--font-english);
-      }
-      .controls .btn.active {
-        background: var(--accent-blue);
-        border-color: var(--accent-blue);
-        color: var(--text-controls-active);
-      }
-      .controls .btn.active:hover {
-        background: var(--accent-blue-hover);
-        border-color: var(--accent-blue-hover);
-      }
-      .controls .btn.active .en {
-        opacity: 0.8;
       }
 
-      /* ============================================================
-           PHRASE CARD
-           ============================================================ */
-      .card {
-        background: var(--bg-card);
-        border-radius: var(--radius-card);
-        padding: var(--spacing-card);
+      .mode-tabs .tab .en {
+        font-weight: 500;
+        opacity: 0.8;
+        font-size: 0.65rem;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        color: #2c3e2f;
+      }
+
+      .mode-tabs .tab.active .en {
+        opacity: 1;
+        color: #ffffff;
+      }
+
+      .mode-tabs .tab.active {
+        background: #6c8b6b;
+        color: white;
+        box-shadow: 0 2px 6px rgba(108, 139, 107, 0.3);
+      }
+
+      .mode-tabs .tab.active .en {
+        opacity: 0.7;
+        color: white;
+      }
+
+      /* ─── SMALL BUTTONS ───────────────────────────────────────── */
+      .small-btn {
+        background: #e8e0d5;
+        border: none;
+        padding: 6px 16px;
+        border-radius: 40px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        color: #2c3e2f;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .small-btn:hover {
+        background: #d4cbbc;
+        transform: translateY(-1px);
+      }
+
+      .small-btn.active {
+        background: #6c8b6b;
+        color: white;
+        box-shadow: 0 2px 6px rgba(108, 139, 107, 0.3);
+      }
+
+      .small-btn.active:hover {
+        background: #5a7a59;
+      }
+
+      /* ─── CATEGORIES ──────────────────────────────────────────── */
+      .categories {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+
+      .categories .cat-btn {
+        background: #e8e0d5;
+        border: none;
+        padding: 6px 16px;
+        border-radius: 40px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #2c3e2f;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .categories .cat-btn .en {
+        font-weight: 500;
+        opacity: 0.8;
+        font-size: 0.65rem;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        color: #2c3e2f;
+      }
+
+      .categories .cat-btn.active .en {
+        opacity: 1;
+        color: #ffffff;
+      }
+
+      .categories .cat-btn:hover {
+        background: #d4cbbc;
+        transform: translateY(-1px);
+      }
+
+      .categories .cat-btn.active {
+        background: #6c8b6b;
+        color: white;
+        box-shadow: 0 2px 6px rgba(108, 139, 107, 0.3);
+      }
+
+      .categories .cat-btn.active .en {
+        opacity: 0.7;
+        color: white;
+      }
+
+      /* ─── PHRASE CARD ─────────────────────────────────────────── */
+      .phrase-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px 25px 25px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #6c8b6b;
         text-align: center;
-        box-shadow: inset 0 -4px 0 var(--border-dark);
-        margin-bottom: var(--spacing-gap);
         min-height: 180px;
         display: flex;
         flex-direction: column;
@@ -371,399 +288,427 @@
         align-items: center;
       }
 
-      .card .number {
-        font-size: var(--fs-small);
-        color: var(--text-subtitle);
-        margin-bottom: var(--spacing-small);
+      .phrase-card .number {
+        font-size: 0.9rem;
+        color: #8a7b6e;
+        margin-bottom: 8px;
         font-weight: 500;
-        font-family: var(--font-english);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
-      .card .number .en {
+
+      .phrase-card .number .en {
         opacity: 0.5;
         font-weight: 300;
       }
 
-      .card .japanese {
-        font-size: var(--fs-japanese-large);
+      .phrase-card .japanese {
+        font-size: 2.8rem; /* 2.8rem matchs flashcards */
         font-weight: 700;
-        color: var(--text-card-japanese);
+        color: #000000;
         line-height: 1.8;
         letter-spacing: 1px;
         margin-bottom: 4px;
-        font-family: var(--font-japanese);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
 
-      .card .japanese ruby {
+      .phrase-card .japanese ruby {
         ruby-align: center;
       }
-      .card .japanese rt {
-        font-size: var(--fs-furigana) !important;
-        font-weight: 400;
-        color: var(--text-card-furigana);
+
+      .phrase-card .japanese rt {
+        font-size: 1.2rem !important; /* matchs flashcards */
+        font-weight: 600 !important;
+        color: #8b0000 !important;
         letter-spacing: 0.5px;
       }
-      .card .japanese.no-furigana rt {
+
+      .phrase-card .japanese.no-furigana rt {
         display: none !important;
       }
 
-      .card .english {
-        font-size: var(--fs-english);
-        color: var(--text-card-english);
-        font-weight: 300;
+      .phrase-card .english {
+        font-size: 1.2rem;
+        color: #2601f8;
+        font-weight: 400;
         opacity: 0;
         transition: opacity 0.3s ease;
         margin-top: 6px;
-        font-family: var(--font-english);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
-      .card .english.show {
+
+      .phrase-card .english.show {
         opacity: 1;
       }
 
-      .card .play-btn {
+      .phrase-card .play-btn {
         margin-top: 18px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.15);
-        color: var(--text-card-japanese);
+        background: #6c8b6b;
+        border: none;
+        color: white;
         padding: 10px 28px;
         border-radius: 40px;
         font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.2s;
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        font-family: var(--font-japanese);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
-      .card .play-btn:hover {
-        background: rgba(255, 255, 255, 0.18);
-        border-color: rgba(255, 255, 255, 0.25);
+
+      .phrase-card .play-btn:hover {
+        background: #5a7a59;
         transform: scale(1.02);
       }
-      .card .play-btn:active {
+
+      .phrase-card .play-btn:active {
         transform: scale(0.98);
       }
-      .card .play-btn.playing {
-        background: rgba(220, 38, 38, 0.3);
-        border-color: rgba(220, 38, 38, 0.4);
+
+      .phrase-card .play-btn.playing {
+        background: #dc3545;
       }
-      .card .play-btn .en {
+
+      .phrase-card .play-btn .en {
         font-weight: 400;
-        opacity: 0.5;
+        opacity: 0.7;
         font-size: 0.8rem;
-        font-family: var(--font-english);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
 
-      /* ============================================================
-           CONVERSATION PILL
-           ============================================================ */
-      .conversation-pill {
-        background: var(--conv-bg);
-        border-radius: var(--radius-pill);
-        padding: var(--spacing-pill);
-        margin-bottom: var(--spacing-gap);
-        border-left: var(--conv-border-left);
+      /* ─── CONVERSATION CARD - Now matches Phrase Card ────────── */
+      .conv-pill {
+        background: white;
+        border-radius: 16px;
+        padding: 30px 25px 25px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #6c8b6b;
         transition: 0.3s;
+        min-height: 180px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
 
-      .conversation-pill .pill-label {
-        font-size: var(--fs-tiny);
+      .conv-pill .pill-label {
+        font-size: 0.9rem;
         font-weight: 700;
-        color: var(--accent-blue);
-        text-transform: uppercase;
+        color: #1e4b6e;
         letter-spacing: 0.5px;
-        margin-bottom: 6px;
+        margin-bottom: 12px;
         display: flex;
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
-        font-family: var(--font-english);
-      }
-      .conversation-pill .pill-label .en {
-        font-weight: 400;
-        opacity: 0.5;
-        font-size: 0.65rem;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
 
-      .conversation-pill .pill-content {
+      .conv-pill .pill-label .en {
+        font-weight: 500;
+        opacity: 0.8;
+        font-size: 0.7rem;
+        color: #2c3e2f;
+      }
+
+      .conv-pill .pill-content {
         font-size: 1rem;
         line-height: 1.8;
-        font-family: var(--font-japanese);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
       }
 
-      .conversation-pill .pill-content .line {
+      .conv-pill .pill-content .line {
         padding: 3px 0;
         display: flex;
         flex-direction: column;
         gap: 2px;
       }
 
-      .conversation-pill .pill-content .line .jp-wrapper {
+      .conv-pill .pill-content .line .jp-wrapper {
         display: flex;
         align-items: baseline;
         gap: 8px;
       }
 
-      .conversation-pill .pill-content .line .speaker {
+      .conv-pill .pill-content .line .speaker {
         font-weight: 700;
-        font-size: var(--conv-speaker-size);
-        font-family: var(--font-english);
+        font-size: 0.9rem;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
         flex-shrink: 0;
         min-width: 30px;
       }
-      .conversation-pill .pill-content .line .speaker.a {
-        color: var(--conv-speaker-color-a);
+
+      .conv-pill .pill-content .line .speaker.a {
+        color: #1e4b6e;
       }
-      .conversation-pill .pill-content .line .speaker.b {
-        color: var(--conv-speaker-color-b);
+      .conv-pill .pill-content .line .speaker.b {
+        color: #2d7a4a;
       }
-      .conversation-pill .pill-content .line .speaker.c {
-        color: var(--conv-speaker-color-c);
+      .conv-pill .pill-content .line .speaker.c {
+        color: #6c8b6b;
       }
 
-      .conversation-pill .pill-content .line .jp {
-        font-size: var(--conv-japanese-size);
-        color: var(--conv-japanese-color);
-        font-family: var(--font-japanese);
+      .conv-pill .pill-content .line .jp {
+        font-size: 2.8rem; /* matchs flashcards */
+        font-weight: 700;
+        color: #000000;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        line-height: 1.8;
+        letter-spacing: 1px;
       }
 
-      .conversation-pill .pill-content .line .jp ruby rt {
-        font-size: var(--conv-furigana-size) !important;
-        color: var(--conv-furigana-color) !important;
-        font-weight: var(--conv-furigana-weight);
-        letter-spacing: 0.3px;
+      .conv-pill .pill-content .line .jp ruby {
+        ruby-align: center;
       }
-      .conversation-pill .pill-content .line .jp.no-furigana rt {
+
+      .conv-pill .pill-content .line .jp rt {
+        font-size: 1.2rem !important; /* matchs flashcards */
+        font-weight: 600 !important;
+        color: #8b0000 !important;
+        letter-spacing: 0.5px;
+      }
+
+      .conv-pill .pill-content .line .jp.no-furigana rt {
         display: none !important;
       }
 
-      .conversation-pill .pill-content .line .en-text {
-        font-size: var(--conv-english-size);
-        color: var(--conv-english-color);
+      .conv-pill .pill-content .line .en-text {
+        font-size: 1.2rem;
+        color: #2601f8;
         opacity: 0;
         transition: opacity 0.3s ease;
-        font-family: var(--font-english);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
         padding-left: 38px;
+        font-weight: 400;
       }
-      .conversation-pill .pill-content .line .en-text.show {
+
+      .conv-pill .pill-content .line .en-text.show {
         opacity: 1;
       }
 
-      .conversation-pill .pill-play-btn {
-        margin-top: 10px;
-        background: var(--border-light);
+      .conv-pill .pill-play-btn {
+        margin-top: 18px;
+        background: #6c8b6b;
         border: none;
-        padding: 6px 16px;
-        border-radius: var(--radius-small);
-        font-size: 0.8rem;
+        color: white;
+        padding: 10px 28px;
+        border-radius: 40px;
+        font-size: 1rem;
         font-weight: 600;
-        color: var(--text-conversation);
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.2s;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        font-family: var(--font-japanese);
+        gap: 10px;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        align-self: center;
       }
-      .conversation-pill .pill-play-btn:hover {
-        background: var(--border-medium);
+
+      .conv-pill .pill-play-btn:hover {
+        background: #5a7a59;
+        transform: scale(1.02);
       }
-      .conversation-pill .pill-play-btn .en {
+
+      .conv-pill .pill-play-btn:active {
+        transform: scale(0.98);
+      }
+
+      .conv-pill .pill-play-btn.playing {
+        background: #dc3545;
+      }
+
+      .conv-pill .pill-play-btn .en {
         font-weight: 400;
-        opacity: 0.5;
-        font-size: 0.65rem;
-        font-family: var(--font-english);
-      }
-      .conversation-pill .pill-play-btn.playing {
-        background: var(--accent-red);
+        opacity: 0.7;
+        font-size: 0.8rem;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
         color: white;
       }
 
-      .conversation-pill.expression {
-        border-left: var(--conv-border-left-expressions);
-      }
-      .conversation-pill.expression .pill-label {
-        color: var(--accent-purple);
+      /* ─── EXPRESSION VARIANT - Same as conversation ──────────── */
+      .conv-pill.expression {
+        border-left-color: #6c8b6b;
       }
 
-      /* ============================================================
-           NAVIGATION
-           ============================================================ */
+      .conv-pill.expression .pill-label {
+        color: #6c8b6b;
+      }
+
+      /* ─── NAVIGATION ───────────────────────────────────────────── */
       .nav {
         display: flex;
         gap: 12px;
         justify-content: center;
         align-items: center;
-        margin-top: var(--spacing-small);
+        margin-top: 8px;
         flex-wrap: wrap;
       }
 
       .nav .btn-nav {
         padding: 10px 24px;
         border-radius: 40px;
-        border: 2px solid var(--border-light);
-        background: var(--bg-controls);
+        border: none;
+        background: #e8e0d5;
         font-weight: 600;
         font-size: 0.95rem;
-        color: var(--text-controls);
+        color: #2c3e2f;
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.2s;
         display: inline-flex;
         align-items: center;
         gap: 6px;
         min-width: 100px;
         justify-content: center;
-        font-family: var(--font-japanese);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
+
       .nav .btn-nav .en {
-        font-weight: 400;
-        opacity: 0.5;
+        font-weight: 500;
+        opacity: 0.8;
         font-size: 0.75rem;
-        font-family: var(--font-english);
+        font-family: var(--font-family, "Segoe UI", sans-serif);
+        color: #2c3e2f;
       }
+
+      .nav .btn-nav.primary .en {
+        opacity: 0.8;
+        color: #ffffff;
+      }
+
       .nav .btn-nav:hover:not(:disabled) {
-        background: var(--bg-conversation);
-        border-color: var(--border-medium);
+        background: #d4cbbc;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       }
+
       .nav .btn-nav:disabled {
         opacity: 0.3;
         cursor: not-allowed;
         transform: none !important;
         box-shadow: none !important;
       }
+
       .nav .btn-nav.primary {
-        background: var(--text-title);
-        border-color: var(--text-title);
-        color: var(--text-controls-active);
+        background: #6c8b6b;
+        color: white;
       }
+
       .nav .btn-nav.primary:hover:not(:disabled) {
-        background: var(--border-dark);
-        border-color: var(--border-dark);
+        background: #5a7a59;
       }
+
       .nav .btn-nav.primary .en {
         opacity: 0.6;
+        color: white;
       }
 
       .nav .counter {
         font-size: 0.95rem;
-        color: var(--text-subtitle);
+        color: #8a7b6e;
         font-weight: 500;
         padding: 0 12px;
         min-width: 80px;
         text-align: center;
-        font-family: var(--font-english);
-      }
-      .nav .counter strong {
-        color: var(--text-title);
-        font-size: 1.1rem;
-      }
-      .nav .counter .en {
-        opacity: 0.5;
-        font-weight: 300;
-        font-size: 0.75rem;
+        font-family: var(--font-family, "Segoe UI", sans-serif);
       }
 
-      /* ============================================================
-           PROGRESS DOTS
-           ============================================================ */
+      .nav .counter strong {
+        color: #2c3e2f;
+        font-size: 1.1rem;
+      }
+
+      .nav .counter .en {
+        opacity: 0.8;
+        font-weight: 500;
+        font-size: 0.75rem;
+        color: #2c3e2f;
+      }
+
+      /* ─── PROGRESS DOTS ────────────────────────────────────────── */
       .progress {
         display: flex;
         gap: 6px;
         justify-content: center;
-        margin-top: var(--spacing-gap);
+        margin-top: 16px;
         flex-wrap: wrap;
       }
+
       .progress .dot {
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background: var(--bg-progress-empty);
+        background: #e8e0d5;
         transition: 0.3s;
       }
+
       .progress .dot.active {
-        background: var(--bg-progress-active);
+        background: #6c8b6b;
         transform: scale(1.2);
       }
+
       .progress .dot.done {
-        background: var(--bg-progress-done);
+        background: #4caf50;
       }
 
-      /* ============================================================
-           CATEGORIES
-           ============================================================ */
-      .categories {
-        display: flex;
-        gap: var(--spacing-small);
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: var(--spacing-gap);
-      }
-      .categories .cat-btn {
-        padding: 6px 16px;
-        border-radius: var(--radius-small);
-        border: 2px solid var(--border-light);
-        background: var(--bg-controls);
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--text-subtitle);
-        cursor: pointer;
-        transition: 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        font-family: var(--font-japanese);
-      }
-      .categories .cat-btn .en {
-        font-weight: 400;
-        opacity: 0.5;
-        font-size: 0.65rem;
-        font-family: var(--font-english);
-      }
-      .categories .cat-btn:hover {
-        background: var(--bg-conversation);
-        border-color: var(--border-medium);
-      }
-      .categories .cat-btn.active {
-        background: var(--accent-blue);
-        border-color: var(--accent-blue);
-        color: var(--text-controls-active);
-      }
-      .categories .cat-btn.active .en {
-        opacity: 0.7;
-      }
-
-      /* ============================================================
-           RESPONSIVE
-           ============================================================ */
-      @media (max-width: 550px) {
-        :root {
-          --fs-title: 1.4rem;
-          --fs-japanese-large: 2rem;
-          --fs-japanese-medium: 0.95rem;
-          --fs-english: 1rem;
-          --fs-furigana: 0.8rem;
-          --conv-furigana-size: 0.7rem;
-          --spacing-container: 20px 16px;
-          --spacing-card: 24px 18px;
-          --spacing-pill: 12px 14px;
+      /* ─── RESPONSIVE ───────────────────────────────────────────── */
+      @media (max-width: 700px) {
+        /* ... */
+        .phrase-card .japanese,
+        .conv-pill .pill-content .line .jp {
+          font-size: 0.9rem; /* ← MATCHES FLASHCARDS */
         }
 
         .directions-header {
           flex-direction: column;
           align-items: flex-start;
+          text-align: left;
         }
 
         .directions-header .back-button {
           align-self: flex-end;
         }
 
-        .card {
-          min-height: 150px;
+        .directions-header .title {
+          font-size: 1.4rem;
         }
-        .card .japanese rt {
-          font-size: 0.8rem !important;
+
+        .directions-header .title .en {
+          font-size: 0.85rem;
+        }
+
+        .directions-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .directions-controls .control-group {
+          justify-content: center;
+        }
+
+        .phrase-card,
+        .conv-pill {
+          min-height: 150px;
+          padding: 24px 18px;
+        }
+
+        .phrase-card .japanese,
+        .conv-pill .pill-content .line .jp {
+          font-size: 2rem;
+        }
+
+        .phrase-card .japanese rt,
+        .conv-pill .pill-content .line .jp rt {
+          font-size: 0.9rem !important; /* ← MATCHES FLASHCARDS */
+        }
+
+        .conv-pill .pill-content .line .en-text {
+          padding-left: 30px;
+          font-size: 1rem;
         }
 
         .nav .btn-nav {
@@ -771,39 +716,82 @@
           font-size: 0.85rem;
           min-width: 70px;
         }
-        .controls .btn {
-          font-size: 0.8rem;
-          padding: 6px 14px;
-        }
-        .categories .cat-btn {
-          font-size: 0.7rem;
-          padding: 4px 12px;
-        }
+
         .mode-tabs .tab {
           font-size: 0.75rem;
           padding: 6px 12px;
         }
-        .conversation-pill .pill-content .line .jp {
-          font-size: 0.95rem;
+
+        .categories .cat-btn {
+          font-size: 0.7rem;
+          padding: 4px 12px;
         }
-        .conversation-pill .pill-content .line .en-text {
-          padding-left: 30px;
+
+        .small-btn {
+          font-size: 0.75rem;
+          padding: 4px 12px;
         }
       }
 
-      @media (max-width: 400px) {
-        .directions-header .title {
-          font-size: 1.2rem;
+      @media (max-width: 480px) {
+        /* ... */
+        .phrase-card .japanese,
+        .conv-pill .pill-content .line .jp {
+          font-size: 0.7rem; /* ← MATCHES FLASHCARDS */
         }
+
         .directions-header .back-button {
           font-size: 0.8rem;
           padding: 6px 14px;
+        }
+
+        .phrase-card .japanese,
+        .conv-pill .pill-content .line .jp {
+          font-size: 1.6rem;
+        }
+
+        .phrase-card .japanese rt,
+        .conv-pill .pill-content .line .jp rt {
+          font-size: 0.7rem !important; /* ← MATCHES FLASHCARDS */
+        }
+
+        .conv-pill .pill-content .line .en-text {
+          font-size: 0.9rem;
+        }
+
+        .nav .btn-nav {
+          font-size: 0.75rem;
+          padding: 6px 12px;
+          min-width: 60px;
+        }
+
+        .mode-tabs .tab {
+          font-size: 0.65rem;
+          padding: 4px 10px;
+        }
+
+        .mode-tabs .tab .en {
+          font-size: 0.55rem;
+        }
+
+        .categories .cat-btn {
+          font-size: 0.6rem;
+          padding: 3px 10px;
+        }
+
+        .categories .cat-btn .en {
+          font-size: 0.55rem;
+        }
+
+        .small-btn {
+          font-size: 0.65rem;
+          padding: 3px 10px;
         }
       }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="directions-container">
       <!-- ==========================================================
            HEADER - with Back Button top right
            ========================================================== -->
@@ -824,38 +812,40 @@
       </div>
 
       <!-- ==========================================================
-             MODE TABS
-             ========================================================== -->
-      <div class="mode-tabs">
-        <button class="tab active" data-mode="phrases">
-          📝 フレーズ <span class="en">(Phrases)</span>
-        </button>
-        <button class="tab" data-mode="conversations">
-          💬 会話 <span class="en">(Conversations)</span>
-        </button>
-        <button class="tab" data-mode="expressions">
-          🌟 表現 <span class="en">(Expressions)</span>
-        </button>
+           CONTROLS BAR
+           ========================================================== -->
+      <div class="directions-controls">
+        <div class="control-group">
+          <label>Mode:</label>
+          <div class="mode-tabs">
+            <button class="tab active" data-mode="phrases">
+              📝 フレーズ <span class="en">(Phrases)</span>
+            </button>
+            <button class="tab" data-mode="conversations">
+              💬 会話 <span class="en">(Conversations)</span>
+            </button>
+            <button class="tab" data-mode="expressions">
+              🌟 表現 <span class="en">(Expressions)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <button class="small-btn active" id="furiganaToggle">
+            ふ <span class="en">(Furigana)</span>
+          </button>
+          <button class="small-btn active" id="translationToggle">
+            英 <span class="en">(Translation)</span>
+          </button>
+          <button class="small-btn" id="autoPlayBtn">
+            ▶ <span class="en">(Auto-Play)</span>
+          </button>
+        </div>
       </div>
 
       <!-- ==========================================================
-             CONTROLS
-             ========================================================== -->
-      <div class="controls">
-        <button class="btn active" id="furiganaToggle">
-          ふ <span class="en">(Furigana)</span>
-        </button>
-        <button class="btn active" id="translationToggle">
-          英 <span class="en">(Translation)</span>
-        </button>
-        <button class="btn" id="autoPlayBtn">
-          ▶ <span class="en">(Auto-Play)</span>
-        </button>
-      </div>
-
-      <!-- ==========================================================
-             CATEGORIES (for Phrases mode)
-             ========================================================== -->
+           CATEGORIES (for Phrases mode)
+           ========================================================== -->
       <div class="categories" id="categoriesContainer">
         <button class="cat-btn active" data-cat="all">
           📚 全て <span class="en">(All)</span>
@@ -872,9 +862,9 @@
       </div>
 
       <!-- ==========================================================
-             PHRASE CARD
-             ========================================================== -->
-      <div class="card" id="card">
+           PHRASE CARD
+           ========================================================== -->
+      <div class="phrase-card" id="card">
         <div class="number" id="cardNumber">1 <span class="en">/</span> 28</div>
         <div class="japanese" id="japaneseText"></div>
         <div class="english" id="englishText"></div>
@@ -884,52 +874,58 @@
       </div>
 
       <!-- ==========================================================
-             CONVERSATION PILL
-             ========================================================== -->
-      <div
-        class="conversation-pill"
-        id="conversationPill"
-        style="display: none"
-      >
+           CONVERSATION CARD
+           ========================================================== -->
+      <div class="conv-pill" id="conversationPill" style="display: none">
         <div class="pill-label">
           💬 会話 <span class="en">(Conversation)</span>
           <span
-            style="font-weight: 400; opacity: 0.5; font-size: 0.7rem"
+            style="
+              font-weight: 400;
+              opacity: 0.5;
+              font-size: 0.7rem;
+              color: #8a7b6e;
+            "
             id="convNumber"
             >1 / 8</span
           >
         </div>
         <div class="pill-content" id="convContent"></div>
         <button class="pill-play-btn" id="convPlayBtn">
-          🔊 会話を聞く <span class="en">(Listen to Conversation)</span>
+          🔊 聞く <span class="en">(Listen)</span>
         </button>
       </div>
 
       <!-- ==========================================================
-             EXPRESSION PILL
-             ========================================================== -->
+           EXPRESSION CARD
+           ========================================================== -->
       <div
-        class="conversation-pill expression"
+        class="conv-pill expression"
         id="expressionPill"
         style="display: none"
       >
         <div class="pill-label">
           🌟 自然な表現 <span class="en">(Natural Expressions)</span>
           <span
-            style="font-weight: 600; opacity: 1; font-size: 0.9rem"
+            style="
+              font-weight: 600;
+              opacity: 1;
+              font-size: 0.9rem;
+              color: #6c8b6b;
+            "
             id="expNumber"
             >1 / 13</span
           >
         </div>
         <div class="pill-content" id="expContent"></div>
         <button class="pill-play-btn" id="expPlayBtn">
-          🔊 表現を聞く <span class="en">(Listen to Expression)</span>
+          🔊 聞く <span class="en">(Listen)</span>
         </button>
       </div>
 
       <!-- ==========================================================
-             NAVIGATION
-             ========================================================== -->
+           NAVIGATION
+           ========================================================== -->
       <div class="nav">
         <button class="btn-nav" id="prevBtn">
           ◀ 前へ <span class="en">(Prev)</span>
@@ -947,13 +943,13 @@
       </div>
 
       <!-- ==========================================================
-             PROGRESS DOTS
-             ========================================================== -->
+           PROGRESS DOTS
+           ========================================================== -->
       <div class="progress" id="progress"></div>
     </div>
 
     <!-- ============================================================
-         JAVASCRIPT
+         JAVASCRIPT - Updated with new button text
          ============================================================ -->
     <script>
       (function () {
@@ -1392,7 +1388,7 @@
         ];
 
         // ──────────────────────────────────────────────────────────────
-        // 2. STATE - Don't change these unless you know what you're doing
+        // 2. STATE
         // ──────────────────────────────────────────────────────────────
 
         let currentMode = "phrases";
@@ -1625,8 +1621,7 @@
           });
           convContent.innerHTML = html;
 
-          convPlayBtn.innerHTML =
-            '🔊 会話を聞く <span class="en">(Listen to Conversation)</span>';
+          convPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
           convPlayBtn.classList.remove("playing");
           isConvPlaying = false;
         }
@@ -1649,13 +1644,12 @@
                 <span class="speaker c">🌟</span>
                 <span class="jp ${!furiganaVisible ? "no-furigana" : ""}">${addFurigana(exp.jp)}</span>
               </div>
-              <span class="en-text ${translationVisible ? "show" : ""}" style="font-size:0.9rem;color:#64748b;">${exp.en}</span>
+              <span class="en-text ${translationVisible ? "show" : ""}" style="font-size:1.2rem;color:#2601f8;">${exp.en}</span>
             </div>
           `;
           expContent.innerHTML = html;
 
-          expPlayBtn.innerHTML =
-            '🔊 表現を聞く <span class="en">(Listen to Expression)</span>';
+          expPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
           expPlayBtn.classList.remove("playing");
           isExpPlaying = false;
         }
@@ -1806,8 +1800,7 @@
           if (isConvPlaying) {
             window.speechSynthesis.cancel();
             isConvPlaying = false;
-            convPlayBtn.innerHTML =
-              '🔊 会話を聞く <span class="en">(Listen to Conversation)</span>';
+            convPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
             convPlayBtn.classList.remove("playing");
             return;
           }
@@ -1822,8 +1815,7 @@
           const fullText = conv.lines.map((l) => l.jp).join("。");
           speakText(fullText, () => {
             isConvPlaying = false;
-            convPlayBtn.innerHTML =
-              '🔊 会話を聞く <span class="en">(Listen to Conversation)</span>';
+            convPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
             convPlayBtn.classList.remove("playing");
           });
         }
@@ -1832,8 +1824,7 @@
           if (isExpPlaying) {
             window.speechSynthesis.cancel();
             isExpPlaying = false;
-            expPlayBtn.innerHTML =
-              '🔊 表現を聞く <span class="en">(Listen to Expression)</span>';
+            expPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
             expPlayBtn.classList.remove("playing");
             return;
           }
@@ -1847,8 +1838,7 @@
 
           speakText(exp.jp, () => {
             isExpPlaying = false;
-            expPlayBtn.innerHTML =
-              '🔊 表現を聞く <span class="en">(Listen to Expression)</span>';
+            expPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
             expPlayBtn.classList.remove("playing");
             if (autoPlay && currentIndex < EXPRESSIONS.length - 1) {
               setTimeout(() => {
@@ -1903,11 +1893,9 @@
           isExpPlaying = false;
           playBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
           playBtn.classList.remove("playing");
-          convPlayBtn.innerHTML =
-            '🔊 会話を聞く <span class="en">(Listen to Conversation)</span>';
+          convPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
           convPlayBtn.classList.remove("playing");
-          expPlayBtn.innerHTML =
-            '🔊 表現を聞く <span class="en">(Listen to Expression)</span>';
+          expPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
           expPlayBtn.classList.remove("playing");
 
           updateProgress();
@@ -1946,11 +1934,9 @@
             isExpPlaying = false;
             playBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
             playBtn.classList.remove("playing");
-            convPlayBtn.innerHTML =
-              '🔊 会話を聞く <span class="en">(Listen to Conversation)</span>';
+            convPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
             convPlayBtn.classList.remove("playing");
-            expPlayBtn.innerHTML =
-              '🔊 表現を聞く <span class="en">(Listen to Expression)</span>';
+            expPlayBtn.innerHTML = '🔊 聞く <span class="en">(Listen)</span>';
             expPlayBtn.classList.remove("playing");
           }
         }
@@ -2019,8 +2005,7 @@
           `📚 ${PHRASES.length} フレーズ, 💬 ${CONVERSATIONS.length} 会話, 🌟 ${EXPRESSIONS.length} 表現 loaded`,
         );
         console.log("⌨️ ショートカット: ← → (前/次), Space (次), Enter (音声)");
-        console.log("🎨 カスタマイズ: :root 変数を変更してください");
-        console.log("📝 会話ピルのカスタマイズ: --conv-* 変数を使用");
+        console.log("🎨 スタイルは components.css から継承");
       })();
     </script>
   </body>

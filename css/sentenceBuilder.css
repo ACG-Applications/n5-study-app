@@ -1,49 +1,47 @@
 /* ============================================================
-   SENTENCE BUILDER - Main Styles
-   All colors, fonts, sizes, and spacing can be customized here
+   SENTENCE BUILDER - Updated to match app styling
+   All colors, fonts, sizes, and spacing now match verbs/adjectives
    ============================================================ */
 
 /* ============================================================
-   1. ROOT VARIABLES - All customizable values in one place
+   1. ROOT VARIABLES - Using app's CSS variables
    ============================================================ */
 :root {
-  /* ---------- FONTS ---------- */
-  --font-family:
-    "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+  /* Inherit from variables.css but with fallbacks */
+  --font-family: "Segoe UI", Roboto, "Noto Sans", system-ui, -apple-system, sans-serif;
   --font-size-base: 16px;
   --font-weight-normal: 400;
   --font-weight-bold: 600;
   --font-weight-light: 300;
 
-  /* ---------- PAGE COLORS ---------- */
-  --color-bg-page: #a7e7fa;
+  /* Colors matching the app */
+  --color-bg-page: #f5f0eb;
   --color-bg-card: #ffffff;
-  --color-text-primary: #080808;
-  --color-text-secondary: #3d352b;
-  --color-text-muted: #7a6f60;
+  --color-text-primary: #2c3e2f;
+  --color-text-secondary: #4a6741;
+  --color-text-muted: #8a7b6e;
   --color-text-light: #b8a58b;
 
-  /* ---------- BRAND COLORS ---------- */
-  --color-primary: #5a8a6a;
-  --color-primary-dark: #4a7a5a;
+  --color-primary: #6c8b6b;
+  --color-primary-dark: #5a7a59;
   --color-primary-light: #eaf5ea;
-  --color-primary-bg: #d4e8d4;
+  --color-primary-bg: #e8f0e7;
 
-  --color-accent: #4a7a8a;
-  --color-accent-dark: #3a6a7a;
-  --color-accent-light: #e3f0ff;
+  --color-accent: #c45d1e;
+  --color-accent-dark: #a84d18;
+  --color-accent-light: #fff1e0;
 
-  /* ---------- MODE BUTTONS ---------- */
-  --color-mode-active: #5a8a6a;
+  /* Mode buttons */
+  --color-mode-active: #6c8b6b;
   --color-mode-active-text: #ffffff;
-  --color-mode-inactive: #faf8f5;
-  --color-mode-inactive-text: #3d352b;
+  --color-mode-inactive: #e8e0d5;
+  --color-mode-inactive-text: #2c3e2f;
   --color-mode-locked: #f0ebe3;
   --color-mode-locked-text: #b8a58b;
 
-  /* ---------- STATUS BAR ---------- */
+  /* Status bar */
   --color-status-not-started: #f5f0eb;
-  --color-status-not-started-text: #7a6f60;
+  --color-status-not-started-text: #8a7b6e;
   --color-status-locked: #fff8e8;
   --color-status-locked-text: #8a7a4a;
   --color-status-practice: #e3f0ff;
@@ -53,68 +51,65 @@
   --color-status-mastery: #eaf5ea;
   --color-status-mastery-text: #2d7a4a;
 
-  /* ---------- WORD BANK ---------- */
-  --color-bank-bg: #fbfcc3;
-  --color-bank-border: #e8e0d6;
+  /* Word Bank */
+  --color-bank-bg: #faf8f5;
+  --color-bank-border: #e8e0d5;
   --color-bank-word: #ffffff;
-  --color-bank-word-border: #d4c9b8;
-  --color-bank-word-text: #000000;
+  --color-bank-word-border: #d4cbbc;
+  --color-bank-word-text: #2c3e2f;
   --color-bank-word-hover: #f5f0eb;
-  --color-bank-word-selected: #eaf550;
+  --color-bank-word-selected: #d4e8d4;
   --color-bank-word-used: rgba(0, 0, 0, 0.25);
 
-  /* ---------- FURIGANA ---------- */
-  --color-furigana: #8b0000;
-
-  /* ---------- BLANK SLOTS ---------- */
-  --color-blank-bg: #cdee99;
+  /* Blank Slots */
+  --color-blank-bg: #e8f0e7;
   --color-blank-border: #8a7a6a;
-  --color-blank-filled-bg: #eaf5ea;
-  --color-blank-filled-border: #5a8a6a;
-  --color-blank-correct-bg: #d4e8d4;
-  --color-blank-correct-border: #2d7a4a;
-  --color-blank-incorrect-bg: #f8d4d4;
-  --color-blank-incorrect-border: #b34a4a;
+  --color-blank-filled-bg: #d4e8d4;
+  --color-blank-filled-border: #6c8b6b;
+  --color-blank-correct-bg: #d4edda;
+  --color-blank-correct-border: #28a745;
+  --color-blank-incorrect-bg: #f8d7da;
+  --color-blank-incorrect-border: #dc3545;
 
-  /* ---------- FEEDBACK ---------- */
-  --color-feedback-success-bg: #eaf5ea;
-  --color-feedback-success-border: #5a8a6a;
-  --color-feedback-success-text: #1a4a2a;
-  --color-feedback-error-bg: #f8ecec;
-  --color-feedback-error-border: #b34a4a;
-  --color-feedback-error-text: #5a2a2a;
+  /* Feedback */
+  --color-feedback-success-bg: #d4edda;
+  --color-feedback-success-border: #28a745;
+  --color-feedback-success-text: #155724;
+  --color-feedback-error-bg: #f8d7da;
+  --color-feedback-error-border: #dc3545;
+  --color-feedback-error-text: #721c24;
 
-  /* ---------- CORRECT SENTENCE ---------- */
+  /* Correct Sentence */
   --color-correct-bg: #ffffff;
-  --color-correct-border: #0066cc;
-  --color-correct-label: #0066cc;
+  --color-correct-border: #1e4b6e;
+  --color-correct-label: #1e4b6e;
   --color-correct-text: #1a1a2e;
-  --color-correct-highlight: #0066cc;
-  --color-correct-play-btn: #0066cc;
-  --color-correct-play-btn-hover: #004499;
+  --color-correct-highlight: #1e4b6e;
+  --color-correct-play-btn: #6c8b6b;
+  --color-correct-play-btn-hover: #5a7a59;
 
-  /* ---------- ORDER SLOTS ---------- */
+  /* Order Slots */
   --color-order-slot-bg: #ffffff;
-  --color-order-slot-border: #d4c9b8;
+  --color-order-slot-border: #d4cbbc;
   --color-order-slot-empty-bg: #f5f0eb;
   --color-order-slot-empty-border: #c8bcaa;
-  --color-order-slot-filled-bg: #eaf5ea;
-  --color-order-slot-filled-border: #5a8a6a;
-  --color-order-slot-correct-bg: #c8e0c8;
-  --color-order-slot-correct-border: #2d7a4a;
-  --color-order-slot-incorrect-bg: #f8d4d4;
-  --color-order-slot-incorrect-border: #b34a4a;
+  --color-order-slot-filled-bg: #e8f5e9;
+  --color-order-slot-filled-border: #6c8b6b;
+  --color-order-slot-correct-bg: #d4edda;
+  --color-order-slot-correct-border: #28a745;
+  --color-order-slot-incorrect-bg: #f8d7da;
+  --color-order-slot-incorrect-border: #dc3545;
 
-  /* ---------- BUTTONS ---------- */
-  --color-btn-primary: #5a8a6a;
-  --color-btn-primary-hover: #4a7a5a;
+  /* Buttons - matching app */
+  --color-btn-primary: #6c8b6b;
+  --color-btn-primary-hover: #5a7a59;
   --color-btn-primary-text: #ffffff;
 
-  --color-btn-danger: #b34a4a;
-  --color-btn-danger-hover: #a33a3a;
+  --color-btn-danger: #dc3545;
+  --color-btn-danger-hover: #c82333;
   --color-btn-danger-text: #ffffff;
 
-  --color-btn-secondary: #8a7a6a;
+  --color-btn-secondary: #8a7b6e;
   --color-btn-secondary-hover: #7a6a5a;
   --color-btn-secondary-text: #ffffff;
 
@@ -122,24 +117,24 @@
   --color-btn-tts-hover: #3a6a7a;
   --color-btn-tts-text: #ffffff;
 
-  /* ---------- SPACING ---------- */
+  /* Spacing - matching app */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
-  /* ---------- BORDER RADIUS ---------- */
+  /* Border Radius - matching app */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 30px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-full: 40px;
 
-  /* ---------- SHADOWS ---------- */
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --shadow-word: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-word-hover: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadows - matching app */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-word: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --shadow-word-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 /* ============================================================
@@ -160,46 +155,108 @@ body {
 }
 
 /* ============================================================
-   3. APP CONTAINER
+   3. APP CONTAINER - MATCHES ADJECTIVES/VERBS
    ============================================================ */
 .app-container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg) 28px var(--spacing-xl);
-  box-shadow: var(--shadow-card);
+  padding: 20px;
+  background: transparent;
 }
 
 /* ============================================================
-   4. HEADER
+   4. BUILDER HEADER - MATCHES ADJECTIVES.CSS EXACTLY
    ============================================================ */
-.app-header {
+.builder-header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #031bf8;
-  padding-bottom: 14px;
-  margin-bottom: 18px;
-  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.app-header h1 {
-  font-size: 1.6rem;
-  font-weight: var(--font-weight-bold);
-  color: #030303;
-  letter-spacing: -0.3px;
+.builder-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e2f;
+  margin: 0;
 }
 
-.app-header h1 span {
-  font-weight: var(--font-weight-light);
-  color: #1a1714;
+.builder-header h1 span {
+  font-weight: 300;
+  color: #8a7b6e;
   font-size: 1rem;
 }
 
+.builder-header .back-button {
+  background: #6c8b6b;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s, transform 0.1s;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.builder-header .back-button:hover {
+  background: #5a7a59;
+  transform: translateY(-1px);
+}
+
 /* ============================================================
-   5. HEADER CONTROLS
+   5. CONTROLS BAR - MATCHES ADJECTIVES CONTROLS
+   ============================================================ */
+.builder-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.builder-controls .control-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.builder-controls .control-group label {
+  font-weight: 600;
+  color: #4a6741;
+  font-size: 0.9rem;
+}
+
+.builder-controls .control-group select,
+.builder-controls .control-group input {
+  padding: 6px 16px;
+  border-radius: 40px;
+  border: 1px solid #d4cbbc;
+  background: white;
+  font-family: inherit;
+  font-size: 0.85rem;
+  min-width: 140px;
+}
+
+.builder-controls .control-group select:focus,
+.builder-controls .control-group input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 139, 107, 0.25);
+}
+
+/* ============================================================
+   6. HEADER CONTROLS (Furigana/Speed toggles)
    ============================================================ */
 .header-controls {
   display: flex;
@@ -209,18 +266,18 @@ body {
 }
 
 .header-controls label {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  color: #070604;
+  color: #4a6741;
 }
 
 .header-controls select,
 .header-controls button {
   font-size: 0.8rem;
-  padding: var(--spacing-xs) 12px;
-  border-radius: var(--radius-xl);
-  border: 1px solid #d4c9b8;
-  background: var(--color-bg-card);
+  padding: 4px 12px;
+  border-radius: 40px;
+  border: 1px solid #d4cbbc;
+  background: white;
   cursor: pointer;
   font-family: inherit;
   transition: 0.15s;
@@ -231,40 +288,38 @@ body {
   background: #f0ebe3;
 }
 
-/* Toggle buttons (Furigana ON/OFF) */
 .header-controls .toggle-btn {
-  background: var(--color-bg-card);
-  border-color: #fc0202;
+  background: #e8e0d5;
+  border-color: #d4cbbc;
   font-weight: 500;
   min-width: 60px;
   text-align: center;
 }
 
 .header-controls .toggle-btn.active {
-  background: #72f78f;
-  border-color: #00f700;
-  color: rgb(2, 2, 2);
+  background: #6c8b6b;
+  border-color: #5a7a59;
+  color: white;
 }
 
-/* Speed buttons (0.75x, 1.0x, 1.25x) */
 .header-controls .speed-btn {
-  background: var(--color-bg-card);
-  border-color: #d4c9b8;
-  padding: var(--spacing-xs) 10px;
+  background: #e8e0d5;
+  border-color: #d4cbbc;
+  padding: 4px 10px;
   font-size: 0.7rem;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
   min-width: 40px;
   text-align: center;
 }
 
 .header-controls .speed-btn.active {
-  background: #72f78f;
-  border-color: #00f700;
-  color: rgb(2, 2, 2);
+  background: #6c8b6b;
+  border-color: #5a7a59;
+  color: white;
 }
 
 /* ============================================================
-   6. MODE TOGGLE - Fill, Order, Select
+   7. MODE TOGGLE - Fill, Order, Select
    ============================================================ */
 .mode-toggle {
   display: inline-flex;
@@ -274,18 +329,19 @@ body {
 }
 
 .mode-toggle .mode-label {
-  font-size: 0.65rem;
-  color: #070707;
-  margin-right: 2px;
+  font-size: 0.75rem;
+  color: #4a6741;
+  font-weight: 500;
+  margin-right: 4px;
 }
 
 .mode-btn {
-  font-size: 0.65rem;
-  padding: 3px 10px;
-  border-radius: var(--radius-xl);
-  border: 1px solid #d4c9b8;
-  background: var(--color-bg-card);
-  color: #000000;
+  font-size: 0.75rem;
+  padding: 4px 14px;
+  border-radius: 40px;
+  border: 1px solid #d4cbbc;
+  background: white;
+  color: #2c3e2f;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -293,26 +349,26 @@ body {
 }
 
 .mode-btn.active {
-  background: var(--color-mode-active);
-  color: var(--color-mode-active-text);
-  border-color: #4a7a5a;
+  background: #6c8b6b;
+  color: white;
+  border-color: #5a7a59;
+  box-shadow: 0 2px 6px rgba(108, 139, 107, 0.3);
 }
 
 .mode-btn:not(.active):hover {
   background: #f0ebe3;
 }
 
-/* Locked mode button */
 .mode-btn.locked {
-  background: var(--color-mode-locked) !important;
-  color: var(--color-mode-locked-text) !important;
-  border-color: #d4c9b8 !important;
+  background: #f0ebe3 !important;
+  color: #b8a58b !important;
+  border-color: #d4cbbc !important;
   cursor: not-allowed !important;
-  opacity: 0.5 !important;
+  opacity: 0.6 !important;
 }
 
 /* ============================================================
-   7. MASTERY SELECTOR
+   8. MASTERY SELECTOR
    ============================================================ */
 .mastery-selector {
   display: inline-flex;
@@ -323,17 +379,18 @@ body {
 }
 
 .mastery-selector .mastery-label {
-  font-size: 0.65rem;
-  color: #070707;
+  font-size: 0.75rem;
+  color: #4a6741;
+  font-weight: 500;
   margin-right: 2px;
 }
 
 .mastery-selector select {
-  font-size: 0.65rem;
-  padding: 3px 8px;
-  border-radius: var(--radius-xl);
-  border: 1px solid #d4c9b8;
-  background: var(--color-bg-card);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 40px;
+  border: 1px solid #d4cbbc;
+  background: white;
   cursor: pointer;
   font-family: inherit;
   transition: 0.15s;
@@ -349,47 +406,52 @@ body {
 }
 
 #modeStatus {
-  font-size: 0.65rem;
-  padding: 2px 10px;
-  border-radius: var(--radius-md);
-  background: var(--color-status-mastery);
-  color: var(--color-status-mastery-text);
-  border: 1px solid #5a8a6a;
+  font-size: 0.7rem;
+  padding: 2px 12px;
+  border-radius: 40px;
+  background: #eaf5ea;
+  color: #2d7a4a;
+  border: 1px solid #6c8b6b;
   white-space: nowrap;
   transition: all 0.3s ease;
 }
 
-/* Reset Mastery Progress button */
 .reset-mastery-btn {
-  font-size: 0.55rem;
-  padding: 2px 8px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-btn-danger);
+  font-size: 0.6rem;
+  padding: 2px 10px;
+  border-radius: 40px;
+  border: 1px solid #dc3545;
   background: #fff;
-  color: var(--color-btn-danger);
+  color: #dc3545;
   cursor: pointer;
   margin-left: var(--spacing-xs);
   white-space: nowrap;
   transition: all 0.2s ease;
+  font-family: inherit;
+  font-weight: 500;
 }
 
 .reset-mastery-btn:hover {
-  background: var(--color-btn-danger);
+  background: #dc3545;
   color: #fff;
 }
 
 /* ============================================================
-   8. PROGRESS SECTION
+   9. PROGRESS SECTION - MATCHES APP STYLE
    ============================================================ */
 .progress-section {
-  margin-bottom: var(--spacing-md);
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .progress-stats {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 20px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--color-text-secondary);
   margin-bottom: 6px;
 }
@@ -401,8 +463,8 @@ body {
 }
 
 .progress-stats .stat-item .stat-value {
-  font-weight: var(--font-weight-bold);
-  color: #1a1a1a;
+  font-weight: 600;
+  color: #2c3e2f;
 }
 
 .progress-stats .stat-item .stat-label {
@@ -410,27 +472,25 @@ body {
 }
 
 .progress-stats .stat-item.correct .stat-value {
-  color: #2d7a4a;
+  color: #28a745;
 }
 
 .progress-stats .stat-item.incorrect .stat-value {
-  color: var(--color-btn-danger);
+  color: #dc3545;
 }
 
-/* Progress bar track */
 .progress-bar-container {
   width: 100%;
   height: 8px;
-  background: #e8e0d6;
-  border-radius: var(--radius-lg);
+  background: #e8e0d5;
+  border-radius: 20px;
   overflow: hidden;
 }
 
-/* Progress bar fill */
 .progress-bar {
   height: 100%;
-  background: var(--color-primary);
-  border-radius: var(--radius-lg);
+  background: #6c8b6b;
+  border-radius: 20px;
   transition: width 0.5s ease;
   width: 0%;
 }
@@ -438,38 +498,37 @@ body {
 .progress-label {
   display: flex;
   justify-content: space-between;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
   margin-top: var(--spacing-xs);
 }
 
 /* ============================================================
-   9. SENTENCE AREA
+   10. SENTENCE AREA - MATCHES APP STYLE
    ============================================================ */
 .sentence-area {
-  background: var(--color-bg-card);
-  border: 2px solid #e8e0d6;
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg) var(--spacing-lg) 18px;
-  margin-bottom: 14px;
+  background: white;
+  border: 2px solid #e8e0d5;
+  border-radius: 16px;
+  padding: 20px 24px 18px;
+  margin-bottom: 16px;
   min-height: 140px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Translation toggle button container */
 .sentence-area .translation-toggle {
   display: flex;
   justify-content: flex-end;
   margin-bottom: var(--spacing-sm);
 }
 
-/* Translation toggle button */
 .sentence-area .translation-toggle button {
   background: none;
-  border: 1px solid #d4c9b8;
-  border-radius: var(--radius-xl);
-  padding: 3px 14px;
-  font-size: 0.9rem;
-  color: #5a4e3e;
+  border: 1px solid #d4cbbc;
+  border-radius: 40px;
+  padding: 4px 16px;
+  font-size: 0.85rem;
+  color: #4a6741;
   cursor: pointer;
   font-family: inherit;
   transition: 0.15s;
@@ -480,56 +539,45 @@ body {
 }
 
 .sentence-area .translation-toggle button.active {
-  background: #b8a58b;
-  border-color: #9e8a72;
+  background: #6c8b6b;
+  border-color: #5a7a59;
   color: white;
 }
 
 /* ============================================================
-   10. SENTENCE JP - Japanese sentence display
+   11. SENTENCE JP - Japanese sentence display
    ============================================================ */
 .sentence-jp {
   font-size: 1.9rem;
   line-height: 2.6;
-  color: #000000;
+  color: #000000 !important;
+  font-weight: 500 !important;
   padding: var(--spacing-sm) var(--spacing-xs);
   word-break: break-word;
   font-family: var(--font-family);
   min-height: 70px;
-  background: var(--color-bg-card);
-}
-
-/* Ruby (furigana) styling */
-.sentence-jp ruby {
-  ruby-align: center;
-}
-
-/* Furigana text (small text above kanji) */
-.sentence-jp ruby rt {
-  color: var(--color-furigana);
-  font-size: 1rem;
-  font-weight: var(--font-weight-light);
-  letter-spacing: 0.3px;
+  background: transparent;
 }
 
 /* ============================================================
-   11. FILL MODE - blank slot styles
+   12. FILL MODE - blank slot styles
    ============================================================ */
 .sentence-jp .blank-slot {
   display: inline-block;
   min-width: 70px;
-  border-bottom: 3px dashed var(--color-blank-border);
+  border-bottom: 3px dashed #8a7a6a;
   margin: 0 2px;
   padding: 0 8px 2px 8px;
   text-align: center;
   cursor: pointer;
   transition: 0.15s;
-  background: var(--color-blank-bg);
+  background: #e8f0e7;
   border-radius: 0 0 4px 4px;
   min-height: 55px;
   vertical-align: bottom;
   font-size: 1.9rem;
-  color: #000000;
+  color: #000000 !important;
+  font-weight: 500 !important;
   position: relative;
 }
 
@@ -540,18 +588,18 @@ body {
 
 .sentence-jp .blank-slot.filled {
   border-bottom-style: solid;
-  border-bottom-color: var(--color-blank-filled-border);
-  background: var(--color-blank-filled-bg);
+  border-bottom-color: #6c8b6b;
+  background: #d4e8d4;
 }
 
 .sentence-jp .blank-slot.correct {
-  border-bottom-color: var(--color-blank-correct-border);
-  background: var(--color-blank-correct-bg);
+  border-bottom-color: #28a745;
+  background: #d4edda;
 }
 
 .sentence-jp .blank-slot.incorrect {
-  border-bottom-color: var(--color-blank-incorrect-border);
-  background: var(--color-blank-incorrect-bg);
+  border-bottom-color: #dc3545;
+  background: #f8d7da;
 }
 
 .sentence-jp .blank-slot .placed-word {
@@ -561,24 +609,15 @@ body {
   cursor: pointer;
 }
 
-.sentence-jp .blank-slot .placed-word ruby {
-  ruby-align: center;
-}
-
-.sentence-jp .blank-slot .placed-word ruby rt {
-  color: var(--color-furigana);
-  font-size: 1rem;
-}
-
 .sentence-jp .blank-slot .blank-number {
   font-size: 0.7rem;
-  color: var(--color-text-light);
+  color: #b8a58b;
   display: block;
   margin-top: -4px;
 }
 
 /* ============================================================
-   12. ORDER MODE - slot styles
+   13. ORDER MODE - slot styles
    ============================================================ */
 .order-sentence-container {
   display: flex;
@@ -593,7 +632,7 @@ body {
 }
 
 .order-sentence-container .order-instruction {
-  color: var(--color-text-light);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   font-style: italic;
   padding: var(--spacing-sm) 0;
@@ -610,15 +649,14 @@ body {
   width: 100%;
 }
 
-/* Individual order slot */
 .order-slot {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: var(--color-order-slot-bg);
-  border: 2px solid var(--color-order-slot-border);
-  border-radius: var(--radius-xl);
+  background: #ffffff;
+  border: 2px solid #d4cbbc;
+  border-radius: 40px;
   font-size: 1.9rem;
   color: #000000;
   cursor: pointer;
@@ -652,45 +690,24 @@ body {
   transform: scale(0.95);
 }
 
-.order-slot ruby {
-  ruby-align: center;
-  display: inline;
-  line-height: 1.8;
-  vertical-align: middle;
-  ruby-position: over;
-  text-align: center;
-}
-
-.order-slot ruby rt {
-  color: var(--color-furigana);
-  font-size: 0.9rem;
-  font-weight: var(--font-weight-light);
-  display: ruby-text;
-  line-height: 1.2;
-  text-align: center;
-  letter-spacing: 0.5px;
-  ruby-position: over;
-}
-
 .order-slot .order-number {
   font-size: 0.55rem;
-  color: #030200;
+  color: #8a7b6e;
   line-height: 1.2;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
   margin-left: var(--spacing-xs);
 }
 
 .order-slot .slot-placeholder {
   font-size: 1rem;
-  color: #d4c9b8;
+  color: #d4cbbc;
   line-height: 1;
 }
 
-/* Empty slot */
 .order-slot.empty {
-  background: var(--color-order-slot-empty-bg);
+  background: #f5f0eb;
   border-style: dashed;
-  border-color: var(--color-order-slot-empty-border);
+  border-color: #c8bcaa;
   min-width: 50px;
   min-height: 50px;
   padding: var(--spacing-sm) 14px;
@@ -708,10 +725,9 @@ body {
   transform: scale(1.02);
 }
 
-/* Filled slot */
 .order-slot.filled {
-  background: var(--color-order-slot-filled-bg);
-  border-color: var(--color-order-slot-filled-border);
+  background: #e8f5e9;
+  border-color: #6c8b6b;
   border-style: solid;
 }
 
@@ -721,46 +737,46 @@ body {
 }
 
 .order-slot.filled.correct {
-  background: var(--color-order-slot-correct-bg);
-  border-color: var(--color-order-slot-correct-border);
+  background: #d4edda;
+  border-color: #28a745;
 }
 
 .order-slot.filled.incorrect {
-  background: var(--color-order-slot-incorrect-bg);
-  border-color: var(--color-order-slot-incorrect-border);
+  background: #f8d7da;
+  border-color: #dc3545;
 }
 
 /* ============================================================
-   13. SELECT MODE - instruction text
+   14. SELECT MODE - instruction text
    ============================================================ */
 .select-mode-instruction {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-sm);
   text-align: center;
   padding: var(--spacing-xs) var(--spacing-sm);
   background: #faf8f5;
-  border-radius: var(--radius-sm);
-  border: 1px solid #e8e0d6;
+  border-radius: 12px;
+  border: 1px solid #e8e0d5;
   width: 100%;
 }
 
 .select-mode-instruction .highlight-count {
   font-weight: 700;
-  color: #2d7a4a;
+  color: #28a745;
 }
 
 .select-mode-instruction .distractor-warning {
-  color: #b38a4a;
+  color: #d4a04a;
   font-weight: 500;
 }
 
 /* ============================================================
-   14. SENTENCE ENGLISH TRANSLATION
+   15. SENTENCE ENGLISH TRANSLATION
    ============================================================ */
 .sentence-en {
-  font-size: 0.95rem;
-  color: #5a4e3e;
+  font-size: 1rem;
+  color: #4a6741;
   padding: 10px var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
   border-top: 1px dashed #e0d8ce;
   margin-top: 10px;
@@ -773,7 +789,7 @@ body {
 }
 
 /* ============================================================
-   15. SENTENCE CONTROLS
+   16. SENTENCE CONTROLS
    ============================================================ */
 .sentence-controls {
   display: flex;
@@ -784,25 +800,25 @@ body {
 }
 
 .sentence-controls .sentence-hint {
-  font-size: 0.75rem;
-  color: #8a7a6a;
+  font-size: 0.8rem;
+  color: #8a7b6e;
   font-style: italic;
 }
 
 /* ============================================================
-   16. WORD BANK AREA
+   17. WORD BANK AREA
    ============================================================ */
 .word-bank-area {
-  background: var(--color-bank-bg);
-  border: 2px solid var(--color-bank-border);
-  border-radius: var(--radius-md);
+  background: #faf8f5;
+  border: 2px solid #e8e0d5;
+  border-radius: 16px;
   padding: var(--spacing-md) var(--spacing-lg);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   min-height: 80px;
 }
 
 .word-bank-label {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-md);
   display: flex;
@@ -818,7 +834,7 @@ body {
 }
 
 /* ============================================================
-   17. WORD BANK - individual word tiles
+   18. WORD BANK - individual word tiles
    ============================================================ */
 .word-bank {
   display: flex;
@@ -834,11 +850,11 @@ body {
   align-items: center;
   justify-content: center;
   padding: 10px 24px !important;
-  background: var(--color-bank-word) !important;
-  border: 2.5px solid var(--color-bank-word-border) !important;
-  border-radius: var(--radius-xl) !important;
+  background: #ffffff !important;
+  border: 2.5px solid #d4cbbc !important;
+  border-radius: 40px !important;
   font-size: 1.8rem !important;
-  color: var(--color-bank-word-text) !important;
+  color: #2c3e2f !important;
   cursor: pointer;
   transition: 0.15s;
   user-select: none;
@@ -847,14 +863,14 @@ body {
   gap: 0 6px;
   position: relative;
   white-space: nowrap;
-  box-shadow: var(--shadow-word);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .word-bank .bank-word:hover {
-  background: var(--color-bank-word-hover) !important;
+  background: #f5f0eb !important;
   border-color: #b8a58b !important;
   transform: scale(1.03);
-  box-shadow: var(--shadow-word-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .word-bank .bank-word:active {
@@ -862,9 +878,9 @@ body {
 }
 
 .word-bank .bank-word.selected {
-  background: var(--color-bank-word-selected) !important;
-  border-color: #b8a58b !important;
-  box-shadow: 0 0 0 3px rgba(184, 165, 139, 0.3);
+  background: #d4e8d4 !important;
+  border-color: #6c8b6b !important;
+  box-shadow: 0 0 0 3px rgba(108, 139, 107, 0.3);
 }
 
 .word-bank .bank-word.used {
@@ -875,22 +891,12 @@ body {
   box-shadow: none;
 }
 
-.word-bank .bank-word ruby {
-  ruby-align: center;
-}
-
-.word-bank .bank-word ruby rt {
-  color: var(--color-furigana) !important;
-  font-size: 1rem !important;
-  font-weight: var(--font-weight-light);
-}
-
 .word-bank .bank-word .word-tts-btn {
   background: none;
   border: none;
   font-size: 0.75rem;
   cursor: pointer;
-  color: #5a7a8a;
+  color: #6c8b6b;
   padding: 0 2px 0 10px;
   transition: 0.15s;
   font-family: inherit;
@@ -898,11 +904,10 @@ body {
 }
 
 .word-bank .bank-word .word-tts-btn:hover {
-  color: #3a5a6a;
+  color: #5a7a59;
   transform: scale(1.2);
 }
 
-/* Distractor words (select mode) */
 .word-bank .bank-word.distractor {
   border-color: #d4a04a;
   background: #fcf5e8;
@@ -910,12 +915,12 @@ body {
 
 .word-bank .bank-word.distractor .distractor-badge {
   font-size: 0.5rem;
-  color: var(--color-btn-danger);
+  color: #dc3545;
   margin-left: var(--spacing-xs);
   background: #ffebee;
   padding: 0 6px;
   border-radius: 10px;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
 }
 
 .word-bank .bank-word.distractor.used {
@@ -931,7 +936,7 @@ body {
 }
 
 /* ============================================================
-   18. ACTION CONTROLS
+   19. ACTION CONTROLS - MATCHES APP BUTTONS
    ============================================================ */
 .action-controls {
   display: flex;
@@ -943,15 +948,15 @@ body {
 
 .action-btn {
   padding: 10px 24px;
-  border-radius: var(--radius-full);
+  border-radius: 40px;
   border: none;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   font-family: inherit;
   transition: 0.15s;
-  background: #e8e0d6;
-  color: var(--color-text-secondary);
+  background: #e8e0d5;
+  color: #2c3e2f;
 }
 
 .action-btn:hover:not(:disabled) {
@@ -970,59 +975,58 @@ body {
 }
 
 .action-btn.primary {
-  background: var(--color-btn-primary);
-  color: var(--color-btn-primary-text);
+  background: #6c8b6b;
+  color: white;
 }
 
 .action-btn.primary:hover:not(:disabled) {
-  background: var(--color-btn-primary-hover);
+  background: #5a7a59;
 }
 
 .action-btn.danger {
-  background: var(--color-btn-danger);
-  color: var(--color-btn-danger-text);
+  background: #dc3545;
+  color: white;
 }
 
 .action-btn.danger:hover:not(:disabled) {
-  background: var(--color-btn-danger-hover);
+  background: #c82333;
 }
 
 .action-btn.secondary {
-  background: var(--color-btn-secondary);
-  color: var(--color-btn-secondary-text);
+  background: #8a7b6e;
+  color: white;
 }
 
 .action-btn.secondary:hover:not(:disabled) {
-  background: var(--color-btn-secondary-hover);
+  background: #7a6a5a;
 }
 
 .action-btn.sentence-tts {
-  background: var(--color-btn-tts);
-  color: var(--color-btn-tts-text);
+  background: #4a7a8a;
+  color: white;
 }
 
 .action-btn.sentence-tts:hover:not(:disabled) {
-  background: var(--color-btn-tts-hover);
+  background: #3a6a7a;
 }
 
-/* Clear Progress button */
 .action-btn.clear-btn {
-  background: var(--color-btn-secondary);
-  color: var(--color-btn-secondary-text);
-  font-size: 0.7rem;
-  padding: 6px 14px;
+  background: #8a7b6e;
+  color: white;
+  font-size: 0.75rem;
+  padding: 6px 16px;
 }
 
 .action-btn.clear-btn:hover:not(:disabled) {
-  background: var(--color-btn-secondary-hover);
+  background: #7a6a5a;
 }
 
 /* ============================================================
-   19. FEEDBACK AREA
+   20. FEEDBACK AREA
    ============================================================ */
 .feedback-area {
   padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-md);
+  border-radius: 16px;
   margin-bottom: var(--spacing-md);
   display: none;
   font-size: 0.95rem;
@@ -1034,36 +1038,36 @@ body {
 }
 
 .feedback-area.success {
-  background: var(--color-feedback-success-bg);
-  border: 2px solid var(--color-feedback-success-border);
-  color: var(--color-feedback-success-text);
+  background: #d4edda;
+  border: 2px solid #28a745;
+  color: #155724;
 }
 
 .feedback-area.error {
-  background: var(--color-feedback-error-bg);
-  border: 2px solid var(--color-feedback-error-border);
-  color: var(--color-feedback-error-text);
+  background: #f8d7da;
+  border: 2px solid #dc3545;
+  color: #721c24;
 }
 
 .feedback-area .feedback-title {
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
   font-size: 1rem;
   margin-bottom: var(--spacing-xs);
 }
 
 .feedback-area .feedback-detail {
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: #2c3e2f;
 }
 
 .feedback-area .feedback-detail .correct-word {
-  font-weight: var(--font-weight-bold);
-  color: #2d7a4a;
+  font-weight: 600;
+  color: #28a745;
 }
 
 .feedback-area .feedback-detail .wrong-word {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-btn-danger);
+  font-weight: 600;
+  color: #dc3545;
 }
 
 .feedback-area .feedback-detail .grammar-hint {
@@ -1071,21 +1075,21 @@ body {
   margin-top: 6px;
   padding: var(--spacing-sm) var(--spacing-md);
   background: rgba(255, 255, 255, 0.5);
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  border-left: 3px solid #8a7a6a;
+  color: #2c3e2f;
+  border-left: 3px solid #8a7b6e;
 }
 
 /* ============================================================
-   20. FEEDBACK - Correct sentence styling
+   21. FEEDBACK - Correct sentence styling
    ============================================================ */
 .feedback-detail .correct-sentence-container {
   margin-top: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-md);
-  background: var(--color-correct-bg);
-  border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-correct-border);
+  background: #ffffff;
+  border-radius: 12px;
+  border-left: 4px solid #1e4b6e;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -1093,30 +1097,29 @@ body {
 }
 
 .feedback-detail .correct-sentence-label {
-  color: var(--color-correct-label);
+  color: #1e4b6e;
   font-size: 1rem;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
 }
 
 .feedback-detail .correct-sentence-text {
   font-size: 1.1rem;
   font-weight: 500;
-  color: var(--color-correct-text);
+  color: #1a1a2e;
   line-height: 1.8;
 }
 
 .feedback-detail .correct-sentence-text .highlight-word {
-  color: var(--color-correct-highlight);
+  color: #1e4b6e;
   font-weight: 700;
 }
 
-/* Play button styling in feedback */
 .feedback-detail .play-correct-btn {
   background: none;
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: var(--color-correct-play-btn);
+  color: #6c8b6b;
   padding: 0 var(--spacing-xs);
   transition: transform 0.15s;
   vertical-align: middle;
@@ -1125,17 +1128,17 @@ body {
 
 .feedback-detail .play-correct-btn:hover {
   transform: scale(1.2);
-  color: var(--color-correct-play-btn-hover);
+  color: #5a7a59;
 }
 
 /* ============================================================
-   21. COMPLETION OVERLAY
+   22. COMPLETION OVERLAY
    ============================================================ */
 .completion-overlay {
   display: none;
-  background: var(--color-bg-card);
-  border: 3px solid #5a8a6a;
-  border-radius: var(--radius-lg);
+  background: white;
+  border: 3px solid #6c8b6b;
+  border-radius: 20px;
   padding: var(--spacing-xl) 28px;
   text-align: center;
   margin-top: var(--spacing-sm);
@@ -1147,20 +1150,20 @@ body {
 
 .completion-overlay h2 {
   font-size: 1.8rem;
-  color: #2d7a4a;
+  color: #28a745;
   margin-bottom: 6px;
 }
 
 .completion-overlay .completion-stats {
   font-size: 1rem;
-  color: var(--color-text-secondary);
+  color: #2c3e2f;
   margin: var(--spacing-md) 0;
   line-height: 1.8;
 }
 
 .completion-overlay .completion-stats .highlight-num {
   font-weight: 700;
-  color: #1a1a1a;
+  color: #2c3e2f;
 }
 
 .completion-overlay .completion-actions {
@@ -1172,7 +1175,7 @@ body {
 }
 
 /* ============================================================
-   22. UTILITY CLASSES
+   23. UTILITY CLASSES
    ============================================================ */
 .hidden {
   display: none !important;
@@ -1204,26 +1207,183 @@ body {
 }
 
 /* ============================================================
-   23. RESPONSIVE - Mobile (700px and below)
+   24. FURIGANA STYLING - Matches components.css
+   ============================================================ */
+
+/* Furigana in sentence display */
+.sentence-jp ruby {
+  display: ruby !important;
+  ruby-align: center !important;
+  ruby-position: over !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.sentence-jp ruby rt,
+.sentence-jp rt {
+  display: ruby-text !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #8b0000 !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  background: transparent !important;
+  padding-bottom: 8px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* Furigana in blank slots */
+.sentence-jp .blank-slot ruby {
+  display: ruby !important;
+  ruby-align: center !important;
+  ruby-position: over !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.sentence-jp .blank-slot ruby rt,
+.sentence-jp .blank-slot rt {
+  display: ruby-text !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #8b0000 !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  background: transparent !important;
+  padding-bottom: 8px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* Furigana in word bank */
+.word-bank .bank-word ruby {
+  display: ruby !important;
+  ruby-align: center !important;
+  ruby-position: over !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.word-bank .bank-word ruby rt,
+.word-bank .bank-word rt {
+  display: ruby-text !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #8b0000 !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  background: transparent !important;
+  padding-bottom: 8px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* Furigana in order slots */
+.order-slot ruby {
+  display: ruby !important;
+  ruby-align: center !important;
+  ruby-position: over !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.order-slot ruby rt,
+.order-slot rt {
+  display: ruby-text !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #8b0000 !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  background: transparent !important;
+  padding-bottom: 8px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* Furigana in correct sentence feedback */
+.correct-sentence-text ruby {
+  display: ruby !important;
+  ruby-align: center !important;
+  ruby-position: over !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.correct-sentence-text ruby rt,
+.correct-sentence-text rt {
+  display: ruby-text !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #8b0000 !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  background: transparent !important;
+  padding-bottom: 8px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* Hide furigana toggle */
+.hide-furigana rt {
+  display: none !important;
+}
+
+/* ============================================================
+   25. RESPONSIVE - MATCHES APP
    ============================================================ */
 @media (max-width: 700px) {
   .app-container {
-    padding: 14px 12px 18px;
+    padding: 12px;
   }
 
-  .app-header {
+  .builder-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .builder-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .builder-controls {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--spacing-sm);
   }
 
-  .app-header h1 {
-    font-size: 1.1rem;
-    text-align: center;
+  .builder-controls .control-group {
+    justify-content: space-between;
   }
 
-  .app-header h1 span {
-    display: block;
+  .builder-controls .control-group select,
+  .builder-controls .control-group input {
+    min-width: 120px;
+  }
+
+  .back-button {
+    padding: 6px 16px;
     font-size: 0.8rem;
   }
 
@@ -1231,19 +1391,23 @@ body {
     justify-content: center;
   }
 
-  .header-controls select,
-  .header-controls button {
-    font-size: 0.65rem;
-    padding: 3px 8px;
-  }
-
   .sentence-jp {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     line-height: 2.2;
   }
 
-  .sentence-jp ruby rt {
-    font-size: 0.55rem;
+  .sentence-jp ruby rt,
+  .sentence-jp rt,
+  .sentence-jp .blank-slot ruby rt,
+  .sentence-jp .blank-slot rt,
+  .word-bank .bank-word ruby rt,
+  .word-bank .bank-word rt,
+  .order-slot ruby rt,
+  .order-slot rt,
+  .correct-sentence-text ruby rt,
+  .correct-sentence-text rt {
+    font-size: 0.9rem !important;
+    padding-bottom: 6px !important;
   }
 
   .sentence-jp .blank-slot {
@@ -1255,10 +1419,6 @@ body {
 
   .sentence-jp .blank-slot .placed-word {
     font-size: 1.3rem;
-  }
-
-  .sentence-jp .blank-slot .placed-word ruby rt {
-    font-size: 0.5rem;
   }
 
   .sentence-jp .blank-slot .blank-number {
@@ -1273,10 +1433,6 @@ body {
 
   .order-slot .order-number {
     font-size: 0.45rem;
-  }
-
-  .order-slot ruby rt {
-    font-size: 0.5rem;
   }
 
   .order-slot.empty {
@@ -1294,17 +1450,13 @@ body {
     min-width: 46px;
   }
 
-  .word-bank .bank-word ruby rt {
-    font-size: 0.55rem !important;
-  }
-
   .action-btn {
     padding: var(--spacing-sm) var(--spacing-md);
     font-size: 0.8rem;
   }
 
   .progress-stats {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     gap: 6px 12px;
   }
 
@@ -1326,46 +1478,45 @@ body {
   }
 
   .mode-toggle .mode-label {
-    font-size: 0.55rem;
+    font-size: 0.65rem;
   }
 
   .mode-btn {
-    font-size: 0.55rem;
-    padding: 2px 8px;
+    font-size: 0.65rem;
+    padding: 3px 10px;
   }
 
   .select-mode-instruction {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 
-  /* Mastery selector mobile */
   .mastery-selector .mastery-label {
-    font-size: 0.55rem;
+    font-size: 0.65rem;
   }
 
   .mastery-selector select {
-    font-size: 0.55rem;
-    padding: 2px 6px;
+    font-size: 0.65rem;
+    padding: 3px 8px;
   }
 
   #modeStatus {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     padding: 2px 8px;
   }
 
   .reset-mastery-btn {
-    font-size: 0.5rem;
-    padding: 1px 6px;
+    font-size: 0.55rem;
+    padding: 2px 8px;
   }
 }
 
-/* ============================================================
-   24. RESPONSIVE - Small mobile (480px and below)
-   ============================================================ */
 @media (max-width: 480px) {
   .app-container {
     padding: var(--spacing-sm) 6px var(--spacing-md);
-    border-radius: var(--radius-md);
+  }
+
+  .builder-header h1 {
+    font-size: 1.2rem;
   }
 
   .sentence-jp {
@@ -1373,8 +1524,18 @@ body {
     line-height: 1.8;
   }
 
-  .sentence-jp ruby rt {
-    font-size: 0.45rem;
+  .sentence-jp ruby rt,
+  .sentence-jp rt,
+  .sentence-jp .blank-slot ruby rt,
+  .sentence-jp .blank-slot rt,
+  .word-bank .bank-word ruby rt,
+  .word-bank .bank-word rt,
+  .order-slot ruby rt,
+  .order-slot rt,
+  .correct-sentence-text ruby rt,
+  .correct-sentence-text rt {
+    font-size: 0.7rem !important;
+    padding-bottom: 4px !important;
   }
 
   .sentence-jp .blank-slot {
@@ -1389,10 +1550,6 @@ body {
     font-size: 1rem;
   }
 
-  .sentence-jp .blank-slot .placed-word ruby rt {
-    font-size: 0.4rem;
-  }
-
   .sentence-jp .blank-slot .blank-number {
     font-size: 0.5rem;
   }
@@ -1401,7 +1558,7 @@ body {
     font-size: 0.9rem;
     padding: var(--spacing-xs) var(--spacing-md);
     min-width: 30px;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     border-width: 1.5px;
   }
 
@@ -1411,10 +1568,6 @@ body {
 
   .order-slot .slot-placeholder {
     font-size: 0.7rem;
-  }
-
-  .order-slot ruby rt {
-    font-size: 0.4rem;
   }
 
   .order-slot.empty {
@@ -1435,10 +1588,6 @@ body {
     padding: 6px 14px !important;
     min-width: 38px;
     border-width: 2px !important;
-  }
-
-  .word-bank .bank-word ruby rt {
-    font-size: 0.45rem !important;
   }
 
   .word-bank .bank-word .word-tts-btn {
@@ -1463,7 +1612,7 @@ body {
   }
 
   .progress-stats {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     gap: var(--spacing-xs) var(--spacing-sm);
   }
 
@@ -1493,27 +1642,26 @@ body {
   }
 
   .mode-toggle .mode-label {
-    font-size: 0.5rem;
+    font-size: 0.55rem;
   }
 
   .mode-btn {
-    font-size: 0.5rem;
-    padding: 2px 6px;
+    font-size: 0.55rem;
+    padding: 2px 8px;
   }
 
   .select-mode-instruction {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     padding: 3px 6px;
   }
 
-  /* Mastery selector small mobile */
   .mastery-selector .mastery-label {
-    font-size: 0.5rem;
+    font-size: 0.55rem;
   }
 
   .mastery-selector select {
-    font-size: 0.5rem;
-    padding: 2px 5px;
+    font-size: 0.55rem;
+    padding: 2px 6px;
   }
 
   #modeStatus {
@@ -1522,51 +1670,12 @@ body {
   }
 
   .reset-mastery-btn {
-    font-size: 0.45rem;
-    padding: 1px 4px;
+    font-size: 0.5rem;
+    padding: 1px 6px;
   }
-}
-/* ============================================================
-   25. BUILDER HEADER - Matches adjectives.css style
-   ============================================================ */
-.builder-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 24px;
-}
 
-.builder-header h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #2c3e2f;
-  margin: 0;
-}
-
-.builder-header h1 span {
-  font-weight: 300;
-  color: #7a6f60;
-  font-size: 1rem;
-}
-
-/* Back button - matches adjectives.css exactly */
-.builder-header .back-button {
-  background: #6c8b6b;
-  color: white;
-  padding: 8px 20px;
-  border-radius: 40px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition:
-    background 0.2s,
-    transform 0.1s;
-  display: inline-block;
-}
-
-.builder-header .back-button:hover {
-  background: #5a7a59;
-  transform: translateY(-1px);
+  .builder-controls .control-group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
