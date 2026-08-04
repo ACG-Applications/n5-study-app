@@ -23,13 +23,168 @@
     <!-- 5. HELPERS -->
     <link rel="stylesheet" href="css/kana-helper.css" />
     <link rel="stylesheet" href="css/kanji-helper.css" />
+
+    <!-- Global Search Styles (matching other pages) -->
+    <style>
+      /* Sticky header for practice test page */
+      .practice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #ffffff;
+        border-bottom: 2px solid #e8e0d5;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .practice-header .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .practice-header .header-left h1 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+      .practice-header .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .practice-header .back-button {
+        font-size: 0.8rem;
+        background: #e8e0d5;
+        padding: 4px 14px;
+        border-radius: 40px;
+        text-decoration: none;
+        color: #2c3e2f;
+        white-space: nowrap;
+        transition: background 0.2s ease;
+      }
+      .practice-header .back-button:hover {
+        background: #d4cbbc;
+      }
+
+      /* Compact control bar */
+      .practice-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 12px;
+        padding: 8px 16px;
+        background: #faf8f5;
+        border-bottom: 1px solid #e8e0d5;
+        min-height: 44px;
+      }
+      .practice-controls .control-group {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+      .practice-controls .control-group label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #4a6741;
+      }
+      .practice-controls .control-group select {
+        padding: 4px 8px;
+        border-radius: 40px;
+        border: 1px solid #d4c9b8;
+        font-size: 0.8rem;
+        background: white;
+        font-family: inherit;
+      }
+      .practice-controls .small-btn {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+        height: 26px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        background: #e8e0d5;
+        color: #2c3e2f;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+      .practice-controls .small-btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(0.95);
+      }
+      .practice-controls .progress-indicator {
+        font-size: 0.8rem;
+        color: #4a6741;
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      .practice-controls .progress-indicator span {
+        font-weight: 700;
+        color: #6c8b6b;
+      }
+
+      @media (max-width: 700px) {
+        .practice-header .header-left h1 {
+          font-size: 1rem;
+        }
+        .practice-controls {
+          gap: 4px 8px;
+          padding: 6px 12px;
+        }
+        .practice-controls .control-group label {
+          font-size: 0.7rem;
+        }
+        .practice-controls .control-group select {
+          font-size: 0.7rem;
+          padding: 3px 6px;
+        }
+        .practice-controls .small-btn {
+          font-size: 0.65rem;
+          padding: 3px 8px;
+          height: 22px;
+        }
+        .practice-controls .progress-indicator {
+          font-size: 0.7rem;
+        }
+      }
+      @media (max-width: 480px) {
+        .practice-header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 4px;
+        }
+        .practice-header .header-left,
+        .practice-header .header-right {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .practice-header .header-left h1 {
+          font-size: 0.9rem;
+        }
+        .practice-controls {
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        .practice-controls .control-group {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="practice-container">
-      <!-- Header -->
+      <!-- Header with consistent back button styling -->
       <div class="practice-header">
-        <h1>📝 JLPT N5 Practice Test</h1>
-        <a href="index.html" class="back-button">← Back to Main Menu</a>
+        <div class="header-left">
+          <h1>📝 JLPT N5 Practice Test</h1>
+        </div>
+        <div class="header-right">
+          <a href="index.html" class="back-button">← Back</a>
+        </div>
       </div>
 
       <!-- Controls Bar -->

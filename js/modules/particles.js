@@ -69,7 +69,7 @@ function printLesson() {
   window.print();
 }
 
-// Add furigana to text based on toggle state
+// Add furigana to text based on toggle state (NO TOOLTIPS)
 const furiganaCache = new Map();
 function addFuriganaToText(text) {
   if (!text) return "";
@@ -79,18 +79,7 @@ function addFuriganaToText(text) {
     return text.replace(/[（(][^）)]*[）)]/g, "");
   }
 
-  // Try to use tooltips if the function is available
-  if (
-    typeof createQuizWordTooltips === "function" &&
-    typeof getWordMeaningsForSentence === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: text });
-    if (wordMeanings && wordMeanings.length > 0) {
-      return createQuizWordTooltips(text, wordMeanings);
-    }
-  }
-
-  // Fallback: basic furigana
+  // Simple furigana conversion using ruby tags (NO TOOLTIPS)
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -492,12 +481,6 @@ function renderLearnTab() {
         const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
         if (text) {
           el.addEventListener("click", function (e) {
-            if (
-              e.target.closest(".tooltip-text") ||
-              e.target.closest(".particle-highlight") ||
-              e.target.closest(".word-tooltip")
-            )
-              return;
             const cleanText = text.replace(/[→].*$/, "").trim();
             if (cleanText && typeof speakText === "function") {
               speakText(cleanText);
@@ -599,8 +582,11 @@ function populateSprintDropdowns() {
   }
 }
 
-// Extract examples for a particle from sentences
 function extractExamplesForParticle(particle, sprintIndex = null) {
+  console.log(
+    `extractExamplesForParticle called for: ${particle}, sprint: ${sprintIndex}`,
+  );
+
   const examples = [];
   let sentencesToSearch = sentencesData;
 
@@ -609,15 +595,21 @@ function extractExamplesForParticle(particle, sprintIndex = null) {
     sentencesToSearch = sentencesData.slice(start, end + 1);
   }
 
-  sentencesToSearch.forEach((sentence) => {
+  console.log(
+    `Searching through ${sentencesToSearch.length} sentences for "${particle}"`,
+  );
+
+  sentencesToSearch.forEach((sentence, idx) => {
     const pattern = new RegExp(
       `\\s${particle}\\s|^${particle}\\s|\\s${particle}$`,
     );
     if (pattern.test(sentence.jp)) {
+      console.log(`  Found "${particle}" in sentence ${idx}: ${sentence.jp}`);
       examples.push(sentence);
     }
   });
 
+  console.log(`Found ${examples.length} examples for "${particle}"`);
   return examples.slice(0, 5);
 }
 
@@ -631,81 +623,157 @@ function getSprintForSentence(sentence) {
   return "Unknown";
 }
 
-// In particles.js - Updated wrapParticleExample function
+// ===== WRAP PARTICLE EXAMPLE - FIXED =====
 function wrapParticleExample(text, particle) {
   if (!text) return "";
 
-  // If furigana is hidden, remove ALL furigana markers first
+  // Process furigana based on toggle state
   let rubyText = text;
+  
   if (furiganaHidden) {
-    // Remove all furigana from kanji AND katakana
+    // Remove all furigana markers and ruby tags
     rubyText = rubyText.replace(/[（(][^）)]*[）)]/g, "");
-    // Then we're done - no ruby tags needed
+    // Also remove any existing ruby tags from previous renders
+    rubyText = rubyText.replace(/<ruby>.*?<\/ruby>/g, function(match) {
+      // Extract just the kanji without the furigana
+      const kanjiMatch = match.match(/<ruby>([^<]*)<rt>/);
+      if (kanjiMatch) {
+        return kanjiMatch[1];
+      }
+      return match.replace(/<ruby>|<\/ruby>|<rt>.*?<\/rt>/g, "");
+    });
+    // Also strip any remaining ruby tags that might have been missed
+    rubyText = rubyText.replace(/<ruby>|<\/ruby>|<rt>.*?<\/rt>/g, "");
   } else {
-    // Only process furigana when visible
+    // Process furigana for kanji - but only if not already processed
+    // First, remove any existing ruby tags to avoid duplication
+    rubyText = rubyText.replace(/<ruby>.*?<\/ruby>/g, function(match) {
+      const kanjiMatch = match.match(/<ruby>([^<]*)<rt>/);
+      if (kanjiMatch) {
+        return kanjiMatch[1];
+      }
+      return match;
+    });
+    
+    // Now apply fresh furigana
     rubyText = rubyText.replace(
       /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-      (_, kanji, furigana) => {
-        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-      },
+      (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
     );
-
-    // Also handle furigana with different pattern: 漢字(かんじ)
     rubyText = rubyText.replace(
       /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
-      (_, kanji, furigana) => {
-        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-      },
+      (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
     );
-
-    // Remove any leftover furigana from katakana words (like コンビニ（こんぴに）)
-    rubyText = rubyText.replace(
-      /[\u30A0-\u30FF]+[（(][^）)]+[）)]/g,
-      (match) => {
-        return match.replace(/[（(][^）)]*[）)]/g, "");
-      },
+    // Remove katakana furigana
+    rubyText = rubyText.replace(/[\u30A0-\u30FF]+[（(][^）)]+[）)]/g, (match) =>
+      match.replace(/[（(][^）)]*[）)]/g, ""),
     );
   }
 
-  if (particle && particle !== "___") {
-    const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, "g");
-    rubyText = rubyText.replace(
-      regex,
-      `<span class="particle-highlight">$1</span>`,
-    );
-  } else if (particle === "___") {
-    rubyText = rubyText.replace(/___/g, '<span class="quiz-blank">___</span>');
+  // If no particle to highlight, return as-is
+  if (!particle || particle === "___") {
+    if (particle === "___") {
+      rubyText = rubyText.replace(
+        /___/g,
+        '<span class="quiz-blank">___</span>',
+      );
+    }
+    return rubyText;
   }
 
-  return rubyText;
+  const escapedParticle = particle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  let result = rubyText;
+
+  // ============================================================
+  // Process SINGLE-CHARACTER particles FIRST
+  // ============================================================
+  if (particle.length === 1) {
+    // Pattern 1: Particle at end of word (e.g., ですか, ですよ, ですね)
+    const endPattern = new RegExp(
+      `([\\u3040-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FAF]*)(${escapedParticle})(?=[。！？、]|$)`,
+      "g",
+    );
+    result = result.replace(endPattern, (match, before, particleMatch) => {
+      if (match.includes('class="particle-highlight"')) return match;
+      return `${before}<span class="particle-highlight">${particleMatch}</span>`;
+    });
+
+    // Pattern 2: Particle in middle with space after (e.g., りんごや バナナ)
+    const middlePattern = new RegExp(
+      `([\\u3040-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FAF]*)(${escapedParticle})(?=\\s)`,
+      "g",
+    );
+    result = result.replace(middlePattern, (match, before, particleMatch) => {
+      if (match.includes('class="particle-highlight"')) return match;
+      return `${before}<span class="particle-highlight">${particleMatch}</span>`;
+    });
+  }
+
+  // ============================================================
+  // Process ALL particles with spaces around them
+  // ============================================================
+  const spacePattern = new RegExp(`(^|\\s)(${escapedParticle})(\\s|$)`, "g");
+  result = result.replace(
+    spacePattern,
+    (match, before, particleMatch, after) => {
+      return `${before}<span class="particle-highlight">${particleMatch}</span>${after}`;
+    },
+  );
+
+  // ============================================================
+  // Fallback for multi-character particles
+  // ============================================================
+  if (particle.length > 1) {
+    const hasHighlight = result.includes(
+      `<span class="particle-highlight">${particle}</span>`,
+    );
+    if (!hasHighlight) {
+      const lenientPattern = new RegExp(
+        `(^|\\s)(${escapedParticle})(?=\\s|$)`,
+        "g",
+      );
+      result = result.replace(
+        lenientPattern,
+        (match, before, particleMatch) => {
+          return `${before}<span class="particle-highlight">${particleMatch}</span>`;
+        },
+      );
+    }
+  }
+
+  return result;
 }
 
-// In particles.js - Updated applyFuriganaHide function
+// ===== applyFuriganaHide - FIXED =====
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
+  
   // Clear the cache
   furiganaCache.clear();
   if (typeof meaningCache !== "undefined") {
     meaningCache.clear();
   }
+  
+  // Update button text - FIXED
   if (furiToggleBtn) {
     furiToggleBtn.innerText = furiganaHidden
       ? "🔤 Furigana On"
       : "🔤 Furigana Off";
   }
 
-  // Re-render everything
-  renderLearnTab();
-  renderParticleDetails();
-  renderPairDetails();
-  renderStructureExamples();
-  populateParticleReference();
+  // Re-render everything - ORDER MATTERS
+  renderLearnTab();          // Learn tab content
+  populateParticleReference(); // Complete Particle Reference
+  renderStructureExamples(); // Example Sentences (Structure tab)
+  renderParticleDetails();   // Individual Particles tab
+  renderPairDetails();       // Confusing Pairs tab
 
+  // If quiz is active, re-render the current question
   if (quizActive && currentQuiz.length > 0) {
     renderQuizQuestion();
   }
 
-  // Update all rt elements
+  // Update all rt elements (backup)
   document
     .querySelectorAll(
       "#structureExamples .example-jp, .particle-ref-example .example-jp, #particleDetails .example-jp, .pair-example, .quiz-sentence, .quiz-feedback .example-jp",
@@ -733,9 +801,7 @@ function renderParticleDetails() {
 
     let examplesHtml = "";
     for (const ex of examples) {
-      let displayHtml = "";
-      // Tooltips have been removed, always use the fallback
-      displayHtml = wrapParticleExample(ex.jp, particle);
+      let displayHtml = wrapParticleExample(ex.jp, particle);
 
       examplesHtml += `
         <div class="example-item n5-example" data-reading="${ex.reading}">
@@ -785,7 +851,6 @@ function renderParticleDetails() {
     const reading = el.dataset.reading;
     if (reading && typeof speakText === "function") {
       el.addEventListener("click", (e) => {
-        if (e.target.closest(".tooltip-text")) return;
         speakText(reading);
       });
     }
@@ -909,7 +974,6 @@ function renderPairDetails() {
   }
 }
 
-// In particles.js - Updated renderStructureExamples
 function renderStructureExamples() {
   const container = document.getElementById("structureExamples");
   if (!container) return;
@@ -934,12 +998,6 @@ function renderStructureExamples() {
     const s = sentencesData[idx];
     if (!s) continue;
 
-    // Get word meanings for tooltips
-    let wordMeanings = [];
-    if (typeof getWordMeaningsForSentence === "function") {
-      wordMeanings = getWordMeaningsForSentence(s);
-    }
-
     // Get the raw text without furigana markers for display
     let rawJp = s.jp;
 
@@ -948,27 +1006,26 @@ function renderStructureExamples() {
       return match.replace(/[（(][^）)]*[）)]/g, "");
     });
 
+    // Find which particles are in this sentence
     const particlesInSentence = [];
     for (const particle of allParticles) {
-      const pattern = new RegExp(
-        `\\s${particle}\\s|^${particle}\\s|\\s${particle}$`,
+      const escapedParticle = particle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const pattern1 = new RegExp(`(^|\\s)${escapedParticle}(\\s|$)`);
+      const pattern2 = new RegExp(
+        `[\\u3040-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FAF]*${escapedParticle}(?=[。！？、]|$)`,
       );
-      if (pattern.test(rawJp)) {
+
+      if (pattern1.test(rawJp) || pattern2.test(rawJp)) {
         particlesInSentence.push(particle);
       }
     }
 
     let displayHtml = rawJp;
 
-    // Use createQuizWordTooltips if available
-    if (
-      wordMeanings &&
-      wordMeanings.length > 0 &&
-      typeof createQuizWordTooltips === "function"
-    ) {
-      displayHtml = createQuizWordTooltips(rawJp, wordMeanings);
+    // Apply furigana based on toggle state
+    if (furiganaHidden) {
+      displayHtml = displayHtml.replace(/[（(][^）)]*[）)]/g, "");
     } else {
-      // Apply furigana to kanji only
       displayHtml = displayHtml.replace(
         /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
         (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
@@ -977,10 +1034,26 @@ function renderStructureExamples() {
 
     // Highlight particles
     for (const particle of particlesInSentence) {
-      const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, "g");
+      const escapedParticle = particle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      const regex1 = new RegExp(`(^|\\s)(${escapedParticle})(\\s|$)`, "g");
       displayHtml = displayHtml.replace(
-        regex,
-        `<span class="particle-highlight">$1</span>`,
+        regex1,
+        (match, before, particleMatch, after) => {
+          return `${before}<span class="particle-highlight">${particleMatch}</span>${after}`;
+        },
+      );
+
+      const regex2 = new RegExp(
+        `([\\u3040-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FAF]*)(${escapedParticle})(?=[。！？、]|$)`,
+        "g",
+      );
+      displayHtml = displayHtml.replace(
+        regex2,
+        (match, before, particleMatch) => {
+          if (match.includes('class="particle-highlight"')) return match;
+          return `${before}<span class="particle-highlight">${particleMatch}</span>`;
+        },
       );
     }
 
@@ -1001,7 +1074,6 @@ function renderStructureExamples() {
       const reading = el.dataset.reading;
       if (reading && typeof speakText === "function") {
         el.addEventListener("click", (e) => {
-          if (e.target.closest(".tooltip-text")) return;
           speakText(reading);
         });
       }
@@ -1018,7 +1090,8 @@ function renderStructureExamples() {
     });
   }
 }
-// In particles.js - Updated populateParticleReference
+
+// ===== populateParticleReference =====
 function populateParticleReference() {
   const particles = [
     { char: "は", id: "wa" },
@@ -1046,33 +1119,75 @@ function populateParticleReference() {
 
     if (examples.length > 0) {
       const ex = examples[0];
-      let displayHtml = "";
+      let displayHtml = ex.jp;
 
-      // Get word meanings for tooltips
-      let wordMeanings = [];
-      if (typeof getWordMeaningsForSentence === "function") {
-        wordMeanings = getWordMeaningsForSentence(ex);
-      }
-
-      // Use createQuizWordTooltips if available for tooltips
-      if (
-        wordMeanings &&
-        wordMeanings.length > 0 &&
-        typeof createQuizWordTooltips === "function"
-      ) {
-        displayHtml = createQuizWordTooltips(ex.jp, wordMeanings);
-        // Highlight the particle
-        const regex = new RegExp(`(${p.char})(?![^<]*>|[^<]*<\\/rt>)`, "g");
-        displayHtml = displayHtml.replace(
-          regex,
-          `<span class="particle-highlight">$1</span>`,
-        );
+      // Apply furigana
+      if (furiganaHidden) {
+        displayHtml = displayHtml.replace(/[（(][^）)]*[）)]/g, "");
       } else {
-        // Fallback: use wrapParticleExample
-        displayHtml = wrapParticleExample(ex.jp, p.char);
+        displayHtml = displayHtml.replace(
+          /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+          (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
+        );
+        displayHtml = displayHtml.replace(
+          /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
+          (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
+        );
       }
 
-      // If furigana hidden, strip it from the display
+      // Apply particle highlighting
+      const escapedParticle = p.char.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      const regex1 = new RegExp(`(^|\\s)(${escapedParticle})(\\s|$)`, "g");
+      displayHtml = displayHtml.replace(
+        regex1,
+        (match, before, particleMatch, after) => {
+          if (match.includes('class="particle-highlight"')) return match;
+          return `${before}<span class="particle-highlight">${particleMatch}</span>${after}`;
+        },
+      );
+
+      if (p.char.length === 1) {
+        const regex2 = new RegExp(
+          `([\\u3040-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FAF]*)(${escapedParticle})(?=[。！？、]|$)`,
+          "g",
+        );
+        displayHtml = displayHtml.replace(
+          regex2,
+          (match, before, particleMatch) => {
+            if (match.includes('class="particle-highlight"')) return match;
+            return `${before}<span class="particle-highlight">${particleMatch}</span>`;
+          },
+        );
+
+        const regex3 = new RegExp(
+          `([\\u3040-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FAF]*)(${escapedParticle})(?=\\s)`,
+          "g",
+        );
+        displayHtml = displayHtml.replace(
+          regex3,
+          (match, before, particleMatch) => {
+            if (match.includes('class="particle-highlight"')) return match;
+            return `${before}<span class="particle-highlight">${particleMatch}</span>`;
+          },
+        );
+      }
+
+      if (p.char.length > 1) {
+        const regex4 = new RegExp(
+          `([\\u3040-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FAF]*)(${escapedParticle})(?=\\s|$)`,
+          "g",
+        );
+        displayHtml = displayHtml.replace(
+          regex4,
+          (match, before, particleMatch) => {
+            if (match.includes('class="particle-highlight"')) return match;
+            return `${before}<span class="particle-highlight">${particleMatch}</span>`;
+          },
+        );
+      }
+
+      // If furigana hidden, strip rt tags
       if (furiganaHidden) {
         displayHtml = displayHtml.replace(/<rt>.*?<\/rt>/g, "");
       }
@@ -1088,7 +1203,6 @@ function populateParticleReference() {
       const exampleDiv = container.querySelector(".example-item");
       if (exampleDiv && typeof speakText === "function") {
         exampleDiv.addEventListener("click", (e) => {
-          if (e.target.closest(".tooltip-text")) return;
           speakText(ex.reading);
         });
       }
@@ -1109,7 +1223,6 @@ function populateParticleReference() {
         const exampleDiv = container.querySelector(".example-item");
         if (exampleDiv && typeof speakText === "function") {
           exampleDiv.addEventListener("click", (e) => {
-            if (e.target.closest(".tooltip-text")) return;
             speakText(supp.reading);
           });
         }
@@ -1139,6 +1252,7 @@ function populateParticleReference() {
       });
   }
 }
+
 // ==================== QUIZ FUNCTIONS ====================
 
 function findAllParticlesInSentence(sentenceText) {
@@ -1329,230 +1443,13 @@ function showStatsExplanation() {
   }
 }
 
-// Helper: Get word meanings for a sentence - IMPROVED VERSION
 function getWordMeaningsForSentence(sentence) {
-  // Try to get wordDict from multiple sources
-  const dict =
-    wordDictRef ||
-    (typeof window !== "undefined" && window.wordDict) ||
-    (typeof wordDict !== "undefined" ? wordDict : null);
-
-  if (!dict) {
-    return [];
-  }
-
-  // If we have a sentenceData object with wordMeanings, use it
-  if (sentence && sentence.wordMeanings && sentence.wordMeanings.length > 0) {
-    return sentence.wordMeanings;
-  }
-
-  // If we have a sentenceData object, use it to get meanings
-  const sentenceObj = sentence.sentenceData || sentence;
-  if (
-    sentenceObj &&
-    sentenceObj.wordMeanings &&
-    sentenceObj.wordMeanings.length > 0
-  ) {
-    return sentenceObj.wordMeanings;
-  }
-
-  // Get the text to parse
-  const text =
-    sentence.originalSentence || sentence.jp || sentence.sentence || "";
-  if (!text) {
-    return [];
-  }
-
-  // Split the text into words
-  const words = text.split(/\s+/);
-  const meanings = [];
-  const usedKeys = new Set();
-
-  for (const word of words) {
-    // Clean the word (remove furigana)
-    const cleanWord = word
-      .replace(/（[^）]+）/g, "")
-      .replace(/\([^)]+\)/g, "")
-      .trim();
-
-    // Try exact match first
-    if (dict[cleanWord] && !usedKeys.has(cleanWord)) {
-      meanings.push({
-        word: cleanWord,
-        meaning: dict[cleanWord].meaning,
-      });
-      usedKeys.add(cleanWord);
-      continue;
-    }
-
-    if (dict[word] && !usedKeys.has(word)) {
-      meanings.push({
-        word: word,
-        meaning: dict[word].meaning,
-      });
-      usedKeys.add(word);
-      continue;
-    }
-
-    // Try partial match - find if any dictionary key is contained in this word
-    let found = false;
-    const sortedKeys = Object.keys(dict).sort((a, b) => b.length - a.length);
-    for (const key of sortedKeys) {
-      if (usedKeys.has(key)) continue;
-      // Check if the word contains this dictionary key
-      if (cleanWord.includes(key) && key.length > 1) {
-        meanings.push({
-          word: key,
-          meaning: dict[key].meaning,
-        });
-        usedKeys.add(key);
-        found = true;
-        break;
-      }
-    }
-
-    if (!found) {
-      // No meaning found
-    }
-  }
-
-  return meanings;
+  return [];
 }
 
-// Helper: Create word tooltip HTML for quiz sentences
 function createQuizWordTooltips(text, wordMeanings) {
   if (!text) return "";
-  if (!wordMeanings || !wordMeanings.length) {
-    // Still wrap furigana even without tooltips
-    return wrapParticleExample(text, "");
-  }
-
-  // Split text by spaces while preserving particles
-  const words = text.split(/\s+/);
-  let result = "";
-  let usedMeanings = [];
-
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
-    let meaning = "";
-    let found = false;
-
-    // Clean the word (remove furigana)
-    const cleanWord = word
-      .replace(/（[^）]+）/g, "")
-      .replace(/\([^)]+\)/g, "")
-      .trim();
-
-    // Try to find meaning for this word
-    for (let j = 0; j < wordMeanings.length; j++) {
-      if (usedMeanings.includes(j)) continue;
-      const w = wordMeanings[j];
-      const cleanW = w.word
-        ? w.word
-            .replace(/（[^）]+）/g, "")
-            .replace(/\([^)]+\)/g, "")
-            .trim()
-        : "";
-
-      if (cleanW === cleanWord || w.word === word || cleanW === word) {
-        meaning = w.meaning || w.meaning_en || "";
-        usedMeanings.push(j);
-        found = true;
-        break;
-      }
-    }
-
-    // If not found, try to match partially
-    if (!found) {
-      for (let j = 0; j < wordMeanings.length; j++) {
-        if (usedMeanings.includes(j)) continue;
-        const w = wordMeanings[j];
-        const cleanW = w.word
-          ? w.word
-              .replace(/（[^）]+）/g, "")
-              .replace(/\([^)]+\)/g, "")
-              .trim()
-          : "";
-        if (cleanW && cleanWord.includes(cleanW)) {
-          meaning = w.meaning || w.meaning_en || "";
-          usedMeanings.push(j);
-          found = true;
-          break;
-        }
-      }
-    }
-
-    // Build the word with furigana
-    let displayWord = word;
-    // Wrap furigana
-    displayWord = displayWord.replace(
-      /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-      (_, kanji, furigana) => {
-        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-      },
-    );
-    displayWord = displayWord.replace(
-      /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
-      (_, kanji, furigana) => {
-        return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-      },
-    );
-
-    if (meaning) {
-      // Check if this word contains a particle that should be highlighted
-      const particleMatch = word.match(
-        /^(.*?)([はがをにでへとかからまでのもよねや])$/,
-      );
-      if (particleMatch) {
-        const before = particleMatch[1];
-        const particle = particleMatch[2];
-        // Rebuild with furigana for the before part
-        let beforeHtml = before;
-        beforeHtml = beforeHtml.replace(
-          /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-          (_, kanji, furigana) => {
-            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-          },
-        );
-        beforeHtml = beforeHtml.replace(
-          /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
-          (_, kanji, furigana) => {
-            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-          },
-        );
-        result += `<span class="word-tooltip">${beforeHtml}<span class="particle-highlight">${particle}</span><span class="tooltip-text">${meaning}</span></span> `;
-      } else {
-        result += `<span class="word-tooltip">${displayWord}<span class="tooltip-text">${meaning}</span></span> `;
-      }
-    } else {
-      // Check if this word contains a particle that should be highlighted
-      const particleMatch = word.match(
-        /^(.*?)([はがをにでへとかからまでのもよねや])$/,
-      );
-      if (particleMatch) {
-        const before = particleMatch[1];
-        const particle = particleMatch[2];
-        let beforeHtml = before;
-        beforeHtml = beforeHtml.replace(
-          /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-          (_, kanji, furigana) => {
-            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-          },
-        );
-        beforeHtml = beforeHtml.replace(
-          /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
-          (_, kanji, furigana) => {
-            return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-          },
-        );
-        result += `${beforeHtml}<span class="particle-highlight">${particle}</span> `;
-      } else {
-        result += `${displayWord} `;
-      }
-    }
-  }
-
-  return result.trim();
+  return wrapParticleExample(text, "");
 }
 
 function renderQuizQuestion() {
@@ -1571,13 +1468,9 @@ function renderQuizQuestion() {
   const attemptsLeft = quizAttemptsRemaining[currentQuizIndex];
   const currentAnswer = quizAnswers[currentQuizIndex];
 
-  // Get word meanings for tooltips
-  const wordMeanings = getWordMeaningsForSentence(q);
-
-  // ✅ NEW: Check furigana state for quiz display
   const displayText = furiganaHidden
-    ? q.originalSentence.replace(/[（(][^）)]*[）)]/g, "") // Strip furigana
-    : q.originalSentence; // Keep original
+    ? q.originalSentence.replace(/[（(][^）)]*[）)]/g, "")
+    : q.originalSentence;
 
   let html = `
     <div class="quiz-header-info">
@@ -1591,13 +1484,10 @@ function renderQuizQuestion() {
 
   if (quizMode === "easy") {
     const displayTextWithBlank = createEasyDisplayText(
-      displayText, // ← Use the stripped version if furigana is hidden
+      displayText,
       q.correctParticle,
     );
-    const displayHtml =
-      wordMeanings && wordMeanings.length > 0 && !furiganaHidden
-        ? createQuizWordTooltips(displayTextWithBlank, wordMeanings)
-        : wrapParticleExample(displayTextWithBlank, "___");
+    const displayHtml = wrapParticleExample(displayTextWithBlank, "___");
 
     html += `
       <div class="quiz-question easy-question">
@@ -1627,15 +1517,11 @@ function renderQuizQuestion() {
       </div>
     `;
   } else {
-    // Hard mode
     const displayTextWithBlanks = createHardDisplayText(
       displayText,
       q.particles,
     );
-    const displayHtml =
-      wordMeanings && wordMeanings.length > 0 && !furiganaHidden
-        ? createQuizWordTooltips(displayTextWithBlanks, wordMeanings)
-        : wrapParticleExample(displayTextWithBlanks, "");
+    const displayHtml = wrapParticleExample(displayTextWithBlanks, "");
 
     const blankAnswers =
       currentAnswer && currentAnswer.blanks ? currentAnswer.blanks : {};
@@ -1687,23 +1573,6 @@ function renderQuizQuestion() {
 
   quizArea.innerHTML = html;
 
-  // ATTACH TOOLTIPS
-  if (typeof attachQuizTooltips === "function") {
-    setTimeout(function () {
-      attachQuizTooltips();
-    }, 100);
-    try {
-      attachQuizTooltips();
-    } catch (e) {
-      // ignore
-    }
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(function () {
-      if (quizArea) attachTooltipLongPress(quizArea);
-    }, 100);
-  }
-
-  // Add TTS to the listen button
   const ttsBtn = quizArea.querySelector(".quiz-tts-btn");
   if (ttsBtn) {
     ttsBtn.addEventListener("click", (e) => {
@@ -1715,7 +1584,6 @@ function renderQuizQuestion() {
     });
   }
 
-  // Apply furigana hide state to quiz
   if (furiganaHidden) {
     quizArea.querySelectorAll("rt").forEach((rt) => {
       rt.style.display = "none";
@@ -1852,7 +1720,6 @@ function resetQuiz() {
   renderQuizQuestion();
 }
 
-// Reset all progress (mastered and attempted particles)
 function resetAllProgress() {
   if (
     confirm(
@@ -1885,7 +1752,6 @@ function resetAllProgress() {
   }
 }
 
-// Reset only mastered particles (keep attempted)
 function resetMasteredOnly() {
   if (
     confirm(
@@ -1911,7 +1777,6 @@ function resetMasteredOnly() {
   }
 }
 
-// ===== SHOW ANSWER - CORRECT =====
 function showAnswer() {
   const q = currentQuiz[currentQuizIndex];
   let answerText = "";
@@ -1953,7 +1818,6 @@ function showAnswer() {
   }
 }
 
-// ===== CHECK ANSWER - CORRECT =====
 function checkAnswer() {
   const q = currentQuiz[currentQuizIndex];
   const userAnswer = quizAnswers[currentQuizIndex];
@@ -2063,7 +1927,6 @@ function checkAnswer() {
   }
 }
 
-// ===== SHOW FEEDBACK AND NEXT - CORRECT =====
 function showFeedbackAndNext(
   message,
   q,
@@ -2092,18 +1955,11 @@ function showFeedbackAndNext(
   saveMasteredParticles();
   updateQuizStatsDisplay();
 
-  // Get word meanings for tooltips in feedback
-  const wordMeanings = getWordMeaningsForSentence(q);
-
-  // Check furigana state for feedback display
   const displayText = furiganaHidden
     ? q.originalSentence.replace(/[（(][^）)]*[）)]/g, "")
     : q.originalSentence;
 
-  const displayHtml =
-    wordMeanings && wordMeanings.length > 0 && !furiganaHidden
-      ? createQuizWordTooltips(displayText, wordMeanings)
-      : wrapParticleExample(displayText, "");
+  const displayHtml = wrapParticleExample(displayText, "");
 
   const feedbackHtml = `
     <div class="quiz-feedback ${isCorrect && pointsEarned > 0 ? "correct" : "incorrect"}">
@@ -2123,7 +1979,6 @@ function showFeedbackAndNext(
   if (quizArea) {
     quizArea.innerHTML = feedbackHtml;
 
-    // Apply furigana hide state
     if (furiganaHidden) {
       quizArea.querySelectorAll("rt").forEach((rt) => {
         rt.style.display = "none";
@@ -2192,7 +2047,6 @@ function showQuizResults() {
   }
 }
 
-// Tab switching
 function switchTab(tabId) {
   currentParticleTab = tabId;
 
@@ -2287,13 +2141,11 @@ if (startQuizBtn) {
   });
 }
 
-// Reset All Progress button
 const resetAllProgressBtn = document.getElementById("resetAllProgressBtn");
 if (resetAllProgressBtn) {
   resetAllProgressBtn.addEventListener("click", resetAllProgress);
 }
 
-// Reset Mastered Only button
 const resetMasteredOnlyBtn = document.getElementById("resetMasteredOnlyBtn");
 if (resetMasteredOnlyBtn) {
   resetMasteredOnlyBtn.addEventListener("click", resetMasteredOnly);

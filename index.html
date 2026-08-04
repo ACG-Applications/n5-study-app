@@ -557,7 +557,35 @@
         }
       }
 
-      /* ===== GLOBAL SEARCH BAR STYLES - COMPACT ===== */
+      /* Add to the existing styles */
+      .gs-speak-btn {
+        background: #4a8a6a !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 30px !important;
+        height: 30px !important;
+        color: white !important;
+        cursor: pointer !important;
+        font-size: 13px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition:
+          background 0.15s,
+          transform 0.1s !important;
+        flex-shrink: 0 !important;
+        margin-left: 8px !important;
+        font-family: inherit !important;
+        line-height: 1 !important;
+      }
+      .gs-speak-btn:hover {
+        background: #3a7a5a !important;
+        transform: scale(1.05) !important;
+      }
+      .gs-speak-btn:active {
+        transform: scale(0.95) !important;
+      }
+      /* ===== GLOBAL SEARCH BAR STYLES - POPUP DROPDOWN ===== */
       .global-search-wrapper {
         display: flex;
         align-items: center;
@@ -591,23 +619,27 @@
         font-size: 0.75rem;
       }
       #globalSearchResults {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
+        position: fixed;
+        top: 60px;
+        right: 20px;
+        width: 420px;
+        max-width: 90vw;
+        max-height: 70vh;
         background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        margin-top: 8px;
-        max-height: 350px;
-        overflow-y: auto;
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
         display: none;
-        z-index: 1000;
+        z-index: 9999;
         border: 1px solid #e3dbd0;
-        padding: 8px 0;
+        overflow: hidden;
       }
       #globalSearchResults.active {
         display: block;
+      }
+      #globalSearchResults .gs-results-inner {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding: 8px 0;
       }
       #globalSearchResults .gs-result-item {
         padding: 10px 16px;
@@ -620,6 +652,9 @@
       }
       #globalSearchResults .gs-result-item:hover {
         background: #f5f0eb;
+      }
+      #globalSearchResults .gs-result-item[data-jisho]:hover {
+        background: #e8f5e9;
       }
       #globalSearchResults .gs-word {
         font-weight: 600;
@@ -648,8 +683,59 @@
         color: #999;
         font-style: italic;
       }
+      #globalSearchResults .gs-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 16px;
+        border-bottom: 1px solid #eee;
+        background: #faf8f5;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        border-radius: 16px 16px 0 0;
+      }
+      #globalSearchResults .gs-header span {
+        font-size: 0.8rem;
+        color: #8a7e6e;
+      }
+      #globalSearchResults .gs-close-btn-top {
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        color: #999;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 50%;
+        transition: background 0.15s;
+      }
+      #globalSearchResults .gs-close-btn-top:hover {
+        background: #eee;
+        color: #333;
+      }
+
+      /* Keyboard shortcut hint */
+      .global-search-wrapper .gs-shortcut {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.6rem;
+        color: #bbb;
+        pointer-events: none;
+        background: #f5f0eb;
+        padding: 1px 8px;
+        border-radius: 10px;
+        font-weight: 500;
+      }
 
       @media (max-width: 700px) {
+        #globalSearchResults {
+          top: 55px;
+          right: 10px;
+          width: 90vw;
+          max-width: 90vw;
+        }
         .global-search-wrapper input {
           width: 110px;
           font-size: 0.75rem;
@@ -662,8 +748,17 @@
         .global-search-wrapper {
           padding-left: 6px;
         }
+        .global-search-wrapper .gs-shortcut {
+          display: none;
+        }
       }
       @media (max-width: 480px) {
+        #globalSearchResults {
+          top: 50px;
+          right: 5px;
+          width: 95vw;
+          max-width: 95vw;
+        }
         .global-search-wrapper {
           width: 100%;
           margin-left: 0;
@@ -898,6 +993,126 @@
       </div>
 
       <!-- 🔗 APP LINKS SECTION END -->
+
+      <!-- 📚 RESOURCES / PDF LIBRARY SECTION -->
+      <div class="resources-section">
+        <div class="resources-header">
+          <h2>📚 PDF Resources & Study Guides</h2>
+          <button id="toggleResources" class="small-btn">▼ Collapse</button>
+        </div>
+
+        <div class="resources-grid">
+          <!-- Dr. Wes Robertson - Verb Guide -->
+          <a
+            href="pdf/Dr-Wes-Robertson-Verbs.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">📕</span>
+            <span class="resource-name">Japanese Verbs</span>
+            <span class="resource-desc">Complete verb conjugation guide</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+
+          <!-- Dr. Wes Robertson - ~て Form -->
+          <a
+            href="pdf/Dr-Wes-Roberston-Things-You-Can-Do-With-Tte-Form.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">📗</span>
+            <span class="resource-name">~て Form Guide</span>
+            <span class="resource-desc">All the ways to use ~て form</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+
+          <!-- Dr. Wes Robertson - Giving & Receiving -->
+          <a
+            href="pdf/Dr-Wes-Robertson-Giving-and-Receiving.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">📘</span>
+            <span class="resource-name">Giving & Receiving</span>
+            <span class="resource-desc">あげる, くれる, もらう explained</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+
+          <!-- Dr. Wes Robertson - Passive Form -->
+          <a
+            href="pdf/Dr-Wes-Robertson-Japanese-Passive-Form.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">📙</span>
+            <span class="resource-name">Passive Form</span>
+            <span class="resource-desc">Japanese passive voice guide</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+
+          <!-- Dr. Wes Robertson - Volitional Form -->
+          <a
+            href="pdf/Dr-Wes-Robertson-Japanese-Volitional-Form.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">📒</span>
+            <span class="resource-name">Volitional Form</span>
+            <span class="resource-desc">〜よう form usage guide</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+
+          <!-- Dr. Wes Robertson - ~て~に~ Form -->
+          <a
+            href="pdf/Dr-Wes-Robertson-The-Tte-Ni-Form.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">📓</span>
+            <span class="resource-name">~て~に~ Form</span>
+            <span class="resource-desc">Sequential actions guide</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+
+          <!-- Nihongo doya - N5 Kanji Practice -->
+          <a
+            href="pdf/Nihongodoya-n5-kanji-practice-workbook.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">🈳</span>
+            <span class="resource-name">N5 Kanji Workbook</span>
+            <span class="resource-desc">Practice workbook for N5 kanji</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+
+          <!-- Nihon Shock - Basic Japanese -->
+          <a
+            href="pdf/NihonShock-Basic-Japanese.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card"
+          >
+            <span class="resource-icon">🇯🇵</span>
+            <span class="resource-name">Basic Japanese</span>
+            <span class="resource-desc">Foundational Japanese guide</span>
+            <span class="resource-badge pdf">PDF</span>
+          </a>
+        </div>
+
+        <div class="resources-footer">
+          💡 Click any PDF to open it in a new tab. Save or print for offline
+          study.
+        </div>
+      </div>
+      <!-- END 📚 RESOURCES / PDF LIBRARY SECTION -->
 
       <!-- Progress Bar -->
       <div class="progress-section">
@@ -2573,44 +2788,87 @@
       })();
     </script>
 
-    <!-- 5. GLOBAL SEARCH BAR SCRIPT (JISHO) -->
+    <!-- 5. GLOBAL SEARCH BAR SCRIPT (JISHO) - WITH TTS BUTTONS -->
     <script>
+      // ================================================================
+      // GLOBAL SEARCH - wordDict + Jisho.org fallback (WITH TTS)
+      // ================================================================
       document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.getElementById("globalSearchInput");
         const resultsContainer = document.getElementById("globalSearchResults");
 
-        // Ensure wordDict is available
-        if (typeof wordDict === "undefined") {
-          console.warn("Global Search: wordDict not found.");
+        if (!searchInput || !resultsContainer) {
+          console.warn("Global Search: Elements not found.");
           return;
         }
 
-        // Function to build the HTML for a single result
+        // Check if wordDict exists
+        if (typeof wordDict === "undefined") {
+          console.warn("Global Search: wordDict not found.");
+          // Still allow Jisho fallback
+        }
+
+        // TTS function for search
+        function speakSearchText(text, lang = "ja-JP") {
+          if (!text || text.trim() === "") return;
+          if (typeof speakText === "function") {
+            speakText(text, lang);
+          } else if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 0.85;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+          }
+        }
+
+        // Helper to create result HTML with TTS button
         function createResultHTML(key, data) {
           let displayText = `<span class="gs-word">${key}</span>`;
           if (data.reading && data.reading !== key) {
             displayText += ` <span class="gs-reading">(${data.reading})</span>`;
           }
-
           let meaningText = data.meaning || "";
           let rootInfo = "";
-
-          // If it's a conjugated form, link it back to the root
           if (data.is_conjugation && data.root) {
-            const rootData = wordDict[data.root];
+            const rootData = wordDict ? wordDict[data.root] : null;
             const rootMeaning = rootData ? rootData.meaning : "";
             rootInfo = ` <span class="gs-root">← from ${data.root} (${rootMeaning})</span>`;
           }
 
+          // Determine what to speak - use reading if available, otherwise the word itself
+          const speakText = data.reading || key;
+
           return `
-                <div class="gs-result-item">
-                    <div>
-                        ${displayText}
-                        <span class="gs-meaning">${meaningText}</span>
-                        ${rootInfo}
-                    </div>
+            <div class="gs-result-item" data-word="${key}" data-speak="${speakText}">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="flex: 1;">
+                  ${displayText}
+                  <span class="gs-meaning">${meaningText}</span>
+                  ${rootInfo}
                 </div>
-            `;
+                <button class="gs-speak-btn" data-speak="${speakText}" style="
+                  background: #4a8a6a;
+                  border: none;
+                  border-radius: 50%;
+                  width: 30px;
+                  height: 30px;
+                  color: white;
+                  cursor: pointer;
+                  font-size: 13px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  transition: background 0.15s, transform 0.1s;
+                  flex-shrink: 0;
+                  margin-left: 8px;
+                  font-family: inherit;
+                  line-height: 1;
+                " title="Listen to pronunciation">🔊</button>
+              </div>
+            </div>
+          `;
         }
 
         // Search function
@@ -2624,46 +2882,135 @@
           }
 
           const matches = [];
-          // Search through the dictionary keys
-          for (const [key, data] of Object.entries(wordDict)) {
-            // Skip if the key is a counter suffix (like "～えき") to avoid clutter
-            if (key.startsWith("～")) continue;
 
-            // Check exact/partial match on dictionary word, reading, or meaning
-            const matchKey = key.toLowerCase();
-            const matchReading = (data.reading || "").toLowerCase();
-            const matchMeaning = (data.meaning || "").toLowerCase();
-
-            if (
-              matchKey.includes(query) ||
-              matchReading.includes(query) ||
-              matchMeaning.includes(query)
-            ) {
-              matches.push({ key, data });
+          // Search local wordDict if available
+          if (window.wordDict && typeof window.wordDict === "object") {
+            for (const [key, data] of Object.entries(window.wordDict)) {
+              if (key.startsWith("～")) continue;
+              const matchKey = key.toLowerCase();
+              const matchReading = (data.reading || "").toLowerCase();
+              const matchMeaning = (data.meaning || "").toLowerCase();
+              if (
+                matchKey.includes(query) ||
+                matchReading.includes(query) ||
+                matchMeaning.includes(query)
+              ) {
+                matches.push({ key, data, source: "local" });
+              }
+              if (matches.length >= 10) break;
             }
-
-            // Stop after 15 results to keep it fast
-            if (matches.length >= 15) break;
           }
+
+          // Build results HTML
+          let html = `
+            <div class="gs-header">
+              <span>🔍 ${matches.length} result${matches.length !== 1 ? "s" : ""}</span>
+              <button class="gs-close-btn-top" id="gsClosePopupBtn">✕</button>
+            </div>
+            <div class="gs-results-inner">
+          `;
 
           if (matches.length === 0) {
-            resultsContainer.innerHTML = `<div class="gs-empty">No results found for "${query}"</div>`;
-            resultsContainer.classList.add("active");
-            return;
+            // No local results - show Jisho option
+            html += `
+              <div class="gs-result-item" data-jisho="${query}" style="border-bottom: 2px solid #6c8b6b; background: #f0f7f0;">
+                <div>
+                  <span style="font-weight: 600; color: #6c8b6b;">🔍 "${query}" not found locally</span>
+                  <br>
+                  <span style="font-size: 0.85rem; color: #1a2b4c;">
+                    Click here to search on 
+                    <strong style="color: #6c8b6b;">Jisho.org</strong> 
+                    <span style="font-size: 0.7rem; color: #999;">(opens in new tab)</span>
+                  </span>
+                </div>
+              </div>
+            `;
+          } else {
+            // Show local results with TTS buttons
+            for (const match of matches) {
+              html += createResultHTML(match.key, match.data);
+            }
+
+            // Add Jisho option at the bottom
+            html += `
+              <div class="gs-result-item" data-jisho="${query}" style="border-top: 2px solid #e8e0d5; background: #faf8f5; margin-top: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+                  <span style="font-size: 0.85rem; color: #666;">
+                    🔍 Not finding what you need?
+                  </span>
+                  <span style="font-size: 0.8rem; color: #6c8b6b; font-weight: 500; cursor: pointer;">
+                    Search on Jisho.org →
+                  </span>
+                </div>
+              </div>
+            `;
           }
 
-          // Render results
-          let html = "";
-          for (const match of matches) {
-            html += createResultHTML(match.key, match.data);
-          }
+          html += `</div>`;
           resultsContainer.innerHTML = html;
           resultsContainer.classList.add("active");
+
+          // Close button
+          const closeBtn = document.getElementById("gsClosePopupBtn");
+          if (closeBtn) {
+            closeBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              resultsContainer.classList.remove("active");
+              searchInput.value = "";
+              searchInput.blur();
+            });
+          }
+
+          // TTS button click handler
+          document.querySelectorAll(".gs-speak-btn").forEach((btn) => {
+            btn.addEventListener("click", function (e) {
+              e.stopPropagation(); // Prevent triggering the result item click
+              const text = this.dataset.speak;
+              if (text) {
+                speakSearchText(text, "ja-JP");
+                // Visual feedback
+                this.style.transform = "scale(1.2)";
+                setTimeout(() => {
+                  this.style.transform = "scale(1)";
+                }, 200);
+              }
+            });
+          });
+
+          // Click handler for results (fill input)
+          document.querySelectorAll(".gs-result-item").forEach((item) => {
+            item.addEventListener("click", function (e) {
+              // Skip if the click was on the speaker button (handled separately)
+              if (e.target.closest(".gs-speak-btn")) return;
+
+              // Check if it's a Jisho link
+              const jishoQuery = this.dataset.jisho;
+              if (jishoQuery) {
+                // Open Jisho in new tab
+                const url = `https://jisho.org/search/${encodeURIComponent(jishoQuery)}`;
+                window.open(url, "_blank");
+                resultsContainer.classList.remove("active");
+                searchInput.value = "";
+                searchInput.blur();
+                return;
+              }
+
+              // Local result - fill the search input
+              const wordSpan = this.querySelector(".gs-word");
+              if (wordSpan) {
+                searchInput.value = wordSpan.textContent;
+                resultsContainer.classList.remove("active");
+              }
+            });
+          });
         });
 
         // Close dropdown when clicking outside
         document.addEventListener("click", function (e) {
-          if (!e.target.closest(".global-search-wrapper")) {
+          if (
+            !e.target.closest(".global-search-wrapper") &&
+            !e.target.closest("#globalSearchResults")
+          ) {
             resultsContainer.classList.remove("active");
           }
         });
@@ -2674,27 +3021,52 @@
             resultsContainer.classList.remove("active");
             this.blur();
           }
+          // Enter key - if results are shown
+          if (e.key === "Enter") {
+            const firstItem = resultsContainer.querySelector(".gs-result-item");
+            if (firstItem) {
+              // If it's a Jisho item, open Jisho
+              if (firstItem.dataset.jisho) {
+                const url = `https://jisho.org/search/${encodeURIComponent(firstItem.dataset.jisho)}`;
+                window.open(url, "_blank");
+                resultsContainer.classList.remove("active");
+                searchInput.value = "";
+                searchInput.blur();
+                return;
+              }
+              // Local result - fill input
+              const wordSpan = firstItem.querySelector(".gs-word");
+              if (wordSpan) {
+                searchInput.value = wordSpan.textContent;
+                resultsContainer.classList.remove("active");
+              }
+            }
+          }
+        });
+
+        // Toggle Resources section
+        const toggleResourcesBtn = document.getElementById("toggleResources");
+        if (toggleResourcesBtn) {
+          toggleResourcesBtn.addEventListener("click", () => {
+            const section = document.querySelector(".resources-section");
+            section.classList.toggle("collapsed");
+            toggleResourcesBtn.textContent = section.classList.contains(
+              "collapsed",
+            )
+              ? "▶ Expand"
+              : "▼ Collapse";
+          });
+        }
+
+        // Optional: Focus on search with Ctrl+K or Cmd+K
+        document.addEventListener("keydown", function (e) {
+          if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+            e.preventDefault();
+            searchInput.focus();
+            searchInput.select();
+          }
         });
       });
-    </script>
-
-    <script>
-      // Register Service Worker for PWA offline support
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("./sw.js")
-            .then((registration) => {
-              console.log(
-                "Service Worker registered with scope:",
-                registration.scope,
-              );
-            })
-            .catch((error) => {
-              console.log("Service Worker registration failed:", error);
-            });
-        });
-      }
     </script>
   </body>
 </html>

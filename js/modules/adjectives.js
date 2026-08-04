@@ -2,20 +2,6 @@
 
 // DEBUG: Check if helpers are loaded
 console.log("=== ADJECTIVES MODULE LOADED ===");
-console.log(
-  "Testing helpers - getWordMeaningsForSentence:",
-  typeof getWordMeaningsForSentence,
-);
-console.log(
-  "Testing helpers - createQuizWordTooltips:",
-  typeof createQuizWordTooltips,
-);
-console.log(
-  "Testing helpers - attachQuizTooltipsGlobal:",
-  typeof attachQuizTooltipsGlobal,
-);
-console.log("Testing helpers - window.wordDict:", typeof window.wordDict);
-console.log("Testing speakText:", typeof speakText);
 
 let currentAdjTab = "conjugation";
 let furiganaHidden = false;
@@ -68,18 +54,7 @@ function addFuriganaToText(text) {
     return text.replace(/[（(][^）)]*[）)]/g, "");
   }
 
-  // Try to use tooltips if the function is available
-  if (
-    typeof createQuizWordTooltips === "function" &&
-    typeof getWordMeaningsForSentence === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: text });
-    if (wordMeanings && wordMeanings.length > 0) {
-      return createQuizWordTooltips(text, wordMeanings);
-    }
-  }
-
-  // Fallback: basic furigana
+  // Simple furigana conversion using ruby tags (NO TOOLTIPS)
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -88,28 +63,9 @@ function addFuriganaToText(text) {
   );
 }
 
-// ===== HELPER: Display sentence with proper furigana handling =====
+// ===== HELPER: Display sentence with proper furigana handling (NO TOOLTIPS) =====
 function displaySentenceWithFurigana(sentence) {
   if (!sentence) return "";
-  // First, try to use the word meanings/tooltip approach
-  if (
-    typeof getWordMeaningsForSentence === "function" &&
-    typeof createQuizWordTooltips === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
-    if (wordMeanings && wordMeanings.length > 0) {
-      // If furigana is hidden, strip furigana from the sentence before creating tooltips
-      if (furiganaHidden) {
-        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
-        const cleanWordMeanings = getWordMeaningsForSentence({
-          jp: cleanSentence,
-        });
-        return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
-      }
-      return createQuizWordTooltips(sentence, wordMeanings);
-    }
-  }
-  // Fallback to basic furigana
   return addFuriganaToText(sentence);
 }
 
@@ -175,45 +131,45 @@ function renderLearnTab() {
             
             <!-- SECTION 1: Introduction -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. 形容詞（けいようし）の 基本 / Adjective Basics</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. Adjective Basics</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    日本語（にほんご）の 形容詞（けいようし）は <strong>2種類（にしゅるい）</strong> あります：
+                    There are <strong>2 types</strong> of adjectives in Japanese:
                 </p>
                 <ul style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 12px; padding-left: 20px;">
-                    <li><strong>い-形容詞（けいようし）</strong> / i-Adjectives</li>
-                    <li><strong>な-形容詞（けいようし）</strong> / na-Adjectives</li>
+                    <li><strong>i-Adjectives</strong></li>
+                    <li><strong>na-Adjectives</strong></li>
                 </ul>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>The golden rule: adjectives always sit <strong>directly before</strong> the noun they modify, or at the <strong>end of a sentence</strong> to describe a state.</em>
+                <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 12px;">
+                    The golden rule: adjectives always sit <strong>directly before</strong> the noun they modify, or at the <strong>end of a sentence</strong> to describe a state.
                 </p>
                 
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">特徴（とくちょう）<br><span style="font-weight: 400; font-size: 0.8rem;">Feature</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">い-形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.8rem;">i-Adjective</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">な-形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.8rem;">na-Adjective</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Feature</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">i-Adjective</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">na-Adjective</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">終（お）わり方（かた）<br><span style="font-size: 0.8rem;">Ending</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Ending</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">い (i)</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Various (not い)</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">名詞（めいし）の 前（まえ）<br><span style="font-size: 0.8rem;">Before noun</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Before noun</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">暑（あつ）い 日（ひ）</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">静（しず）か<strong>な</strong> 人（ひと）</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">文（ぶん）の 終（お）わり<br><span style="font-size: 0.8rem;">End of sentence</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">End of sentence</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">日（ひ）は 暑（あつ）い です</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">人（ひと）は 静（しず）か です</td>
                             </tr>
                             <tr>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">例外（れいがい）<br><span style="font-size: 0.8rem;">Exception</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Exception</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">いい → よくない</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">きれい (looks like i, but is na)</td>
                             </tr>
@@ -224,32 +180,29 @@ function renderLearnTab() {
             
             <!-- SECTION 2: i-Adjectives -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. い-形容詞（けいようし） / i-Adjectives</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. i-Adjectives</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    い-形容詞（けいようし）は <strong>い (i)</strong> で 終（お）わります。
-                </p>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>i-Adjectives end with the hiragana character <strong>い (i)</strong>.</em>
+                    i-Adjectives end with the hiragana character <strong>い (i)</strong>.
                 </p>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">名詞（めいし）を 修飾（しゅうしょく）する / Describing a noun</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Describing a noun</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あつい ひ')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あつい ひ');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">暑（あつ）い 日（ひ）</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">Hot day</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">状態（じょうたい）を 表（あらわ）す / Describing a state</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Describing a state</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('ひ は あつい です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('ひ は あつい です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">日（ひ）は 暑（あつ）い です。</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">The day is hot.</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">否定形（ひていけい） / Negative form</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Negative form</h4>
                 <div style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px;">
                     <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-                        <strong>ルール / Rule:</strong> い → くない
+                        <strong>Rule:</strong> い → くない
                     </div>
                 </div>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あつくない です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あつくない です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -258,10 +211,10 @@ function renderLearnTab() {
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">過去形（かこけい） / Past form</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Past form</h4>
                 <div style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px;">
                     <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-                        <strong>ルール / Rule:</strong> い → かった
+                        <strong>Rule:</strong> い → かった
                     </div>
                 </div>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あつかった です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あつかった です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -270,17 +223,17 @@ function renderLearnTab() {
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">過去否定形（かこひていけい） / Past Negative form</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Past Negative form</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あつくなかった です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あつくなかった です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">暑（あつ）<strong>くなかった</strong> です。</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">It <strong>was not</strong> hot.</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">接続（せつぞく） / Connecting adjectives (て-form)</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Connecting adjectives (て-form)</h4>
                 <div style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px;">
                     <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-                        <strong>ルール / Rule:</strong> い → くて
+                        <strong>Rule:</strong> い → くて
                     </div>
                 </div>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あつくて むしあつい')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あつくて むしあつい');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -292,29 +245,26 @@ function renderLearnTab() {
             
             <!-- SECTION 3: na-Adjectives -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. な-形容詞（けいようし） / na-Adjectives</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. na-Adjectives</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    な-形容詞（けいようし）は <strong>な (na)</strong> を 使（つか）って 名詞（めいし）を 修飾（しゅうしょく）します。
-                </p>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>na-Adjectives use <strong>な (na)</strong> to connect to the noun they modify.</em>
+                    na-Adjectives use <strong>な (na)</strong> to connect to the noun they modify.
                 </p>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">名詞（めいし）を 修飾（しゅうしょく）する / Describing a noun</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Describing a noun</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('しずかな ひと')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('しずかな ひと');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">静（しず）か<strong>な</strong> 人（ひと）</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">Quiet person</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">状態（じょうたい）を 表（あらわ）す / Describing a state</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Describing a state</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('ひと は しずか です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('ひと は しずか です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">人（ひと）は 静（しず）か です。</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">The person is quiet.</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">否定形（ひていけい） / Negative form</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Negative form</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('しずか じゃない です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('しずか じゃない です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">静（しず）か<strong>じゃない</strong> です。</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">It is <strong>not</strong> quiet.</div>
@@ -326,24 +276,24 @@ function renderLearnTab() {
                     </div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">過去形（かこけい） / Past form</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Past form</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('しずか でした')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('しずか でした');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">静（しず）か<strong>でした</strong>。</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">It <strong>was</strong> quiet.</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">過去否定形（かこひていけい） / Past Negative form</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Past Negative form</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('しずか じゃなかった です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('しずか じゃなかった です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">静（しず）か<strong>じゃなかった</strong> です。</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">It <strong>was not</strong> quiet.</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">接続（せつぞく） / Connecting adjectives (て-form)</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Connecting adjectives (て-form)</h4>
                 <div style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px;">
                     <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-                        <strong>ルール / Rule:</strong> な → で (Add で)
+                        <strong>Rule:</strong> Add で
                     </div>
                 </div>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('しずかで きれいな まち')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('しずかで きれいな まち');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -355,12 +305,12 @@ function renderLearnTab() {
             
             <!-- SECTION 4: Comparison -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. 比較（ひかく） / Comparison</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. Comparison</h3>
                 
                 <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">より (yori) - "more than" / "than"</h4>
                 <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
                     <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-                        <strong>ルール / Rule:</strong> A は B より + Adjective
+                        <strong>Rule:</strong> A は B より + Adjective
                     </div>
                 </div>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('りんご は バナナ より やすい です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('りんご は バナナ より やすい です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -369,10 +319,10 @@ function renderLearnTab() {
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">一番（いちばん） - "the most"</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">一番（いちばん）- "the most"</h4>
                 <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
                     <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-                        <strong>ルール / Rule:</strong> A は [group] の 中（なか）で 一番（いちばん）+ Adjective
+                        <strong>Rule:</strong> A は [group] の 中（なか）で 一番（いちばん）+ Adjective
                     </div>
                 </div>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('りんご は くだもの の なか で いちばん すき です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('りんご は くだもの の なか で いちばん すき です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -384,22 +334,19 @@ function renderLearnTab() {
             
             <!-- SECTION 5: Key Exceptions -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. 例外（れいがい） / Key Exceptions</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. Key Exceptions</h3>
                 
                 <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">いい (good) - Special Case</h4>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    「いい」は い-形容詞（けいようし）ですが、否定形（ひていけい）は 古（ふる）い 形（かたち）の 「よい」 から 作（つく）ります。
-                </p>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>"いい (ii / good)" is an i-adjective, but its negative forms are built from its older form "よい (yoi)".</em>
+                    "いい (ii / good)" is an i-adjective, but its negative forms are built from its older form "よい (yoi)".
                 </p>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形（けい）<br><span style="font-weight: 400; font-size: 0.8rem;">Form</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">正（ただ）しい<br><span style="font-weight: 400; font-size: 0.8rem;">Correct</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ 間違（まちが）い<br><span style="font-weight: 400; font-size: 0.8rem;">Incorrect</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Form</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Correct</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ Incorrect</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -430,10 +377,7 @@ function renderLearnTab() {
                 <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">きれい (beautiful/clean) - Looks like i, but is na</h4>
                 <div style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px;">
                     <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-                        ⚠️ <strong>重要（じゅうよう）！</strong> 「きれい」は <strong>な-形容詞（けいようし）</strong> です。
-                    </div>
-                    <div style="font-size: 0.95rem; color: #555555; font-weight: 400; margin-top: 4px;">
-                        <em>⚠️ Important! "きれい (kirei)" is a <strong>na-adjective</strong>, even though it ends in い.</em>
+                        ⚠️ <strong>Important!</strong> "きれい (kirei)" is a <strong>na-adjective</strong>, even though it ends in い.
                     </div>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -445,23 +389,23 @@ function renderLearnTab() {
                     <div style="background: #f8d7da; border-radius: 12px; padding: 16px; border-left: 4px solid #dc3545;">
                         <div style="font-size: 1.1rem; color: #d9534f; font-weight: 500;">綺麗（きれい）<strong>い</strong> 人（ひと）</div>
                         <div style="color: #721c24; font-weight: 400; font-size: 0.95rem;">Beautiful person ❌</div>
-                        <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">⚠️ 間違（まちが）い / Incorrect</div>
+                        <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">⚠️ Incorrect</div>
                     </div>
                 </div>
             </div>
             
             <!-- SECTION 6: Common N5 Adjectives -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">6. N5 で よく 使（つか）う 形容詞（けいようし） / Common N5 Adjectives</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">6. Common N5 Adjectives</h3>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">い-形容詞（けいようし） / i-Adjectives</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">i-Adjectives</h4>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adjective</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adjective</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reading</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -479,14 +423,14 @@ function renderLearnTab() {
                     </table>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">な-形容詞（けいようし） / na-Adjectives</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">na-Adjectives</h4>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adjective</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adjective</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reading</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -507,36 +451,36 @@ function renderLearnTab() {
             
             <!-- SECTION 7: Common Mistakes -->
             <div class="learn-section" style="margin-bottom: 20px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">7. よくある 間違（まちが）い / Common Mistakes</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">7. Common Mistakes</h3>
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ 間違（まちが）い<br><span style="font-weight: 400; font-size: 0.8rem;">Incorrect</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ 正（ただ）しい<br><span style="font-weight: 400; font-size: 0.8rem;">Correct</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">理（り）由（ゆう）<br><span style="font-weight: 400; font-size: 0.8rem;">Reason</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ Incorrect</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ Correct</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reason</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">綺麗（きれい）い 人（ひと）</td>
                                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">綺麗（きれい）<strong>な</strong> 人（ひと）</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">きれい は な-形容詞（けいようし）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">きれい is a na-adjective</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">静（しず）かな です</td>
                                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">静（しず）か です</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">文（ぶん）の 終（お）わり は な が いらない</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">No な at the end of sentence</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">いい じゃない</td>
                                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;"><strong>よくない</strong></td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">いい の 否定形（ひていけい）は よくない</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Negative form of いい is よくない</td>
                             </tr>
                             <tr>
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">好（す）きな です</td>
                                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">好（す）き です</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">文（ぶん）の 終（お）わり は な が いらない</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">No な at the end of sentence</td>
                             </tr>
                         </tbody>
                     </table>
@@ -545,30 +489,30 @@ function renderLearnTab() {
             
             <!-- SUMMARY BOX -->
             <div style="background: #e8f0e7; border-radius: 16px; padding: 20px; margin-top: 24px; border-left: 4px solid #6c8b6b;">
-                <h4 style="color: #000000; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">📌 まとめ / Summary</h4>
+                <h4 style="color: #000000; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">📌 Summary</h4>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px;">
-                    <div style="color: #000000; font-weight: 500;">✅ い-形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.85rem;">i-Adjective Rules</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ i-Adjective Rules</div>
                     <div style="color: #000000; font-weight: 400;">
-                        終（お）わりは い<br>
-                        名詞（めいし）の 前（まえ）：暑（あつ）い 日（ひ）<br>
-                        否定（ひてい）：暑（あつ）くない<br>
-                        過去（かこ）：暑（あつ）かった<br>
-                        接続（せつぞく）：暑（あつ）くて
+                        Ends with い<br>
+                        Before noun: 暑（あつ）い 日（ひ）<br>
+                        Negative: 暑（あつ）くない<br>
+                        Past: 暑（あつ）かった<br>
+                        Te-form: 暑（あつ）くて
                     </div>
-                    <div style="color: #000000; font-weight: 500;">✅ な-形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.85rem;">na-Adjective Rules</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ na-Adjective Rules</div>
                     <div style="color: #000000; font-weight: 400;">
-                        名詞（めいし）の 前（まえ）：静（しず）かな 人（ひと）<br>
-                        文（ぶん）の 終（お）わり：静（しず）か です<br>
-                        否定（ひてい）：静（しず）かじゃない<br>
-                        過去（かこ）：静（しず）かでした<br>
-                        接続（せつぞく）：静（しず）かで
+                        Before noun: 静（しず）かな 人（ひと）<br>
+                        End of sentence: 静（しず）か です<br>
+                        Negative: 静（しず）かじゃない<br>
+                        Past: 静（しず）かでした<br>
+                        Te-form: 静（しず）かで
                     </div>
-                    <div style="color: #000000; font-weight: 500;">✅ 例外（れいがい）<br><span style="font-weight: 400; font-size: 0.85rem;">Exceptions</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ Exceptions</div>
                     <div style="color: #000000; font-weight: 400;">
                         いい → よくない<br>
-                        きれい は な-形容詞（けいようし）
+                        きれい is a na-adjective
                     </div>
-                    <div style="color: #000000; font-weight: 500;">✅ 比較（ひかく）<br><span style="font-weight: 400; font-size: 0.85rem;">Comparison</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ Comparison</div>
                     <div style="color: #000000; font-weight: 400;">
                         より = more than<br>
                         一番（いちばん）= the most
@@ -589,12 +533,6 @@ function renderLearnTab() {
         const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
         if (text) {
           el.addEventListener("click", function (e) {
-            if (
-              e.target.closest(".tooltip-text") ||
-              e.target.closest(".particle-highlight") ||
-              e.target.closest(".word-tooltip")
-            )
-              return;
             const cleanText = text.replace(/[→].*$/, "").trim();
             if (cleanText && typeof speakText === "function") {
               speakText(cleanText);
@@ -604,6 +542,17 @@ function renderLearnTab() {
       }
     }
   });
+
+  // Re-apply furigana hide state
+  if (furiganaHidden) {
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
+    });
+  } else {
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
+    });
+  }
 }
 
 // Load mastered adjectives from localStorage
@@ -742,9 +691,7 @@ function renderAdjectivesList() {
     let examplesHtml = "";
     if (adj.examples && adj.examples.length > 0) {
       for (const ex of adj.examples) {
-        // ===== Use the helper that respects furigana toggle =====
         let displayJp = displaySentenceWithFurigana(ex.sentence);
-
         const reading =
           ex.reading || ex.sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
 
@@ -777,7 +724,6 @@ function renderAdjectivesList() {
         <div class="conjugation-table">
     `;
 
-    // Define the parentheses text for each conjugation type
     const conjParentheses = {
       masu: "です",
       nai: "ない",
@@ -826,32 +772,23 @@ function renderAdjectivesList() {
 
   container.innerHTML = html;
 
-  // ===== TTS SUPPORT: Add click listeners for example items and buttons =====
+  // TTS SUPPORT
   document.querySelectorAll(".example-item").forEach((el) => {
     const reading = el.dataset.reading;
     if (reading) {
-      // Click on the example item itself plays audio
       el.addEventListener("click", (e) => {
-        if (
-          e.target.closest(".example-tts-btn") ||
-          e.target.closest(".tooltip-text") ||
-          e.target.closest(".word-tooltip")
-        )
-          return;
-        console.log("TTS: Playing example sentence:", reading);
+        if (e.target.closest(".example-tts-btn")) return;
         if (typeof speakText === "function") {
           speakText(reading);
         } else if (typeof window.speakText === "function") {
           window.speakText(reading);
         }
       });
-      // TTS button inside the example
       const ttsBtn = el.querySelector(".example-tts-btn");
       if (ttsBtn) {
         ttsBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           const btnReading = ttsBtn.dataset.reading || reading;
-          console.log("TTS: Playing from button:", btnReading);
           if (typeof speakText === "function") {
             speakText(btnReading);
           } else if (typeof window.speakText === "function") {
@@ -873,15 +810,6 @@ function renderAdjectivesList() {
       }
     });
   });
-
-  // ===== ATTACH TOOLTIPS =====
-  if (typeof attachQuizTooltipsGlobal === "function") {
-    setTimeout(attachQuizTooltipsGlobal, 100);
-  } else if (typeof attachQuizTooltips === "function") {
-    setTimeout(attachQuizTooltips, 100);
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(() => attachTooltipLongPress(container), 100);
-  }
 }
 
 function renderMasteredList() {
@@ -1126,7 +1054,6 @@ function renderQuizQuestion() {
     reading: q.adjReading,
   });
 
-  // ===== Use the helper that respects furigana toggle =====
   let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
   console.log("Final sentence display:", sentenceDisplay);
 
@@ -1238,7 +1165,7 @@ function renderQuizQuestion() {
   quizArea.innerHTML = html;
   console.log("Quiz HTML rendered");
 
-  // ===== TTS SUPPORT: Add click listener to the listen button =====
+  // TTS SUPPORT
   const ttsBtn = quizArea.querySelector(".quiz-tts-btn");
   if (ttsBtn) {
     console.log("TTS: Found listen button");
@@ -1266,20 +1193,12 @@ function renderQuizQuestion() {
     console.log("TTS: Listen button not found or no reading available");
   }
 
-  // ===== TTS SUPPORT: Click on sentence to play audio =====
+  // Click on sentence to play audio
   const sentenceEl = quizArea.querySelector(".quiz-sentence");
   if (sentenceEl && reading) {
     sentenceEl.style.cursor = "pointer";
     sentenceEl.title = "Click to listen";
     sentenceEl.addEventListener("click", function (e) {
-      if (
-        e.target.closest(".tooltip-text") ||
-        e.target.closest(".particle-highlight") ||
-        e.target.closest(".word-tooltip")
-      ) {
-        console.log("TTS: Click on tooltip ignored");
-        return;
-      }
       console.log("TTS: Playing from sentence click:", reading);
       if (typeof speakText === "function") {
         speakText(reading);
@@ -1292,25 +1211,6 @@ function renderQuizQuestion() {
         window.speechSynthesis.speak(utterance);
       }
     });
-  }
-
-  // ===== ATTACH TOOLTIPS =====
-  console.log("Attaching tooltips...");
-  if (typeof attachQuizTooltipsGlobal === "function") {
-    setTimeout(function () {
-      console.log("Calling attachQuizTooltipsGlobal");
-      attachQuizTooltipsGlobal();
-    }, 150);
-  } else if (typeof attachQuizTooltips === "function") {
-    setTimeout(function () {
-      console.log("Calling attachQuizTooltips");
-      attachQuizTooltips();
-    }, 150);
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(function () {
-      console.log("Calling attachTooltipLongPress");
-      attachTooltipLongPress(quizArea);
-    }, 150);
   }
 
   // Option button event listeners
@@ -1412,7 +1312,6 @@ function checkAnswer() {
 
     updateQuizStatsDisplay();
 
-    // ===== Use the helper that respects furigana toggle =====
     let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
 
     const reading = q.reading || "";
@@ -1464,7 +1363,6 @@ function checkAnswer() {
         });
       }
     } else {
-      // ===== Use the helper that respects furigana toggle =====
       let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
 
       const reading = q.reading || "";
@@ -1497,7 +1395,6 @@ function checkAnswer() {
 function showAnswer() {
   const q = currentQuiz[currentQuizIndex];
 
-  // ===== Use the helper that respects furigana toggle =====
   let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
 
   const reading = q.reading || "";

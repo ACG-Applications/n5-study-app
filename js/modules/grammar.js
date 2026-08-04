@@ -55,6 +55,7 @@ function printLesson() {
 
 // Add furigana to text based on toggle state
 const furiganaCache = new Map();
+
 function addFuriganaToText(text) {
   if (!text) return "";
 
@@ -63,18 +64,7 @@ function addFuriganaToText(text) {
     return text.replace(/[（(][^）)]*[）)]/g, "");
   }
 
-  // Try to use tooltips if the function is available
-  if (
-    typeof createQuizWordTooltips === "function" &&
-    typeof getWordMeaningsForSentence === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: text });
-    if (wordMeanings && wordMeanings.length > 0) {
-      return createQuizWordTooltips(text, wordMeanings);
-    }
-  }
-
-  // Fallback: basic furigana
+  // Simple furigana conversion using ruby tags (NO TOOLTIPS)
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -89,86 +79,16 @@ function stripFurigana(text) {
   return text.replace(/[（(][^）)]*[）)]/g, "");
 }
 
-// ===== HELPER: Display sentence with furigana AND highlighted particles =====
+// ===== HELPER: Display sentence with furigana (no particle highlighting) =====
 function displaySentenceWithFuriganaAndParticles(sentence) {
   if (!sentence) return "";
-
-  let result = "";
-
-  // Step 1: Get the sentence with furigana using existing function
-  if (
-    typeof getWordMeaningsForSentence === "function" &&
-    typeof createQuizWordTooltips === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
-    if (wordMeanings && wordMeanings.length > 0) {
-      if (furiganaHidden) {
-        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
-        const cleanWordMeanings = getWordMeaningsForSentence({
-          jp: cleanSentence,
-        });
-        result = createQuizWordTooltips(cleanSentence, cleanWordMeanings);
-      } else {
-        result = createQuizWordTooltips(sentence, wordMeanings);
-      }
-    } else {
-      result = addFuriganaToText(sentence);
-    }
-  } else {
-    result = addFuriganaToText(sentence);
-  }
-
-  // Step 2: Highlight ALL particles
-  const particles = [
-    "は",
-    "が",
-    "を",
-    "に",
-    "へ",
-    "で",
-    "と",
-    "も",
-    "か",
-    "よ",
-    "ね",
-    "から",
-    "まで",
-    "より",
-    "くらい",
-    "ごろ",
-    "だけ",
-    "ほど",
-    "の",
-    "や",
-  ];
-
-  for (const particle of particles) {
-    const regex = new RegExp(`(${particle})(?![^<]*>|[^<]*<\\/rt>)`, "g");
-    result = result.replace(regex, '<span class="particle">$1</span>');
-  }
-
-  return result;
+  // Just apply furigana, no particle highlighting
+  return addFuriganaToText(sentence);
 }
 
 // ===== HELPER: Display sentence with proper furigana handling (legacy) =====
 function displaySentenceWithFurigana(sentence) {
   if (!sentence) return "";
-  if (
-    typeof getWordMeaningsForSentence === "function" &&
-    typeof createQuizWordTooltips === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
-    if (wordMeanings && wordMeanings.length > 0) {
-      if (furiganaHidden) {
-        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
-        const cleanWordMeanings = getWordMeaningsForSentence({
-          jp: cleanSentence,
-        });
-        return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
-      }
-      return createQuizWordTooltips(sentence, wordMeanings);
-    }
-  }
   return addFuriganaToText(sentence);
 }
 
@@ -322,12 +242,7 @@ function renderGrammarList() {
     const reading = el.dataset.reading;
     if (reading) {
       el.addEventListener("click", (e) => {
-        if (
-          e.target.closest(".example-tts-btn") ||
-          e.target.closest(".tooltip-text") ||
-          e.target.closest(".word-tooltip")
-        )
-          return;
+        if (e.target.closest(".example-tts-btn")) return;
         if (typeof speakText === "function") {
           speakText(reading);
         } else if (typeof window.speakText === "function") {
@@ -360,14 +275,6 @@ function renderGrammarList() {
       }
     });
   });
-
-  if (typeof attachQuizTooltipsGlobal === "function") {
-    setTimeout(attachQuizTooltipsGlobal, 50);
-  } else if (typeof attachQuizTooltips === "function") {
-    setTimeout(attachQuizTooltips, 50);
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(() => attachTooltipLongPress(container), 50);
-  }
 }
 
 function renderMasteredList() {
@@ -442,7 +349,7 @@ function wrapFuriganaInHTML(htmlString) {
   return tempDiv.innerHTML;
 }
 
-// ===== RENDER LEARN TAB - COMPLETE =====
+// ===== RENDER LEARN TAB =====
 function renderLearnTab() {
   const container = document.getElementById("learnContent");
   if (!container) return;
@@ -458,12 +365,9 @@ function renderLearnTab() {
       
       <!-- SECTION 1: Basic Sentence Structure -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. 文（ぶん）の 基本構造（きほんこうぞう） / Basic Sentence Structure</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. Basic Sentence Structure</h3>
         <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-          日本語（にほんご）の 文（ぶん）は <strong>SOV (主語＋目的語＋動詞）</strong> の 順序（じゅんじょ）です。
-        </p>
-        <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-          <em>Japanese sentences follow <strong>SOV (Subject-Object-Verb)</strong> order.</em>
+          Japanese sentences follow <strong>SOV (Subject-Object-Verb)</strong> order.
         </p>
         
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('わたし は りんご を たべます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('わたし は りんご を たべます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -482,7 +386,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">あります / います - Existence "there is/are"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> あります = 物（もの） (inanimate objects) &nbsp;|&nbsp; います = 人（ひと）・動物（どうぶつ） (people/animals)
+            <strong>Rule:</strong> あります = Inanimate objects &nbsp;|&nbsp; います = People/Animals
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('つくえ が あります')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('つくえ が あります');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -499,49 +403,49 @@ function renderLearnTab() {
       
       <!-- SECTION 2: Essential Particles (Quick Reference) -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. 助詞（じょし）の 基本 / Essential Particles (Quick Reference)</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. Essential Particles (Quick Reference)</h3>
         <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-          <em>For detailed explanations, visit the <strong>Particles</strong> module. Here's a quick reference:</em>
+          For detailed explanations, visit the <strong>Particles</strong> module. Here's a quick reference:
         </p>
         
         <div style="overflow-x: auto; margin-bottom: 16px;">
           <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
             <thead>
               <tr style="background: #e8e0d5;">
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">助詞（じょし）<br><span style="font-weight: 400; font-size: 0.8rem;">Particle</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">役割（やくわり）<br><span style="font-weight: 400; font-size: 0.8rem;">Role</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Particle</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Role</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">は (wa)</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">トピック / Topic</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Topic</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">私（わたし）<strong>は</strong> 学生（がくせい）です</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">が (ga)</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">主語（しゅご）/ Subject</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Subject</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">犬（いぬ）<strong>が</strong> 走（はし）ります</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">を (wo)</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">目的語（もくてきご）/ Object</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Object</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">本（ほん）<strong>を</strong> 読（よ）みます</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">に (ni)</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">目的地（もくてきち）/ 時間（じかん）</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Destination / Time</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">学校（がっこう）<strong>に</strong> 行（い）きます</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">で (de)</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">場所（ばしょ）/ 手段（しゅだん）</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Location / Means</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">学校（がっこう）<strong>で</strong> 勉強（べんきょう）します</td>
               </tr>
               <tr>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">の (no)</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">所有（しょゆう）/ Possession</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Possession</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">私（わたし）<strong>の</strong> 車（くるま）</td>
               </tr>
             </tbody>
@@ -549,56 +453,56 @@ function renderLearnTab() {
         </div>
         <div style="background: #fff3e0; border-radius: 12px; padding: 12px 16px; border-left: 4px solid #ff9800;">
           <div style="font-size: 0.9rem; color: #856404; font-weight: 400;">
-            💡 <strong>覚（おぼ）え方（かた） / Memory Tip:</strong> は = "as for", が = "the one that", を = "action done to", に = "toward", で = "at/by", の = "of"
+            💡 <strong>Memory Tip:</strong> は = "as for", が = "the one that", を = "action done to", に = "toward", で = "at/by", の = "of"
           </div>
         </div>
       </div>
       
       <!-- SECTION 3: Verb Conjugations (Quick Reference) -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. 動詞（どうし）の 活用（かつよう） / Verb Conjugations (Quick Reference)</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. Verb Conjugations (Quick Reference)</h3>
         <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-          <em>For detailed explanations, visit the <strong>Verbs</strong> module. Here's a quick reference:</em>
+          For detailed explanations, visit the <strong>Verbs</strong> module. Here's a quick reference:
         </p>
         
         <div style="overflow-x: auto; margin-bottom: 16px;">
           <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
             <thead>
               <tr style="background: #e8e0d5;">
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形（けい）<br><span style="font-weight: 400; font-size: 0.8rem;">Form</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">パターン<br><span style="font-weight: 400; font-size: 0.8rem;">Pattern</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Form</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Pattern</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">現在（げんざい）<br><span style="font-size: 0.8rem;">Present</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Present</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ます</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べます</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去（かこ）<br><span style="font-size: 0.8rem;">Past</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Past</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ました</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べました</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">否定（ひてい）<br><span style="font-size: 0.8rem;">Negative</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Negative</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ません</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べません</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去否定（かこひてい）<br><span style="font-size: 0.8rem;">Past Negative</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Past Negative</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ませんでした</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べませんでした</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て形（けい）<br><span style="font-size: 0.8rem;">Te-form</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Te-form</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Verb-specific</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べて</td>
               </tr>
               <tr>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ている<br><span style="font-size: 0.8rem;">Ongoing/State</span></td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">て-form + います</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">〜ている</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">te-form + います</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べて います</td>
               </tr>
             </tbody>
@@ -608,38 +512,38 @@ function renderLearnTab() {
       
       <!-- SECTION 4: Adjective Conjugations (Quick Reference) -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. 形容詞（けいようし）の 活用（かつよう） / Adjective Conjugations (Quick Reference)</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. Adjective Conjugations (Quick Reference)</h3>
         <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-          <em>For detailed explanations, visit the <strong>Adjectives</strong> module. Here's a quick reference:</em>
+          For detailed explanations, visit the <strong>Adjectives</strong> module. Here's a quick reference:
         </p>
         
         <div style="overflow-x: auto; margin-bottom: 16px;">
           <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
             <thead>
               <tr style="background: #e8e0d5;">
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形（けい）<br><span style="font-weight: 400; font-size: 0.8rem;">Form</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">い-形容詞<br><span style="font-weight: 400; font-size: 0.8rem;">i-Adjective</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">な-形容詞<br><span style="font-weight: 400; font-size: 0.8rem;">na-Adjective</span></th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Form</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">i-Adjective</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">na-Adjective</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">現在（げんざい）<br><span style="font-size: 0.8rem;">Present</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Present</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">暑（あつ）い です</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">静（しず）か です</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去（かこ）<br><span style="font-size: 0.8rem;">Past</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Past</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">暑（あつ）かった です</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">静（しず）か でした</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">否定（ひてい）<br><span style="font-size: 0.8rem;">Negative</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Negative</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">暑（あつ）くない です</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">静（しず）かじゃない です</td>
               </tr>
               <tr>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">過去否定（かこひてい）<br><span style="font-size: 0.8rem;">Past Negative</span></td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Past Negative</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">暑（あつ）くなかった です</td>
                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">静（しず）かじゃなかった です</td>
               </tr>
@@ -650,12 +554,12 @@ function renderLearnTab() {
       
       <!-- SECTION 5: Time & Frequency -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. 時（とき）と 頻度（ひんど） / Time &amp; Frequency</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. Time &amp; Frequency</h3>
         
-        <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">時間（じかん）の 表現（ひょうげん） / Time Expressions</h4>
+        <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Time Expressions</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> 特定（とくてい）の 時間（じかん） + <strong>に</strong>
+            <strong>Rule:</strong> Specific time + <strong>に</strong>
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('ろくじ に おきます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('ろくじ に おきます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -665,7 +569,7 @@ function renderLearnTab() {
         </div>
         <div style="background: #f8d7da; border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; border-left: 4px solid #dc3545;">
           <div style="font-size: 0.9rem; color: #721c24; font-weight: 400;">
-            ⚠️ <strong>注意（ちゅうい） / Note:</strong> 今日（きょう）, 明日（あした）, 毎日（まいにち） は <strong>に</strong> を 使（つか）いません。
+            ⚠️ <strong>Note:</strong> 今日（きょう）, 明日（あした）, 毎日（まいにち） do NOT use <strong>に</strong>.
           </div>
         </div>
         
@@ -679,7 +583,7 @@ function renderLearnTab() {
       
       <!-- SECTION 6: Question Formation -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">6. 疑問文（ぎもんぶん） / Question Formation</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">6. Question Formation</h3>
         
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">か - Question Particle</h4>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('がくせい です か')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('がくせい です か');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -688,14 +592,14 @@ function renderLearnTab() {
           <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
         </div>
         
-        <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">疑問詞（ぎもんし） / Question Words</h4>
+        <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Question Words</h4>
         <div style="overflow-x: auto; margin-bottom: 16px;">
           <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
             <thead>
               <tr style="background: #e8e0d5;">
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">疑問詞（ぎもんし）<br><span style="font-weight: 400; font-size: 0.8rem;">Question Word</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Question Word</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
               </tr>
             </thead>
             <tbody>
@@ -726,15 +630,15 @@ function renderLearnTab() {
       
       <!-- SECTION 7: Connecting Sentences -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">7. 文（ぶん）を つなぐ / Connecting Sentences</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">7. Connecting Sentences</h3>
         
         <div style="overflow-x: auto; margin-bottom: 16px;">
           <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
             <thead>
               <tr style="background: #e8e0d5;">
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">接続詞（せつぞくし）<br><span style="font-weight: 400; font-size: 0.8rem;">Connector</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Connector</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
               </tr>
             </thead>
             <tbody>
@@ -760,12 +664,12 @@ function renderLearnTab() {
       
       <!-- SECTION 8: Invitations & Suggestions -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">8. 誘（さそ）い / Invitations &amp; Suggestions</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">8. Invitations &amp; Suggestions</h3>
         
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">～ませんか - "Would you like to...?"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> ます → ませんか
+            <strong>Rule:</strong> ます → ませんか
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('いっしょ に えいが を みません か')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('いっしょ に えいが を みません か');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -777,7 +681,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">～ましょう - "Let's..."</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> ます → ましょう
+            <strong>Rule:</strong> ます → ましょう
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('いっしょ に べんきょう しましょう')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('いっしょ に べんきょう しましょう');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -787,14 +691,14 @@ function renderLearnTab() {
         </div>
         <div style="background: #fff3e0; border-radius: 12px; padding: 12px 16px; border-left: 4px solid #ff9800;">
           <div style="font-size: 0.9rem; color: #856404; font-weight: 400;">
-            💡 <strong>違い（ちがい） / Difference:</strong> ませんか = 相手（あいて）に 尋（たず）ねる (asking someone) &nbsp;|&nbsp; ましょう = みんなで する (doing together as a group)
+            💡 <strong>Difference:</strong> ませんか = asking someone &nbsp;|&nbsp; ましょう = doing together as a group
           </div>
         </div>
         
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">～ましょうか - "Shall I...?" (Offering)</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> ます → ましょうか (offering to do for someone)
+            <strong>Rule:</strong> ます → ましょうか (offering to do for someone)
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('にもつ を もちましょうか')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('にもつ を もちましょうか');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -811,12 +715,12 @@ function renderLearnTab() {
       
       <!-- SECTION 9: Expressing Obligation & Possibility -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">9. 義務（ぎむ）と 可能性（かのうせい） / Expressing Obligation &amp; Possibility</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">9. Expressing Obligation &amp; Possibility</h3>
         
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜なければならない - "Must / Have to"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Verb (ない-form) + なければならない
+            <strong>Rule:</strong> Verb (ない-form) + なければならない
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('まいにち にほんご を べんきょうしなければならない')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('まいにち にほんご を べんきょうしなければならない');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -828,7 +732,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜かもしれない - "Might / Maybe"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Verb (plain form) + かもしれない
+            <strong>Rule:</strong> Verb (plain form) + かもしれない
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あした は あめ が ふる かもしれない')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あした は あめ が ふる かもしれない');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -845,12 +749,12 @@ function renderLearnTab() {
       
       <!-- SECTION 10: Additional N5 Grammar Patterns -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">10. N5 の その他（ほか）の 文法（ぶんぽう）パターン / Additional N5 Grammar Patterns</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">10. Additional N5 Grammar Patterns</h3>
         
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜おく - "To do in advance" (Preparatory)</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Verb (te-form) + おく
+            <strong>Rule:</strong> Verb (te-form) + おく
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('あしたのしけんのためにべんきょうしておく')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('あしたのしけんのためにべんきょうしておく');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -862,7 +766,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜とか - "Things like..." (Listing examples)</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> NounA + とか + NounB + とか
+            <strong>Rule:</strong> NounA + とか + NounB + とか
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('りんご とか バナナ とか が すき です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('りんご とか バナナ とか が すき です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -874,7 +778,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜やすい / 〜にくい - "Easy/Hard to do"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Verb (stem) + やすい (easy) / にくい (hard)
+            <strong>Rule:</strong> Verb (stem) + やすい (easy) / にくい (hard)
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('この ほん は よみやすい です')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('この ほん は よみやすい です');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -891,7 +795,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜について - "About, concerning"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Noun + について
+            <strong>Rule:</strong> Noun + について
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('にほん に ついて はなしましょう')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('にほん に ついて はなしましょう');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -903,7 +807,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜にとって - "For / From the perspective of"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Noun + にとって
+            <strong>Rule:</strong> Noun + にとって
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('わたし に とって にほんご は むずかしい')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('わたし に とって にほんご は むずかしい');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -915,7 +819,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜として - "As / In the capacity of"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Noun + として
+            <strong>Rule:</strong> Noun + として
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('せんせい と して せいと を しどうします')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('せんせい と して せいと を しどうします');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -927,7 +831,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜によって - "By / Depending on"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Noun + によって
+            <strong>Rule:</strong> Noun + によって
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('ひと に よって かんがえかた が ちがいます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('ひと に よって かんがえかた が ちがいます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -939,7 +843,7 @@ function renderLearnTab() {
         <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">〜という - "Called / Named"</h4>
         <div style="background: #f5f5f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
           <div style="font-size: 1rem; color: #000000; font-weight: 400;">
-            <strong>ルール / Rule:</strong> Noun + という + Noun
+            <strong>Rule:</strong> Noun + という + Noun
           </div>
         </div>
         <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('さくら と いう はな')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('さくら と いう はな');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -951,65 +855,63 @@ function renderLearnTab() {
       
       <!-- SECTION 11: Common Mistakes -->
       <div class="learn-section" style="margin-bottom: 28px;">
-        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">11. よくある 間違（まちが）い / Common Mistakes</h3>
+        <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">11. Common Mistakes</h3>
         <div style="overflow-x: auto;">
           <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
             <thead>
               <tr style="background: #e8e0d5;">
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ 間違（まちが）い<br><span style="font-weight: 400; font-size: 0.8rem;">Incorrect</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ 正（ただ）しい<br><span style="font-weight: 400; font-size: 0.8rem;">Correct</span></th>
-                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">理（り）由（ゆう）<br><span style="font-weight: 400; font-size: 0.8rem;">Reason</span></th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ Incorrect</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ Correct</th>
+                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reason</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">私（わたし）は 行（い）きます 学校（がっこう）へ</td>
                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">私（わたし）は 学校（がっこう）へ 行（い）きます</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">動詞（どうし）は 文（ぶん）の 最後（さいご）</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Verb must be at the end of the sentence</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">学校（がっこう）を 行（い）きます</td>
                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">学校（がっこう）<strong>へ</strong> 行（い）きます</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">移動（いどう）は に/へ、を は 目的語（もくてきご）</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Movement uses に/へ, を is for direct objects</td>
               </tr>
               <tr style="border-bottom: 1px solid #e8e0d5;">
                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">11時（じ）で 寝（ね）ます</td>
                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">11時（じ）<strong>に</strong> 寝（ね）ます</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">時間（じかん）は に (で は 違（ちが）う)</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Specific time uses に (で is different)</td>
               </tr>
               <tr>
                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">私（わたし）は 車（くるま）に 行（い）きます</td>
                 <td style="padding: 8px 16px; color: #28a745; font-weight: 400;">私（わたし）は 車（くるま）<strong>で</strong> 行（い）きます</td>
-                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">手段（しゅだん）は で</td>
+                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Means/method uses で</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
       
-      <!-- ============================================================
-           SECTION 12: SUMMARY BOX ← THIS WAS MISSING!
-           ============================================================ -->
+      <!-- SECTION 12: Summary Box -->
       <div style="background: #e8f0e7; border-radius: 16px; padding: 20px; margin-top: 24px; border-left: 4px solid #6c8b6b;">
-        <h4 style="color: #000000; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">📌 まとめ / Summary</h4>
+        <h4 style="color: #000000; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">📌 Summary</h4>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px;">
-          <div style="color: #000000; font-weight: 500;">✅ 文（ぶん）の 構造（こうぞう）<br><span style="font-weight: 400; font-size: 0.85rem;">Sentence Structure</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Sentence Structure</div>
           <div style="color: #000000; font-weight: 400;">SOV: 私（わたし）は りんごを 食（た）べます</div>
-          <div style="color: #000000; font-weight: 500;">✅ 助詞（じょし）<br><span style="font-weight: 400; font-size: 0.85rem;">Particles</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Particles</div>
           <div style="color: #000000; font-weight: 400;">は, が, を, に, で, の</div>
-          <div style="color: #000000; font-weight: 500;">✅ 動詞（どうし）の 活用（かつよう）<br><span style="font-weight: 400; font-size: 0.85rem;">Verb Conjugations</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Verb Conjugations</div>
           <div style="color: #000000; font-weight: 400;">ます, ました, ません, ませんでした, て-form</div>
-          <div style="color: #000000; font-weight: 500;">✅ 形容詞（けいようし）の 活用（かつよう）<br><span style="font-weight: 400; font-size: 0.85rem;">Adjective Conjugations</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Adjective Conjugations</div>
           <div style="color: #000000; font-weight: 400;">い-adj: 暑（あつ）い / な-adj: 静（しず）か</div>
-          <div style="color: #000000; font-weight: 500;">✅ 質問（しつもん）<br><span style="font-weight: 400; font-size: 0.85rem;">Questions</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Questions</div>
           <div style="color: #000000; font-weight: 400;">か, 何（なに）, 誰（だれ）, どこ, いくら</div>
-          <div style="color: #000000; font-weight: 500;">✅ 接続（せつぞく）<br><span style="font-weight: 400; font-size: 0.85rem;">Connectors</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Connectors</div>
           <div style="color: #000000; font-weight: 400;">そして, でも, それから</div>
-          <div style="color: #000000; font-weight: 500;">✅ 誘（さそ）い<br><span style="font-weight: 400; font-size: 0.85rem;">Invitations</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Invitations</div>
           <div style="color: #000000; font-weight: 400;">～ませんか, ～ましょう, ～ましょうか</div>
-          <div style="color: #000000; font-weight: 500;">✅ 義務（ぎむ）と 可能性（かのうせい）<br><span style="font-weight: 400; font-size: 0.85rem;">Obligation &amp; Possibility</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Obligation &amp; Possibility</div>
           <div style="color: #000000; font-weight: 400;">〜なければならない, 〜かもしれない</div>
-          <div style="color: #000000; font-weight: 500;">✅ その他（ほか）の パターン<br><span style="font-weight: 400; font-size: 0.85rem;">Other Patterns</span></div>
+          <div style="color: #000000; font-weight: 500;">✅ Other Patterns</div>
           <div style="color: #000000; font-weight: 400;">〜おく, 〜とか, 〜やすい/にくい, 〜について, 〜にとって, 〜として, 〜によって, 〜という</div>
         </div>
       </div>
@@ -1028,12 +930,7 @@ function renderLearnTab() {
         const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
         if (text) {
           el.addEventListener("click", function (e) {
-            if (
-              e.target.closest(".tooltip-text") ||
-              e.target.closest(".particle-highlight") ||
-              e.target.closest(".word-tooltip")
-            )
-              return;
+            if (e.target.closest(".particle-highlight")) return;
             const cleanText = text.replace(/[→].*$/, "").trim();
             if (cleanText && typeof speakText === "function") {
               speakText(cleanText);
@@ -1204,11 +1101,7 @@ function renderQuizQuestion() {
     sentenceEl.style.cursor = "pointer";
     sentenceEl.title = "Click to listen";
     sentenceEl.addEventListener("click", function (e) {
-      if (
-        e.target.closest(".tooltip-text") ||
-        e.target.closest(".particle-highlight") ||
-        e.target.closest(".word-tooltip")
-      ) {
+      if (e.target.closest(".particle-highlight")) {
         return;
       }
       if (typeof speakText === "function") {
@@ -1222,14 +1115,6 @@ function renderQuizQuestion() {
         window.speechSynthesis.speak(utterance);
       }
     });
-  }
-
-  if (typeof attachQuizTooltipsGlobal === "function") {
-    setTimeout(attachQuizTooltipsGlobal, 50);
-  } else if (typeof attachQuizTooltips === "function") {
-    setTimeout(attachQuizTooltips, 50);
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(() => attachTooltipLongPress(quizArea), 50);
   }
 
   document.querySelectorAll(".quiz-option-btn").forEach((btn) => {

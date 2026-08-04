@@ -40,7 +40,6 @@ function printLesson() {
 }
 
 // Add furigana to text based on toggle state
-// Add furigana to text based on toggle state
 const furiganaCache = new Map();
 function addFuriganaToText(text) {
   if (!text) return "";
@@ -50,18 +49,7 @@ function addFuriganaToText(text) {
     return text.replace(/[（(][^）)]*[）)]/g, "");
   }
 
-  // Try to use tooltips if the function is available
-  if (
-    typeof createQuizWordTooltips === "function" &&
-    typeof getWordMeaningsForSentence === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: text });
-    if (wordMeanings && wordMeanings.length > 0) {
-      return createQuizWordTooltips(text, wordMeanings);
-    }
-  }
-
-  // Fallback: basic furigana
+  // Simple furigana conversion using ruby tags (NO TOOLTIPS)
   return text.replace(
     /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
     (_, kanji, furigana) => {
@@ -70,28 +58,9 @@ function addFuriganaToText(text) {
   );
 }
 
-// ===== HELPER: Display sentence with proper furigana handling =====
+// ===== HELPER: Display sentence with proper furigana handling (NO TOOLTIPS) =====
 function displaySentenceWithFurigana(sentence) {
   if (!sentence) return "";
-  // First, try to use the word meanings/tooltip approach
-  if (
-    typeof getWordMeaningsForSentence === "function" &&
-    typeof createQuizWordTooltips === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
-    if (wordMeanings && wordMeanings.length > 0) {
-      // If furigana is hidden, strip furigana from the sentence before creating tooltips
-      if (furiganaHidden) {
-        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
-        const cleanWordMeanings = getWordMeaningsForSentence({
-          jp: cleanSentence,
-        });
-        return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
-      }
-      return createQuizWordTooltips(sentence, wordMeanings);
-    }
-  }
-  // Fallback to basic furigana
   return addFuriganaToText(sentence);
 }
 
@@ -145,12 +114,9 @@ function renderLearnTab() {
             
             <!-- SECTION 1: Basic Placement -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. 基本（きほん）の 副詞（ふくし）の 位置（いち） / Basic Adverb Placement</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. Basic Adverb Placement</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    副詞（ふくし）は 通（つう）常（じょう）、動詞（どうし）や 形容詞（けいようし）の <strong>前（まえ）</strong> に 置（お）きます。
-                </p>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>Adverbs usually come <strong>before</strong> the word they modify (verb or adjective).</em>
+                    Adverbs usually come <strong>before</strong> the word they modify (verb or adjective).
                 </p>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('わたし は はやく おきます')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('わたし は はやく おきます');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">私（わたし）は <strong>早（はや）く</strong> 起（お）きます。</div>
@@ -166,12 +132,9 @@ function renderLearnTab() {
             
             <!-- SECTION 2: Time Adverbs -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. 時間（じかん）の 副詞（ふくし） / Time Adverbs</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. Time Adverbs</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    時間（じかん）の 副詞（ふくし）は 文（ぶん）の <strong>最初（さいしょ）</strong> に 来（く）ることが 多（おお）い です。
-                </p>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>Time adverbs often come at the <strong>beginning</strong> of the sentence.</em>
+                    Time adverbs often come at the <strong>beginning</strong> of the sentence.
                 </p>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('きのう わたし は はやく おきました')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('きのう わたし は はやく おきました');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;"><strong>きのう</strong> 私（わたし）は 早（はや）く 起（お）きました。</div>
@@ -192,20 +155,20 @@ function renderLearnTab() {
             
             <!-- SECTION 3: Converting Adjectives -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. 形容詞（けいようし）から 副詞（ふくし）へ / Converting Adjectives to Adverbs</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. Converting Adjectives to Adverbs</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 12px;">
-                    形容詞（けいようし）を 副詞（ふくし）に 変（か）えることが できます。
+                    You can convert adjectives into adverbs.
                 </p>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">い-形容詞（けいようし）→ 副詞（ふくし） / i-Adjective → Adverb (い → く)</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">i-Adjective → Adverb (い → く)</h4>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adjective</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">副詞（ふくし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adverb</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adjective</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adverb</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -231,15 +194,15 @@ function renderLearnTab() {
                     </table>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">な-形容詞（けいようし）→ 副詞（ふくし） / na-Adjective → Adverb (な → に)</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">na-Adjective → Adverb (な → に)</h4>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adjective</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">副詞（ふくし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adverb</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adjective</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adverb</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -268,17 +231,17 @@ function renderLearnTab() {
             
             <!-- SECTION 4: Common N5 Adverbs -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. N5 で よく 使（つか）う 副詞（ふくし） / Common N5 Adverbs</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. Common N5 Adverbs</h3>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">程度（ていど）の 副詞（ふくし） / Degree Adverbs (How much / intensity)</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Degree Adverbs (How much / intensity)</h4>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">副詞（ふくし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adverb</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adverb</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reading</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -310,15 +273,15 @@ function renderLearnTab() {
                     </table>
                 </div>
                 
-                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">頻度（ひんど）の 副詞（ふくし） / Frequency Adverbs (How often)</h4>
+                <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">Frequency Adverbs (How often)</h4>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">副詞（ふくし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adverb</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adverb</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reading</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -353,21 +316,18 @@ function renderLearnTab() {
             
             <!-- SECTION 5: Sentence-Level Adverbs -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. 文（ぶん）を 修飾（しゅうしょく）する 副詞（ふくし） / Sentence-Level Adverbs</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. Sentence-Level Adverbs</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    これらの 副詞（ふくし）は 文（ぶん）の <strong>最初（さいしょ）</strong> に 来（く）ることが 多（おお）い です。
-                </p>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>These adverbs modify the <strong>whole sentence</strong> and often come at the beginning.</em>
+                    These adverbs modify the <strong>whole sentence</strong> and often come at the beginning.
                 </p>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">副詞（ふくし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adverb</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adverb</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reading</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -396,7 +356,7 @@ function renderLearnTab() {
             
             <!-- SECTION 6: もっと and もう -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">6. 「もっと」と「もう」の 特（とく）別（べつ）な 使（つか）い方（かた） / Special Cases: もっと and もう</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">6. Special Cases: もっと and もう</h3>
                 
                 <h4 style="color: #000000; font-weight: 600; font-size: 1rem; margin-bottom: 8px;">もっと (more)</h4>
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('もっと べんきょうします')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('もっと べんきょうします');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
@@ -415,28 +375,25 @@ function renderLearnTab() {
                     <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">もう 食（た）べません。</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">I won't eat <strong>anymore</strong>.</div>
                     <div style="color: #888888; font-size: 0.7rem; margin-top: 4px;">🔊 Click to listen</div>
-                    <div style="color: #d9534f; font-weight: 400; font-size: 0.85rem; margin-top: 4px;">⚠️ もう + 否定形（ひていけい）= "not anymore"</div>
+                    <div style="color: #d9534f; font-weight: 400; font-size: 0.85rem; margin-top: 4px;">⚠️ もう + negative = "not anymore"</div>
                 </div>
             </div>
             
             <!-- SECTION 7: Negative Polarity -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">7. 否定（ひてい）の 副詞（ふくし） / Negative Polarity Adverbs</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">7. Negative Polarity Adverbs</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    これらの 副詞（ふくし）は <strong>必（かなら）ず</strong> 動詞（どうし）が 否定形（ひていけい）です。
-                </p>
-                <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
-                    <em>These adverbs <strong>always</strong> require a negative verb.</em>
+                    These adverbs <strong>always</strong> require a negative verb.
                 </p>
                 <div style="overflow-x: auto; margin-bottom: 16px;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">副詞（ふくし）<br><span style="font-weight: 400; font-size: 0.8rem;">Adverb</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ 正（ただ）しい<br><span style="font-weight: 400; font-size: 0.8rem;">Correct</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ 間違（まちが）い<br><span style="font-weight: 400; font-size: 0.8rem;">Incorrect</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Adverb</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reading</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ Correct</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ Incorrect</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -468,36 +425,36 @@ function renderLearnTab() {
             
             <!-- SECTION 8: Common Mistakes -->
             <div class="learn-section" style="margin-bottom: 20px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">8. よくある 間違（まちが）い / Common Mistakes</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">8. Common Mistakes</h3>
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ 間違（まちが）い<br><span style="font-weight: 400; font-size: 0.8rem;">Incorrect</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ 正（ただ）しい<br><span style="font-weight: 400; font-size: 0.8rem;">Correct</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">理（り）由（ゆう）<br><span style="font-weight: 400; font-size: 0.8rem;">Reason</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">❌ Incorrect</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">✅ Correct</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reason</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">私（わたし）は 行（い）きます 早（はや）く。</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">私（わたし）は 早（はや）く 行（い）きます。</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">副詞（ふくし）は 動詞（どうし）の 前（まえ）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Adverb goes before the verb</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">あまり 食（た）べます。</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">あまり 食（た）べ<strong>ません</strong>。</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">あまり = 否定（ひてい）の 副詞（ふくし）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">あまり requires negative verb</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">静（しず）かな 話（はな）します。</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">静（しず）か<strong>に</strong> 話（はな）します。</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">な-形容詞（けいようし）は な → に</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">na-adjective → に for adverb</td>
                             </tr>
                             <tr>
                                 <td style="padding: 8px 16px; color: #d9534f; font-weight: 400;">早（はや）い 起（お）きます。</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">早（はや）<strong>く</strong> 起（お）きます。</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">い-形容詞（けいようし）は い → く</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">i-adjective → く for adverb</td>
                             </tr>
                         </tbody>
                     </table>
@@ -506,25 +463,25 @@ function renderLearnTab() {
             
             <!-- SUMMARY BOX -->
             <div style="background: #e8f0e7; border-radius: 16px; padding: 20px; margin-top: 24px; border-left: 4px solid #6c8b6b;">
-                <h4 style="color: #000000; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">📌 まとめ / Summary</h4>
+                <h4 style="color: #000000; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">📌 Summary</h4>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px;">
-                    <div style="color: #000000; font-weight: 500;">✅ 副詞（ふくし）+ 動詞（どうし）<br><span style="font-weight: 400; font-size: 0.85rem;">Adverb + Verb</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ Adverb + Verb</div>
                     <div style="color: #000000; font-weight: 400;">早（はや）く 起（お）きます</div>
-                    <div style="color: #000000; font-weight: 500;">✅ 副詞（ふくし）+ 形容詞（けいようし）<br><span style="font-weight: 400; font-size: 0.85rem;">Adverb + Adjective</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ Adverb + Adjective</div>
                     <div style="color: #000000; font-weight: 400;">とても おいしい</div>
-                    <div style="color: #000000; font-weight: 500;">✅ 時間（じかん）の 副詞（ふくし）は 最初（さいしょ）<br><span style="font-weight: 400; font-size: 0.85rem;">Time adverbs come first</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ Time adverbs come first</div>
                     <div style="color: #000000; font-weight: 400;">あした 行（い）きます</div>
-                    <div style="color: #000000; font-weight: 500;">✅ い → く<br><span style="font-weight: 400; font-size: 0.85rem;">i-adjective → く</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ i-adjective → く</div>
                     <div style="color: #000000; font-weight: 400;">早い → 早く</div>
-                    <div style="color: #000000; font-weight: 500;">✅ な → に<br><span style="font-weight: 400; font-size: 0.85rem;">na-adjective → に</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ na-adjective → に</div>
                     <div style="color: #000000; font-weight: 400;">静かな → 静かに</div>
-                    <div style="color: #000000; font-weight: 500;">✅ あまり + 否定（ひてい）<br><span style="font-weight: 400; font-size: 0.85rem;">あまり + negative</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ あまり + negative</div>
                     <div style="color: #000000; font-weight: 400;">あまり 行きません</div>
-                    <div style="color: #000000; font-weight: 500;">✅ ぜんぜん + 否定（ひてい）<br><span style="font-weight: 400; font-size: 0.85rem;">ぜんぜん + negative</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ ぜんぜん + negative</div>
                     <div style="color: #000000; font-weight: 400;">ぜんぜん わかりません</div>
-                    <div style="color: #000000; font-weight: 500;">✅ もう = already (肯定)<br><span style="font-weight: 400; font-size: 0.85rem;">もう = already (positive)</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ もう = already (positive)</div>
                     <div style="color: #000000; font-weight: 400;">もう 食べました</div>
-                    <div style="color: #000000; font-weight: 500;">✅ もう = anymore (否定)<br><span style="font-weight: 400; font-size: 0.85rem;">もう = anymore (negative)</span></div>
+                    <div style="color: #000000; font-weight: 500;">✅ もう = anymore (negative)</div>
                     <div style="color: #000000; font-weight: 400;">もう 食べません</div>
                 </div>
             </div>
@@ -539,18 +496,10 @@ function renderLearnTab() {
   document.querySelectorAll(".example-box, .example-click").forEach((el) => {
     if (!el.hasAttribute("data-tts-attached")) {
       el.setAttribute("data-tts-attached", "true");
-      // The onclick is already in the HTML, but we also add a fallback click listener
       if (!el.hasAttribute("onclick")) {
         const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
         if (text) {
           el.addEventListener("click", function (e) {
-            // Don't trigger if clicking on the listen indicator
-            if (
-              e.target.closest(".tooltip-text") ||
-              e.target.closest(".particle-highlight") ||
-              e.target.closest(".word-tooltip")
-            )
-              return;
             const cleanText = text.replace(/[→].*$/, "").trim();
             if (cleanText && typeof speakText === "function") {
               speakText(cleanText);
@@ -560,6 +509,17 @@ function renderLearnTab() {
       }
     }
   });
+
+  // Re-apply furigana hide state
+  if (furiganaHidden) {
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "none";
+    });
+  } else {
+    container.querySelectorAll("rt").forEach((rt) => {
+      rt.style.display = "";
+    });
+  }
 }
 
 // Strip furigana for comparison
@@ -570,7 +530,6 @@ function stripFuriganaForDropdown(text) {
 
 // Format adverb for display with furigana
 function formatAdverbForDisplay(adv) {
-  // Use the pre-formatted display property from adverbsData
   return addFuriganaToText(adv.display);
 }
 
@@ -635,7 +594,6 @@ function unmarkAdverbMastered(advId) {
 
 function applyFuriganaHide() {
   furiganaHidden = !furiganaHidden;
-  // Clear the cache
   furiganaCache.clear();
   if (typeof meaningCache !== "undefined") {
     meaningCache.clear();
@@ -677,9 +635,7 @@ function renderAdverbsList() {
     let examplesHtml = "";
     if (adv.examples && adv.examples.length > 0) {
       for (const ex of adv.examples) {
-        // ===== Use the helper that respects furigana toggle =====
         let displayJp = displaySentenceWithFurigana(ex.sentence);
-
         const reading =
           ex.reading || ex.sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
 
@@ -727,32 +683,22 @@ function renderAdverbsList() {
 
   container.innerHTML = html;
 
-  // ===== TTS SUPPORT: Add click listeners for example items and buttons =====
   document.querySelectorAll(".example-item").forEach((el) => {
     const reading = el.dataset.reading;
     if (reading) {
-      // Click on the example item itself plays audio
       el.addEventListener("click", (e) => {
-        if (
-          e.target.closest(".example-tts-btn") ||
-          e.target.closest(".tooltip-text") ||
-          e.target.closest(".word-tooltip")
-        )
-          return;
-        console.log("TTS: Playing example sentence:", reading);
+        if (e.target.closest(".example-tts-btn")) return;
         if (typeof speakText === "function") {
           speakText(reading);
         } else if (typeof window.speakText === "function") {
           window.speakText(reading);
         }
       });
-      // TTS button inside the example
       const ttsBtn = el.querySelector(".example-tts-btn");
       if (ttsBtn) {
         ttsBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           const btnReading = ttsBtn.dataset.reading || reading;
-          console.log("TTS: Playing from button:", btnReading);
           if (typeof speakText === "function") {
             speakText(btnReading);
           } else if (typeof window.speakText === "function") {
@@ -774,15 +720,6 @@ function renderAdverbsList() {
       }
     });
   });
-
-  // ===== ATTACH TOOLTIPS =====
-  if (typeof attachQuizTooltipsGlobal === "function") {
-    setTimeout(attachQuizTooltipsGlobal, 50);
-  } else if (typeof attachQuizTooltips === "function") {
-    setTimeout(attachQuizTooltips, 50);
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(() => attachTooltipLongPress(container), 50);
-  }
 }
 
 function renderMasteredList() {
@@ -849,7 +786,6 @@ function generateQuiz() {
     return;
   }
 
-  // Shuffle
   for (let i = availableAdverbs.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [availableAdverbs[i], availableAdverbs[j]] = [
@@ -864,7 +800,6 @@ function generateQuiz() {
     const example = adv.examples[0];
     if (!example) continue;
 
-    // Create sentence with blank - replace the adverb with _______
     let sentenceWithBlank = example.sentence;
     const advInSentence = adv.dictionary;
 
@@ -875,7 +810,6 @@ function generateQuiz() {
       sentenceWithBlank = sentenceWithBlank.replace(cleanAdv, "______");
     }
 
-    // Generate options (always 4 options) - USE DISPLAY for furigana
     const options = [adv.display];
     const otherAdverbs = availableAdverbs.filter((a) => a.id !== adv.id);
 
@@ -904,7 +838,6 @@ function generateQuiz() {
       }
     }
 
-    // Shuffle options
     for (let i = options.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [options[i], options[j]] = [options[j], options[i]];
@@ -927,7 +860,6 @@ function generateQuiz() {
     });
   }
 
-  // Shuffle final questions
   for (let i = allQuestions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
@@ -987,7 +919,6 @@ function renderQuizQuestion() {
 
   const quizTitle = "📝 Adverb Quiz - choose the correct adverb";
 
-  // ===== Use the helper that respects furigana toggle =====
   let sentenceDisplay = displaySentenceWithFurigana(q.sentence);
 
   let html = `
@@ -1025,7 +956,6 @@ function renderQuizQuestion() {
     }
     html += `</div>`;
   } else {
-    // HARD MODE - Grid of buttons - shuffled order
     const shuffledOptions = [...q.options];
     for (let i = shuffledOptions.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -1066,49 +996,31 @@ function renderQuizQuestion() {
 
   quizArea.innerHTML = html;
 
-  // ===== TTS SUPPORT: Add click listener to the listen button =====
   const ttsBtn = quizArea.querySelector(".quiz-tts-btn");
   if (ttsBtn) {
-    console.log("TTS: Found listen button");
     const btnReading = ttsBtn.dataset.reading || reading;
     ttsBtn.addEventListener("click", function (e) {
       e.stopPropagation();
-      console.log("TTS: Button clicked, reading:", btnReading);
       if (btnReading) {
         if (typeof speakText === "function") {
           speakText(btnReading);
         } else if (typeof window.speakText === "function") {
           window.speakText(btnReading);
         } else if (window.speechSynthesis) {
-          console.log("TTS: Using fallback speechSynthesis");
           const utterance = new SpeechSynthesisUtterance(btnReading);
           utterance.lang = "ja-JP";
           utterance.rate = 0.85;
           window.speechSynthesis.speak(utterance);
-        } else {
-          console.warn("TTS: No speech synthesis available");
         }
       }
     });
-  } else {
-    console.log("TTS: Listen button not found or no reading available");
   }
 
-  // ===== TTS SUPPORT: Click on sentence to play audio =====
   const sentenceEl = quizArea.querySelector(".quiz-sentence");
   if (sentenceEl && reading) {
     sentenceEl.style.cursor = "pointer";
     sentenceEl.title = "Click to listen";
     sentenceEl.addEventListener("click", function (e) {
-      if (
-        e.target.closest(".tooltip-text") ||
-        e.target.closest(".particle-highlight") ||
-        e.target.closest(".word-tooltip")
-      ) {
-        console.log("TTS: Click on tooltip ignored");
-        return;
-      }
-      console.log("TTS: Playing from sentence click:", reading);
       if (typeof speakText === "function") {
         speakText(reading);
       } else if (typeof window.speakText === "function") {
@@ -1120,15 +1032,6 @@ function renderQuizQuestion() {
         window.speechSynthesis.speak(utterance);
       }
     });
-  }
-
-  // ===== ATTACH TOOLTIPS =====
-  if (typeof attachQuizTooltipsGlobal === "function") {
-    setTimeout(attachQuizTooltipsGlobal, 50);
-  } else if (typeof attachQuizTooltips === "function") {
-    setTimeout(attachQuizTooltips, 50);
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(() => attachTooltipLongPress(quizArea), 50);
   }
 
   if (quizMode === "easy") {
@@ -1228,7 +1131,6 @@ function checkAnswer() {
 
     updateQuizStatsDisplay();
 
-    // ===== Use the helper that respects furigana toggle =====
     let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
 
     const reading = q.reading || "";
@@ -1280,7 +1182,6 @@ function checkAnswer() {
         });
       }
     } else {
-      // ===== Use the helper that respects furigana toggle =====
       let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
 
       const reading = q.reading || "";
@@ -1313,7 +1214,6 @@ function checkAnswer() {
 function showAnswer() {
   const q = currentQuiz[currentQuizIndex];
 
-  // ===== Use the helper that respects furigana toggle =====
   let sentenceDisplay = displaySentenceWithFurigana(q.originalSentence);
 
   const reading = q.reading || "";

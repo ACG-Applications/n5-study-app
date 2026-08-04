@@ -140,19 +140,6 @@ function showStrokeOrder(kanji, unicode, meaning) {
                         text-align: center;
                         vertical-align: middle;
                     ">▶️ Replay</button>
-                    <button id="strokePrintBtn" class="small-btn" style="
-                        background: #6c8b6b;
-                        color: white;
-                        border: none;
-                        padding: 8px 20px;
-                        border-radius: 40px;
-                        cursor: pointer;
-                        font-size: 0.9rem;
-                        font-family: inherit;
-                        line-height: 1.5;
-                        text-align: center;
-                        vertical-align: middle;
-                    ">🖨️ Print</button>
                     <button id="strokeCloseBtn" class="small-btn" style="
                         background: #e8e0d5;
                         border: none;
@@ -179,7 +166,7 @@ function showStrokeOrder(kanji, unicode, meaning) {
             .stroke-modal-content {
                 animation: strokeFadeIn 0.2s ease;
             }
-            #strokeReplayBtn, #strokePrintBtn, #strokeCloseBtn {
+            #strokeReplayBtn, #strokeCloseBtn {
                 display: inline-flex !important;
                 align-items: center !important;
                 justify-content: center !important;
@@ -198,9 +185,6 @@ function showStrokeOrder(kanji, unicode, meaning) {
       if (e.target === modal) {
         modal.style.display = "none";
       }
-    });
-    modal.querySelector("#strokePrintBtn").addEventListener("click", () => {
-      printStrokeDiagram(kanji, unicode, meaning);
     });
     modal.querySelector("#strokeReplayBtn").addEventListener("click", () => {
       replayAnimation();
@@ -258,8 +242,7 @@ function showStrokeOrder(kanji, unicode, meaning) {
                 <div style="text-align:center;padding:30px 20px;">
                     <div style="font-size:6rem;color:#2c3e2f;margin-bottom:10px;line-height:1.2;">${kanji.charAt(0)}</div>
                     <div style="font-size:0.8rem;color:#999;padding:12px;background:#f5f0eb;border-radius:8px;margin-top:8px;">
-                        💡 SVG stroke diagram not available.<br>
-                        Use the <strong>🖨️ Print</strong> button for a text reference.
+                        💡 SVG stroke diagram not available.
                     </div>
                 </div>
             `;
@@ -324,135 +307,6 @@ function replayAnimation() {
       replayBtn.style.opacity = "1";
     }, 1500);
   }
-}
-
-// Print stroke diagram - uses static SVG for better print quality
-function printStrokeDiagram(kanji, unicode, meaning) {
-  console.log("🖨️ printStrokeDiagram called:", { kanji, unicode, meaning });
-
-  if (
-    !unicode ||
-    unicode === "undefined" ||
-    unicode === "" ||
-    unicode === "NaN"
-  ) {
-    unicode = getUnicodeHex(kanji);
-  }
-
-  const cleanKanji = kanji.charAt(0);
-
-  // Ensure unicode is uppercase and clean
-  const cleanUnicode = String(unicode).trim().toUpperCase();
-
-  // Pad to 5 digits for static file naming (e.g., "04E00.svg")
-  const paddedHex = cleanUnicode.padStart(5, "0");
-
-  // Build the static SVG path
-  const staticSvgPath = `images/kanji-strokes/${paddedHex}.svg`;
-
-  console.log("🖨️ Print using static SVG:", staticSvgPath);
-
-  const printWindow = window.open("", "_blank");
-  if (!printWindow) {
-    alert("Please allow popups for this site.");
-    return;
-  }
-
-  const svgHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Stroke Order - ${cleanKanji}</title>
-    <style>
-        @page {
-            size: A4 portrait;
-            margin: 20mm;
-        }
-        body {
-            font-family: 'Segoe UI', 'Noto Sans', sans-serif;
-            text-align: center;
-            padding: 20px;
-            background: white;
-            color: #1a1a1a;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .kanji-char {
-            font-size: 6rem;
-            color: #2c3e2f;
-            margin-bottom: 10px;
-        }
-        .title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #1e4b6e;
-            margin-bottom: 4px;
-        }
-        .meaning {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .svg-container {
-            background: #faf8f5;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 400px;
-            border: 1px solid #e8e0d5;
-        }
-        .svg-container img {
-            max-width: 100%;
-            height: auto;
-        }
-        .svg-fallback {
-            font-size: 0.9rem;
-            color: #999;
-            padding: 20px;
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 0.7rem;
-            color: #999;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-        @media print {
-            body { padding: 0; }
-            .no-print { display: none; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="kanji-char">${cleanKanji}</div>
-        <div class="title">Stroke Order Diagram</div>
-        <div class="meaning">${meaning || ""}</div>
-        
-        <div class="svg-container">
-            <img src="${staticSvgPath}" 
-                 alt="Stroke order for ${cleanKanji}"
-                 onerror="this.parentElement.innerHTML='<div class=\\'svg-fallback\\'>⚠️ SVG not available.<br><br><span style=\\'font-size:2rem;\\'>${cleanKanji}</span></div>'">
-        </div>
-        
-        <div class="footer">
-            N5 Japanese Study App · ${new Date().toLocaleDateString()}
-        </div>
-    </div>
-    <script>
-        setTimeout(() => {
-            window.print();
-        }, 1000);
-    <\/script>
-</body>
-</html>
-    `;
-
-  printWindow.document.write(svgHtml);
-  printWindow.document.close();
 }
 
 // Add stroke order buttons to kanji cards

@@ -194,16 +194,22 @@ function initVocabDeck() {
   vocabDeck = available;
   vocabCurrentIndex = 0;
   vocabIsFlipped = false;
-  vocabFuriganaHidden = false; // Default: furigana visible
+  // DO NOT reset vocabFuriganaHidden here - preserve user preference
   updateVocabUI();
   updateVocabSprintInfo();
   showVocabCard();
   
-  // Update furigana toggle button
+  // Update furigana toggle button based on current state
   if (vocabFuriToggleBtn) {
-    vocabFuriToggleBtn.textContent = "🔤 Furigana Off";
-    vocabFuriToggleBtn.style.backgroundColor = "#6c8b6b";
-    vocabFuriToggleBtn.style.color = "white";
+    if (vocabFuriganaHidden) {
+      vocabFuriToggleBtn.textContent = "🔤 Furigana On";
+      vocabFuriToggleBtn.style.backgroundColor = "#555";
+      vocabFuriToggleBtn.style.color = "white";
+    } else {
+      vocabFuriToggleBtn.textContent = "🔤 Furigana Off";
+      vocabFuriToggleBtn.style.backgroundColor = "#6c8b6b";
+      vocabFuriToggleBtn.style.color = "white";
+    }
   }
 }
 
@@ -248,11 +254,23 @@ function showVocabCard() {
   const wordWithFurigana = buildVocabFuriganaHTML(card.word, card.reading);
   vocabWord.innerHTML = wordWithFurigana;
   
-  // Toggle furigana visibility via CSS class
+  // Toggle furigana visibility via CSS class - USE THE CURRENT STATE
   if (vocabFuriganaHidden) {
     vocabWord.classList.add('hide-furigana');
+    // Update button text to reflect current state
+    if (vocabFuriToggleBtn) {
+      vocabFuriToggleBtn.textContent = "🔤 Furigana On";
+      vocabFuriToggleBtn.style.backgroundColor = "#555";
+      vocabFuriToggleBtn.style.color = "white";
+    }
   } else {
     vocabWord.classList.remove('hide-furigana');
+    // Update button text to reflect current state
+    if (vocabFuriToggleBtn) {
+      vocabFuriToggleBtn.textContent = "🔤 Furigana Off";
+      vocabFuriToggleBtn.style.backgroundColor = "#6c8b6b";
+      vocabFuriToggleBtn.style.color = "white";
+    }
   }
   
   // ALWAYS hide the reading text below - it's never needed
@@ -479,7 +497,6 @@ function toggleVocabFurigana() {
       vocabWord.innerHTML = wordWithFurigana;
       
       if (vocabFuriganaHidden) {
-        // Furigana is hidden - just show plain text (no furigana, no parentheses)
         vocabWord.classList.add('hide-furigana');
         vocabReading.textContent = "";
         vocabReading.style.display = "none";
@@ -487,7 +504,6 @@ function toggleVocabFurigana() {
         vocabFuriToggleBtn.style.backgroundColor = "#555";
         vocabFuriToggleBtn.style.color = "white";
       } else {
-        // Furigana is visible - show furigana above kanji
         vocabWord.classList.remove('hide-furigana');
         vocabReading.textContent = "";
         vocabReading.style.display = "none";

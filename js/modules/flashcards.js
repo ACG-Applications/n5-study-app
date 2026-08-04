@@ -295,6 +295,12 @@ function showFlash(pos) {
   const revealBtn = document.getElementById("revealTransBtn");
   if (revealBtn) revealBtn.innerText = "🔎 Reveal";
 
+  // Update furigana toggle button to reflect current state
+  const furiBtn = document.getElementById("flashFuriToggleBtn");
+  if (furiBtn) {
+    furiBtn.innerText = flashFuriganaHidden ? "🔤 Furigana On" : "🔤 Furigana Off";
+  }
+
   // Add kanji chips
   addKanjiChips();
 }

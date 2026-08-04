@@ -67,13 +67,13 @@ function addFuriganaToText(text) {
       /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
       (_, kanji, furigana) => {
         return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-      }
+      },
     )
     .replace(
       /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
       (_, kanji, furigana) => {
         return `<ruby>${kanji}<rt>${furigana}</rt></ruby>`;
-      }
+      },
     );
 }
 
@@ -93,31 +93,30 @@ function renderLearnTab() {
             
             <!-- SECTION 1: How to Study Kanji -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. 漢字（かんじ）の 学（まな）び方（かた） / How to Study Kanji</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">1. How to Study Kanji</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    漢字（かんじ）を 効率（こうりつ）よく 学（まな）ぶには <strong>3つ</strong> の 方法（ほうほう）を 組（く）み合（あ）わせます：
+                    To study kanji efficiently, combine <strong>3</strong> methods:
                 </p>
                 <ul style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 12px; padding-left: 20px;">
-                    <li><strong>1. 部首（ぶしゅ）と 連想（れんそう）</strong> / Radicals &amp; Mnemonics</li>
-                    <li><strong>2. 文脈（ぶんみゃく）で 学（まな）ぶ</strong> / Learn in Context (Vocabulary)</li>
-                    <li><strong>3. 間隔（かんかく）を 置（お）いた 復習（ふくしゅう）</strong> / Spaced Repetition</li>
+                    <li><strong>1. Radicals &amp; Mnemonics</strong> - Break kanji into parts and create visual stories</li>
+                    <li><strong>2. Learn in Context</strong> - Study through vocabulary words, not isolated readings</li>
+                    <li><strong>3. Spaced Repetition</strong> - Review at increasing intervals</li>
                 </ul>
                 <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
                     <em>The most effective method: <strong>Structure + Context + Spaced Repetition</strong></em>
                 </p>
                 <div style="background: #fff3e0; border-radius: 12px; padding: 12px 16px; border-left: 4px solid #ff9800;">
                     <div style="font-size: 0.9rem; color: #856404; font-weight: 400;">
-                        💡 <strong>重要（じゅうよう）な ポイント / Key Point:</strong> 読（よ）み方（かた）を 単独（たんどく）で 覚（おぼ）えるのは 効率（こうりつ）が よくありません。<br>
-                        <em>Don't memorize readings in isolation. Learn kanji through <strong>vocabulary words</strong>.</em>
+                        💡 <strong>Key Point:</strong> Don't memorize readings in isolation. Learn kanji through <strong>vocabulary words</strong>.
                     </div>
                 </div>
             </div>
             
             <!-- SECTION 2: Radicals & Mnemonics -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. 部首（ぶしゅ）と 連想（れんそう） / Radicals &amp; Mnemonics</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">2. Radicals &amp; Mnemonics</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    漢字（かんじ）を <strong>部品（ぶひん）</strong> に 分（わ）けて、意味（いみ）を 連想（れんそう）します。
+                    Break kanji into <strong>component parts</strong> and create visual stories to remember them.
                 </p>
                 <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
                     <em>Break kanji into component parts and create <strong>visual stories</strong> to remember them.</em>
@@ -127,53 +126,53 @@ function renderLearnTab() {
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">部首（ぶしゅ）<br><span style="font-weight: 400; font-size: 0.8rem;">Radical</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Radical</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">亻 (ひと)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">亻</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Person</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">休（きゅう） - person leaning on tree</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">休 - person leaning on tree</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">木 (き)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">木</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Tree</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">休, 林, 森</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">日 (ひ)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">日</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Sun / Day</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">時（じ）, 明（めい）, 曜（よう）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">時, 明, 曜</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">月 (つき)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">月</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Moon / Month</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">月（つき）, 期（き）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">月, 期</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">口 (くち)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">口</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Mouth</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">食（しょく）, 話（わ）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">食, 話</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">氵 (さんずい)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">氵</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Water</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">海（かい）, 洗（せん）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">海, 洗</td>
                             </tr>
                             <tr>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">心 (こころ)</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">心</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Heart</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">思（し）, 意（い）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" style="cursor: pointer;">思, 意</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 
                 <div class="example-box" style="background: #f5f5f0; border-radius: 12px; padding: 16px; margin-bottom: 8px; cursor: pointer;" onclick="if(typeof speakText==='function'){speakText('きゅう')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('きゅう');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}">
-                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">💡 <strong>例（れい） / Example:</strong> 休（きゅう）</div>
+                    <div style="font-size: 1.1rem; color: #000000; font-weight: 500;">💡 <strong>Example:</strong> 休</div>
                     <div style="color: #444444; font-weight: 400; font-size: 0.95rem;">
                         亻 (person) + 木 (tree) = person leaning against a tree → <strong>rest</strong>
                     </div>
@@ -183,9 +182,9 @@ function renderLearnTab() {
             
             <!-- SECTION 3: Learn in Context -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. 文脈（ぶんみゃく）で 学（まな）ぶ / Learn in Context (Vocabulary)</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">3. Learn in Context (Vocabulary)</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    読（よ）み方（かた）を 単独（たんどく）で 覚（おぼ）えるのでは なく、<strong>実際（じっさい）の 単語（たんご）</strong> で 学（まな）びます。
+                    Instead of memorizing readings alone, learn kanji through <strong>actual vocabulary words</strong>.
                 </p>
                 <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
                     <em>Instead of memorizing readings alone, learn kanji through <strong>actual vocabulary words</strong>.</em>
@@ -195,34 +194,34 @@ function renderLearnTab() {
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">漢字（かんじ）<br><span style="font-weight: 400; font-size: 0.8rem;">Kanji</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">単語（たんご）<br><span style="font-weight: 400; font-size: 0.8rem;">Vocabulary</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">読（よ）み方（かた）<br><span style="font-weight: 400; font-size: 0.8rem;">Reading</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">意味（いみ）<br><span style="font-weight: 400; font-size: 0.8rem;">Meaning</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Kanji</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Vocabulary</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Reading</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Meaning</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">日 (にち)</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">日本（にほん）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">日</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">日本</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" onclick="if(typeof speakText==='function'){speakText('にほん')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('にほん');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}" style="cursor: pointer;">にほん 🔊</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Japan</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">本 (ほん)</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">日本（にほん）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">本</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">日本</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" onclick="if(typeof speakText==='function'){speakText('にほん')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('にほん');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}" style="cursor: pointer;">にほん 🔊</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Japan</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">食 (しょく)</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食（た）べる</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">食</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">食べる</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" onclick="if(typeof speakText==='function'){speakText('たべる')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('たべる');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}" style="cursor: pointer;">たべる 🔊</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">to eat</td>
                             </tr>
                             <tr>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">行 (こう)</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">行（い）く</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 500;">行</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">行く</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;" class="example-click" onclick="if(typeof speakText==='function'){speakText('いく')}else if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('いく');u.lang='ja-JP';u.rate=0.85;window.speechSynthesis.speak(u)}" style="cursor: pointer;">いく 🔊</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">to go</td>
                             </tr>
@@ -231,16 +230,16 @@ function renderLearnTab() {
                 </div>
                 <div style="background: #e8f0e7; border-radius: 12px; padding: 12px 16px; border-left: 4px solid #6c8b6b;">
                     <div style="font-size: 0.9rem; color: #000000; font-weight: 400;">
-                        💡 <strong>ヒント / Tip:</strong> 「日本」を 覚（おぼ）えれば、「日」と「本」の 読（よ）み方（かた）が <strong>自然（しぜん）に</strong> 身（み）につきます。
+                        💡 <strong>Tip:</strong> By learning the word "日本", you naturally learn the readings of both "日" and "本".
                     </div>
                 </div>
             </div>
             
             <!-- SECTION 4: Basic Stroke Order -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. 筆順（ひつじゅん）の 基本（きほん） / Basic Stroke Order</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">4. Basic Stroke Order</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    筆順（ひつじゅん）の 基本（きほん）ルールを 覚（おぼ）えると、書（か）くのが 楽（らく）になり、自然（しぜん）な 字（じ）に 見（み）えます。
+                    Learning basic stroke order rules makes writing easier and your kanji look more natural.
                 </p>
                 <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
                     <em>Learning basic stroke order rules makes writing easier and your kanji look more natural.</em>
@@ -250,30 +249,30 @@ function renderLearnTab() {
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">ルール<br><span style="font-weight: 400; font-size: 0.8rem;">Rule</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">説明（せつめい）<br><span style="font-weight: 400; font-size: 0.8rem;">Explanation</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">例（れい）<br><span style="font-weight: 400; font-size: 0.8rem;">Example</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Rule</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Explanation</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Example</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">1</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">左（ひだり）から 右（みぎ）へ<br><span style="font-size: 0.8rem;">Left to right</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Left to right</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">一, 二, 三</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">2</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">上（うえ）から 下（した）へ<br><span style="font-size: 0.8rem;">Top to bottom</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Top to bottom</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">二, 三, 十</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">3</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">外（そと）から 内（うち）へ<br><span style="font-size: 0.8rem;">Outside to inside</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Outside to inside</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">口, 国, 図</td>
                             </tr>
                             <tr>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">4</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">水平（すいへい）の 前（まえ）に 垂直（すいちょく）<br><span style="font-size: 0.8rem;">Horizontal before vertical</span></td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Horizontal before vertical</td>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 400;">十, 王, 土</td>
                             </tr>
                         </tbody>
@@ -283,9 +282,9 @@ function renderLearnTab() {
             
             <!-- SECTION 5: Effective Review -->
             <div class="learn-section" style="margin-bottom: 28px;">
-                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. 効果的（こうかてき）な 復習（ふくしゅう） / Effective Review</h3>
+                <h3 style="color: #000000; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px;">5. Effective Review</h3>
                 <p style="color: #000000; font-weight: 400; font-size: 1rem; margin-bottom: 8px;">
-                    <strong>間隔（かんかく）を 置（お）いた 復習（ふくしゅう）</strong> は 記憶（きおく）を 定着（ていちゃく）させる 最善（さいぜん）の 方法（ほうほう）です。
+                    <strong>Spaced Repetition</strong> is the best way to solidify kanji in your long-term memory.
                 </p>
                 <p style="color: #555555; font-weight: 400; font-size: 0.95rem; margin-bottom: 12px;">
                     <em><strong>Spaced Repetition</strong> is the best way to solidify kanji in your long-term memory.</em>
@@ -295,37 +294,37 @@ function renderLearnTab() {
                     <table style="width: 100%; border-collapse: collapse; background: #faf8f5; border-radius: 12px; overflow: hidden;">
                         <thead>
                             <tr style="background: #e8e0d5;">
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">ツール<br><span style="font-weight: 400; font-size: 0.8rem;">Tool</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">特徴（とくちょう）<br><span style="font-weight: 400; font-size: 0.8rem;">Features</span></th>
-                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">おすすめ<br><span style="font-weight: 400; font-size: 0.8rem;">Recommendation</span></th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Tool</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Features</th>
+                                <th style="padding: 10px 16px; text-align: left; color: #000000; font-weight: 600; border-bottom: 2px solid #d4cbbc;">Recommendation</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">Anki</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">フラッシュカード + SRS<br><span style="font-size: 0.8rem;">Flashcards + SRS</span></td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">⭐⭐⭐⭐⭐ 最も（もっとも）人気（にんき）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Flashcards + SRS</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">⭐⭐⭐⭐⭐ Most popular</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #e8e0d5;">
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">WaniKani</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">ゲーム形式（けいしき）で 学習（がくしゅう）<br><span style="font-size: 0.8rem;">Gamified learning</span></td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">⭐⭐⭐⭐⭐ 初心者（しょしんしゃ）に 最適（さいてき）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Gamified learning</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">⭐⭐⭐⭐⭐ Best for beginners</td>
                             </tr>
                             <tr>
                                 <td style="padding: 8px 16px; color: #000000; font-weight: 500;">Renshuu</td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">無料（むりょう）で 多機能（たきのう）<br><span style="font-size: 0.8rem;">Free &amp; multifunctional</span></td>
-                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">⭐⭐⭐⭐ カスタマイズ 可能（かのう）</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">Free &amp; multifunctional</td>
+                                <td style="padding: 8px 16px; color: #000000; font-weight: 400;">⭐⭐⭐⭐ Customizable</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div style="background: #e8f0fe; border-radius: 12px; padding: 12px 16px; border-left: 4px solid #1e4b6e;">
                     <div style="font-size: 0.9rem; color: #1e4b6e; font-weight: 400;">
-                        💡 <strong>おすすめの 勉強法（べんきょうほう） / Recommended Study Method:</strong><br>
-                        1. 5-10個（こ）の 新（あたら）しい 漢字（かんじ）を 学（まな）ぶ<br>
-                        2. その 日（ひ）の 終（お）わりに 復習（ふくしゅう）する<br>
-                        3. 翌日（よくじつ）に もう 一度（いちど） 復習（ふくしゅう）する<br>
-                        4. 1週間（しゅうかん）後（ご）に 再（ふたた）び 復習（ふくしゅう）する
+                        💡 <strong>Recommended Study Method:</strong><br>
+                        1. Learn 5-10 new kanji<br>
+                        2. Review at the end of the day<br>
+                        3. Review again the next day<br>
+                        4. Review once more after 1 week
                     </div>
                 </div>
             </div>
@@ -342,12 +341,6 @@ function renderLearnTab() {
         const text = el.textContent.trim().replace(/[🔊]/g, "").trim();
         if (text) {
           el.addEventListener("click", function (e) {
-            if (
-              e.target.closest(".tooltip-text") ||
-              e.target.closest(".particle-highlight") ||
-              e.target.closest(".word-tooltip")
-            )
-              return;
             const cleanText = text.replace(/[→].*$/, "").trim();
             if (cleanText && typeof speakText === "function") {
               speakText(cleanText);
@@ -469,23 +462,6 @@ function renderMasteredList() {
 // Helper function to display a sentence with proper furigana handling
 function displaySentenceWithFurigana(sentence) {
   if (!sentence) return "";
-
-  if (
-    typeof getWordMeaningsForSentence === "function" &&
-    typeof createQuizWordTooltips === "function"
-  ) {
-    const wordMeanings = getWordMeaningsForSentence({ jp: sentence });
-    if (wordMeanings && wordMeanings.length > 0) {
-      if (furiganaHidden) {
-        const cleanSentence = sentence.replace(/[（(][^）)]*[）)]/g, "").trim();
-        const cleanWordMeanings = getWordMeaningsForSentence({
-          jp: cleanSentence,
-        });
-        return createQuizWordTooltips(cleanSentence, cleanWordMeanings);
-      }
-      return createQuizWordTooltips(sentence, wordMeanings);
-    }
-  }
   return addFuriganaToText(sentence);
 }
 
@@ -591,14 +567,6 @@ function renderKanjiList() {
 
   container.innerHTML = html;
   console.log("Kanji list rendered, count:", filteredKanji.length);
-
-  if (typeof attachQuizTooltipsGlobal === "function") {
-    setTimeout(attachQuizTooltipsGlobal, 50);
-  } else if (typeof attachQuizTooltips === "function") {
-    setTimeout(attachQuizTooltips, 50);
-  } else if (typeof attachTooltipLongPress === "function") {
-    setTimeout(() => attachTooltipLongPress(container), 50);
-  }
 }
 
 // ==================== RESET FUNCTIONS ====================
@@ -669,242 +637,256 @@ function resetMasteredOnly() {
 
 // ==================== QUIZ STATE ====================
 const kanjiQuizState = {
-    isActive: false,
-    questions: [],
-    currentIndex: 0,
-    correctCount: 0,
-    incorrectCount: 0,
-    totalCount: 0,
-    score: 0,
-    usedShowAnswer: false,
-    attempts: 0
+  isActive: false,
+  questions: [],
+  currentIndex: 0,
+  correctCount: 0,
+  incorrectCount: 0,
+  totalCount: 0,
+  score: 0,
+  usedShowAnswer: false,
+  attempts: 0,
 };
 
 // ==================== QUIZ FUNCTIONS ====================
 
 function attachStartQuizListener() {
-    const startBtn = document.getElementById('startQuizBtn');
-    if (startBtn) {
-        startBtn.removeEventListener('click', generateKanjiQuiz);
-        startBtn.addEventListener('click', generateKanjiQuiz);
-        console.log('Start quiz listener attached');
-    } else {
-        console.log('Start quiz button not found');
-    }
+  const startBtn = document.getElementById("startQuizBtn");
+  if (startBtn) {
+    startBtn.removeEventListener("click", generateKanjiQuiz);
+    startBtn.addEventListener("click", generateKanjiQuiz);
+    console.log("Start quiz listener attached");
+  } else {
+    console.log("Start quiz button not found");
+  }
 }
 
 function getSelectedQuizMode() {
-    const modeRadios = document.querySelectorAll('input[name="quizMode"]');
-    for (const radio of modeRadios) {
-        if (radio.checked) {
-            return radio.value;
-        }
+  const modeRadios = document.querySelectorAll('input[name="quizMode"]');
+  for (const radio of modeRadios) {
+    if (radio.checked) {
+      return radio.value;
     }
-    return 'kanji_to_reading';
+  }
+  return "kanji_to_reading";
 }
 
 function getReadingModes(kanji) {
-    const readings = [];
-    
-    const onyomiList = kanji.onyomi 
-        ? kanji.onyomi.split(/[、,，\s]+/).filter(r => r && r !== '-') 
-        : [];
-    const kunyomiList = kanji.kunyomi 
-        ? kanji.kunyomi.split(/[、,，\s]+/).filter(r => r && r !== '-') 
-        : [];
-    
-    for (const r of onyomiList) {
-        readings.push({ reading: r, type: 'on' });
-    }
-    for (const r of kunyomiList) {
-        readings.push({ reading: r, type: 'kun' });
-    }
-    
-    return readings;
+  const readings = [];
+
+  const onyomiList = kanji.onyomi
+    ? kanji.onyomi.split(/[、,，\s]+/).filter((r) => r && r !== "-")
+    : [];
+  const kunyomiList = kanji.kunyomi
+    ? kanji.kunyomi.split(/[、,，\s]+/).filter((r) => r && r !== "-")
+    : [];
+
+  for (const r of onyomiList) {
+    readings.push({ reading: r, type: "on" });
+  }
+  for (const r of kunyomiList) {
+    readings.push({ reading: r, type: "kun" });
+  }
+
+  return readings;
 }
 
 function generateKanjiQuiz() {
-    console.log('generateKanjiQuiz called!');
-    
-    const quizArea = document.getElementById('quizArea');
-    const resultsDiv = document.getElementById('quizResults');
-    if (!quizArea) {
-        console.log('Quiz area not found');
-        return;
-    }
-    if (resultsDiv) resultsDiv.style.display = 'none';
-    
-    const selectedMode = getSelectedQuizMode();
-    console.log('Selected mode:', selectedMode);
-    
-    const questionCount = parseInt(document.getElementById('quizCountSelect')?.value) || 10;
-    console.log('Question count:', questionCount);
-    
-    const availableKanji = kanjiData.filter(k => k.examples && k.examples.length > 0);
-    console.log('Available kanji with examples:', availableKanji.length);
-    
-    if (availableKanji.length < questionCount) {
-        quizArea.innerHTML = `
+  console.log("generateKanjiQuiz called!");
+
+  const quizArea = document.getElementById("quizArea");
+  const resultsDiv = document.getElementById("quizResults");
+  if (!quizArea) {
+    console.log("Quiz area not found");
+    return;
+  }
+  if (resultsDiv) resultsDiv.style.display = "none";
+
+  const selectedMode = getSelectedQuizMode();
+  console.log("Selected mode:", selectedMode);
+
+  const questionCount =
+    parseInt(document.getElementById("quizCountSelect")?.value) || 10;
+  console.log("Question count:", questionCount);
+
+  const availableKanji = kanjiData.filter(
+    (k) => k.examples && k.examples.length > 0,
+  );
+  console.log("Available kanji with examples:", availableKanji.length);
+
+  if (availableKanji.length < questionCount) {
+    quizArea.innerHTML = `
             <p class="quiz-welcome" style="text-align: center; color: #c45d1e; padding: 40px;">
                 ⚠️ Not enough kanji with examples. Available: ${availableKanji.length}, Requested: ${questionCount}
                 <br><br>
                 Please reduce the number of questions.
             </p>
         `;
-        return;
+    return;
+  }
+
+  for (let i = availableKanji.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [availableKanji[i], availableKanji[j]] = [
+      availableKanji[j],
+      availableKanji[i],
+    ];
+  }
+
+  const selectedKanji = availableKanji.slice(0, questionCount);
+  console.log("Selected kanji count:", selectedKanji.length);
+
+  kanjiQuizState.isActive = true;
+  kanjiQuizState.questions = [];
+  kanjiQuizState.currentIndex = 0;
+  kanjiQuizState.correctCount = 0;
+  kanjiQuizState.incorrectCount = 0;
+  kanjiQuizState.totalCount = questionCount;
+  kanjiQuizState.score = 0;
+  kanjiQuizState.usedShowAnswer = false;
+
+  for (const kanji of selectedKanji) {
+    let questionText = "";
+    let correctAnswer = "";
+    let answerType = "";
+    let originalSentence = "";
+
+    if (selectedMode === "kanji_to_reading") {
+      const readings = getReadingModes(kanji);
+      if (readings.length > 0) {
+        const reading = readings[Math.floor(Math.random() * readings.length)];
+        const readingType = reading.type === "on" ? "On'yomi" : "Kun'yomi";
+        questionText = `What is the ${readingType} reading of: <strong>${kanji.kanji}</strong> (${kanji.meaning})?`;
+        correctAnswer = reading.reading;
+        answerType = "reading";
+      }
+    } else if (selectedMode === "reading_to_kanji") {
+      const readings = getReadingModes(kanji);
+      if (readings.length > 0) {
+        const reading = readings[Math.floor(Math.random() * readings.length)];
+        const readingType = reading.type === "on" ? "On'yomi" : "Kun'yomi";
+        questionText = `Which kanji has the ${readingType} reading: <strong>${reading.reading}</strong>?`;
+        correctAnswer = kanji.kanji;
+        answerType = "kanji";
+      }
+    } else if (selectedMode === "in_context") {
+      if (kanji.examples && kanji.examples.length > 0) {
+        const example =
+          kanji.examples[Math.floor(Math.random() * kanji.examples.length)];
+        originalSentence = example.sentence;
+        const regex = new RegExp(kanji.kanji, "g");
+        const sentenceWithBlank = example.sentence.replace(regex, "_____");
+        questionText = `Fill in the blank: ${sentenceWithBlank}`;
+        correctAnswer = kanji.kanji;
+        answerType = "kanji";
+      }
     }
-    
-    for (let i = availableKanji.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [availableKanji[i], availableKanji[j]] = [availableKanji[j], availableKanji[i]];
+
+    if (questionText && correctAnswer) {
+      kanjiQuizState.questions.push({
+        question: questionText,
+        correctAnswer: correctAnswer,
+        kanjiId: kanji.id,
+        kanji: kanji.kanji,
+        meaning: kanji.meaning,
+        answerType: answerType,
+        attempts: 0,
+        answered: false,
+        originalSentence: originalSentence,
+      });
     }
-    
-    const selectedKanji = availableKanji.slice(0, questionCount);
-    console.log('Selected kanji count:', selectedKanji.length);
-    
-    kanjiQuizState.isActive = true;
-    kanjiQuizState.questions = [];
-    kanjiQuizState.currentIndex = 0;
-    kanjiQuizState.correctCount = 0;
-    kanjiQuizState.incorrectCount = 0;
-    kanjiQuizState.totalCount = questionCount;
-    kanjiQuizState.score = 0;
-    kanjiQuizState.usedShowAnswer = false;
-    
-    for (const kanji of selectedKanji) {
-        let questionText = '';
-        let correctAnswer = '';
-        let answerType = '';
-        let originalSentence = '';
-        
-        if (selectedMode === 'kanji_to_reading') {
-            const readings = getReadingModes(kanji);
-            if (readings.length > 0) {
-                const reading = readings[Math.floor(Math.random() * readings.length)];
-                const readingType = reading.type === 'on' ? "On'yomi" : "Kun'yomi";
-                questionText = `What is the ${readingType} reading of: <strong>${kanji.kanji}</strong> (${kanji.meaning})?`;
-                correctAnswer = reading.reading;
-                answerType = 'reading';
-            }
-        } else if (selectedMode === 'reading_to_kanji') {
-            const readings = getReadingModes(kanji);
-            if (readings.length > 0) {
-                const reading = readings[Math.floor(Math.random() * readings.length)];
-                const readingType = reading.type === 'on' ? "On'yomi" : "Kun'yomi";
-                questionText = `Which kanji has the ${readingType} reading: <strong>${reading.reading}</strong>?`;
-                correctAnswer = kanji.kanji;
-                answerType = 'kanji';
-            }
-        } else if (selectedMode === 'in_context') {
-            if (kanji.examples && kanji.examples.length > 0) {
-                const example = kanji.examples[Math.floor(Math.random() * kanji.examples.length)];
-                originalSentence = example.sentence;
-                const regex = new RegExp(kanji.kanji, 'g');
-                const sentenceWithBlank = example.sentence.replace(regex, '_____');
-                questionText = `Fill in the blank: ${sentenceWithBlank}`;
-                correctAnswer = kanji.kanji;
-                answerType = 'kanji';
-            }
-        }
-        
-        if (questionText && correctAnswer) {
-            kanjiQuizState.questions.push({
-                question: questionText,
-                correctAnswer: correctAnswer,
-                kanjiId: kanji.id,
-                kanji: kanji.kanji,
-                meaning: kanji.meaning,
-                answerType: answerType,
-                attempts: 0,
-                answered: false,
-                originalSentence: originalSentence
-            });
-        }
-    }
-    
-    if (kanjiQuizState.questions.length === 0) {
-        quizArea.innerHTML = `
+  }
+
+  if (kanjiQuizState.questions.length === 0) {
+    quizArea.innerHTML = `
             <p class="quiz-welcome" style="text-align: center; color: #c45d1e; padding: 40px;">
                 ⚠️ Could not generate questions. Please try a different mode.
             </p>
         `;
-        kanjiQuizState.isActive = false;
-        return;
-    }
-    
-    kanjiQuizState.totalCount = kanjiQuizState.questions.length;
-    console.log('Generated', kanjiQuizState.questions.length, 'questions');
-    
-    renderKanjiQuizQuestion();
+    kanjiQuizState.isActive = false;
+    return;
+  }
+
+  kanjiQuizState.totalCount = kanjiQuizState.questions.length;
+  console.log("Generated", kanjiQuizState.questions.length, "questions");
+
+  renderKanjiQuizQuestion();
 }
 
 // Helper function to apply furigana to quiz text
 function displaySentenceWithFuriganaForQuiz(text) {
-    if (!text) return '';
-    
-    let processed = addFuriganaToText(text);
-    
-    if (furiganaHidden) {
-        processed = processed.replace(/[（(][^）)]*[）)]/g, '');
-    }
-    
-    return processed;
+  if (!text) return "";
+  let processed = addFuriganaToText(text);
+  if (furiganaHidden) {
+    processed = processed.replace(/[（(][^）)]*[）)]/g, "");
+  }
+  return processed;
 }
 
 function renderKanjiQuizQuestion() {
-    console.log('renderKanjiQuizQuestion called');
-    
-    if (!kanjiQuizState.isActive || kanjiQuizState.questions.length === 0) {
-        console.log('Quiz not active or no questions');
-        return;
-    }
-    
-    const quizArea = document.getElementById('quizArea');
-    if (!quizArea) {
-        console.log('Quiz area not found');
-        return;
-    }
-    
-    if (kanjiQuizState.currentIndex >= kanjiQuizState.questions.length) {
-        console.log('Quiz complete, showing results');
-        showKanjiQuizResults();
-        return;
-    }
-    
-    const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
-    console.log('Showing question', kanjiQuizState.currentIndex + 1, 'of', kanjiQuizState.questions.length);
-    
-    const progress = kanjiQuizState.currentIndex + 1;
-    const total = kanjiQuizState.questions.length;
-    const score = kanjiQuizState.score.toFixed(1);
-    
-    const options = generateOptions(question);
-    
-    for (let i = options.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [options[i], options[j]] = [options[j], options[i]];
-    }
-    
-    let optionsHtml = options.map((opt, index) => `
+  console.log("renderKanjiQuizQuestion called");
+
+  if (!kanjiQuizState.isActive || kanjiQuizState.questions.length === 0) {
+    console.log("Quiz not active or no questions");
+    return;
+  }
+
+  const quizArea = document.getElementById("quizArea");
+  if (!quizArea) {
+    console.log("Quiz area not found");
+    return;
+  }
+
+  if (kanjiQuizState.currentIndex >= kanjiQuizState.questions.length) {
+    console.log("Quiz complete, showing results");
+    showKanjiQuizResults();
+    return;
+  }
+
+  const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
+  console.log(
+    "Showing question",
+    kanjiQuizState.currentIndex + 1,
+    "of",
+    kanjiQuizState.questions.length,
+  );
+
+  const progress = kanjiQuizState.currentIndex + 1;
+  const total = kanjiQuizState.questions.length;
+  const score = kanjiQuizState.score.toFixed(1);
+
+  const options = generateOptions(question);
+
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [options[i], options[j]] = [options[j], options[i]];
+  }
+
+  let optionsHtml = options
+    .map(
+      (opt, index) => `
         <button class="quiz-option-btn" data-value="${opt.replace(/'/g, "\\'")}" onclick="checkKanjiQuizAnswer('${opt.replace(/'/g, "\\'")}')">
             ${opt}
         </button>
-    `).join('');
-    
-    let processedQuestion = question.question;
-    
-    if (question.answerType === 'kanji' && question.question.includes('_____')) {
-        const sentenceMatch = question.question.match(/Fill in the blank: (.*)/);
-        if (sentenceMatch) {
-            const sentencePart = sentenceMatch[1];
-            const processedSentence = displaySentenceWithFuriganaForQuiz(sentencePart);
-            processedQuestion = `Fill in the blank: ${processedSentence}`;
-        }
-    } else {
-        processedQuestion = displaySentenceWithFuriganaForQuiz(question.question);
+    `,
+    )
+    .join("");
+
+  let processedQuestion = question.question;
+
+  if (question.answerType === "kanji" && question.question.includes("_____")) {
+    const sentenceMatch = question.question.match(/Fill in the blank: (.*)/);
+    if (sentenceMatch) {
+      const sentencePart = sentenceMatch[1];
+      const processedSentence =
+        displaySentenceWithFuriganaForQuiz(sentencePart);
+      processedQuestion = `Fill in the blank: ${processedSentence}`;
     }
-    
-    quizArea.innerHTML = `
+  } else {
+    processedQuestion = displaySentenceWithFuriganaForQuiz(question.question);
+  }
+
+  quizArea.innerHTML = `
         <div class="quiz-question-container">
             <div class="quiz-progress-bar" style="display: flex; justify-content: space-between; padding: 10px 16px; background: #e8e0d5; border-radius: 12px; margin-bottom: 16px;">
                 <span class="quiz-progress-text" style="font-weight: 500;">Question ${progress} of ${total}</span>
@@ -922,254 +904,296 @@ function renderKanjiQuizQuestion() {
 }
 
 function generateOptions(question) {
-    const options = [];
-    const correctAnswer = question.correctAnswer;
-    const allKanji = kanjiData;
-    
-    options.push(correctAnswer);
-    
-    let distractors = [];
-    
-    if (question.answerType === 'reading') {
-        const otherReadings = [];
-        for (const k of allKanji) {
-            if (k.id !== question.kanjiId) {
-                const readings = getReadingModes(k);
-                for (const r of readings) {
-                    if (r.reading !== correctAnswer) {
-                        otherReadings.push(r.reading);
-                    }
-                }
-            }
+  const options = [];
+  const correctAnswer = question.correctAnswer;
+  const allKanji = kanjiData;
+
+  options.push(correctAnswer);
+
+  let distractors = [];
+
+  if (question.answerType === "reading") {
+    const otherReadings = [];
+    for (const k of allKanji) {
+      if (k.id !== question.kanjiId) {
+        const readings = getReadingModes(k);
+        for (const r of readings) {
+          if (r.reading !== correctAnswer) {
+            otherReadings.push(r.reading);
+          }
         }
-        for (let i = otherReadings.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [otherReadings[i], otherReadings[j]] = [otherReadings[j], otherReadings[i]];
-        }
-        distractors = otherReadings.slice(0, 3);
-        
-        while (distractors.length < 3) {
-            const commonReadings = ['にち', 'がつ', 'げつ', 'か', 'じ', 'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう', 'じゅう'];
-            for (const r of commonReadings) {
-                if (r !== correctAnswer && !distractors.includes(r)) {
-                    distractors.push(r);
-                    if (distractors.length >= 3) break;
-                }
-            }
-        }
-    } else if (question.answerType === 'kanji') {
-        const otherKanji = [];
-        for (const k of allKanji) {
-            if (k.id !== question.kanjiId && k.kanji !== correctAnswer) {
-                otherKanji.push(k.kanji);
-            }
-        }
-        for (let i = otherKanji.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [otherKanji[i], otherKanji[j]] = [otherKanji[j], otherKanji[i]];
-        }
-        distractors = otherKanji.slice(0, 3);
-        
-        while (distractors.length < 3) {
-            const commonKanji = ['日', '月', '火', '水', '木', '金', '土', '人', '大', '小', '中', '上', '下', '左', '右'];
-            for (const k of commonKanji) {
-                if (k !== correctAnswer && !distractors.includes(k)) {
-                    distractors.push(k);
-                    if (distractors.length >= 3) break;
-                }
-            }
-        }
+      }
     }
-    
-    for (const d of distractors) {
-        if (options.length < 4 && d !== correctAnswer && !options.includes(d)) {
-            options.push(d);
-        }
+    for (let i = otherReadings.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [otherReadings[i], otherReadings[j]] = [
+        otherReadings[j],
+        otherReadings[i],
+      ];
     }
-    
-    while (options.length < 4) {
-        const placeholders = ['???', '—', '●', '○'];
-        for (const p of placeholders) {
-            if (!options.includes(p) && options.length < 4) {
-                options.push(p);
-            }
+    distractors = otherReadings.slice(0, 3);
+
+    while (distractors.length < 3) {
+      const commonReadings = [
+        "にち",
+        "がつ",
+        "げつ",
+        "か",
+        "じ",
+        "いち",
+        "に",
+        "さん",
+        "よん",
+        "ご",
+        "ろく",
+        "なな",
+        "はち",
+        "きゅう",
+        "じゅう",
+      ];
+      for (const r of commonReadings) {
+        if (r !== correctAnswer && !distractors.includes(r)) {
+          distractors.push(r);
+          if (distractors.length >= 3) break;
         }
+      }
     }
-    
-    return options;
+  } else if (question.answerType === "kanji") {
+    const otherKanji = [];
+    for (const k of allKanji) {
+      if (k.id !== question.kanjiId && k.kanji !== correctAnswer) {
+        otherKanji.push(k.kanji);
+      }
+    }
+    for (let i = otherKanji.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [otherKanji[i], otherKanji[j]] = [otherKanji[j], otherKanji[i]];
+    }
+    distractors = otherKanji.slice(0, 3);
+
+    while (distractors.length < 3) {
+      const commonKanji = [
+        "日",
+        "月",
+        "火",
+        "水",
+        "木",
+        "金",
+        "土",
+        "人",
+        "大",
+        "小",
+        "中",
+        "上",
+        "下",
+        "左",
+        "右",
+      ];
+      for (const k of commonKanji) {
+        if (k !== correctAnswer && !distractors.includes(k)) {
+          distractors.push(k);
+          if (distractors.length >= 3) break;
+        }
+      }
+    }
+  }
+
+  for (const d of distractors) {
+    if (options.length < 4 && d !== correctAnswer && !options.includes(d)) {
+      options.push(d);
+    }
+  }
+
+  while (options.length < 4) {
+    const placeholders = ["???", "—", "●", "○"];
+    for (const p of placeholders) {
+      if (!options.includes(p) && options.length < 4) {
+        options.push(p);
+      }
+    }
+  }
+
+  return options;
 }
 
 function checkKanjiQuizAnswer(selectedAnswer) {
-    console.log('checkKanjiQuizAnswer called with:', selectedAnswer);
-    
-    const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
-    if (!question) {
-        console.log('No question found');
-        return;
+  console.log("checkKanjiQuizAnswer called with:", selectedAnswer);
+
+  const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
+  if (!question) {
+    console.log("No question found");
+    return;
+  }
+
+  if (question.answered) {
+    console.log("Question already answered");
+    return;
+  }
+
+  const isCorrect = selectedAnswer === question.correctAnswer;
+
+  question.attempts++;
+  question.answered = true;
+
+  console.log(
+    "Selected:",
+    selectedAnswer,
+    "Correct:",
+    question.correctAnswer,
+    "Is correct:",
+    isCorrect,
+  );
+
+  const feedback = document.getElementById("quizFeedback");
+
+  document.querySelectorAll(".quiz-option-btn").forEach((btn) => {
+    btn.disabled = true;
+    if (btn.dataset.value === question.correctAnswer) {
+      btn.style.background = "#28a745";
+      btn.style.color = "white";
+      btn.style.borderColor = "#1e7e34";
+    } else if (btn.dataset.value === selectedAnswer && !isCorrect) {
+      btn.style.background = "#dc3545";
+      btn.style.color = "white";
+      btn.style.borderColor = "#bd2130";
     }
-    
-    if (question.answered) {
-        console.log('Question already answered');
-        return;
+    btn.style.opacity = "0.7";
+    btn.style.cursor = "default";
+  });
+
+  if (isCorrect) {
+    if (question.attempts === 1) {
+      kanjiQuizState.score += 1;
+      markKanjiMastered(question.kanjiId, true);
+    } else {
+      kanjiQuizState.score += 0.5;
     }
-    
-    const isCorrect = selectedAnswer === question.correctAnswer;
-    
-    question.attempts++;
-    question.answered = true;
-    
-    console.log('Selected:', selectedAnswer, 'Correct:', question.correctAnswer, 'Is correct:', isCorrect);
-    
-    const feedback = document.getElementById('quizFeedback');
-    
-    document.querySelectorAll('.quiz-option-btn').forEach(btn => {
-        btn.disabled = true;
-        if (btn.dataset.value === question.correctAnswer) {
-            btn.style.background = '#28a745';
-            btn.style.color = 'white';
-            btn.style.borderColor = '#1e7e34';
-        } else if (btn.dataset.value === selectedAnswer && !isCorrect) {
-            btn.style.background = '#dc3545';
-            btn.style.color = 'white';
-            btn.style.borderColor = '#bd2130';
-        }
-        btn.style.opacity = '0.7';
-        btn.style.cursor = 'default';
-    });
-    
-    if (isCorrect) {
-        if (question.attempts === 1) {
-            kanjiQuizState.score += 1;
-            markKanjiMastered(question.kanjiId, true);
-        } else {
-            kanjiQuizState.score += 0.5;
-        }
-        kanjiQuizState.correctCount++;
-        if (feedback) {
-            feedback.innerHTML = `
+    kanjiQuizState.correctCount++;
+    if (feedback) {
+      feedback.innerHTML = `
                 <p style="color: #28a745; font-weight: bold; font-size: 1.1rem;">✅ Correct!</p>
                 <p style="color: #666;">Answer: ${question.correctAnswer}</p>
             `;
-        }
-    } else {
-        kanjiQuizState.incorrectCount++;
-        if (feedback) {
-            feedback.innerHTML = `
+    }
+  } else {
+    kanjiQuizState.incorrectCount++;
+    if (feedback) {
+      feedback.innerHTML = `
                 <p style="color: #dc3545; font-weight: bold; font-size: 1.1rem;">❌ Incorrect</p>
                 <p style="color: #28a745;">Correct answer: ${question.correctAnswer}</p>
             `;
-        }
-        if (!attemptedKanji.has(question.kanjiId)) {
-            attemptedKanji.add(question.kanjiId);
-            saveMasteredKanji();
-        }
     }
-    
-    const scoreText = document.querySelector('.quiz-score-text');
-    if (scoreText) {
-        scoreText.textContent = `Score: ${kanjiQuizState.score.toFixed(1)}`;
+    if (!attemptedKanji.has(question.kanjiId)) {
+      attemptedKanji.add(question.kanjiId);
+      saveMasteredKanji();
     }
-    
-    setTimeout(() => {
-        if (feedback) {
-            feedback.innerHTML += `
+  }
+
+  const scoreText = document.querySelector(".quiz-score-text");
+  if (scoreText) {
+    scoreText.textContent = `Score: ${kanjiQuizState.score.toFixed(1)}`;
+  }
+
+  setTimeout(() => {
+    if (feedback) {
+      feedback.innerHTML += `
                 <button class="small-btn quiz-next-btn" onclick="nextQuizQuestion()" style="margin-top: 12px; background: #6c8b6b; color: white; border: none; padding: 8px 28px; border-radius: 40px; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
                     ➡️ Next Question
                 </button>
             `;
-        }
-    }, 800);
+    }
+  }, 800);
 }
 
 function nextQuizQuestion() {
-    kanjiQuizState.currentIndex++;
-    updateMasteredCount();
-    renderMasteredList();
-    if (kanjiQuizState.currentIndex < kanjiQuizState.questions.length) {
-        renderKanjiQuizQuestion();
-    } else {
-        showKanjiQuizResults();
-    }
+  kanjiQuizState.currentIndex++;
+  updateMasteredCount();
+  renderMasteredList();
+  if (kanjiQuizState.currentIndex < kanjiQuizState.questions.length) {
+    renderKanjiQuizQuestion();
+  } else {
+    showKanjiQuizResults();
+  }
 }
 
 function toggleShowAnswer() {
-    console.log('toggleShowAnswer called');
-    
-    const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
-    if (!question) {
-        console.log('No question found');
-        return;
-    }
-    
-    if (question.answered) {
-        console.log('Question already answered');
-        return;
-    }
-    
-    const feedback = document.getElementById('quizFeedback');
-    if (feedback) {
-        feedback.innerHTML = `
+  console.log("toggleShowAnswer called");
+
+  const question = kanjiQuizState.questions[kanjiQuizState.currentIndex];
+  if (!question) {
+    console.log("No question found");
+    return;
+  }
+
+  if (question.answered) {
+    console.log("Question already answered");
+    return;
+  }
+
+  const feedback = document.getElementById("quizFeedback");
+  if (feedback) {
+    feedback.innerHTML = `
             <p style="color: #17a2b8; font-weight: bold; font-size: 1.1rem;">👁️ Answer shown</p>
             <p style="color: #28a745;">Correct answer: ${question.correctAnswer}</p>
         `;
+  }
+
+  document.querySelectorAll(".quiz-option-btn").forEach((btn) => {
+    btn.disabled = true;
+    if (btn.dataset.value === question.correctAnswer) {
+      btn.style.background = "#28a745";
+      btn.style.color = "white";
+      btn.style.borderColor = "#1e7e34";
     }
-    
-    document.querySelectorAll('.quiz-option-btn').forEach(btn => {
-        btn.disabled = true;
-        if (btn.dataset.value === question.correctAnswer) {
-            btn.style.background = '#28a745';
-            btn.style.color = 'white';
-            btn.style.borderColor = '#1e7e34';
-        }
-        btn.style.opacity = '0.7';
-        btn.style.cursor = 'default';
-    });
-    
-    question.answered = true;
-    question.attempts = 1;
-    kanjiQuizState.incorrectCount++;
-    
-    setTimeout(() => {
-        if (feedback) {
-            feedback.innerHTML += `
+    btn.style.opacity = "0.7";
+    btn.style.cursor = "default";
+  });
+
+  question.answered = true;
+  question.attempts = 1;
+  kanjiQuizState.incorrectCount++;
+
+  setTimeout(() => {
+    if (feedback) {
+      feedback.innerHTML += `
                 <button class="small-btn quiz-next-btn" onclick="nextQuizQuestion()" style="margin-top: 12px; background: #6c8b6b; color: white; border: none; padding: 8px 28px; border-radius: 40px; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
                     ➡️ Next Question
                 </button>
             `;
-        }
-    }, 500);
+    }
+  }, 500);
 }
 
 function showKanjiQuizResults() {
-    console.log('showKanjiQuizResults called');
-    
-    const resultsDiv = document.getElementById('quizResults');
-    const quizArea = document.getElementById('quizArea');
-    if (!resultsDiv) {
-        console.log('Results div not found');
-        return;
-    }
-    
-    kanjiQuizState.isActive = false;
-    
-    const total = kanjiQuizState.totalCount || 1;
-    const percentage = Math.round((kanjiQuizState.score / total) * 100);
-    
-    let emoji = '😅';
-    let message = 'Keep practicing!';
-    if (percentage >= 90) {
-        emoji = '🎉';
-        message = 'Excellent! You\'re a kanji master!';
-    } else if (percentage >= 70) {
-        emoji = '🌟';
-        message = 'Great job! Keep it up!';
-    } else if (percentage >= 50) {
-        emoji = '💪';
-        message = 'Good effort! Review the ones you missed.';
-    }
-    
-    resultsDiv.style.display = 'block';
-    resultsDiv.innerHTML = `
+  console.log("showKanjiQuizResults called");
+
+  const resultsDiv = document.getElementById("quizResults");
+  const quizArea = document.getElementById("quizArea");
+  if (!resultsDiv) {
+    console.log("Results div not found");
+    return;
+  }
+
+  kanjiQuizState.isActive = false;
+
+  const total = kanjiQuizState.totalCount || 1;
+  const percentage = Math.round((kanjiQuizState.score / total) * 100);
+
+  let emoji = "😅";
+  let message = "Keep practicing!";
+  if (percentage >= 90) {
+    emoji = "🎉";
+    message = "Excellent! You're a kanji master!";
+  } else if (percentage >= 70) {
+    emoji = "🌟";
+    message = "Great job! Keep it up!";
+  } else if (percentage >= 50) {
+    emoji = "💪";
+    message = "Good effort! Review the ones you missed.";
+  }
+
+  resultsDiv.style.display = "block";
+  resultsDiv.innerHTML = `
         <div class="quiz-results-content" style="text-align: center; padding: 20px; background: #faf8f5; border-radius: 16px;">
             <h3 style="font-size: 1.8rem; margin-bottom: 16px;">${emoji} Quiz Complete!</h3>
             <div class="result-stats" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; max-width: 400px; margin: 0 auto; text-align: left;">
@@ -1186,35 +1210,35 @@ function showKanjiQuizResults() {
             </div>
         </div>
     `;
-    
-    if (quizArea) {
-        quizArea.innerHTML = `
+
+  if (quizArea) {
+    quizArea.innerHTML = `
             <p class="quiz-complete" style="text-align: center; padding: 20px; color: #28a745; font-size: 1.2rem;">
                 ✅ Quiz complete! Check your results below.
             </p>
         `;
-    }
-    
-    updateMasteredCount();
-    renderMasteredList();
+  }
+
+  updateMasteredCount();
+  renderMasteredList();
 }
 
 function stopKanjiQuiz() {
-    kanjiQuizState.isActive = false;
-    kanjiQuizState.questions = [];
-    kanjiQuizState.currentIndex = 0;
-    
-    const quizArea = document.getElementById('quizArea');
-    if (quizArea) {
-        quizArea.innerHTML = `
+  kanjiQuizState.isActive = false;
+  kanjiQuizState.questions = [];
+  kanjiQuizState.currentIndex = 0;
+
+  const quizArea = document.getElementById("quizArea");
+  if (quizArea) {
+    quizArea.innerHTML = `
             <p class="quiz-welcome" style="text-align: center; color: #666; padding: 40px; font-size: 1rem;">
                 Quiz stopped. Select a mode and number of questions, then click <strong>"Start New Quiz"</strong>
             </p>
         `;
-    }
-    
-    const resultsDiv = document.getElementById('quizResults');
-    if (resultsDiv) resultsDiv.style.display = 'none';
+  }
+
+  const resultsDiv = document.getElementById("quizResults");
+  if (resultsDiv) resultsDiv.style.display = "none";
 }
 
 // ========== EVENT DELEGATION ==========
@@ -1302,7 +1326,9 @@ function applyFuriganaHide() {
   renderLearnTab();
   renderMasteredList();
 
-  if (typeof kanjiQuizState !== 'undefined' && kanjiQuizState &&
+  if (
+    typeof kanjiQuizState !== "undefined" &&
+    kanjiQuizState &&
     kanjiQuizState.isActive &&
     kanjiQuizState.questions.length > 0
   ) {
@@ -1351,7 +1377,9 @@ function switchTab(tabId) {
                 `;
       }
     }
-    if (typeof kanjiQuizState !== 'undefined' && kanjiQuizState &&
+    if (
+      typeof kanjiQuizState !== "undefined" &&
+      kanjiQuizState &&
       kanjiQuizState.isActive &&
       kanjiQuizState.questions.length > 0
     ) {
