@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Wes Robertson — Japanese Grammar Guide</title>
+<style>
+  /* ================================================================
+     🔧 CENTRAL STYLE CONFIGURATION — Change these values to customize
+     ================================================================ */
+
+  /* ----- COLORS ----- */
+  :root {
+    /* ---- Backgrounds ---- */
+    --bg-body:       #faf8f6;      /* page background */
+    --bg-paper:      #ffffff;      /* card background */
+    --bg-tab:        #e8e0d4;      /* inactive tab background */
+    --bg-tab-active: #ffffff;      /* active tab background */
+    --bg-note:       #f3efe9;      /* note box background */
+    --bg-warn:       #f9f1e6;      /* warning note background */
+    --bg-conj:       #f5f2ed;      /* conjugation box background */
+    --bg-table:      #fcfbf9;      /* table background */
+    --bg-th:         #e8e0d4;      /* table header background */
+    --bg-btn:        #d4c5a0;      /* toggle button background */
+    --bg-btn-hover:  #c4b590;      /* toggle button hover */
+    --bg-explainer:  #eef3f7;      /* explanation box background */
+
+    /* ---- Text Colors ---- */
+    --text-body:     #1e1e1e;      /* main body text */
+    --text-jp:       #000000;      /* Japanese text color */
+    --text-en:       #021d47;      /* English translation color */
+    --text-sub:      #333333;      /* subtitle / secondary text */
+    --text-muted:    #675843;      /* muted / label text */
+    --text-note:     #174462;      /* note text */
+    --furigana-color: #540202;     /* Furigana text */
+
+    /* ---- Text Weights (400=normal, 500=medium, 600=semi-bold, 700=bold) ---- */
+    --text-weight-body:    400;    /* main body text weight */
+    --text-weight-jp:      700;    /* Japanese text weight */
+    --text-weight-en:      500;    /* English translation weight */
+    --text-weight-heading: 600;    /* all headings weight */
+    --text-weight-label:   600;    /* labels (uppercase) weight */
+    --text-weight-muted:   400;    /* muted text weight */
+    --text-weight-furigana: 700;   /* furigana weight */
+
+    /* ---- Text Sizes ---- */
+    --text-size-body:     1rem;    /* main body text size */
+    --text-size-jp:       1.4rem;  /* Japanese text size */
+    --text-size-en:       1rem;    /* English translation size */
+    --text-size-furigana: 0.9rem;  /* furigana size */
+    --text-size-h1:       2rem;    /* H1 size */
+    --text-size-h2:       1.5rem;  /* H2 size */
+    --text-size-h3:       1.2rem;  /* H3 size */
+    --text-size-conj:     1.3rem;  /* conjugation box text size */
+    --text-size-table:    0.95rem; /* table text size */
+    --text-size-note:     0.95rem; /* note text size */
+    --text-size-small:    0.85rem; /* small text size */
+    --text-size-explainer: 0.98rem; /* explainer text size */
+
+    /* ---- Line Heights (spacing between lines) ---- */
+    --line-height-body:     1.7;    /* main body line height */
+    --line-height-jp:       2.2;    /* Japanese text line height */
+    --line-height-en:       1.4;    /* English text line height */
+    --line-height-heading:  1.3;    /* headings line height */
+    --line-height-furigana: 1.0;    /* furigana line height */
+    --line-height-explainer: 1.8;   /* explainer line height */
+
+    /* ---- Furigana (Ruby) Spacing ---- */
+    --furigana-ruby-align:  center; /* center, start, end */
+    --furigana-letter-spacing: 0.3px; /* space between furigana characters */
+    --furigana-gap:        0.1rem;  /* space between furigana and kanji */
+
+    /* ---- Borders ---- */
+    --border-main:   #d4c5a0;      /* main border / heading underline */
+    --border-light:  #ddd6cc;      /* light divider */
+    --border-note:   #b8a58b;      /* note left border */
+    --border-warn:   #c49a6c;      /* warning left border */
+    --border-table:  #ece6dc;      /* table cell borders */
+    --border-explainer: #b8c9d9;   /* explainer left border */
+  }
+
+  /* ================================================================
+     END OF CENTRAL CONFIG — Styles below use the variables above
+     ================================================================ */
+
+  /* ----- RESET & BODY ----- */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: var(--bg-body);
+    font-family: 'Segoe UI', 'Noto Sans JP', 'Hiragino Sans', system-ui, sans-serif;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    max-width: 1100px;
+    line-height: var(--line-height-body);
+    color: var(--text-body);
+    font-size: var(--text-size-body);
+    font-weight: var(--text-weight-body);
+  }
+  .paper {
+    background: var(--bg-paper);
+    padding: 2.5rem 3rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border-radius: 12px;
+  }
+
+  /* ----- TOP BAR ----- */
+  .top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.8rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .top-bar h1 {
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .controls .toggle-btn {
+    background: var(--bg-btn);
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: var(--text-weight-label);
+    color: #1e2b33;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .controls .toggle-btn:hover {
+    background: var(--bg-btn-hover);
+  }
+  .controls .toggle-btn.active {
+    background: #8b7a64;
+    color: white;
+  }
+  .controls .status-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: var(--text-weight-muted);
+  }
+
+  /* ----- TABS ----- */
+  .tab-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.1rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 2px solid var(--border-main);
+    padding-bottom: 0.2rem;
+  }
+  .tab-btn {
+    background: var(--bg-tab);
+    border: none;
+    border-radius: 8px 8px 0 0;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: var(--text-weight-label);
+    color: var(--text-sub);
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+    border: 2px solid transparent;
+    border-bottom: none;
+  }
+  .tab-btn:hover {
+    background: #dcd4c6;
+  }
+  .tab-btn.active {
+    background: var(--bg-tab-active);
+    color: var(--text-body);
+    border-color: var(--border-main);
+    border-bottom: 2px solid var(--bg-tab-active);
+    margin-bottom: -2px;
+  }
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.25s ease;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+
+  /* ----- HEADINGS ----- */
+  h1 {
+    font-size: var(--text-size-h1);
+    font-weight: var(--text-weight-heading);
+    line-height: var(--line-height-heading);
+    letter-spacing: -0.3px;
+    border-bottom: 3px solid var(--border-main);
+    padding-bottom: 0.4rem;
+  }
+  .subhead {
+    font-size: 1.1rem;
+    color: var(--text-sub);
+    font-weight: var(--text-weight-muted);
+    margin-top: -0.2rem;
+    margin-bottom: 1.8rem;
+  }
+  h2 {
+    font-size: var(--text-size-h2);
+    font-weight: var(--text-weight-heading);
+    line-height: var(--line-height-heading);
+    margin-top: 2.2rem;
+    margin-bottom: 0.6rem;
+    border-left: 6px solid var(--border-main);
+    padding-left: 0.9rem;
+  }
+  h3 {
+    font-size: var(--text-size-h3);
+    font-weight: var(--text-weight-heading);
+    line-height: var(--line-height-heading);
+    margin-top: 1.8rem;
+    margin-bottom: 0.4rem;
+    color: #2c3e4f;
+  }
+  h4 {
+    font-size: 1.05rem;
+    font-weight: var(--text-weight-heading);
+    line-height: var(--line-height-heading);
+    margin-top: 1.4rem;
+    margin-bottom: 0.3rem;
+    color: #3a4a5a;
+  }
+  hr {
+    border: none;
+    border-top: 2px dashed var(--border-light);
+    margin: 2rem 0;
+  }
+
+  /* ----- RUBY / FURIGANA (with spacing control) ----- */
+  ruby {
+    ruby-align: var(--furigana-ruby-align);
+  }
+  rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    letter-spacing: var(--furigana-letter-spacing);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);  /* ← space between furigana and kanji */
+    transition: opacity 0.25s ease, font-size 0.25s ease;
+  }
+  .furigana-hidden ruby rt {
+    opacity: 0;
+    font-size: 0.01rem;
+    pointer-events: none;
+    transition: opacity 0.2s ease, font-size 0.2s ease;
+  }
+
+  /* ----- CLICKABLE JAPANESE (TTS) ----- */
+  .clickable-ja {
+    cursor: pointer;
+    display: inline-block;
+    transition: background 0.15s ease, border-radius 0.15s ease;
+    padding: 0 0.1rem;
+    border-radius: 4px;
+  }
+  .clickable-ja:hover {
+    background: rgba(139, 26, 26, 0.07);
+    border-radius: 4px;
+  }
+  .clickable-ja:active {
+    background: rgba(139, 26, 26, 0.15);
+  }
+  .clickable-ja ruby {
+    cursor: pointer;
+  }
+
+  /* ----- EXPLAINER BOXES ----- */
+  .explainer {
+    background: var(--bg-explainer);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin: 0.8rem 0 1.5rem 0;
+    border-left: 5px solid var(--border-explainer);
+    font-size: var(--text-size-explainer);
+    font-weight: var(--text-weight-body);
+    line-height: var(--line-height-explainer);
+    color: #1a2a3a;
+  }
+  .explainer strong {
+    color: #0a2a5e;
+    font-weight: var(--text-weight-heading);
+  }
+  .explainer .key-point {
+    display: block;
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(10, 42, 94, 0.06);
+    border-radius: 6px;
+    border-left: 3px solid #0a2a5e;
+  }
+
+  /* ----- EXAMPLE BLOCKS ----- */
+  .example-block {
+    margin: 0.6rem 0 1rem 0;
+    padding: 0.2rem 0;
+  }
+  .example-block .ja {
+    font-size: var(--text-size-jp);
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+    display: block;
+  }
+  .example-block .ja ruby {
+    font-size: var(--text-size-jp);
+    color: var(--text-jp);
+  }
+  .example-block .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .example-block .en {
+    display: block;
+    font-size: var(--text-size-en);
+    font-weight: var(--text-weight-en);
+    color: var(--text-en);
+    font-style: italic;
+    line-height: var(--line-height-en);
+    margin-top: -0.1rem;
+    margin-bottom: 0.2rem;
+    padding-left: 0.1rem;
+  }
+
+  /* ----- CONJUGATION BOXES ----- */
+  .conj-box {
+    background: var(--bg-conj);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0 1.2rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 2rem;
+  }
+  .conj-box .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+  }
+  .conj-box .step .label {
+    font-size: 0.7rem;
+    font-weight: var(--text-weight-label);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .conj-box .step .ja {
+    font-size: var(--text-size-conj);
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+  }
+  .conj-box .step .ja ruby {
+    font-size: var(--text-size-conj);
+    color: var(--text-jp);
+  }
+  .conj-box .step .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .conj-box .arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .conj-box .polite {
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    margin-left: 0.3rem;
+  }
+  .conj-box .polite .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+  }
+  .conj-box .polite .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .conj-box .polite .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+
+  /* ----- VERB TABLES ----- */
+  .verb-table {
+    background: var(--bg-conj);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    margin: 1rem 0;
+  }
+  .verb-table .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 1.5rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--border-table);
+  }
+  .verb-table .row:last-child {
+    border-bottom: none;
+  }
+  .verb-table .row .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+    min-width: 100px;
+  }
+  .verb-table .row .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .verb-table .row .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .verb-table .row .en {
+    font-size: var(--text-size-en);
+    font-weight: var(--text-weight-en);
+    color: var(--text-en);
+    font-style: italic;
+    line-height: var(--line-height-en);
+  }
+  .verb-table .row .label-sm {
+    font-size: 0.7rem;
+    font-weight: var(--text-weight-label);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    min-width: 70px;
+  }
+
+  .pattern-box {
+    background: var(--bg-conj);
+    border-radius: 12px;
+    padding: 0.8rem 1.5rem;
+    margin: 1rem 0;
+  }
+  .pattern-box .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 1.5rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--border-table);
+  }
+  .pattern-box .row:last-child {
+    border-bottom: none;
+  }
+  .pattern-box .row .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+  }
+  .pattern-box .row .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .pattern-box .row .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .pattern-box .row .en {
+    font-size: 0.9rem;
+    font-weight: var(--text-weight-en);
+    color: var(--text-en);
+    font-style: italic;
+    line-height: var(--line-height-en);
+  }
+  .pattern-box .row .arrow-sm {
+    color: var(--text-muted);
+    font-weight: 300;
+    margin: 0 0.2rem;
+  }
+
+  /* ----- i-ADJECTIVE TABLE ----- */
+  .i-adj-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 2rem;
+    background: var(--bg-conj);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+  }
+  .i-adj-table .row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid var(--border-table);
+  }
+  .i-adj-table .row:last-child {
+    border-bottom: none;
+  }
+  .i-adj-table .row .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+    min-width: 120px;
+  }
+  .i-adj-table .row .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .i-adj-table .row .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .i-adj-table .row .en {
+    font-size: var(--text-size-en);
+    font-weight: var(--text-weight-en);
+    color: var(--text-en);
+    font-style: italic;
+    line-height: var(--line-height-en);
+  }
+
+  /* ----- RULES BOX ----- */
+  .rules-box {
+    background: var(--bg-conj);
+    padding: 1rem 1.8rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+    counter-reset: rule-counter;
+  }
+  .rules-box .rule {
+    counter-increment: rule-counter;
+    margin: 0.8rem 0;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--border-note);
+    padding-left: 1rem;
+  }
+  .rules-box .rule .rule-num {
+    display: inline-block;
+    font-weight: var(--text-weight-label);
+    color: var(--text-muted);
+    margin-right: 0.3rem;
+  }
+  .rules-box .rule .rule-num::after {
+    content: ".";
+  }
+  .rules-box .rule .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+    display: block;
+    margin-top: 0.2rem;
+  }
+  .rules-box .rule .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .rules-box .rule .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .rules-box .rule .en {
+    display: block;
+    font-size: var(--text-size-en);
+    font-weight: var(--text-weight-en);
+    color: var(--text-en);
+    font-style: italic;
+    line-height: var(--line-height-en);
+  }
+
+  /* ----- ALTERNATIVES BOX ----- */
+  .alt-box {
+    background: var(--bg-conj);
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+  }
+  .alt-box .example-block {
+    margin: 0.4rem 0;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid var(--border-table);
+  }
+  .alt-box .example-block:last-child {
+    border-bottom: none;
+  }
+  .alt-box .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+  }
+  .alt-box .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .alt-box .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .alt-box .en {
+    font-size: var(--text-size-en);
+    font-weight: var(--text-weight-en);
+    color: var(--text-en);
+    font-style: italic;
+    line-height: var(--line-height-en);
+  }
+
+  /* ----- NOTE BOXES ----- */
+  .note {
+    background: var(--bg-note);
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    font-size: var(--text-size-note);
+    font-weight: var(--text-weight-body);
+    line-height: var(--line-height-body);
+    border-left: 4px solid var(--border-note);
+  }
+  .note.warn {
+    background: var(--bg-warn);
+    border-left-color: var(--border-warn);
+  }
+  .note .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+  }
+  .note .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .note .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+
+  /* ----- COMPARISON BOX ----- */
+  .comparison-box {
+    background: var(--bg-conj);
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    margin: 1.2rem 0;
+  }
+  .comparison-box .example-block {
+    border-bottom: 1px solid var(--border-table);
+    padding: 0.4rem 0;
+    margin: 0;
+  }
+  .comparison-box .example-block:last-child {
+    border-bottom: none;
+  }
+  .comparison-box .ja {
+    font-size: 1.3rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+  }
+  .comparison-box .ja ruby {
+    font-size: 1.3rem;
+    color: var(--text-jp);
+  }
+  .comparison-box .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+  .comparison-box .en {
+    font-size: var(--text-size-en);
+    font-weight: var(--text-weight-en);
+    color: var(--text-en);
+    font-style: italic;
+    line-height: var(--line-height-en);
+  }
+
+  /* ----- HINT BOX ----- */
+  .hint-box {
+    background: var(--bg-conj);
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+  }
+  .hint-box .hint {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border-table);
+  }
+  .hint-box .hint:last-child {
+    border-bottom: none;
+  }
+  .hint-box .hint .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+  }
+  .hint-box .hint .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  .hint-box .hint .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+
+  /* ----- HTML TABLES ----- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: var(--text-size-table);
+    font-weight: var(--text-weight-body);
+    line-height: var(--line-height-body);
+    background: var(--bg-table);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th {
+    background: var(--bg-th);
+    font-weight: var(--text-weight-heading);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    color: var(--text-body);
+  }
+  td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--border-table);
+    vertical-align: top;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  td .ja {
+    font-size: 1.2rem;
+    font-weight: var(--text-weight-jp);
+    color: var(--text-jp);
+    line-height: var(--line-height-jp);
+  }
+  td .ja ruby {
+    font-size: 1.2rem;
+    color: var(--text-jp);
+  }
+  td .ja rt {
+    font-size: var(--text-size-furigana);
+    font-weight: var(--text-weight-furigana);
+    color: var(--furigana-color);
+    line-height: var(--line-height-furigana);
+    margin-bottom: var(--furigana-gap);
+  }
+
+  /* ----- MISC ----- */
+  .footer-note {
+    font-size: var(--text-size-small);
+    font-weight: var(--text-weight-muted);
+    color: #5f5f5f;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  /* ----- PRINT / PDF ----- */
+  @media print {
+    body {
+      background: white;
+      margin: 0.3in;
+      padding: 0;
+    }
+    .paper {
+      box-shadow: none;
+      padding: 0.1in;
+      border-radius: 0;
+    }
+    .tab-btn {
+      display: none;
+    }
+    .tab-content {
+      display: block !important;
+      page-break-after: always;
+    }
+    .tab-content:last-child {
+      page-break-after: avoid;
+    }
+    .controls {
+      display: none !important;
+    }
+    .note, .comparison-box, .conj-box, .verb-table, .pattern-box, .hint-box, .alt-box, .rules-box, .i-adj-table, .explainer {
+      break-inside: avoid;
+    }
+    table {
+      break-inside: auto;
+    }
+    h2, h3, h4 {
+      break-after: avoid;
+    }
+  }
+
+  /* ----- SMALL SCREENS ----- */
+  @media (max-width: 600px) {
+    .paper {
+      padding: 1.2rem;
+    }
+    .top-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .controls {
+      justify-content: flex-start;
+    }
+    .example-block .ja {
+      font-size: 1.2rem;
+    }
+    .example-block .ja ruby {
+      font-size: 1.2rem;
+    }
+    .conj-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.3rem;
+    }
+    .conj-box .step {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .conj-box .arrow {
+      transform: rotate(90deg);
+      display: inline-block;
+    }
+    .i-adj-table {
+      grid-template-columns: 1fr;
+    }
+    .verb-table .row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.1rem;
+    }
+    .pattern-box .row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.1rem;
+    }
+    .tab-btn {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.7rem;
+    }
+    .explainer {
+      padding: 0.8rem 1rem;
+      font-size: 0.92rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="paper">
+
+  <!-- ============================================================ -->
+  <!--                     TOP BAR                                   -->
+  <!-- ============================================================ -->
+  <div class="top-bar">
+    <h1>Dr. Wes Robertson — Japanese Grammar Guide</h1>
+    <div class="controls">
+      <span class="status-label" id="furiganaStatus">Furigana: ON</span>
+      <button class="toggle-btn active" id="furiganaToggle">🔤 Furigana</button>
+      <button class="toggle-btn active" id="speedToggle" style="background:#c4b590;">🐢 1x</button>
+      <span class="status-label" style="font-size:0.75rem; color:#6b5f4e;">Click Japanese text to hear it</span>
+    </div>
+  </div>
+  <div class="subhead">@ScriptingJapan — Complete Reference with Explanations</div>
+
+  <!-- ============================================================ -->
+  <!--                        TABS                                   -->
+  <!-- ============================================================ -->
+  <div class="tab-container">
+    <button class="tab-btn active" data-tab="tab-giving">Giving &amp; Receiving</button>
+    <button class="tab-btn" data-tab="tab-tte">〜て Form</button>
+    <button class="tab-btn" data-tab="tab-passive">Passive / Causative</button>
+    <button class="tab-btn" data-tab="tab-volitional">Volitional &amp; Potential</button>
+    <button class="tab-btn" data-tab="tab-tai">〜たい Form</button>
+    <button class="tab-btn" data-tab="tab-verbs">Verb Conjugation</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--              TAB 1: GIVING & RECEIVING                        -->
+  <!-- ============================================================ -->
+  <div id="tab-giving" class="tab-content active">
+
+    <h2>Giving &amp; Receiving in Japanese</h2>
+
+    <div class="explainer">
+      <strong>Why this matters:</strong> In English, "give" and "receive" are simple — you give to someone, you receive from someone. In Japanese, <strong>the choice of verb depends on who is doing the giving relative to your in‑group</strong>. This reflects the strong emphasis on in‑group/out‑group relationships in Japanese culture. Getting this wrong can sound rude or confusing, so it's worth understanding the logic.
+      <span class="key-point">
+        <strong>Key insight:</strong> Think of <strong>inward</strong> (toward you or your group) vs. <strong>outward</strong> (away from you or your group). The verb you choose tells the listener the direction of the giving.
+      </span>
+    </div>
+
+    <p>Japanese has <strong>three different verbs</strong> for "to give."<br />
+    Your choice depends on <strong>who is giving what to whom</strong>.</p>
+    <p>The key factor is whether the gift moves:</p>
+    <ul>
+      <li><strong>Inward</strong> — from outside your group to inside your group</li>
+      <li><strong>Outward</strong> — from inside your group to outside your group</li>
+    </ul>
+
+    <h3>In‑Group / Out‑Group Examples</h3>
+    <table>
+      <thead><tr><th>Situation</th><th>Direction</th></tr></thead>
+      <tbody>
+        <tr><td>Your dad gives something to you</td><td>✅ Inward</td></tr>
+        <tr><td>You give something to your dad</td><td>❌ Outward</td></tr>
+        <tr><td>Your boss gives something to your dad</td><td>✅ Inward (dad is closer to you than your boss)</td></tr>
+        <tr><td>Someone from another company gives to your boss</td><td>✅ Inward (your company is your in‑group)</td></tr>
+        <tr><td>Your dad gives something to your boss</td><td>❌ Outward</td></tr>
+        <tr><td>Your boss gives to another company</td><td>❌ Outward</td></tr>
+      </tbody>
+    </table>
+
+    <h2>1. くれる — Inward Giving</h2>
+
+    <div class="explainer">
+      <strong>When to use くれる:</strong> Use it when <strong>someone gives something to you or someone in your in‑group</strong>. The "giver" is marked by は or が, and the "receiver" (who is in your in‑group) is marked by に. You <strong>never</strong> use くれる when you or someone in your group is the giver — that would be outward.
+    </div>
+
+    <p><strong>Use くれる</strong> when something moves <strong>inward</strong>.<br />The <strong>recipient</strong> is marked by <strong>に</strong>.</p>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>父<rt>ちち</rt></ruby>が<ruby>私<rt>わたし</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>をくれました。</span>
+      <span class="en">My father gave (inwards) a book to me.</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>父<rt>パパ</rt></ruby>に<ruby>何<rt>なに</rt></ruby>をくれた？</span>
+      <span class="en">What did you (outside our family) give my dad?</span>
+    </div>
+
+    <h2>2. あげる — Outward Giving</h2>
+
+    <div class="explainer">
+      <strong>When to use あげる:</strong> Use it when <strong>you or someone in your in‑group gives something to someone outside</strong>. The giver is marked by は or が, and the recipient is marked by に. Be careful: using あげる to talk about your own actions can sound <strong>pretentious</strong> — like you're doing someone a big favor. In casual situations, Japanese people often avoid あげる when talking about their own giving, especially to close friends or family.
+    </div>
+
+    <p><strong>Use あげる</strong> when something moves <strong>outward</strong>.<br />The <strong>recipient</strong> is marked by <strong>に</strong>.</p>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>は<ruby>父<rt>ちち</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>をあげた。</span>
+      <span class="en">I gave (outwards) a book to my dad.</span>
+    </div>
+
+    <h2>3. やる — Outward (disrespectful / casual)</h2>
+
+    <div class="explainer">
+      <strong>When to use やる:</strong> This is also outward giving, but it carries a tone of <strong>looking down on the recipient</strong> or is used for <strong>non‑human things</strong> (animals, plants). Use it when you're giving something to someone you consider beneath you, or to a pet/plant. It can sound aggressive if used with people, so be careful. In modern Japanese, やる is often replaced with あげる even for animals to sound more polite.
+    </div>
+
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>野良猫<rt>のらねこ</rt></ruby>に<ruby>餌<rt>えさ</rt></ruby>を<ruby>買<rt>か</rt></ruby>ってやった。</span>
+      <span class="en">I bought the stray cat food (casual, non‑human).</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>俺<rt>おまえ</rt></ruby>に<ruby>教<rt>おし</rt></ruby>えてやる。</span>
+      <span class="en">I'll teach you a lesson (you scum).</span>
+    </div>
+
+    <h2>4. もらう — Receiving</h2>
+
+    <div class="explainer">
+      <strong>When to use もらう:</strong> This is the "receiving" verb — it doesn't care about direction, only that <strong>you received something</strong>. The giver is marked by に or から, and the receiver (you or your in‑group) is marked by は or が. This is the safest verb to use when you're the receiver, because it doesn't involve the complex in‑group/out‑group calculations of the giving verbs.
+    </div>
+
+    <p><strong>もらう</strong> means <strong>"to receive"</strong>.<br />The <strong>giver</strong> is marked by <strong>に</strong> or <strong>から</strong>.<br />The <strong>receiver</strong> is marked by <strong>は / が</strong>.</p>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>父<rt>ちち</rt></ruby>から<ruby>本<rt>ほん</rt></ruby>をもらった。</span>
+      <span class="en">I got a book from my dad.</span>
+    </div>
+
+    <h2>5. Verb + て Form + Giving Verbs</h2>
+
+    <div class="explainer">
+      <strong>Why this matters:</strong> Attaching くれる, あげる, or もらう to the て‑form of another verb turns the action into a <strong>favor</strong>. It indicates that the action was done <strong>for someone's benefit</strong>. The same in‑group/out‑group rules apply — くれる means the favor was done for you or your group, あげる means you did a favor for someone outside.
+    </div>
+
+    <table>
+      <thead><tr><th>Japanese</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ja clickable-ja"><ruby>父<rt>ちち</rt></ruby>に<ruby>作<rt>つく</rt></ruby>ってくれた。</span></td><td>Someone outside made it for my dad (inward).</td></tr>
+        <tr><td><span class="ja clickable-ja"><ruby>父<rt>ちち</rt></ruby>に<ruby>作<rt>つく</rt></ruby>ってあげた。</span></td><td>I made it for my dad (outward).</td></tr>
+        <tr><td><span class="ja clickable-ja"><ruby>説明<rt>せつめい</rt></ruby>してくれる？</span></td><td>Will you explain it to me (as a favor)?</td></tr>
+      </tbody>
+    </table>
+
+    <h2>6. Side‑by‑Side Comparison</h2>
+
+    <div class="explainer">
+      <strong>See the difference:</strong> These four sentences all involve a book being transferred between Tanaka and me. The verb choice completely changes who is doing what, and whether Tanaka is in‑group or out‑group. Pay attention to the particles — they change to match the verb's direction.
+    </div>
+
+    <div class="comparison-box">
+      <div class="example-block">
+        <span class="ja clickable-ja">たなかさんは<ruby>私<rt>わたし</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>をくれました。</span>
+        <span class="en">Tanaka gave (inwards) a book to <strong>me</strong>.</span>
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はたなかさんに<ruby>本<rt>ほん</rt></ruby>をあげました。</span>
+        <span class="en"><strong>I</strong> gave (outwards) a book to Tanaka.</span>
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はたなかさんに<ruby>本<rt>ほん</rt></ruby>をもらいました。</span>
+        <span class="en"><strong>I</strong> received a book from Tanaka.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--              TAB 2: 〜て FORM                                  -->
+  <!-- ============================================================ -->
+  <div id="tab-tte" class="tab-content">
+
+    <h2>Things You Can Do With ~て Form</h2>
+
+    <div class="explainer">
+      <strong>What is the て‑form?</strong> The て‑form (also called the "te‑form") is one of the most versatile verb forms in Japanese. It's like a <strong>verb‑connector</strong> — it lets you attach other verbs to change the meaning. Think of it as the "and then" or "in order to" form. Once you know the て‑form of a verb, you can make many different expressions by attaching different helper verbs. This section covers the three most common uses.
+    </div>
+
+    <h2>1. 〜てみる — Try doing (for the first time)</h2>
+
+    <div class="explainer">
+      <strong>What it means:</strong> 〜てみる means <strong>"to try doing [verb] for the first time"</strong> or <strong>"to give [verb] a shot"</strong>. It implies that you're doing something <em>new</em> — you've never done it before, or at least you haven't done it in this particular context. <strong>Important:</strong> It does NOT mean "try hard" or "make an effort" — that's a different expression (〜しようとしている). Use 〜てみる when you're <em>experimenting</em> or <em>testing</em> something.
+    </div>
+
+    <div class="conj-box">
+      <div class="step"><span class="label">Dictionary</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">て form</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んで</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">〜てみる</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んでみる</span></div>
+      <span class="polite">Polite: <span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んでみます。</span></span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>先生<rt>せんせい</rt></ruby>にきいてみるね！</span>
+      <span class="en">I'll try asking the teacher.</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>納豆<rt>なっとう</rt></ruby>をたべてみましたか。</span>
+      <span class="en">Did you try eating natto (for the first time)?</span>
+    </div>
+    <div class="note">⚠️ 〜てみる cannot mean "try" as in <strong>"making efforts"</strong>.<br />
+      <span class="ja clickable-ja"><ruby>日本語<rt>にほんご</rt></ruby>をべんきょうしようとしている。</span> — I'm making efforts to study Japanese. (This means you're struggling/working hard at it, not just trying it for the first time.)
+    </div>
+
+    <h2>2. 〜ておく — Do in advance / in preparation</h2>
+
+    <div class="explainer">
+      <strong>What it means:</strong> 〜ておく means <strong>"to do [verb] in advance"</strong> or <strong>"to do [verb] as preparation"</strong>. It implies that you're doing something now so that you're <em>ready</em> for something later. It's like "let me get this done ahead of time." The おく is the verb meaning "to put/place" — so literally, you're "putting" the action in place for later.
+    </div>
+
+    <div class="conj-box">
+      <div class="step"><span class="label">Dictionary</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">て form</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んで</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">〜ておく</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んでおく</span></div>
+      <span class="polite">Polite: <span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んでおきます。</span></span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>服<rt>ふく</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>っておいた。</span>
+      <span class="en">I washed the clothes in preparation.</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>明日<rt>あした</rt></ruby>のランチをつくっておくね。</span>
+      <span class="en">I'll get tomorrow's lunch ready early, okay?</span>
+    </div>
+
+    <h2>3. 〜てほしい — Want something done (by someone)</h2>
+
+    <div class="explainer">
+      <strong>What it means:</strong> 〜てほしい means <strong>"I want [someone] to do [verb]"</strong>. It expresses a desire for <em>someone else</em> to take an action. The person you want to do the action is marked by に. <strong>Be careful:</strong> This can sound <strong>demanding or childish</strong> if used with superiors or in formal situations. It's fine with friends, family, or people below you, but for polite requests, use 〜てもらえませんか instead.
+    </div>
+
+    <div class="note warn">⚠️ Avoid this when requesting from superiors. Use 〜もらえませんか for polite requests.</div>
+    <div class="conj-box">
+      <div class="step"><span class="label">Dictionary</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">て form</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んで</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">〜てほしい</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んでほしい</span></div>
+      <span class="polite">Polite: <span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んでほしいです。</span></span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja">これをかたづけてほしい。</span>
+      <span class="en">I want you to tidy this up.</span>
+    </div>
+
+    <h2>4. 〜ている — Progressive / Result / Habitual</h2>
+
+    <div class="explainer">
+      <strong>What it means:</strong> 〜ている is one of the most important verb forms in Japanese. It has <strong>three main uses</strong>:
+      <ol>
+        <li><strong>Progressive:</strong> An action is happening right now ("I am eating").</li>
+        <li><strong>Resultant state:</strong> A completed action has left a lasting result ("I am married" — the action of marrying happened, and the state continues).</li>
+        <li><strong>Habitual:</strong> Something done regularly ("I read the newspaper every morning").</li>
+      </ol>
+      Context is key to understanding which meaning is intended. If it's an action that takes time (like 食べる — eating), it's usually progressive. If it's a change of state (like 結婚する — to get married), it's usually resultant state.
+    </div>
+
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>今<rt>いま</rt></ruby>、<ruby>飯<rt>めし</rt></ruby>を<ruby>食<rt>た</rt></ruby>べている。</span>
+      <span class="en">I am eating right now. (progressive)</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>結婚<rt>けっこん</rt></ruby>している。</span>
+      <span class="en">I am married. (resultant state)</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--              TAB 3: PASSIVE / CAUSATIVE                       -->
+  <!-- ============================================================ -->
+  <div id="tab-passive" class="tab-content">
+
+    <h2>Passive / Causative / Causative‑Passive</h2>
+
+    <div class="explainer">
+      <strong>Three related forms:</strong> These three forms are built from each other and are used to shift <strong>who is doing the action</strong> and <strong>who is affected</strong>.
+      <ul>
+        <li><strong>Passive:</strong> "I <strong>was verbed</strong> by someone." (The focus is on the receiver.)</li>
+        <li><strong>Causative:</strong> "I <strong>made/let</strong> someone verb." (The focus is on the causer.)</li>
+        <li><strong>Causative‑Passive:</strong> "I <strong>was made to verb</strong> by someone." (The focus is on the person being forced.)</li>
+      </ul>
+      Think of it as a <strong>chain of responsibility</strong>: who is doing the action, and who is affected by it?
+    </div>
+
+    <h2>1. Passive Form</h2>
+
+    <div class="explainer">
+      <strong>What it does:</strong> The passive form shifts the focus <strong>from the doer to the receiver</strong>. In Japanese, it's used much more often than in English — not just when someone "was verbed," but also to <strong>avoid directly blaming someone</strong> (since Japanese culture values indirectness) and to <strong>show respect</strong> (the honorific passive). The "doer" is marked by に, and the "receiver" (the topic) is marked by は.
+    </div>
+
+    <h3>Irregular Verbs — する &amp; くる</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label">する</span><span class="ja clickable-ja">する</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">Passive</span><span class="ja clickable-ja">される</span></div>
+    </div>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>来<rt>く</rt></ruby>る</span><span class="ja clickable-ja"><ruby>来<rt>く</rt></ruby>る</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">Passive</span><span class="ja clickable-ja"><ruby>来<rt>こ</rt></ruby>られる</span></div>
+    </div>
+
+    <h3>る Verbs — replace る with 〜られる</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>食<rt>た</rt></ruby>べる</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べる</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">Passive</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べられる</span></div>
+    </div>
+
+    <h3>う Verbs — [u] → [a] + れる</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>飲<rt>の</rt></ruby>む</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">[u]→[a]</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>ま</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">+ れる</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>まれる</span></div>
+    </div>
+    <div class="note warn">⚠️ う → わ (e.g., <ruby>買<rt>か</rt></ruby>う → <ruby>買<rt>か</rt></ruby>われる)</div>
+
+    <div class="example-block">
+      <span class="ja clickable-ja">ビールは<ruby>私<rt>わたし</rt></ruby>に<ruby>飲<rt>の</rt></ruby>まれた。</span>
+      <span class="en">The beer was drunk by me.</span>
+    </div>
+
+    <h2>2. Causative Form — make/let</h2>
+
+    <div class="explainer">
+      <strong>What it does:</strong> The causative form means <strong>"to make/let someone do [verb]"</strong>. The person doing the causing (the "causer") is marked by は, and the person being caused (the "doer") is marked by に. The difference between "make" and "let" is <strong>determined by context</strong> — not by the verb form itself. Words like むりやり (against will) or すきなだけ (to one's heart's content) clarify the meaning.
+    </div>
+
+    <h3>する → させる &nbsp;|&nbsp; くる → こさせる</h3>
+    <h3>る Verbs — replace る with 〜させる</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>食<rt>た</rt></ruby>べる</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べる</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">Causative</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べさせる</span></div>
+    </div>
+    <h3>う Verbs — [u] → [a] + せる</h3>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>は<ruby>猫<rt>ねこ</rt></ruby>にピザを<ruby>食<rt>た</rt></ruby>べさせなかった。</span>
+      <span class="en">I didn't make/allow the cat to eat pizza.</span>
+    </div>
+
+    <h2>3. Causative‑Passive — was made to do</h2>
+
+    <div class="explainer">
+      <strong>What it does:</strong> The causative‑passive form means <strong>"was made/caused to do [verb] by someone"</strong>. It combines the causative (making someone do something) with the passive (the focus is on the receiver). The person being forced is marked by は, and the person doing the forcing is marked by に. This is often used to complain about being forced to do something!
+    </div>
+
+    <h3>する → させられる &nbsp;|&nbsp; くる → こさせられる</h3>
+    <h3>る Verbs — replace る with 〜させられる</h3>
+    <h3>う Verbs — causative form + られる</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>飲<rt>の</rt></ruby>む</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">Causative</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>ませる</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">+ られる</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>ませられる</span></div>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はかれにビールを<ruby>飲<rt>の</rt></ruby>ませられている。</span>
+      <span class="en">I am being forced by him to drink beer.</span>
+    </div>
+
+    <h2>Comparison</h2>
+
+    <div class="explainer">
+      <strong>Notice the particle changes:</strong> In the passive, は marks the receiver (the person affected) and に marks the doer. In the causative, は marks the causer and に marks the doer. In the causative‑passive, は marks the person being forced and に marks the person doing the forcing. The particles tell you <strong>who is responsible</strong> and <strong>who is affected</strong>.
+    </div>
+
+    <div class="comparison-box">
+      <div class="example-block">
+        <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はサメを<ruby>食<rt>た</rt></ruby>べる。</span>
+        <span class="en">I eat shark.</span>
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はサメに<ruby>食<rt>た</rt></ruby>べられる。</span>
+        <span class="en">I will be eaten by a shark. (passive)</span>
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はサメに<ruby>食<rt>た</rt></ruby>べさせる。</span>
+        <span class="en">I let/make the shark eat. (causative)</span>
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はサメに<ruby>食<rt>た</rt></ruby>べさせられる。</span>
+        <span class="en">I will be forced to eat by a shark. (causative-passive)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--              TAB 4: VOLITIONAL & POTENTIAL                    -->
+  <!-- ============================================================ -->
+  <div id="tab-volitional" class="tab-content">
+
+    <h2>Volitional &amp; Potential Forms</h2>
+
+    <h2>1. Volitional — "Let's ~" / "Shall we ~"</h2>
+
+    <div class="explainer">
+      <strong>What it does:</strong> The volitional form means <strong>"let's do [verb]"</strong> or <strong>"I will do [verb]"</strong> (with a sense of intention). It's used to suggest doing something together or to state your own intention. The polite version is 〜ましょう — this is the form you learn first in textbooks. The plain volitional is used in casual conversation. When combined with 〜としている, it means "trying to do" (making an effort). When combined with 〜と思っている, it means "planning to do."
+    </div>
+
+    <h3>Irregular: する → しよう &nbsp;|&nbsp; くる → こよう</h3>
+    <h3>る Verbs — remove る + よう</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>食<rt>た</rt></ruby>べる</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べる</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">Volitional</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べよう</span></div>
+    </div>
+    <h3>う Verbs — [u] → [o] + う</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>飲<rt>の</rt></ruby>む</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">[u]→[o]</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>も</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">+ う</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>もう</span></div>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja">べんきょうしよう。</span>
+      <span class="en">Let's study.</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>帰<rt>かえ</rt></ruby>ろうか。</span>
+      <span class="en">Shall we go home?</span>
+    </div>
+
+    <h3>Volitional + 〜としている — making efforts</h3>
+    <div class="explainer">
+      <strong>What this means:</strong> This expresses that someone is <strong>making an effort</strong> to do something — they're actively working toward the goal, but may not have achieved it yet. It's different from 〜てみる (trying for the first time) — this is about <em>struggling</em> or <em>working hard</em> at something.
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja">たばこをやめようとしている。</span>
+      <span class="en">I'm trying to quit smoking. (making an effort, possibly struggling)</span>
+    </div>
+
+    <h3>Volitional + 〜と思っている — planning</h3>
+    <div class="explainer">
+      <strong>What this means:</strong> This expresses that someone is <strong>planning</strong> to do something — they have made a decision and intend to carry it out. It's stronger than 〜たい (I want to do) and implies more commitment.
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>帰<rt>かえ</rt></ruby>ろうと思っている。</span>
+      <span class="en">I'm thinking of going home. (planning/deciding to)</span>
+    </div>
+
+    <h2>2. Potential — can(not) do</h2>
+
+    <div class="explainer">
+      <strong>What it does:</strong> The potential form expresses <strong>ability</strong> — "can do" or "cannot do" something. It's a way to talk about your skills, capabilities, or permissions. Notice that the formal grammar rule says to use <strong>が</strong> instead of <strong>を</strong> for the object of a potential verb — but in modern Japanese, many people use を anyway. <strong>ら抜き言葉</strong> (dropping the ら from 〜られる) is common in casual speech, but some consider it grammatically incorrect.
+    </div>
+
+    <h3>Irregular: する → できる &nbsp;|&nbsp; くる → こられる</h3>
+    <h3>る Verbs — replace る with 〜られる</h3>
+    <div class="example-block">
+      <span class="ja clickable-ja">あした<ruby>食<rt>た</rt></ruby>べられるよ。</span>
+      <span class="en">I can eat tomorrow.</span>
+    </div>
+    <h3>う Verbs — [u] → [e] + る</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>飲<rt>の</rt></ruby>む</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">[u]→[e]</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>め</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">+ る</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>める</span></div>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja">ビールが<ruby>飲<rt>の</rt></ruby>める。</span>
+      <span class="en">I can drink beer. (always correct with が)</span>
+    </div>
+    <div class="note warn">⚠️ ら抜き言葉: 食べられる → 食べれる (shortened, unambiguous potential. Some consider it informal.)</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--              TAB 5: 〜たい FORM                                -->
+  <!-- ============================================================ -->
+  <div id="tab-tai" class="tab-content">
+
+    <h2>The ~たい Form — "want to [verb]"</h2>
+
+    <div class="explainer">
+      <strong>The logic of 〜たい:</strong> In Japanese, expressing desire is more complex than in English. The 〜たい form attaches to the verb stem and means "I want to do [verb]." However, <strong>you cannot use 〜たい to directly describe other people's desires</strong> — this would be like you're claiming to know what's inside someone else's head, which is considered presumptuous. Instead, you use other forms like 〜たがっている (observable behavior) or 〜たいそうです (hearsay) or quote them directly. Notice also that the object of a 〜たい verb can be marked by either を or が — both are acceptable, but が is more common.
+    </div>
+
+    <h2>1. Basic Form</h2>
+    <p>Attach <strong>〜たい</strong> to the verb <strong>stem</strong> (〜ます form without ます).</p>
+    <div class="conj-box">
+      <div class="step"><span class="label">ます form</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べます</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">Stem</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べ</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">〜たい</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べたい</span></div>
+    </div>
+
+    <h3>Conjugates as an い‑Adjective</h3>
+    <div class="i-adj-table">
+      <div class="row"><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べたいです。</span><span class="en">Want to eat (polite)</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べたい。</span><span class="en">Want to eat (plain)</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べたくないです。</span><span class="en">Don't want to eat (polite)</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べたかったです。</span><span class="en">Wanted to eat (polite)</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べたくなかったです。</span><span class="en">Did not want to eat (polite)</span></div>
+    </div>
+
+    <h2>2. Particle Usage: を vs. が</h2>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はりんごを<ruby>食<rt>た</rt></ruby>べたいです。</span>
+      <span class="en">I want to eat an apple. (using を)</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>はりんごが<ruby>食<rt>た</rt></ruby>べたいです。</span>
+      <span class="en">I want to eat an apple. (using が — also common)</span>
+    </div>
+    <div class="note warn">⚠️ Particles other than を never change to が. (e.g., と stays と, に stays に)</div>
+
+    <h2>3. Restrictions — When NOT to use 〜たい</h2>
+    <div class="note warn">〜たい is <strong>not acceptable</strong> for describing other people's desires. Use the alternatives below.</div>
+
+    <div class="explainer">
+      <strong>Why the restriction?</strong> In Japanese culture, it's considered rude or presumptuous to claim you know what someone else wants. By using 〜たい for someone else, you're making a statement about their inner state that you can't actually verify. Instead, Japanese has several ways to <strong>indirectly</strong> describe others' desires:
+      <ul>
+        <li><strong>〜たがっている</strong> — based on observable behavior ("they seem to want")</li>
+        <li><strong>〜たいそうです</strong> — hearsay ("I heard they want")</li>
+        <li><strong>〜たいと言っている</strong> — direct quotation ("they said they want")</li>
+      </ul>
+    </div>
+
+    <div class="rules-box">
+      <div class="rule">
+        <span class="rule-num">1</span> <strong>Your own desires</strong> — ✅ Always acceptable
+        <span class="ja clickable-ja"><ruby>私<rt>わたし</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたいです。</span>
+        <span class="en">I want to go to Japan.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-num">2</span> <strong>Asking questions</strong> — ✅ Acceptable but can be rude (in any language!)
+        <span class="ja clickable-ja"><ruby>日本<rt>にほん</rt></ruby>でなにをやりたい？</span>
+        <span class="en">What do you want to do in Japan?</span>
+      </div>
+      <div class="rule">
+        <span class="rule-num">3</span> <strong>General desires</strong> — ✅ Acceptable when not specific to an individual
+        <span class="ja clickable-ja">ビールを<ruby>飲<rt>の</rt></ruby>みたい<ruby>人<rt>ひと</rt></ruby>は<ruby>手<rt>て</rt></ruby>をあげてください。</span>
+        <span class="en">Everyone who wants to drink beer, raise your hands.</span>
+      </div>
+    </div>
+
+    <h2>4. Describing Others' Desires</h2>
+
+    <div class="alt-box">
+      <h3>〜たがっている — observable behavior</h3>
+      <div class="explainer" style="margin:0.3rem 0 0.8rem 0; font-size:0.92rem;">
+        Use this when the person's <strong>behavior</strong> suggests they want to do something — they're looking at it, reaching for it, etc. It's a safe way to talk about others' desires without claiming to know their thoughts.
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja">その<ruby>犬<rt>いぬ</rt></ruby>は<ruby>晩御飯<rt>ばんごはん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べたがっている。</span>
+        <span class="en">That dog (is behaving as though it) wants to eat dinner.</span>
+      </div>
+      <div class="note warn">⚠️ 〜たがっている is a verb — do NOT change を to が.</div>
+    </div>
+
+    <div class="alt-box">
+      <h3>〜たいそうです — hearsay</h3>
+      <div class="explainer" style="margin:0.3rem 0 0.8rem 0; font-size:0.92rem;">
+        Use this when you <strong>heard</strong> someone say they want to do something. It's a report of what you were told, not a claim about their inner state.
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja">あまりやりたくないそうです。</span>
+        <span class="en">From what I gather, they don't really want to do it. (hearsay)</span>
+      </div>
+    </div>
+
+    <div class="alt-box">
+      <h3>〜たいと言っている — quoting</h3>
+      <div class="explainer" style="margin:0.3rem 0 0.8rem 0; font-size:0.92rem;">
+        Use this to <strong>directly quote</strong> someone stating their own desire. This is the most explicit and accurate way to describe someone else's wants.
+      </div>
+      <div class="example-block">
+        <span class="ja clickable-ja">かれは<ruby>日本語<rt>にほんご</rt></ruby>をべんきょうしたいと言っていた。</span>
+        <span class="en">He was saying that he wants to study Japanese.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--              TAB 6: VERB CONJUGATION                          -->
+  <!-- ============================================================ -->
+  <div id="tab-verbs" class="tab-content">
+
+    <h2>Basic Verb Conjugation in Japanese</h2>
+
+    <div class="explainer">
+      <strong>The big picture:</strong> Japanese verbs are surprisingly logical once you understand the patterns. There are only <strong>three verb types</strong>:
+      <ul>
+        <li><strong>Irregular verbs</strong> (する and くる) — only two! You just memorize them.</li>
+        <li><strong>る verbs (ichidan)</strong> — verbs ending in 〜る that are regular. The る is part of the stem.</li>
+        <li><strong>う verbs (godan)</strong> — most verbs. The final sound changes depending on the conjugation.</li>
+      </ul>
+      The key to mastering Japanese verbs is recognizing which type you're dealing with. The 〜ます form (polite) makes everything regular — all verbs conjugate the same way in polite speech. The difficulty comes with the plain form, where each verb type behaves differently.
+    </div>
+
+    <h2>1. Polite Form (〜ます)</h2>
+
+    <div class="explainer">
+      <strong>The easy one:</strong> In polite form, <strong>all verbs conjugate the same way</strong>. Present positive is 〜ます, negative is 〜ません, past is 〜ました, past negative is 〜ませんでした. The 〜ます ending can mean either <strong>present tense</strong> (I do) or <strong>future tense</strong> (I will do) — context tells you which. This is why you learn 〜ます form first in textbooks — it's predictable and polite.
+    </div>
+
+    <div class="verb-table">
+      <div class="row"><span class="label-sm">Positive</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べます</span><span class="en">I (will) eat.</span></div>
+      <div class="row"><span class="label-sm">Negative</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べません</span><span class="en">I do/will not eat.</span></div>
+      <div class="row"><span class="label-sm">Past</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べました</span><span class="en">I ate.</span></div>
+      <div class="row"><span class="label-sm">Past Neg.</span><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べませんでした</span><span class="en">I did not eat.</span></div>
+    </div>
+
+    <h2>2. Plain Form</h2>
+
+    <div class="explainer">
+      <strong>The tricky one:</strong> In plain form, each verb type follows its own pattern. But the good news is that once you know the plain form, you can derive everything else. <strong>Irregulars</strong> (する, くる) just need to be memorized. <strong>る verbs</strong> replace る with the new ending. <strong>う verbs</strong> shift the final sound — [u] becomes [a] for negatives, [e] for potential, [o] for volitional, etc. The pattern is consistent across all う verbs.
+    </div>
+
+    <h3>Irregular Verbs — する &amp; くる</h3>
+    <div class="verb-table">
+      <div class="row"><span class="label-sm">する</span><span class="ja clickable-ja">そうじをする。</span><span class="en">I (will) clean.</span></div>
+      <div class="row"><span class="label-sm">しない</span><span class="ja clickable-ja">そうじをしない。</span><span class="en">I do/will not clean.</span></div>
+      <div class="row"><span class="label-sm">した</span><span class="ja clickable-ja">そうじをした。</span><span class="en">I cleaned.</span></div>
+      <div class="row"><span class="label-sm">しなかった</span><span class="ja clickable-ja">そうじをしなかった。</span><span class="en">I did not clean.</span></div>
+    </div>
+    <div class="verb-table">
+      <div class="row"><span class="label-sm">くる</span><span class="ja clickable-ja"><ruby>二時<rt>にじ</rt></ruby>にくる。</span><span class="en">I come at 2.</span></div>
+      <div class="row"><span class="label-sm">こない</span><span class="ja clickable-ja"><ruby>二時<rt>にじ</rt></ruby>にこない。</span><span class="en">I won't come at 2.</span></div>
+      <div class="row"><span class="label-sm">きた</span><span class="ja clickable-ja"><ruby>二時<rt>にじ</rt></ruby>にきた。</span><span class="en">I came at 2.</span></div>
+      <div class="row"><span class="label-sm">こなかった</span><span class="ja clickable-ja"><ruby>二時<rt>にじ</rt></ruby>にこなかった。</span><span class="en">I didn't come at 2.</span></div>
+    </div>
+
+    <h3>る Verbs — replace る with...</h3>
+    <div class="verb-table">
+      <div class="row"><span class="label-sm">Present</span><span class="ja clickable-ja">ドアをあける。</span><span class="en">open the door.</span></div>
+      <div class="row"><span class="label-sm">Neg.</span><span class="ja clickable-ja">ドアをあけない。</span><span class="en">do not open the door.</span></div>
+      <div class="row"><span class="label-sm">Past</span><span class="ja clickable-ja">ドアをあけた。</span><span class="en">opened the door.</span></div>
+      <div class="row"><span class="label-sm">Past Neg.</span><span class="ja clickable-ja">ドアをあけなかった。</span><span class="en">didn't open the door.</span></div>
+    </div>
+
+    <h3>う Verbs — [u] → [a] + ない (negative)</h3>
+    <div class="conj-box">
+      <div class="step"><span class="label"><ruby>飲<rt>の</rt></ruby>む</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">[u]→[a]</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>ま</span></div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="label">+ ない</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>まない</span></div>
+    </div>
+    <div class="note warn">⚠️ う → わ + ない (e.g., <ruby>歌<rt>うた</rt></ruby>う → <ruby>歌<rt>うた</rt></ruby>わない)</div>
+    <div class="note warn">⚠️ ある → ない (irregular)</div>
+
+    <h3>Plain Past — patterns</h3>
+    <div class="pattern-box">
+      <div class="row"><span class="ja clickable-ja"><ruby>買<rt>か</rt></ruby>う</span><span class="arrow-sm">→</span><span class="ja clickable-ja"><ruby>買<rt>か</rt></ruby>った</span><span class="en">〜う → 〜った</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span><span class="arrow-sm">→</span><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んだ</span><span class="en">〜む → 〜んだ</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>書<rt>か</rt></ruby>く</span><span class="arrow-sm">→</span><span class="ja clickable-ja"><ruby>書<rt>か</rt></ruby>いた</span><span class="en">〜く → 〜いた</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>泳<rt>およ</rt></ruby>ぐ</span><span class="arrow-sm">→</span><span class="ja clickable-ja"><ruby>泳<rt>およ</rt></ruby>いだ</span><span class="en">〜ぐ → 〜いだ</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>話<rt>はな</rt></ruby>す</span><span class="arrow-sm">→</span><span class="ja clickable-ja"><ruby>話<rt>はな</rt></ruby>した</span><span class="en">〜す → 〜した</span></div>
+      <div class="row"><span class="ja clickable-ja"><ruby>行<rt>い</rt></ruby>く</span><span class="arrow-sm">→</span><span class="ja clickable-ja"><ruby>行<rt>い</rt></ruby>った</span><span class="en">Exception!</span></div>
+    </div>
+
+    <h3>Past Negative — 〜ない → 〜なかった</h3>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>まなかった。</span>
+      <span class="en">Didn't drink.</span>
+    </div>
+    <div class="example-block">
+      <span class="ja clickable-ja"><ruby>歌<rt>うた</rt></ruby>わなかった。</span>
+      <span class="en">Didn't sing.</span>
+    </div>
+
+    <h2>Summary Table — Plain Form</h2>
+    <table>
+      <thead><tr><th>Verb</th><th>Present</th><th>Neg.</th><th>Past</th><th>Past Neg.</th></tr></thead>
+      <tbody>
+        <tr><td>する</td><td><span class="ja clickable-ja">する</span></td><td><span class="ja clickable-ja">しない</span></td><td><span class="ja clickable-ja">した</span></td><td><span class="ja clickable-ja">しなかった</span></td></tr>
+        <tr><td><ruby>来<rt>く</rt></ruby>る</td><td><span class="ja clickable-ja"><ruby>来<rt>く</rt></ruby>る</span></td><td><span class="ja clickable-ja"><ruby>来<rt>こ</rt></ruby>ない</span></td><td><span class="ja clickable-ja"><ruby>来<rt>き</rt></ruby>た</span></td><td><span class="ja clickable-ja"><ruby>来<rt>こ</rt></ruby>なかった</span></td></tr>
+        <tr><td><ruby>食<rt>た</rt></ruby>べる</td><td><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べる</span></td><td><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べない</span></td><td><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べた</span></td><td><span class="ja clickable-ja"><ruby>食<rt>た</rt></ruby>べなかった</span></td></tr>
+        <tr><td><ruby>飲<rt>の</rt></ruby>む</td><td><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>む</span></td><td><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>まない</span></td><td><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>んだ</span></td><td><span class="ja clickable-ja"><ruby>飲<rt>の</rt></ruby>まなかった</span></td></tr>
+        <tr><td><ruby>歌<rt>うた</rt></ruby>う</td><td><span class="ja clickable-ja"><ruby>歌<rt>うた</rt></ruby>う</span></td><td><span class="ja clickable-ja"><ruby>歌<rt>うた</rt></ruby>わない</span></td><td><span class="ja clickable-ja"><ruby>歌<rt>うた</rt></ruby>った</span></td><td><span class="ja clickable-ja"><ruby>歌<rt>うた</rt></ruby>わなかった</span></td></tr>
+        <tr><td>ある</td><td><span class="ja clickable-ja">ある</span></td><td><span class="ja clickable-ja">ない</span></td><td><span class="ja clickable-ja">あった</span></td><td><span class="ja clickable-ja">なかった</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--                     FOOTER                                   -->
+  <!-- ============================================================ -->
+  <hr style="margin-top:2.5rem;" />
+  <p class="footer-note">Based on the original documents by Dr. Wes Robertson — Reformatted for clarity with detailed explanations. All content © Dr. Wes Robertson / @ScriptingJapan.</p>
+
+</div>
+
+<!-- ============================================================ -->
+<!--                     SCRIPTS                                   -->
+<!-- ============================================================ -->
+<script>
+  (function() {
+
+    // =============================================================
+    // 1. TAB SWITCHING
+    // =============================================================
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+
+    function activateTab(tabId) {
+      contents.forEach(function(c) { c.classList.remove('active'); });
+      tabs.forEach(function(b) { b.classList.remove('active'); });
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      const btn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+      if (btn) btn.classList.add('active');
+    }
+
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        activateTab(this.getAttribute('data-tab'));
+      });
+    });
+
+    if (window.location.hash) {
+      const hash = window.location.hash.replace('#', '');
+      const targetTab = document.querySelector('.tab-btn[data-tab="' + hash + '"]');
+      if (targetTab) activateTab(hash);
+    }
+
+    // =============================================================
+    // 2. FURIGANA TOGGLE
+    // =============================================================
+    const paperEl = document.querySelector('.paper');
+    const furiganaToggleBtn = document.getElementById('furiganaToggle');
+    const furiganaStatusLabel = document.getElementById('furiganaStatus');
+    let furiganaVisible = true;
+
+    function toggleFurigana() {
+      furiganaVisible = !furiganaVisible;
+      if (furiganaVisible) {
+        paperEl.classList.remove('furigana-hidden');
+        furiganaToggleBtn.classList.add('active');
+        furiganaToggleBtn.textContent = '🔤 Furigana';
+        furiganaStatusLabel.textContent = 'Furigana: ON';
+      } else {
+        paperEl.classList.add('furigana-hidden');
+        furiganaToggleBtn.classList.remove('active');
+        furiganaToggleBtn.textContent = '🔤 Furigana (OFF)';
+        furiganaStatusLabel.textContent = 'Furigana: OFF';
+      }
+    }
+
+    furiganaToggleBtn.addEventListener('click', toggleFurigana);
+
+    // =============================================================
+    // 3. SPEED CONTROL (TTS)
+    // =============================================================
+    const speedToggleBtn = document.getElementById('speedToggle');
+    let currentSpeed = 1.0;
+    const speedOptions = [0.75, 1.0];
+    let speedIndex = 1; // starts at 1.0
+
+    function toggleSpeed() {
+      speedIndex = (speedIndex + 1) % speedOptions.length;
+      currentSpeed = speedOptions[speedIndex];
+      speedToggleBtn.textContent = '🐢 ' + currentSpeed + 'x';
+      if (currentSpeed === 1.0) {
+        speedToggleBtn.classList.add('active');
+      } else {
+        speedToggleBtn.classList.remove('active');
+      }
+    }
+
+    speedToggleBtn.addEventListener('click', toggleSpeed);
+
+    // =============================================================
+    // 4. TEXT-TO-SPEECH ON CLICK
+    // =============================================================
+    function speakText(htmlContent) {
+      // Cancel any ongoing speech
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+
+      // Extract clean Japanese text (remove furigana)
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+      const rtElements = tempDiv.querySelectorAll('rt');
+      rtElements.forEach(function(rt) { rt.remove(); });
+      const rubyElements = tempDiv.querySelectorAll('ruby');
+      rubyElements.forEach(function(ruby) {
+        ruby.outerHTML = ruby.innerHTML;
+      });
+      let cleanText = tempDiv.textContent.trim();
+      if (!cleanText || cleanText.length === 0) {
+        cleanText = htmlContent.replace(/<[^>]*>/g, '').trim();
+      }
+      if (!cleanText || cleanText.length === 0) return;
+
+      // Create utterance with current speed
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'ja-JP';
+      utterance.rate = currentSpeed;  // ← uses the speed toggle value
+      utterance.pitch = 1.0;
+
+      if (window.speechSynthesis) {
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Attach click listeners to all Japanese text
+    const clickableElements = document.querySelectorAll('.clickable-ja');
+    clickableElements.forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        speakText(this.innerHTML);
+      });
+    });
+
+  })();
+</script>
+
+</body>
+</html>
