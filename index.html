@@ -1022,8 +1022,9 @@
         <!-- Category 1: 📖 Reading Resources -->
         <div class="resource-category">
           <h3>📖 Reading Resources</h3>
-          <div class="resources-grid">
-            <!-- Waku Waku Naoko - Reading PDF -->
+
+          <!-- Top-level PDF -->
+          <div class="resources-grid" style="margin-bottom: 12px">
             <a
               href="pdf/reading/Waku-Waku-Naoko.pdf"
               target="_blank"
@@ -1035,402 +1036,933 @@
               <span class="resource-desc">Japanese reading practice</span>
               <span class="resource-badge pdf">PDF</span>
             </a>
+          </div>
 
-            <!-- Level-0 Full - Reading Video -->
-            <a
-              href="videos/reading/Level-0-Full.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Full</span>
-              <span class="resource-desc">Complete Level 0 reading video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
+          <!-- Level 0 Folder -->
+          <div class="level-folder">
+            <button class="level-folder-toggle" data-level="0">
+              <span class="folder-icon">📁</span>
+              Level 0 <span class="folder-count">(32 videos)</span>
+              <span class="folder-arrow">▶</span>
+            </button>
+            <div class="level-folder-content" id="level0-content">
+              <div class="resources-grid">
+                <a
+                  href="videos/reading/level0/Level-0-A-Little-Bit.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">A Little Bit</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Anko-Chan-Seasonal-Sweets.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Anko-chan: Seasonal Sweets</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Chrysanthemum.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Chrysanthemum</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Egg.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Egg</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Flowers-and-Colors.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Flowers &amp; Colors</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Full.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Full</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Hanasuke-The-Chihuahua-A-Walk-With-His-Shadow.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hanasuke: Walk With Shadow</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Hanasuke-The-Chihuahua-Amazing.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hanasuke: Amazing</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Hanasuke-The-Chihuahua-Cherry-Blossom-Viewing.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hanasuke: Cherry Blossom</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Hanasuke-The-Chihuahua-Im-Sorry-Big-Sister.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hanasuke: Sorry Big Sister</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Hot-Pot-On-A-Cold-Day.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hot Pot on a Cold Day</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-I-Want-A-Boyfriend.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">I Want a Boyfriend</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-I-Was-There.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">I Was There</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-In-The-Night-Sky.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">In the Night Sky</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Its-Fine.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">It's Fine</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Japanese-Picture-Book-Ai-chan-1.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Ai-chan 1</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Japanese-Picture-Book-Ai-chan-2.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Ai-chan 2</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Lets-Go-To-Hiroshima-and-Miyajima.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hiroshima &amp; Miyajima</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Lets-Make-Some-Tea.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Let's Make Tea</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-My-Dad.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">My Dad</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Nikujaga.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Nikujaga</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Oden.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Oden</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Praying-Mantis.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Praying Mantis</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Snowman.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Snowman</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Still.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Still</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-The-Crow-and-the-Pitcher.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">The Crow &amp; the Pitcher</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-The-Shepherd-Boy.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">The Shepherd Boy</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Two-Frogs.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Two Frogs</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-Wanna-Read-It.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Wanna Read It</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level0/Level-0-What-Is-This.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">What Is This</span>
+                  <span class="resource-desc">Level 0 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+              </div>
+            </div>
+          </div>
 
-            <!-- Level-0 A Little Bit -->
-            <a
-              href="videos/reading/Level-0-A-Little-Bit.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - A Little Bit</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
+          <!-- Level 1 Folder -->
+          <div class="level-folder">
+            <button class="level-folder-toggle" data-level="1">
+              <span class="folder-icon">📁</span>
+              Level 1 <span class="folder-count">(17 videos)</span>
+              <span class="folder-arrow">▶</span>
+            </button>
+            <div class="level-folder-content" id="level1-content">
+              <div class="resources-grid">
+                <a
+                  href="videos/reading/level1/Level-1-big-apple.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Big Apple</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-chihuahua-hanasuke-hat-and-muffler.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hanasuke: Hat &amp; Muffler</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-chihuahua-hanasuke-snowman.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hanasuke: Snowman</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-crying-woman.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Crying Woman</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-dias-winter-vacation.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Dia's Winter Vacation</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-grandma-is-missing.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Grandma Is Missing</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-mexican-dog.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Mexican Dog</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-my-family.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">My Family</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-peanuts-are-interesting.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Peanuts Are Interesting</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-peter-rabbit-series-the-story-of-benjamin-bunny.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name"
+                    >Peter Rabbit: Benjamin Bunny</span
+                  >
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-peter-rabbit-story.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Peter Rabbit Story</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-pumpkin-to-autumn-in-japan.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Pumpkin to Autumn in Japan</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-schmoe-house.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Schmoe House</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-shiba-inu-dina-is-going-to-kyoto-in-autumn.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Dina: Going to Kyoto</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-vietnamese-spring-rolls.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Vietnamese Spring Rolls</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-went-to-the-mountain.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Went to the Mountain</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level1/Level-1-what-is-this.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">What Is This</span>
+                  <span class="resource-desc">Level 1 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+              </div>
+            </div>
+          </div>
 
-            <!-- Level-0 Anko-chan -->
-            <a
-              href="videos/reading/Level-0-Anko-Chan-Seasonal-Sweets.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Anko-chan</span>
-              <span class="resource-desc">Seasonal sweets story</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
+          <!-- Level 2 Folder -->
+          <div class="level-folder">
+            <button class="level-folder-toggle" data-level="2">
+              <span class="folder-icon">📁</span>
+              Level 2 <span class="folder-count">(8 videos)</span>
+              <span class="folder-arrow">▶</span>
+            </button>
+            <div class="level-folder-content" id="level2-content">
+              <div class="resources-grid">
+                <a
+                  href="videos/reading/level2/Level-2-dormitory-mother-with-round-glasses.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Dormitory Mother</span>
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level2/Level-2-hokkaido.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hokkaido</span>
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level2/Level-2-lazy-huan.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Lazy Huan</span>
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level2/Level-2-library-at-night.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Library at Night</span>
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level2/Level-2-my-boyfriend-likes-fried-tofu.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name"
+                    >My Boyfriend Likes Fried Tofu</span
+                  >
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level2/Level-2-vitoria-resia-stories-from-the-indigenous-people-of-brazil.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Vitoria Resia</span>
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level2/Level-2-welcome-to-beppu.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Welcome to Beppu</span>
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level2/Level-2-yamadas-big-problem.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Yamada's Big Problem</span>
+                  <span class="resource-desc">Level 2 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+              </div>
+            </div>
+          </div>
 
-            <!-- Level-0 Chrysanthemum -->
-            <a
-              href="videos/reading/Level-0-Chrysanthemum.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Chrysanthemum</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
+          <!-- Level 3 Folder -->
+          <div class="level-folder">
+            <button class="level-folder-toggle" data-level="3">
+              <span class="folder-icon">📁</span>
+              Level 3 <span class="folder-count">(16 videos)</span>
+              <span class="folder-arrow">▶</span>
+            </button>
+            <div class="level-folder-content" id="level3-content">
+              <div class="resources-grid">
+                <a
+                  href="videos/reading/level3/Level-3-black-bat-and-white-bat.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Black Bat and White Bat</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-bullet-into-ball.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Bullet Into Ball</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-emperors-birthday.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Emperor's Birthday</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-felipa.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Felipa</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-fox-dance-the-day-when-the-children-of-himejima-become-foxes.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Fox Dance</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-frog.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Frog</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-grandmas-uchinaguchi-okinawa-words.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Grandma's Uchinaguchi</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-hot-spring-town-beppu.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Hot Spring Town Beppu</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-iida-kun.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Iida-kun</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-its-strange-mysterious-things-i-felt-2.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Mysterious Things I Felt 2</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-its-strange-the-strange-thing-i-felt.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">The Strange Thing I Felt</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-science-of-hot-springs.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Science of Hot Springs</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-shiiitake-mushroom.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Shiitake Mushroom</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-the-story-of-mr-kichishiroku-a-fish-called-babakuro.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Mr. Kichishiroku</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-tsureruzegusa.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Tsureruzegusa</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level3/Level-3-wild-rose.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Wild Rose</span>
+                  <span class="resource-desc">Level 3 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+              </div>
+            </div>
+          </div>
 
-            <!-- Level-0 Egg -->
-            <a
-              href="videos/reading/Level-0-Egg.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Egg</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Flowers and Colors -->
-            <a
-              href="videos/reading/Level-0-Flowers-and-Colors.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Flowers &amp; Colors</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Hanasuke - A Walk With His Shadow -->
-            <a
-              href="videos/reading/Level-0-Hanasuke-The-Chihuahua-A-Walk-With-His-Shadow.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Hanasuke: Walk</span>
-              <span class="resource-desc">A walk with his shadow</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Hanasuke - Amazing -->
-            <a
-              href="videos/reading/Level-0-Hanasuke-The-Chihuahua-Amazing.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Hanasuke: Amazing</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Hanasuke - Cherry Blossom Viewing -->
-            <a
-              href="videos/reading/Level-0-Hanasuke-The-Chihuahua-Cherry-Blossom-Viewing.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name"
-                >Level 0 - Hanasuke: Cherry Blossom</span
-              >
-              <span class="resource-desc">Cherry blossom viewing story</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Hanasuke - I'm Sorry Big Sister -->
-            <a
-              href="videos/reading/Level-0-Hanasuke-The-Chihuahua-Im-Sorry-Big-Sister.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Hanasuke: Sorry</span>
-              <span class="resource-desc">I'm sorry, big sister</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Hot Pot On A Cold Day -->
-            <a
-              href="videos/reading/Level-0-Hot-Pot-On-A-Cold-Day.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Hot Pot</span>
-              <span class="resource-desc">Hot pot on a cold day</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 I Want A Boyfriend -->
-            <a
-              href="videos/reading/Level-0-I-Want-A-Boyfriend.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - I Want A Boyfriend</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 I Was There -->
-            <a
-              href="videos/reading/Level-0-I-Was-There.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - I Was There</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 In The Night Sky -->
-            <a
-              href="videos/reading/Level-0-In-The-Night-Sky.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - In The Night Sky</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 It's Fine -->
-            <a
-              href="videos/reading/Level-0-Its-Fine.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - It's Fine</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Japanese Picture Book Ai-chan 1 -->
-            <a
-              href="videos/reading/Level-0-Japanese-Picture-Book-Ai-chan-1.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Ai-chan 1</span>
-              <span class="resource-desc">Japanese picture book</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Japanese Picture Book Ai-chan 2 -->
-            <a
-              href="videos/reading/Level-0-Japanese-Picture-Book-Ai-chan-2.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Ai-chan 2</span>
-              <span class="resource-desc">Japanese picture book</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Let's Go To Hiroshima -->
-            <a
-              href="videos/reading/Level-0-Lets-Go-To-Hiroshima-and-Miyajima.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name"
-                >Level 0 - Hiroshima &amp; Miyajima</span
-              >
-              <span class="resource-desc">Let's go to Hiroshima</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Let's Make Some Tea -->
-            <a
-              href="videos/reading/Level-0-Lets-Make-Some-Tea.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Let's Make Tea</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 My Dad -->
-            <a
-              href="videos/reading/Level-0-My-Dad.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - My Dad</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Nikujaga -->
-            <a
-              href="videos/reading/Level-0-Nikujaga.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Nikujaga</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Oden -->
-            <a
-              href="videos/reading/Level-0-Oden.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Oden</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Praying Mantis -->
-            <a
-              href="videos/reading/Level-0-Praying-Mantis.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Praying Mantis</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Snowman -->
-            <a
-              href="videos/reading/Level-0-Snowman.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Snowman</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Still -->
-            <a
-              href="videos/reading/Level-0-Still.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Still</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 The Crow and the Pitcher -->
-            <a
-              href="videos/reading/Level-0-The-Crow-and-the-Pitcher.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name"
-                >Level 0 - The Crow &amp; the Pitcher</span
-              >
-              <span class="resource-desc">Aesop's fable</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 The Shepherd Boy -->
-            <a
-              href="videos/reading/Level-0-The-Shepherd-Boy.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - The Shepherd Boy</span>
-              <span class="resource-desc">Aesop's fable</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Two Frogs -->
-            <a
-              href="videos/reading/Level-0-Two-Frogs.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Two Frogs</span>
-              <span class="resource-desc">Short story reading</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 Wanna Read It -->
-            <a
-              href="videos/reading/Level-0-Wanna-Read-It.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - Wanna Read It</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
-
-            <!-- Level-0 What Is This -->
-            <a
-              href="videos/reading/Level-0-What-Is-This.mp4"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="resource-card"
-            >
-              <span class="resource-icon">🎬</span>
-              <span class="resource-name">Level 0 - What Is This</span>
-              <span class="resource-desc">Reading practice video</span>
-              <span class="resource-badge video">MP4</span>
-            </a>
+          <!-- Level 4 Folder -->
+          <div class="level-folder">
+            <button class="level-folder-toggle" data-level="4">
+              <span class="folder-icon">📁</span>
+              Level 4 <span class="folder-count">(7 videos)</span>
+              <span class="folder-arrow">▶</span>
+            </button>
+            <div class="level-folder-content" id="level4-content">
+              <div class="resources-grid">
+                <a
+                  href="videos/reading/level4/Level-4-ali-baba-and-the-forty-thieves-from-arabian-nights.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Ali Baba</span>
+                  <span class="resource-desc">Level 4 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level4/Level-4-cherry-blossoms-and-whistle-from-osamu-dazais-the-cherry-blossoms-and-the-magic-flute.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Cherry Blossoms and Whistle</span>
+                  <span class="resource-desc">Level 4 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level4/Level-4-crow-and-hedgehog.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Crow and Hedgehog</span>
+                  <span class="resource-desc">Level 4 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level4/Level-4-father-of-beppu-tourism.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Father of Beppu Tourism</span>
+                  <span class="resource-desc">Level 4 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level4/Level-4-girl-and-polar-bear.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Girl and Polar Bear</span>
+                  <span class="resource-desc">Level 4 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level4/Level-4-i-was-surprised-by-the-poster.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Surprised by the Poster</span>
+                  <span class="resource-desc">Level 4 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+                <a
+                  href="videos/reading/level4/Level-4-valentines-day-in-japan.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-card"
+                >
+                  <span class="resource-icon">🎬</span>
+                  <span class="resource-name">Valentine's Day in Japan</span>
+                  <span class="resource-desc">Level 4 reading</span>
+                  <span class="resource-badge video">MP4</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3444,7 +3976,6 @@
         }
       })();
     </script>
-
     <!-- 5. GLOBAL SEARCH BAR SCRIPT (JISHO) - WITH TTS BUTTONS -->
     <script>
       // ================================================================
@@ -3722,6 +4253,30 @@
             searchInput.focus();
             searchInput.select();
           }
+        });
+      });
+    </script>
+
+    <!-- ===== LEVEL FOLDER TOGGLE ===== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Set default state: Level 0 expanded, others collapsed
+        const defaultExpanded = "0";
+
+        document.querySelectorAll(".level-folder-toggle").forEach((btn) => {
+          const folder = btn.closest(".level-folder");
+          const level = btn.dataset.level;
+
+          // Set initial state
+          if (level === defaultExpanded) {
+            folder.classList.add("expanded");
+          }
+
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const parent = this.closest(".level-folder");
+            parent.classList.toggle("expanded");
+          });
         });
       });
     </script>

@@ -1536,6 +1536,104 @@ ruby rt,
     font-size: 0.6rem;
   }
 }
+
+/* ===== LEVEL FOLDER STYLES ===== */
+.level-folder {
+  margin-bottom: 8px;
+  border: 1px solid #e3dbd0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #faf8f5;
+}
+
+.level-folder-toggle {
+  width: 100%;
+  padding: 10px 16px;
+  background: #f0ebe3;
+  border: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c241c;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.level-folder-toggle:hover {
+  background: #e6ddd2;
+}
+
+.level-folder-toggle .folder-icon {
+  font-size: 1.1rem;
+}
+
+.level-folder-toggle .folder-count {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #7a6f60;
+  margin-left: auto;
+}
+
+.level-folder-toggle .folder-arrow {
+  font-size: 0.7rem;
+  color: #7a6f60;
+  transition: transform 0.25s ease;
+  margin-left: 8px;
+}
+
+.level-folder.expanded .folder-arrow {
+  transform: rotate(90deg);
+}
+
+.level-folder-content {
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease,
+    padding 0.3s ease;
+  padding: 0 12px;
+}
+
+.level-folder.expanded .level-folder-content {
+  max-height: 5000px;
+  padding: 12px;
+}
+
+.level-folder-content .resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+/* Level folders - mobile responsive */
+@media (max-width: 600px) {
+  .level-folder-content .resources-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  .level-folder-toggle {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .level-folder-content .resources-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .level-folder-toggle {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  .level-folder-toggle .folder-count {
+    font-size: 0.7rem;
+  }
+}
+
 /* ===== COLLAPSE/EXPAND - OVERRIDE FIX ===== */
 .app-container .app-links-section.collapsed .app-links-grid,
 .app-container .app-links-section.collapsed .app-links-footer {
