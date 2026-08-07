@@ -1,5 +1,5 @@
 /* ===== APP LINKS SECTION ===== */
-.app-links-section {#flashJp rt,
+.app-links-section {
   margin-top: 24px;
   padding: 16px 20px;
   background: #f8f5f0;
@@ -459,12 +459,12 @@ button.action-btn {
 }
 
 .modal-card {
-  position: relative;       /* ← For close button positioning */
+  position: relative; /* ← For close button positioning */
   background: white;
   border-radius: 24px;
-  padding: 32px;            /* ← Increased from 24px */
+  padding: 32px; /* ← Increased from 24px */
   max-width: 90%;
-  width: 700px;             /* ← Increased from 600px */
+  width: 700px; /* ← Increased from 600px */
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
@@ -499,17 +499,17 @@ button.action-btn {
 .flash-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 16px;           /* ← Row gap 12px, Column gap 16px */
+  gap: 12px 16px; /* ← Row gap 12px, Column gap 16px */
   justify-content: center;
-  padding: 16px 12px;       /* ← More padding */
-  margin: 25px 0 15px 0;    /* ← More vertical spacing */
+  padding: 16px 12px; /* ← More padding */
+  margin: 25px 0 15px 0; /* ← More vertical spacing */
   border-top: 1px solid #e8e0d5;
   border-bottom: 1px solid #e8e0d5;
 }
 
 .flash-controls .small-btn {
-  padding: 8px 16px;        /* ← Bigger pills */
-  font-size: 0.85rem;       /* ← Slightly larger text */
+  padding: 8px 16px; /* ← Bigger pills */
+  font-size: 0.85rem; /* ← Slightly larger text */
   border-radius: 40px;
   border: none;
   cursor: pointer;
@@ -519,7 +519,7 @@ button.action-btn {
   white-space: nowrap;
   background: #e8e0d5;
   color: #2c3e2f;
-  margin: 4px 2px;          /* ← Extra spacing between pills */
+  margin: 4px 2px; /* ← Extra spacing between pills */
 }
 
 .flash-controls .small-btn:hover {
@@ -550,7 +550,7 @@ button.action-btn {
 /* Flashcard furigana - larger spacing */
 .flash-jp ruby rt,
 .flash-jp rt {
-  font-size: 1.0rem !important;
+  font-size: 1rem !important;
   font-weight: 600 !important;
   color: #8b0000 !important;
   padding-bottom: 12px !important;
@@ -689,7 +689,7 @@ button.action-btn {
   }
 
   .flash-jp {
-    font-size: 2.0rem;
+    font-size: 2rem;
   }
 
   .flash-translation {
@@ -1501,7 +1501,7 @@ ruby rt,
 }
 
 /* Collapsed state */
-.resources-section.collapsed .resources-grid,
+.resources-section.collapsed .resource-category,
 .resources-section.collapsed .resources-footer {
   display: none;
 }
@@ -1535,4 +1535,14 @@ ruby rt,
   .resource-card .resource-desc {
     font-size: 0.6rem;
   }
+}
+/* ===== COLLAPSE/EXPAND - OVERRIDE FIX ===== */
+.app-container .app-links-section.collapsed .app-links-grid,
+.app-container .app-links-section.collapsed .app-links-footer {
+  display: none !important;
+}
+
+.app-container .resources-section.collapsed .resource-category,
+.app-container .resources-section.collapsed .resources-footer {
+  display: none !important;
 }
