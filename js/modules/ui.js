@@ -190,3 +190,10 @@ if (document.readyState === "loading") {
 } else {
   initAppLinksToggle();
 }
+// Conversation Practice button
+document.getElementById('conversationBtn').addEventListener('click', () => {
+    const sprintIndex = activeSprintIndex || 0;
+    const sprintName = sprints[sprintIndex]?.displayName || 'Sprint ' + (sprintIndex + 1);
+    const url = `standalone/conversation-practice.html?sprint=${sprintIndex}&name=${encodeURIComponent(sprintName)}`;
+    window.open(url, '_blank');
+});

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>💬 N5 Conversation Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/conversation.css" />
+  </head>
+  <body>
+    <!-- ============================================================
+    SETUP SCREEN - First visit / no mode set
+    ============================================================ -->
+    <div id="setupScreen" class="setup-screen">
+      <div class="setup-card">
+        <div class="setup-header">
+          <h2>👋 Welcome to N5 Conversation Practice!</h2>
+          <p>Choose how you'd like to practice speaking Japanese.</p>
+        </div>
+
+        <!-- API Mode Option -->
+        <div class="setup-option selected" id="apiOption">
+          <input type="radio" name="mode" id="apiMode" value="api" checked />
+          <label for="apiMode">
+            <strong>🔑 Use DeepSeek API</strong>
+            <span>AI-powered conversations with natural responses</span>
+          </label>
+          <div class="api-key-input active" id="apiKeyInputContainer">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                width: 100%;
+              "
+            >
+              <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                <input
+                  type="password"
+                  id="setupApiKey"
+                  placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                  style="flex: 1; min-width: 180px"
+                />
+                <button id="setupSaveKey" class="setup-save-key-btn">
+                  💾 Save Key
+                </button>
+              </div>
+              <div
+                style="
+                  font-size: 0.7rem;
+                  color: #8a7e6e;
+                  padding: 4px 4px 0;
+                  line-height: 1.5;
+                "
+              >
+                💡 Get your key at:
+                <a
+                  href="https://platform.deepseek.com/api_keys"
+                  target="_blank"
+                  style="color: #6c8b6b; text-decoration: underline"
+                >
+                  platform.deepseek.com/api_keys
+                </a>
+                <br />
+                🔒 Your key is stored locally in your browser and never sent
+                anywhere except to DeepSeek's API.
+              </div>
+              <div id="setupApiStatus" class="setup-api-status"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Offline Mode Option -->
+        <div class="setup-option" id="offlineOption">
+          <input type="radio" name="mode" id="offlineMode" value="offline" />
+          <label for="offlineMode">
+            <strong>📖 Use Built-in Stories</strong>
+            <span>Offline, pre-written conversations (no API needed)</span>
+          </label>
+        </div>
+
+        <button id="setupStartBtn" class="setup-start-btn">
+          🚀 Start Practicing
+        </button>
+        <p class="setup-note">
+          💡 You can change your settings anytime using the ⚙️ button in the
+          app.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================================
+    MAIN APP
+    ============================================================ -->
+    <div class="app-container" id="appContainer">
+      <!-- Header -->
+      <header class="app-header">
+        <h1>💬 N5 Conversation Practice</h1>
+        <div class="header-actions">
+          <span id="modeIndicator" class="mode-indicator">📖 Offline</span>
+          <button id="settingsBtn" class="settings-btn" title="API Settings">
+            ⚙️
+          </button>
+        </div>
+      </header>
+
+      <!-- Sprint & Topic Selection -->
+      <div class="control-panel">
+        <div class="control-group">
+          <label for="sprintSelect">Sprint:</label>
+          <select id="sprintSelect"></select>
+        </div>
+        <div class="control-group">
+          <label for="topicSelect">Topic:</label>
+          <select id="topicSelect"></select>
+        </div>
+        <button id="newSessionBtn" class="new-session-btn">
+          🔄 New Session
+        </button>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar" id="statusBar">
+        <span id="statusText">🎤 Ready — Press "Speak" to start</span>
+        <span id="exchangeCounter">0 / 8 exchanges</span>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-container" id="chatContainer">
+        <div class="chat-messages" id="chatMessages">
+          <div class="system-message">
+            💡 Select a sprint and topic, then press "Speak" to begin your
+            conversation practice!
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Controls -->
+      <div class="input-controls">
+        <button id="speakBtn" class="speak-btn">🎙️ Speak</button>
+        <button id="stopBtn" class="stop-btn" disabled>⏹️ Stop</button>
+        <!-- 🆕 End Session Button -->
+        <button id="endSessionBtn" class="action-btn-small end-session-btn">
+          🚪 End Session
+        </button>
+        <button id="furiganaToggleBtn" class="action-btn-small">
+          🔤 Furigana: ON
+        </button>
+        <button id="ttsToggleBtn" class="action-btn-small">🔊 Auto: ON</button>
+        <button id="translationToggleBtn" class="action-btn-small">
+          🌎 Translation: ON
+        </button>
+        <button id="copyScriptBtn" class="action-btn-small" disabled>
+          📋 Copy
+        </button>
+        <button id="downloadBtn" class="action-btn-small" disabled>
+          📥 Download
+        </button>
+        <button id="clearHistoryBtn" class="action-btn-small clear-btn">
+          🗑️ Clear
+        </button>
+      </div>
+
+      <!-- Grammar & Vocab Hint -->
+      <div class="hint-panel" id="hintPanel">
+        <div class="hint-section">
+          <span class="hint-label">🎯 Grammar:</span>
+          <span id="grammarHint">Select a sprint to see grammar focus</span>
+        </div>
+        <div class="hint-section">
+          <span class="hint-label">📖 Vocabulary:</span>
+          <span id="vocabHint">Select a sprint to see vocabulary</span>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-bar-container">
+          <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+        </div>
+        <span id="progressText">0% complete</span>
+      </div>
+
+      <!-- Export Status Toast -->
+      <div id="exportToast" class="toast">
+        <span id="toastMessage">✅ Script exported!</span>
+      </div>
+    </div>
+
+    <!-- ============================================================
+    SETTINGS MODAL
+    ============================================================ -->
+    <div id="settingsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>⚙️ Settings</h2>
+          <button class="modal-close" id="closeSettingsBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-weight: 600; margin-bottom: 8px">Mode:</p>
+          <div
+            style="
+              display: flex;
+              gap: 16px;
+              margin-bottom: 16px;
+              flex-wrap: wrap;
+            "
+          >
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                cursor: pointer;
+                padding: 6px 12px;
+                border-radius: 20px;
+                background: rgba(108, 139, 107, 0.08);
+              "
+            >
+              <input
+                type="radio"
+                name="settingsMode"
+                id="settingsApiMode"
+                value="api"
+              />
+              🔑 API Mode
+            </label>
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                cursor: pointer;
+                padding: 6px 12px;
+                border-radius: 20px;
+                background: rgba(0, 0, 0, 0.04);
+              "
+            >
+              <input
+                type="radio"
+                name="settingsMode"
+                id="settingsOfflineMode"
+                value="offline"
+              />
+              📖 Offline Mode
+            </label>
+          </div>
+
+          <div id="settingsApiSection" style="display: none">
+            <div class="form-group">
+              <label for="settingsApiKey">DeepSeek API Key:</label>
+              <input
+                type="password"
+                id="settingsApiKey"
+                placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              />
+              <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                <button id="settingsSaveKeyBtn" class="save-btn">
+                  💾 Save Key
+                </button>
+                <button id="settingsClearKeyBtn" class="clear-btn">
+                  🗑️ Clear Key
+                </button>
+              </div>
+              <div
+                style="
+                  font-size: 0.7rem;
+                  color: #8a7e6e;
+                  margin-top: 4px;
+                  line-height: 1.5;
+                "
+              >
+                💡 Get your key at:
+                <a
+                  href="https://platform.deepseek.com/api_keys"
+                  target="_blank"
+                  style="color: #6c8b6b"
+                >
+                  platform.deepseek.com/api_keys
+                </a>
+                <br />
+                🔒 Your key is stored locally in your browser.
+              </div>
+            </div>
+          </div>
+
+          <div id="settingsApiStatus" class="api-status"></div>
+          <div style="margin-top: 12px; font-size: 0.8rem; color: #888">
+            <strong>💡 No API key?</strong> You can still practice with
+            pre-written fallback stories!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/data/sprints.js"></script>
+    <script src="../js/data/sentences.js"></script>
+    <script src="../js/data/stories.js"></script>
+    <script src="../js/data/wordDict.js"></script>
+    <script src="js/conversation-app.js"></script>
+  </body>
+</html>
