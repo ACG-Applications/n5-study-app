@@ -1273,3 +1273,55 @@ body {
     font-size: 0.75rem !important;
   }
 }
+/* ----- BACK BUTTON ----- */
+.back-button {
+  font-size: 0.8rem;
+  background: #e8e0d5;
+  padding: 4px 14px;
+  border-radius: 40px;
+  text-decoration: none;
+  color: #2c3e2f;
+  white-space: nowrap;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.back-button:hover {
+  background: #d4cbbc;
+  transform: translateY(-1px);
+}
+
+/* Update header layout for back button */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid rgba(108, 139, 107, 0.15);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2c241c 0%, #4a6741 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

@@ -31,7 +31,7 @@ ruby {
 ruby rt,
 rt {
   display: ruby-text !important;
-  font-size: 1.2rem !important; /* ← FONT SIZE */
+  font-size: 0.9rem !important; /* ← FONT SIZE */
   font-weight: 700 !important; /* ← FONT WEIGHT */
   color: #8b0000 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
@@ -92,13 +92,16 @@ rt {
 
 .example-jp ruby rt,
 .example-jp rt {
-  font-size: 0.8rem !important; /* ← FONT SIZE */
+  font-size: 0.65rem !important; /* ← FONT SIZE */
   font-weight: 600 !important; /* ← FONT WEIGHT */
-  color: #290101 !important; /* ← FONT COLOR */
+  color: #8b0001 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
-  letter-spacing: 0.5px !important; /* ← LETTER SPACING */
+  letter-spacing: 0.3px !important; /* ← LETTER SPACING */
   background: transparent !important; /* ← BACKGROUND */
   padding-bottom: 2px !important; /* ← PADDING */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* ─── FURIGANA IN QUIZ ────────────────────────────────────────── */
@@ -115,7 +118,7 @@ rt {
 .quiz-option-btn rt,
 .hard-opt-btn ruby rt,
 .hard-opt-btn rt {
-  font-size: 0.9rem !important; /* ← FONT SIZE */
+  font-size: 0.8rem !important; /* ← FONT SIZE */
   font-weight: 600 !important; /* ← FONT WEIGHT */
   color: #290101 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
@@ -209,7 +212,7 @@ rt {
 
 .example-jp {
   font-size: 1.7rem !important; /* ← FONT SIZE */
-  font-weight: 450 !important; /* ← FONT WEIGHT */
+  font-weight: 550 !important; /* ← FONT WEIGHT */
   color: #000000 !important; /* ← FONT COLOR */
   text-align: left !important; /* ← TEXT ALIGN */
   letter-spacing: 0.3px !important; /* ← LETTER SPACING */
@@ -220,7 +223,32 @@ rt {
   flex-wrap: wrap !important;
   align-items: flex-end !important;
   gap: 4px !important;
-  line-height: 1.2 !important; /* ← LINE HEIGHT */
+  line-height: 1.4 !important; /* ← LINE HEIGHT */
+}
+
+/* Force ALL children to be black - MORE SPECIFIC */
+.example-jp,
+.example-jp *,
+.example-jp span,
+.example-jp ruby,
+.example-jp rt,
+.example-jp .particle,
+.example-jp span.particle,
+.example-jp ruby rt,
+.example-jp .jp-text,
+.example-jp .jp-line,
+.example-jp div,
+.example-jp strong,
+.example-jp em,
+.example-jp b,
+.example-jp i {
+  color: #000000 !important;
+}
+
+/* But keep furigana red */
+.example-jp ruby rt,
+.example-jp rt {
+  color: #8b0000 !important !important; /* ← Keep furigana red */
 }
 
 /* ─── EXAMPLE ITEM CONTAINER ──────────────────────────────────── */
@@ -937,13 +965,28 @@ rt {
 
 .learn-container .example-box .jp {
   font-size: 1.2rem !important; /* ← JAPANESE SIZE */
-  font-weight: 500 !important; /* ← JAPANESE WEIGHT */
+  font-weight: 700 !important; /* ← JAPANESE WEIGHT */
   color: #000000 !important; /* ← JAPANESE COLOR */
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: flex-end !important;
   gap: 4px !important;
   line-height: 1.2 !important;
+}
+
+/* Force children to be black in Learn tab */
+.learn-container .example-box .jp,
+.learn-container .example-box .jp *,
+.learn-container .example-box .jp span,
+.learn-container .example-box .jp ruby,
+.learn-container .example-box .jp rt {
+  color: #000000 !important;
+}
+
+/* Keep furigana red in Learn tab */
+.learn-container .example-box .jp ruby rt,
+.learn-container .example-box .jp rt {
+  color: #8b0000 !important;
 }
 
 .learn-container .example-box .en {

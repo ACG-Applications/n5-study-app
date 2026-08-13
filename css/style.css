@@ -1350,44 +1350,7 @@ button.action-btn {
   vertical-align: middle;
   margin: 0 2px;
 }
-/* ================================================================
-   FORCE FURIGANA - Dark Red with More Spacing
-   ================================================================ */
 
-/* Global override for all furigana */
-rt,
-ruby rt,
-.flash-jp rt,
-.flash-jp ruby rt,
-#flashJp rt,
-#flashJp ruby rt,
-.story-japanese-block rt,
-.story-japanese-block ruby rt,
-#storyJapaneseBlock rt,
-#storyJapaneseBlock ruby rt,
-.learn-container rt,
-.learn-container ruby rt,
-.example-jp rt,
-.example-jp ruby rt,
-.quiz-sentence rt,
-.quiz-sentence ruby rt,
-.conj-item rt,
-.conj-item ruby rt,
-.mastered-adj-dict rt,
-.mastered-adj-dict ruby rt,
-.mastered-verb-dict rt,
-.mastered-verb-dict ruby rt {
-  color: #8b0000 !important;
-  padding-bottom: 8px !important;
-  font-size: 1.2rem !important;
-  font-weight: 600 !important;
-  background: transparent !important;
-  text-align: center !important;
-  letter-spacing: 0.5px !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  padding-top: 0 !important;
-}
 /* Vocab furigana - dark red */
 #vocabWord ruby rt,
 #vocabWord rt {
