@@ -44,14 +44,16 @@ function injectWordMeanings() {
 }
 
 // ============================================================
-// FIXED: Build Ruby HTML using match collection + end-to-start replacement
+// FIXED: Build Ruby HTML - now handles 々 (iteration mark)
 // Example: 好（す）き → <ruby>好<rt>す</rt></ruby>き
+// Example: 時々（ときどき） → <ruby>時々<rt>ときどき</rt></ruby>
 // ============================================================
 function buildRubyHTML(text) {
   if (!text) return text;
   
-  // Pattern: kanji + (furigana) + optional trailing kana
-  const pattern = /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）([\u3040-\u30FF]*)/g;
+  // Pattern: one or more kanji/iteration marks + (furigana) + optional trailing kana
+  // Added \u3005 for the iteration mark 々
+  const pattern = /([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）([\u3040-\u30FF]*)/g;
   
   // Collect all matches with their positions
   let matches = [];

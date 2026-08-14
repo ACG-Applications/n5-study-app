@@ -135,6 +135,157 @@ rt {
 /* < END of FURIGANA COMPONENT > */
 
 /* ================================================================
+   FIX: FURIGANA OVERLAP ON SCROLL - REFINED
+   ================================================================ */
+
+/* Story mode specific - balanced spacing */
+.story-japanese-block {
+  font-size: 1.2rem !important;
+  line-height: 2.4 !important; /* Balanced - enough space without being excessive */
+  padding: 4px 4px !important;
+}
+
+/* Block mode sentences - prevent overlap with balanced spacing */
+#storyJapaneseBlock .highlight-sentence {
+  display: block !important;
+  line-height: 2.4 !important;
+  padding: 4px 4px !important;
+  margin: 1px 0 !important;
+}
+
+#storyJapaneseBlock .highlight-sentence ruby {
+  line-height: 2.2 !important;
+}
+
+#storyJapaneseBlock .highlight-sentence ruby rt,
+#storyJapaneseBlock .highlight-sentence rt {
+  font-size: 0.65rem !important;
+  padding: 0 0 1px 0 !important;
+  line-height: 1 !important;
+}
+
+/* Sentence mode - ensure spacing */
+.story-sentence {
+  line-height: 2.4 !important;
+  padding: 6px 4px !important;
+  margin-bottom: 4px !important;
+}
+
+.story-sentence .jp-line {
+  line-height: 2.3 !important;
+}
+
+.story-sentence .jp-line ruby {
+  line-height: 2.2 !important;
+}
+
+.story-sentence .jp-line ruby rt,
+.story-sentence .jp-line rt {
+  font-size: 0.65rem !important;
+  padding: 0 0 1px 0 !important;
+  line-height: 1 !important;
+}
+
+/* Active/highlighted sentences - keep consistent */
+.highlight-sentence-active,
+.active-sentence {
+  line-height: 2.4 !important;
+  padding: 4px 6px !important;
+}
+
+.highlight-sentence-active ruby,
+.active-sentence ruby {
+  line-height: 2.2 !important;
+}
+
+.highlight-sentence-active ruby rt,
+.active-sentence ruby rt,
+.highlight-sentence-active rt,
+.active-sentence rt {
+  font-size: 0.65rem !important;
+  padding: 0 0 1px 0 !important;
+  line-height: 1 !important;
+}
+
+/* Story content container */
+.story-content {
+  line-height: 2.4 !important;
+  padding: 2px 0 !important;
+}
+
+/* Block mode content */
+.block-mode .story-japanese-block {
+  line-height: 2.4 !important;
+}
+
+.block-mode .story-english-block {
+  line-height: 1.8 !important;
+  padding-top: 10px !important;
+  margin-top: 6px !important;
+  border-top: 1px solid #e8e0d5 !important;
+}
+
+/* Prevent scroll-induced layout shifts */
+#storyContent {
+  overflow-y: auto !important;
+  scroll-behavior: smooth !important;
+  padding: 4px 6px !important;
+}
+
+/* Fix for modal scrolling */
+#storyModal .modal-card {
+  overflow-y: auto !important;
+  padding: 16px 20px !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .story-japanese-block {
+    font-size: 1rem !important;
+    line-height: 2.3 !important;
+  }
+
+  .story-sentence {
+    line-height: 2.3 !important;
+    padding: 4px 2px !important;
+  }
+
+  .story-japanese-block ruby rt,
+  .story-japanese-block rt,
+  .story-sentence .jp-line ruby rt,
+  .story-sentence .jp-line rt {
+    font-size: 0.6rem !important;
+    padding: 0 0 1px 0 !important;
+  }
+
+  #storyJapaneseBlock .highlight-sentence {
+    line-height: 2.2 !important;
+    padding: 3px 2px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .story-japanese-block {
+    font-size: 0.9rem !important;
+    line-height: 2.2 !important;
+  }
+
+  .story-sentence {
+    line-height: 2.2 !important;
+  }
+
+  .story-japanese-block ruby rt,
+  .story-japanese-block rt,
+  .story-sentence .jp-line ruby rt,
+  .story-sentence .jp-line rt {
+    font-size: 0.55rem !important;
+    padding: 0 0 1px 0 !important;
+  }
+}
+
+/* < END of FURIGANA OVERLAP FIX > */
+
+/* ================================================================
    ╔══════════════════════════════════════════════════════════════╗
    ║                                                              ║
    ║                    COMPONENT 2: PARTICLES                   ║

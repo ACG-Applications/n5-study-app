@@ -200,8 +200,9 @@ function wrapSentencesWithSpans(text) {
   let wrappedHtml = "";
   for (let i = 0; i < sentences.length; i++) {
     let sentence = sentences[i];
+    // FIX: Match one or more kanji (including 々) followed by furigana in parentheses
     sentence = sentence.replace(
-      /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
+      /([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g,
       (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
     );
     wrappedHtml += `<span class="highlight-sentence">${sentence}</span>`;
