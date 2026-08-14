@@ -1559,7 +1559,10 @@ Generate your response:`;
             model: "deepseek-chat",
             messages: [
               { role: "system", content: systemPrompt },
-              { role: "user", content: isFirstExchange ? randomOpening : userInput },
+              {
+                role: "user",
+                content: isFirstExchange ? randomOpening : userInput,
+              },
             ],
             max_tokens: 150,
             temperature: 0.7,
@@ -1935,6 +1938,15 @@ Generate your response:`;
     const setupStartBtn = $("setupStartBtn");
     if (setupStartBtn) {
       setupStartBtn.addEventListener("click", handleSetup);
+    }
+
+    // Setup Exit Button - Back to Main
+    const setupExitBtn = document.getElementById("setupExitBtn");
+    if (setupExitBtn) {
+      setupExitBtn.addEventListener("click", function () {
+        // Navigate back to the main index page
+        window.location.href = "../index.html";
+      });
     }
 
     const setupApiKey = $("setupApiKey");

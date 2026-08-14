@@ -4,18 +4,68 @@ let flashIndices = [],
 let flashFuriganaHidden = false;
 let flashShuffled = false;
 let flashTranslationRevealed = false;
+
 const flashJpDiv = document.getElementById("flashJp");
 const flashTransDiv = document.getElementById("flashTranslation");
 const flashModal = document.getElementById("flashcardModal");
 
+// ==================== DATA VALIDATION ====================
+
+function ensureFlashcardData() {
+  const checks = [
+    { name: "sentencesData", exists: typeof sentencesData !== "undefined" },
+    { name: "sprints", exists: typeof sprints !== "undefined" },
+    { name: "masteredSet", exists: typeof masteredSet !== "undefined" },
+  ];
+
+  const missing = checks.filter((c) => !c.exists);
+  if (missing.length > 0) {
+    console.warn(
+      "⚠️ Missing flashcard data:",
+      missing.map((m) => m.name).join(", "),
+    );
+    return false;
+  }
+  return true;
+}
+
+function rebuildFlash() {
+  if (!ensureFlashcardData()) {
+    console.warn("⚠️ Cannot rebuild flashcards: data missing");
+    return;
+  }
+
+  const { start, end } = sprints[activeSprintIndex];
+  flashIndices = [];
+  for (let i = start; i <= end; i++) {
+    if (sentencesData[i]) {
+      const isMastered = masteredSet.has(i);
+      if (
+        (typeof showMastered !== "undefined" && showMastered) ||
+        !isMastered
+      ) {
+        flashIndices.push(i);
+      }
+    }
+  }
+
+  // If no cards, show all sentences in sprint
+  if (!flashIndices.length) {
+    for (let i = start; i <= end; i++) {
+      if (sentencesData[i]) flashIndices.push(i);
+    }
+  }
+
+  flashShuffled = false;
+  flashPos = 0;
+}
+
 // ==================== KANJI HELPER FUNCTIONS ====================
 
-// Get Unicode hex for a kanji character
 function getUnicodeHex(kanji) {
   return kanji.codePointAt(0).toString(16).toUpperCase();
 }
 
-// Get kanji definition from available sources
 function getKanjiDefinition(kanji) {
   if (typeof getWordMeaning === "function") {
     const meaning = getWordMeaning(kanji);
@@ -30,7 +80,6 @@ function getKanjiDefinition(kanji) {
   return null;
 }
 
-// Extract unique kanji from text
 function extractKanjiFromSentence(text) {
   if (!text) return [];
   const clean = text.replace(/[（(][^）)]*[）)]/g, "");
@@ -47,14 +96,12 @@ function addKanjiChips() {
   const sentence = sentencesData[idx].jp || "";
   const kanjiList = extractKanjiFromSentence(sentence);
 
-  // Find the flashcard counter specifically
   const counterP = document.querySelector("#flashcardModal p");
   if (!counterP) {
     console.warn("⚠️ Could not find flashcard counter");
     return;
   }
 
-  // Remove existing chips container
   const existingContainer = document.getElementById("flashKanjiChips");
   if (existingContainer) {
     existingContainer.remove();
@@ -62,7 +109,6 @@ function addKanjiChips() {
 
   if (kanjiList.length === 0) return;
 
-  // Create chips container
   const container = document.createElement("span");
   container.id = "flashKanjiChips";
   container.style.cssText = `
@@ -73,7 +119,6 @@ function addKanjiChips() {
         align-items: center;
     `;
 
-  // Add label
   const label = document.createElement("span");
   label.textContent = "🖌️";
   label.style.cssText = `
@@ -83,7 +128,6 @@ function addKanjiChips() {
     `;
   container.appendChild(label);
 
-  // Add each kanji as a clickable chip
   kanjiList.forEach((kanji) => {
     const chip = document.createElement("span");
     chip.textContent = kanji;
@@ -124,39 +168,17 @@ function addKanjiChips() {
     container.appendChild(chip);
   });
 
-  // Append to the flashcard counter
   counterP.appendChild(container);
 }
 
 // ==================== END KANJI CHIPS ====================
 
-// Update flashcard modal title with current sprint name
 function updateFlashcardTitle() {
   const sprintName = sprints[activeSprintIndex].displayName;
   const modalTitle = document.getElementById("flashcardTitle");
   if (modalTitle) {
     modalTitle.innerHTML = `📇 ${sprintName} · Flashcards`;
   }
-}
-
-function rebuildFlash() {
-  const { start, end } = sprints[activeSprintIndex];
-  flashIndices = [];
-  for (let i = start; i <= end; i++) {
-    if (
-      (typeof showMastered !== "undefined" && showMastered) ||
-      !masteredSet.has(i)
-    ) {
-      flashIndices.push(i);
-    } else if (typeof showMastered === "undefined") {
-      flashIndices.push(i);
-    }
-  }
-  if (!flashIndices.length) {
-    for (let i = start; i <= end; i++) flashIndices.push(i);
-  }
-  flashShuffled = false;
-  flashPos = 0;
 }
 
 function shuffleFlashcards() {
@@ -175,9 +197,6 @@ function resetFlashcardOrder() {
   if (flashIndices.length) showFlash(0);
 }
 
-/**
- * Get dictionary meaning for a word
- */
 function getWordMeaning(word) {
   const dict = window.wordDict || null;
   if (!dict) return null;
@@ -210,9 +229,6 @@ function getWordMeaning(word) {
   return null;
 }
 
-/**
- * Wrap a word with tooltip HTML
- */
 function wrapWordWithTooltip(word, meaning) {
   let displayWord = word;
 
@@ -248,9 +264,6 @@ function wrapWordWithTooltip(word, meaning) {
   return `<span class="word-tooltip">${displayWord}<span class="tooltip-text">${meaning}</span></span>`;
 }
 
-/**
- * Wrap words with tooltips for flashcard display
- */
 function wrapWordsWithTooltips(sentence) {
   if (!sentence || !sentence.jp) return "";
 
@@ -295,17 +308,16 @@ function showFlash(pos) {
   const revealBtn = document.getElementById("revealTransBtn");
   if (revealBtn) revealBtn.innerText = "🔎 Reveal";
 
-  // Update furigana toggle button to reflect current state
   const furiBtn = document.getElementById("flashFuriToggleBtn");
   if (furiBtn) {
-    furiBtn.innerText = flashFuriganaHidden ? "🔤 Furigana On" : "🔤 Furigana Off";
+    furiBtn.innerText = flashFuriganaHidden
+      ? "🔤 Furigana On"
+      : "🔤 Furigana Off";
   }
 
-  // Add kanji chips
   addKanjiChips();
 }
 
-// Update flashcard content when sprint changes
 function updateFlashcardsForSprint() {
   if (flashModal && flashModal.style.display === "flex") {
     rebuildFlash();
@@ -316,38 +328,44 @@ function updateFlashcardsForSprint() {
 
 // ==================== EVENT LISTENERS ====================
 
-// Flashcard Speed Controls
-document.getElementById("flashSpeed075Btn").onclick = () => {
+// Speed Controls
+document.getElementById("flashSpeed075Btn").onclick = function () {
   currentSpeechRate = 0.75;
-  document.getElementById("flashSpeed075Btn").style.backgroundColor = "#6c8b6b";
+  this.style.backgroundColor = "#6c8b6b";
   document.getElementById("flashSpeed100Btn").style.backgroundColor = "#555";
 };
 
-document.getElementById("flashSpeed100Btn").onclick = () => {
+document.getElementById("flashSpeed100Btn").onclick = function () {
   currentSpeechRate = 1.0;
-  document.getElementById("flashSpeed100Btn").style.backgroundColor = "#6c8b6b";
+  this.style.backgroundColor = "#6c8b6b";
   document.getElementById("flashSpeed075Btn").style.backgroundColor = "#555";
 };
 
-// Initialize flashcard event listeners
-document.getElementById("flashcardBtn").onclick = () => {
-  rebuildFlash();
-  updateFlashcardTitle();
-  if (flashIndices.length) showFlash(0);
-  flashModal.style.display = "flex";
+// Flashcard Button - WAIT FOR DATA
+document.getElementById("flashcardBtn").onclick = function () {
+  if (typeof waitForData === "function") {
+    waitForData(function () {
+      rebuildFlash();
+      updateFlashcardTitle();
+      if (flashIndices.length) showFlash(0);
+      flashModal.style.display = "flex";
+    });
+  } else {
+    // Fallback: try direct
+    rebuildFlash();
+    updateFlashcardTitle();
+    if (flashIndices.length) showFlash(0);
+    flashModal.style.display = "flex";
+  }
 };
 
-document.getElementById("flashShuffleBtn").onclick = () => {
-  shuffleFlashcards();
-};
+// Other flashcard controls
+document.getElementById("flashShuffleBtn").onclick = shuffleFlashcards;
+document.getElementById("flashResetOrderBtn").onclick = resetFlashcardOrder;
 
-document.getElementById("flashResetOrderBtn").onclick = () => {
-  resetFlashcardOrder();
-};
-
-document.getElementById("revealTransBtn").onclick = () => {
+document.getElementById("revealTransBtn").onclick = function () {
   const idx = flashIndices[flashPos];
-  const btn = document.getElementById("revealTransBtn");
+  const btn = this;
   if (!flashTranslationRevealed) {
     if (idx !== undefined)
       flashTransDiv.innerHTML = sentencesData[idx].translation;
@@ -360,38 +378,46 @@ document.getElementById("revealTransBtn").onclick = () => {
   }
 };
 
-document.getElementById("nextFlashBtn").onclick = () => {
+document.getElementById("nextFlashBtn").onclick = function () {
   if (flashIndices.length) {
     flashPos = (flashPos + 1) % flashIndices.length;
     showFlash(flashPos);
   }
 };
 
-document.getElementById("prevFlashBtn").onclick = () => {
+document.getElementById("prevFlashBtn").onclick = function () {
   if (flashIndices.length) {
     flashPos = (flashPos - 1 + flashIndices.length) % flashIndices.length;
     showFlash(flashPos);
   }
 };
 
-document.getElementById("closeFlashBtn").onclick = () => {
-  flashModal.style.display = "none";
+document.getElementById("closeFlashBtn").onclick = function () {
+  const modal = document.getElementById("flashcardModal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.classList.remove("show");
+    modal.style.visibility = "hidden";
+    modal.style.opacity = "0";
+    console.log("✅ Flashcard modal closed");
+  }
   if (typeof window.speechSynthesis !== "undefined") {
     window.speechSynthesis.cancel();
   }
 };
 
-document.getElementById("flashAudioBtn").onclick = () => {
+document.getElementById("flashAudioBtn").onclick = function () {
   const idx = flashIndices[flashPos];
   if (idx !== undefined) speakText(sentencesData[idx].reading);
 };
 
-document.getElementById("flashFuriToggleBtn").onclick = () => {
+document.getElementById("flashFuriToggleBtn").onclick = function () {
   flashFuriganaHidden = !flashFuriganaHidden;
   flashJpDiv.classList.toggle("hide-furigana", flashFuriganaHidden);
-  const btn = document.getElementById("flashFuriToggleBtn");
-  btn.innerText = flashFuriganaHidden ? "🔤 Furigana On" : "🔤 Furigana Off";
+  this.innerText = flashFuriganaHidden ? "🔤 Furigana On" : "🔤 Furigana Off";
 };
 
 // Set default speed button highlight
 document.getElementById("flashSpeed100Btn").style.backgroundColor = "#6c8b6b";
+
+console.log("🃏 Flashcard module loaded");

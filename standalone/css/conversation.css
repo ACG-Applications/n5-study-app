@@ -1325,3 +1325,61 @@ body {
   align-items: center;
   gap: 10px;
 }
+/* ============================================================
+   API KEY TOGGLE
+   ============================================================ */
+.toggle-key-btn {
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 1.1rem !important;
+  padding: 4px 8px !important;
+  color: #8a7e6e !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.toggle-key-btn:hover {
+  background: #e8e0d5 !important;
+  color: #4a6741 !important;
+}
+
+.toggle-key-btn:active {
+  transform: scale(0.9) !important;
+}
+
+/* Input wrapper focus state */
+.api-key-input input:focus,
+.form-group input:focus {
+  border-color: #6c8b6b !important;
+  box-shadow: 0 0 0 3px rgba(108, 139, 107, 0.15) !important;
+}
+/* ============================================================
+   SETUP EXIT BUTTON
+   ============================================================ */
+.setup-exit-btn {
+  background: transparent !important;
+  color: #8a7e6e !important;
+  border: 2px solid #d4c9b8 !important;
+  border-radius: 40px !important;
+  padding: 12px 20px !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  transition: all 0.2s ease !important;
+  width: 100%;
+}
+
+.setup-exit-btn:hover {
+  background: #f0ebe3 !important;
+  color: #4a6741 !important;
+  border-color: #b8a58b !important;
+  transform: translateY(-1px) !important;
+}
+
+.setup-exit-btn:active {
+  transform: scale(0.97) !important;
+}

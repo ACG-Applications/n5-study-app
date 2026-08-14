@@ -4,7 +4,7 @@ let vocabDeck = [];
 let vocabCurrentIndex = 0;
 let vocabIsFlipped = false;
 let vocabMastered = new Set();
-let vocabFuriganaHidden = false;  // false = furigana visible, true = furigana hidden
+let vocabFuriganaHidden = false;
 
 // DOM Elements
 const vocabModal = document.getElementById("vocabModal");
@@ -26,26 +26,54 @@ const vocabAudioBtn = document.getElementById("vocabAudioBtn");
 const vocabMasteredBtn = document.getElementById("vocabMasteredBtn");
 const vocabFuriToggleBtn = document.getElementById("vocabFuriToggleBtn");
 
+// ==================== DATA VALIDATION ====================
+
+function ensureVocabData() {
+  const checks = [
+    { name: "sentencesData", exists: typeof sentencesData !== "undefined" },
+    { name: "wordDict", exists: typeof wordDict !== "undefined" },
+    { name: "sprints", exists: typeof sprints !== "undefined" },
+    { name: "masteredSet", exists: typeof masteredSet !== "undefined" },
+  ];
+
+  const missing = checks.filter((c) => !c.exists);
+  if (missing.length > 0) {
+    console.warn(
+      "⚠️ Missing vocab data:",
+      missing.map((m) => m.name).join(", "),
+    );
+    return false;
+  }
+  return true;
+}
+
 // ==================== HELPER FUNCTIONS ====================
 
 function loadMasteredVocab() {
-  const stored = localStorage.getItem("vocabMastered");
-  if (stored) {
-    vocabMastered = new Set(JSON.parse(stored));
+  try {
+    const stored = localStorage.getItem("vocabMastered");
+    if (stored) {
+      vocabMastered = new Set(JSON.parse(stored));
+    }
+  } catch (e) {
+    console.warn("⚠️ Could not load mastered vocab:", e);
+    vocabMastered = new Set();
   }
 }
 
 function saveMasteredVocab() {
-  localStorage.setItem("vocabMastered", JSON.stringify([...vocabMastered]));
+  try {
+    localStorage.setItem("vocabMastered", JSON.stringify([...vocabMastered]));
+  } catch (e) {
+    console.warn("⚠️ Could not save mastered vocab:", e);
+  }
   updateVocabUI();
 }
 
-// Get Unicode hex for a kanji character
 function getUnicodeHex(kanji) {
   return kanji.codePointAt(0).toString(16).toUpperCase();
 }
 
-// Extract unique kanji from a single word
 function extractKanjiFromWord(text) {
   if (!text) return [];
   const clean = text.replace(/[（(][^）)]*[）)]/g, "");
@@ -53,50 +81,43 @@ function extractKanjiFromWord(text) {
   return matches ? [...new Set(matches)] : [];
 }
 
-// Extract words from a sentence (for sprint-based vocab)
 function extractWordsFromSentence(text) {
   if (!text) return [];
   const clean = text.replace(/[（(][^）)]*[）)]/g, "").trim();
   const words = clean.split(/[\s,、。！？]+/);
   return words
-    .map(w => w.replace(/[、。，,、！!？?、]/g, "").trim())
-    .filter(w => w.length > 0);
+    .map((w) => w.replace(/[、。，,、！!？?、]/g, "").trim())
+    .filter((w) => w.length > 0);
 }
 
-// Check if a character is Kanji (CJK Unified Ideographs)
 function isKanji(char) {
   const code = char.charCodeAt(0);
-  return (code >= 0x4E00 && code <= 0x9FAF) || // CJK Unified Ideographs
-         (code >= 0x3400 && code <= 0x4DBF);   // CJK Extension A
+  return (
+    (code >= 0x4e00 && code <= 0x9faf) || (code >= 0x3400 && code <= 0x4dbf)
+  );
 }
 
-// Build HTML with furigana only for kanji characters
 function buildVocabFuriganaHTML(word, reading) {
   if (!word) return word;
   if (!reading) return word;
-  
-  // Split word into characters
-  const chars = word.split('');
-  let result = '';
-  
-  // Find which characters are kanji
+
+  const chars = word.split("");
+  let result = "";
+
   const kanjiIndices = [];
   chars.forEach((char, idx) => {
     if (isKanji(char)) {
       kanjiIndices.push(idx);
     }
   });
-  
-  // If no kanji, return plain text
+
   if (kanjiIndices.length === 0) {
     return word;
   }
-  
-  // Get reading as characters (remove any existing parentheses or furigana markers)
-  let readingChars = reading.replace(/[（）()]/g, '').split('');
-  
+
+  let readingChars = reading.replace(/[（）()]/g, "").split("");
+
   if (kanjiIndices.length === 1) {
-    // Single kanji - assign the entire reading to it
     const idx = kanjiIndices[0];
     for (let i = 0; i < chars.length; i++) {
       if (i === idx) {
@@ -107,85 +128,109 @@ function buildVocabFuriganaHTML(word, reading) {
     }
     return result;
   }
-  
-  // Multiple kanji - distribute reading across them
+
   const totalKanji = kanjiIndices.length;
   const baseLen = Math.floor(readingChars.length / totalKanji);
-  let extra = readingChars.length - (baseLen * totalKanji);
-  
+  let extra = readingChars.length - baseLen * totalKanji;
+
   let readingPos = 0;
   for (let i = 0; i < chars.length; i++) {
     if (kanjiIndices.includes(i)) {
       let len = baseLen + (extra > 0 ? 1 : 0);
       if (extra > 0) extra--;
-      const furigana = readingChars.slice(readingPos, readingPos + len).join('');
+      const furigana = readingChars
+        .slice(readingPos, readingPos + len)
+        .join("");
       result += `<ruby>${chars[i]}<rt>${furigana}</rt></ruby>`;
       readingPos += len;
     } else {
       result += chars[i];
     }
   }
-  
+
   return result;
 }
 
 // ==================== CORE FUNCTIONS ====================
 
 function buildVocabDeck() {
-  if (typeof wordDict === "undefined") return [];
-  
-  // Get the current sprint range
+  if (!ensureVocabData()) return [];
+
   const sprint = sprints[activeSprintIndex];
-  if (!sprint) return [];
-  
+  if (!sprint) {
+    console.warn("⚠️ No sprint found for index:", activeSprintIndex);
+    return [];
+  }
+
   const { start, end } = sprint;
   const sentenceWords = new Set();
-  
-  // Collect all words from sentences in this sprint
+
   for (let i = start; i <= end; i++) {
     if (sentencesData[i] && sentencesData[i].jp) {
       const words = extractWordsFromSentence(sentencesData[i].jp);
-      words.forEach(w => sentenceWords.add(w));
+      words.forEach((w) => sentenceWords.add(w));
     }
   }
-  
-  // Build deck from wordDict, filtering to only words in current sprint
+
   const newDeck = [];
   for (const [key, data] of Object.entries(wordDict)) {
-    // Skip conjugations and counter suffixes
-    if (data.is_conjugation || key.startsWith("～") || key.length === 0) continue;
-    
-    // Only include words that appear in the current sprint's sentences
+    if (data.is_conjugation || key.startsWith("～") || key.length === 0)
+      continue;
     if (sentenceWords.has(key)) {
       newDeck.push({
         word: key,
         reading: data.reading || key,
-        meaning: data.meaning || ""
+        meaning: data.meaning || "",
       });
     }
   }
-  
+
+  return newDeck;
+}
+
+function buildFullDeck() {
+  if (typeof wordDict === "undefined") return [];
+  const newDeck = [];
+  for (const [key, data] of Object.entries(wordDict)) {
+    if (!data.is_conjugation && !key.startsWith("～") && key.length > 0) {
+      newDeck.push({
+        word: key,
+        reading: data.reading || key,
+        meaning: data.meaning || "",
+      });
+    }
+  }
   return newDeck;
 }
 
 function initVocabDeck() {
+  if (!ensureVocabData()) {
+    console.warn("⚠️ Cannot initialize vocab: data missing");
+    return;
+  }
+
   loadMasteredVocab();
-  
-  // Build deck from current sprint
+
   let available = buildVocabDeck();
-  
-  // Filter out mastered words
-  available = available.filter(item => !vocabMastered.has(item.word));
-  
+
   if (available.length === 0) {
-    // If everything is mastered, show all words again
+    console.log("📚 No sprint-specific words found, building full deck");
+    available = buildFullDeck();
+  }
+
+  available = available.filter((item) => !vocabMastered.has(item.word));
+
+  if (available.length === 0) {
     available = buildVocabDeck();
     if (available.length === 0) {
       available = buildFullDeck();
     }
+    if (available.length === 0) {
+      console.warn("⚠️ No vocabulary available");
+      return;
+    }
   }
 
-  // Shuffle the deck
   for (let i = available.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [available[i], available[j]] = [available[j], available[i]];
@@ -194,12 +239,11 @@ function initVocabDeck() {
   vocabDeck = available;
   vocabCurrentIndex = 0;
   vocabIsFlipped = false;
-  // DO NOT reset vocabFuriganaHidden here - preserve user preference
+
   updateVocabUI();
   updateVocabSprintInfo();
   showVocabCard();
-  
-  // Update furigana toggle button based on current state
+
   if (vocabFuriToggleBtn) {
     if (vocabFuriganaHidden) {
       vocabFuriToggleBtn.textContent = "🔤 Furigana On";
@@ -213,23 +257,6 @@ function initVocabDeck() {
   }
 }
 
-// Fallback: build from all words if sprint-based fails
-function buildFullDeck() {
-  if (typeof wordDict === "undefined") return [];
-  const newDeck = [];
-  for (const [key, data] of Object.entries(wordDict)) {
-    if (!data.is_conjugation && !key.startsWith("～") && key.length > 0) {
-      newDeck.push({
-        word: key,
-        reading: data.reading || key,
-        meaning: data.meaning || ""
-      });
-    }
-  }
-  return newDeck;
-}
-
-// Update the vocab sprint info display
 function updateVocabSprintInfo() {
   const sprint = sprints[activeSprintIndex];
   if (sprint) {
@@ -249,50 +276,43 @@ function showVocabCard() {
   }
 
   const card = vocabDeck[vocabCurrentIndex];
-  
-  // Build word with furigana above kanji
   const wordWithFurigana = buildVocabFuriganaHTML(card.word, card.reading);
   vocabWord.innerHTML = wordWithFurigana;
-  
-  // Toggle furigana visibility via CSS class - USE THE CURRENT STATE
+
   if (vocabFuriganaHidden) {
-    vocabWord.classList.add('hide-furigana');
-    // Update button text to reflect current state
+    vocabWord.classList.add("hide-furigana");
     if (vocabFuriToggleBtn) {
       vocabFuriToggleBtn.textContent = "🔤 Furigana On";
       vocabFuriToggleBtn.style.backgroundColor = "#555";
       vocabFuriToggleBtn.style.color = "white";
     }
   } else {
-    vocabWord.classList.remove('hide-furigana');
-    // Update button text to reflect current state
+    vocabWord.classList.remove("hide-furigana");
     if (vocabFuriToggleBtn) {
       vocabFuriToggleBtn.textContent = "🔤 Furigana Off";
       vocabFuriToggleBtn.style.backgroundColor = "#6c8b6b";
       vocabFuriToggleBtn.style.color = "white";
     }
   }
-  
-  // ALWAYS hide the reading text below - it's never needed
+
   vocabReading.textContent = "";
   vocabReading.style.display = "none";
-  
   vocabMeaning.textContent = card.meaning;
 
-  // When flipped, show the meaning
   if (vocabIsFlipped) {
     vocabMeaning.style.display = "block";
   } else {
     vocabMeaning.style.display = "none";
   }
 
-  // Update mastered button
   const isMastered = vocabMastered.has(card.word);
   vocabMasteredBtn.textContent = isMastered ? "⭐ Mastered ✓" : "⭐ Mastered";
   vocabMasteredBtn.style.background = isMastered ? "#4caf50" : "#6c8b6b";
 
-  // ===== ADD KANJI CHIPS WITH PROPER LAYOUT =====
-  const statsDiv = document.querySelector("#vocabModal .modal-card > div:last-child");
+  // Kanji Chips
+  const statsDiv = document.querySelector(
+    "#vocabModal .modal-card > div:last-child",
+  );
   if (statsDiv) {
     const existingContainer = document.getElementById("vocabKanjiChips");
     if (existingContainer) {
@@ -300,63 +320,63 @@ function showVocabCard() {
     }
 
     const kanjiList = extractKanjiFromWord(card.word);
-    statsDiv.innerHTML = '';
-    
+    statsDiv.innerHTML = "";
+
     const flexContainer = document.createElement("div");
     flexContainer.style.cssText = `
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      width: 100%;
-    `;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            width: 100%;
+        `;
 
     const statsText = document.createElement("span");
     const total = vocabDeck.length;
     statsText.textContent = `${vocabCurrentIndex + 1} / ${total}`;
     statsText.style.cssText = `
-      font-size: 0.85rem;
-      color: #666;
-      font-weight: 500;
-      white-space: nowrap;
-    `;
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+            white-space: nowrap;
+        `;
     flexContainer.appendChild(statsText);
 
     if (kanjiList.length > 0) {
       const container = document.createElement("span");
       container.id = "vocabKanjiChips";
       container.style.cssText = `
-        display: inline-flex;
-        gap: 4px;
-        flex-wrap: wrap;
-        align-items: center;
-      `;
+                display: inline-flex;
+                gap: 4px;
+                flex-wrap: wrap;
+                align-items: center;
+            `;
 
       const label = document.createElement("span");
       label.textContent = "🖌️";
       label.style.cssText = `
-        font-size: 0.75rem;
-        color: #8a7b6e;
-        margin-right: 2px;
-      `;
+                font-size: 0.75rem;
+                color: #8a7b6e;
+                margin-right: 2px;
+            `;
       container.appendChild(label);
 
       kanjiList.forEach((kanji) => {
         const chip = document.createElement("span");
         chip.textContent = kanji;
         chip.style.cssText = `
-          display: inline-block;
-          padding: 2px 10px;
-          background: #6c8b6b;
-          color: white;
-          border-radius: 40px;
-          cursor: pointer;
-          font-size: 0.85rem;
-          font-weight: 500;
-          transition: all 0.15s ease;
-          font-family: inherit;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        `;
+                    display: inline-block;
+                    padding: 2px 10px;
+                    background: #6c8b6b;
+                    color: white;
+                    border-radius: 40px;
+                    cursor: pointer;
+                    font-size: 0.85rem;
+                    font-weight: 500;
+                    transition: all 0.15s ease;
+                    font-family: inherit;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                `;
         chip.onmouseover = () => {
           chip.style.background = "#5a7a59";
           chip.style.transform = "translateY(-1px)";
@@ -387,12 +407,12 @@ function showVocabCard() {
     const masteredCount = document.createElement("span");
     masteredCount.textContent = `✅ ${vocabMastered.size} Mastered`;
     masteredCount.style.cssText = `
-      margin-left: auto;
-      font-size: 0.85rem;
-      color: #4CAF50;
-      font-weight: 500;
-      white-space: nowrap;
-    `;
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: #4CAF50;
+            font-weight: 500;
+            white-space: nowrap;
+        `;
     flexContainer.appendChild(masteredCount);
 
     statsDiv.appendChild(flexContainer);
@@ -470,9 +490,7 @@ function toggleVocabMastered() {
 function playVocabAudio() {
   if (vocabDeck.length === 0) return;
   const card = vocabDeck[vocabCurrentIndex];
-  if (typeof window.speakText === "function") {
-    window.speakText(card.reading);
-  } else if (typeof speakText === "function") {
+  if (typeof speakText === "function") {
     speakText(card.reading);
   } else if (window.speechSynthesis) {
     const utterance = new SpeechSynthesisUtterance(card.reading);
@@ -480,39 +498,34 @@ function playVocabAudio() {
     utterance.rate = 0.85;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
-  } else {
-    console.warn("TTS not available.");
   }
 }
 
-// Toggle furigana visibility
 function toggleVocabFurigana() {
   vocabFuriganaHidden = !vocabFuriganaHidden;
-  
-  // Update the word display
+
   if (vocabDeck.length > 0) {
     const card = vocabDeck[vocabCurrentIndex];
     if (card) {
       const wordWithFurigana = buildVocabFuriganaHTML(card.word, card.reading);
       vocabWord.innerHTML = wordWithFurigana;
-      
+
       if (vocabFuriganaHidden) {
-        vocabWord.classList.add('hide-furigana');
+        vocabWord.classList.add("hide-furigana");
         vocabReading.textContent = "";
         vocabReading.style.display = "none";
         vocabFuriToggleBtn.textContent = "🔤 Furigana On";
         vocabFuriToggleBtn.style.backgroundColor = "#555";
         vocabFuriToggleBtn.style.color = "white";
       } else {
-        vocabWord.classList.remove('hide-furigana');
+        vocabWord.classList.remove("hide-furigana");
         vocabReading.textContent = "";
         vocabReading.style.display = "none";
         vocabFuriToggleBtn.textContent = "🔤 Furigana Off";
         vocabFuriToggleBtn.style.backgroundColor = "#6c8b6b";
         vocabFuriToggleBtn.style.color = "white";
       }
-      
-      // If flipped, show meaning
+
       if (vocabIsFlipped) {
         vocabMeaning.style.display = "block";
       } else {
@@ -526,14 +539,28 @@ function toggleVocabFurigana() {
 
 if (vocabOpenBtn) {
   vocabOpenBtn.addEventListener("click", function () {
-    initVocabDeck();
-    vocabModal.style.display = "flex";
+    if (typeof waitForData === "function") {
+      waitForData(function () {
+        initVocabDeck();
+        vocabModal.style.display = "flex";
+      });
+    } else {
+      initVocabDeck();
+      vocabModal.style.display = "flex";
+    }
   });
 }
 
 if (vocabCloseBtn) {
   vocabCloseBtn.addEventListener("click", function () {
-    vocabModal.style.display = "none";
+    const modal = document.getElementById("vocabModal");
+    if (modal) {
+      modal.style.display = "none";
+      modal.classList.remove("show");
+      modal.style.visibility = "hidden";
+      modal.style.opacity = "0";
+      console.log("✅ Vocab modal closed");
+    }
     if (typeof window.speechSynthesis !== "undefined") {
       window.speechSynthesis.cancel();
     }
@@ -559,9 +586,11 @@ if (vocabCard) vocabCard.addEventListener("click", flipVocabCard);
 if (vocabFlipBtn) vocabFlipBtn.addEventListener("click", flipVocabCard);
 if (vocabNextBtn) vocabNextBtn.addEventListener("click", nextVocabCard);
 if (vocabPrevBtn) vocabPrevBtn.addEventListener("click", prevVocabCard);
-if (vocabShuffleBtn) vocabShuffleBtn.addEventListener("click", shuffleVocabDeck);
+if (vocabShuffleBtn)
+  vocabShuffleBtn.addEventListener("click", shuffleVocabDeck);
 if (vocabResetBtn) vocabResetBtn.addEventListener("click", resetVocabMastered);
-if (vocabMasteredBtn) vocabMasteredBtn.addEventListener("click", toggleVocabMastered);
+if (vocabMasteredBtn)
+  vocabMasteredBtn.addEventListener("click", toggleVocabMastered);
 if (vocabAudioBtn) vocabAudioBtn.addEventListener("click", playVocabAudio);
 
 // Keyboard shortcuts
@@ -569,11 +598,14 @@ document.addEventListener("keydown", function (e) {
   if (vocabModal && vocabModal.style.display === "flex") {
     if (e.key === "ArrowLeft") prevVocabCard();
     if (e.key === "ArrowRight") nextVocabCard();
-    if (e.key === " " || e.key === "Space") { e.preventDefault(); flipVocabCard(); }
+    if (e.key === " " || e.key === "Space") {
+      e.preventDefault();
+      flipVocabCard();
+    }
     if (e.key === "m" || e.key === "M") toggleVocabMastered();
     if (e.key === "Escape") vocabCloseBtn.click();
     if (e.key === "f" || e.key === "F") toggleVocabFurigana();
   }
 });
 
-console.log("🔧 Vocab module loaded (sprint-linked)");
+console.log("🔧 Vocab module loaded");

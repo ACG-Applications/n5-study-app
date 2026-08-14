@@ -169,6 +169,7 @@ function init() {
 }
 
 init();
+
 // ==================== APP LINKS TOGGLE ====================
 function initAppLinksToggle() {
   const toggleBtn = document.getElementById("toggleAppLinks");
@@ -190,10 +191,222 @@ if (document.readyState === "loading") {
 } else {
   initAppLinksToggle();
 }
+
 // Conversation Practice button
-document.getElementById('conversationBtn').addEventListener('click', () => {
-    const sprintIndex = activeSprintIndex || 0;
-    const sprintName = sprints[sprintIndex]?.displayName || 'Sprint ' + (sprintIndex + 1);
-    const url = `standalone/conversation-practice.html?sprint=${sprintIndex}&name=${encodeURIComponent(sprintName)}`;
-    window.open(url, '_blank');
+document.getElementById("conversationBtn").addEventListener("click", () => {
+  const sprintIndex = activeSprintIndex || 0;
+  const sprintName =
+    sprints[sprintIndex]?.displayName || "Sprint " + (sprintIndex + 1);
+  const url = `standalone/conversation-practice.html?sprint=${sprintIndex}&name=${encodeURIComponent(sprintName)}`;
+  window.open(url, "_blank");
 });
+
+// ============================================================
+// FLASHCARD BUTTON - ADDED
+// ============================================================
+const flashBtn = document.getElementById("flashcardBtn");
+if (flashBtn) {
+  flashBtn.onclick = function () {
+    console.log("🃏 Flashcard button clicked");
+
+    if (typeof waitForData === "function") {
+      waitForData(function () {
+        console.log("📦 Data ready, initializing flashcards");
+
+        if (typeof rebuildFlash === "function") {
+          rebuildFlash();
+          if (flashIndices && flashIndices.length > 0) {
+            if (typeof showFlash === "function") {
+              showFlash(0);
+              console.log("✅ showFlash called with first card");
+            }
+          }
+        }
+
+        const modal = document.getElementById("flashcardModal");
+        if (modal) {
+          modal.classList.add("show");
+          modal.style.display = "flex";
+          modal.style.visibility = "visible";
+          modal.style.opacity = "1";
+          modal.style.zIndex = "99999";
+          modal.style.position = "fixed";
+          modal.style.top = "0";
+          modal.style.left = "0";
+          modal.style.width = "100vw";
+          modal.style.height = "100vh";
+          modal.style.background = "rgba(0,0,0,0.7)";
+          modal.style.alignItems = "center";
+          modal.style.justifyContent = "center";
+          modal.style.padding = "20px";
+          console.log("✅ Flashcard modal opened");
+        }
+      });
+    } else {
+      console.error("❌ waitForData not found");
+    }
+  };
+  console.log("✅ Flashcard button initialized");
+}
+
+// ============================================================
+// VOCAB BUTTON - ADDED
+// ============================================================
+const vocabBtn = document.getElementById("vocabBtn");
+if (vocabBtn) {
+  vocabBtn.onclick = function () {
+    console.log("📖 Vocab button clicked");
+
+    if (typeof waitForData === "function") {
+      waitForData(function () {
+        console.log("📦 Data ready, initializing vocab");
+
+        if (typeof initVocabDeck === "function") {
+          initVocabDeck();
+          console.log(
+            "✅ Vocab initialized with",
+            typeof vocabDeck !== "undefined" ? vocabDeck.length : 0,
+            "words",
+          );
+        }
+
+        const modal = document.getElementById("vocabModal");
+        if (modal) {
+          modal.classList.add("show");
+          modal.classList.add("show");
+          modal.style.display = "flex";
+          modal.style.visibility = "visible";
+          modal.style.opacity = "1";
+          modal.style.zIndex = "99998";
+          modal.style.position = "fixed";
+          modal.style.top = "0";
+          modal.style.left = "0";
+          modal.style.width = "100vw";
+          modal.style.height = "100vh";
+          modal.style.background = "rgba(0,0,0,0.7)";
+          modal.style.alignItems = "center";
+          modal.style.justifyContent = "center";
+          modal.style.padding = "20px";
+          console.log("✅ Vocab modal opened");
+        }
+      });
+    } else {
+      console.error("❌ waitForData not found");
+    }
+  };
+  console.log("✅ Vocab button initialized");
+}
+
+// ============================================================
+// WORD SEARCH BUTTON - Opens modal in main page
+// ============================================================
+const wordSearchBtn = document.getElementById("wordSearchBtn");
+if (wordSearchBtn) {
+  wordSearchBtn.onclick = function () {
+    console.log("🔍 Word Search button clicked");
+    const modal = document.getElementById("wordSearchModal");
+    if (modal) {
+      modal.style.display = "flex";
+      modal.classList.add("show");
+      modal.style.visibility = "visible";
+      modal.style.opacity = "1";
+      modal.style.zIndex = "99999";
+      modal.style.position = "fixed";
+      modal.style.top = "0";
+      modal.style.left = "0";
+      modal.style.width = "100vw";
+      modal.style.height = "100vh";
+      modal.style.background = "rgba(0,0,0,0.85)";
+      modal.style.alignItems = "center";
+      modal.style.justifyContent = "center";
+      modal.style.padding = "20px";
+      console.log("✅ Word Search modal opened");
+    } else {
+      console.error("❌ wordSearchModal not found");
+    }
+  };
+  console.log("✅ Word Search button initialized");
+}
+
+// Word Search close button
+document.getElementById("wsCloseBtn")?.addEventListener("click", function () {
+  const modal = document.getElementById("wordSearchModal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.classList.remove("show");
+    modal.style.visibility = "hidden";
+    modal.style.opacity = "0";
+  }
+});
+
+// Click outside to close
+document
+  .getElementById("wordSearchModal")
+  ?.addEventListener("click", function (e) {
+    if (e.target === this) {
+      this.style.display = "none";
+      this.classList.remove("show");
+      this.style.visibility = "hidden";
+      this.style.opacity = "0";
+    }
+  });
+
+// ============================================================
+// STORY MODE BUTTON - FIXED
+// ============================================================
+const storyBtn = document.getElementById("storyModeBtn");
+if (storyBtn) {
+  storyBtn.onclick = function () {
+    console.log("📖 Story Mode button clicked");
+
+    // Get current sprint from the dropdown
+    const sprintSelect = document.getElementById("sprintSelect");
+    const currentSprint = sprintSelect ? parseInt(sprintSelect.value) : 0;
+    console.log("Current sprint:", currentSprint);
+
+    // Set the global currentStorySprint variable
+    if (typeof currentStorySprint !== "undefined") {
+      window.currentStorySprint = currentSprint;
+      currentStorySprint = currentSprint;
+    } else {
+      window.currentStorySprint = currentSprint;
+    }
+    console.log("✅ currentStorySprint set to:", currentStorySprint);
+
+    // Now call showStory
+    if (typeof showStory === "function") {
+      showStory();
+      console.log("✅ showStory called");
+    } else if (typeof window.showStory === "function") {
+      window.showStory();
+      console.log("✅ window.showStory called");
+    } else {
+      console.error("❌ showStory function not found");
+      alert("Story Mode module not loaded. Please refresh.");
+      return;
+    }
+
+    // 🔥 OPEN THE MODAL - THIS WAS MISSING!
+    const modal = document.getElementById("storyModal");
+    if (modal) {
+      modal.style.display = "flex";
+      modal.classList.add("show");
+      modal.style.visibility = "visible";
+      modal.style.opacity = "1";
+      modal.style.zIndex = "99999";
+      modal.style.position = "fixed";
+      modal.style.top = "0";
+      modal.style.left = "0";
+      modal.style.width = "100vw";
+      modal.style.height = "100vh";
+      modal.style.background = "rgba(0,0,0,0.85)";
+      modal.style.alignItems = "center";
+      modal.style.justifyContent = "center";
+      modal.style.padding = "20px";
+      console.log("✅ Story modal opened");
+    } else {
+      console.error("❌ storyModal not found");
+    }
+  };
+  console.log("✅ Story Mode button initialized");
+}

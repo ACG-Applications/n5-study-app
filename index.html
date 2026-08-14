@@ -2346,8 +2346,15 @@
           <button id="storyStopBtn" class="small-btn">⏹️ Stop</button>
           <button id="storySpeed075Btn" class="small-btn">🐢 0.75x</button>
           <button id="storySpeed100Btn" class="small-btn">⚡ 1.0x</button>
-    <button id="storyDownloadAudioBtn" class="small-btn" style="background: #6c8b6b; color: white;">📥 Download Audio</button>
-    <button id="closeStoryBtn" class="small-btn">Close</button>
+          <button
+            id="storyDownloadAudioBtn"
+            class="small-btn"
+            style="background: #6c8b6b; color: white"
+          >
+            📥 Download Audio
+          </button>
+          <button id="closeStoryBtn" class="small-btn">Close</button>
+        </div>
         <p>
           <span id="storySprintNum">1</span> /
           <span id="storyTotalSprints">10</span>
@@ -2992,30 +2999,139 @@
 
     <!-- ===== END Vocab MODAL ===== -->
 
-    <!-- 1. DATA - All data files together ✅ -->
-    <script src="js/data/sprints.js"></script>
-    <script src="js/data/sentences.js"></script>
-    <script src="js/data/stories.js"></script>
-    <script src="js/data/wordDict.js"></script>
+    <!-- ============================================================
+     DATA FILES - Load in correct order with tracking
+     ============================================================ -->
+    <script>
+      // Track loading status
+      window.dataLoading = {
+        loaded: {},
+        total: 5, // sprints, mastered, wordDict, sentences, stories
+        complete: false,
+        callbacks: [],
+      };
 
-    <!-- 2. UTILITIES ✅ -->
-    <script src="js/utils/helpers.js"></script>
-    <script src="js/utils/furigana.js"></script>
+      function markDataLoaded(name) {
+        window.dataLoading.loaded[name] = true;
+        const loadedCount = Object.keys(window.dataLoading.loaded).length;
+        console.log(
+          `📦 Data loaded: ${name} (${loadedCount}/${window.dataLoading.total})`,
+        );
 
-    <script src="js/utils/kanaHelper.js"></script>
+        if (loadedCount >= window.dataLoading.total) {
+          window.dataLoading.complete = true;
+          console.log("✅ All data loaded successfully!");
+          window.dataLoading.callbacks.forEach((cb) => cb());
+          window.dataLoading.callbacks = [];
+        }
+      }
 
-    <!-- 3. MODULES ✅ -->
-    <script src="js/modules/audio.js"></script>
-    <script src="js/modules/mastered.js"></script>
-    <script src="js/modules/kanji-stroke.js"></script>
-    <!-- ← MOVED HERE -->
-    <script src="js/modules/flashcards.js"></script>
-    <script src="js/modules/vocab.js"></script>
-    <!-- ← Now after kanji-stroke -->
-    <script src="js/modules/storyMode.js"></script>
-    <script src="js/modules/print.js"></script>
-    <script src="js/modules/ui.js"></script>
-    <script src="js/modules/kanji-helper.js"></script>
+      window.waitForData = function (callback) {
+        if (window.dataLoading.complete) {
+          callback();
+        } else {
+          window.dataLoading.callbacks.push(callback);
+        }
+      };
+    </script>
+
+    <!-- Core Data Files -->
+    <script
+      src="js/data/sprints.js"
+      onload="markDataLoaded('sprints')"
+      onerror="console.error('❌ Failed to load sprints.js')"
+    ></script>
+    <script
+      src="js/data/mastered.js"
+      onload="markDataLoaded('mastered')"
+      onerror="console.error('❌ Failed to load mastered.js')"
+    ></script>
+    <script
+      src="js/data/wordDict.js"
+      onload="markDataLoaded('wordDict')"
+      onerror="console.error('❌ Failed to load wordDict.js')"
+    ></script>
+    <script
+      src="js/data/sentences.js"
+      onload="markDataLoaded('sentences')"
+      onerror="console.error('❌ Failed to load sentences.js')"
+    ></script>
+    <script
+      src="js/data/stories.js"
+      onload="markDataLoaded('stories')"
+      onerror="console.error('❌ Failed to load stories.js')"
+    ></script>
+
+    <!-- Utilities -->
+    <script
+      src="js/utils/furigana.js"
+      onload="console.log('✅ furigana.js loaded')"
+      onerror="console.error('❌ Failed to load furigana.js')"
+    ></script>
+    <script
+      src="js/utils/helpers.js"
+      onload="console.log('✅ helpers.js loaded')"
+      onerror="console.error('❌ Failed to load helpers.js')"
+    ></script>
+    <script
+      src="js/utils/kanaHelper.js"
+      onload="console.log('✅ kanaHelper.js loaded')"
+      onerror="console.error('❌ Failed to load kanaHelper.js')"
+    ></script>
+
+    <!-- Managers -->
+    <script
+      src="js/managers/masteryManager.js"
+      onload="console.log('✅ masteryManager.js loaded')"
+      onerror="console.error('❌ Failed to load masteryManager.js')"
+    ></script>
+
+    <!-- Feature Modules -->
+    <script
+      src="js/modules/audio.js"
+      onload="console.log('✅ audio.js loaded')"
+      onerror="console.error('❌ Failed to load audio.js')"
+    ></script>
+    <script
+      src="js/modules/mastered.js"
+      onload="console.log('✅ mastered.js loaded')"
+      onerror="console.error('❌ Failed to load mastered.js')"
+    ></script>
+    <script
+      src="js/modules/kanji-stroke.js"
+      onload="console.log('✅ kanji-stroke.js loaded')"
+      onerror="console.error('❌ Failed to load kanji-stroke.js')"
+    ></script>
+    <script
+      src="js/modules/kanji-helper.js"
+      onload="console.log('✅ kanji-helper.js loaded')"
+      onerror="console.error('❌ Failed to load kanji-helper.js')"
+    ></script>
+    <script
+      src="js/modules/flashcards.js"
+      onload="console.log('✅ flashcards.js loaded')"
+      onerror="console.error('❌ Failed to load flashcards.js')"
+    ></script>
+    <script
+      src="js/modules/vocab.js"
+      onload="console.log('✅ vocab.js loaded')"
+      onerror="console.error('❌ Failed to load vocab.js')"
+    ></script>
+    <script
+      src="js/modules/storyMode.js"
+      onload="console.log('✅ storyMode.js loaded')"
+      onerror="console.error('❌ Failed to load storyMode.js')"
+    ></script>
+    <script
+      src="js/modules/print.js"
+      onload="console.log('✅ print.js loaded')"
+      onerror="console.error('❌ Failed to load print.js')"
+    ></script>
+    <script
+      src="js/modules/ui.js"
+      onload="console.log('✅ ui.js loaded')"
+      onerror="console.error('❌ Failed to load ui.js')"
+    ></script>
 
     <!-- 4. WORD SEARCH MODULE ✅ -->
     <script>

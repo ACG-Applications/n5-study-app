@@ -8,6 +8,23 @@ let currentSentenceIndex = 0;
 let storySentencesList = [];
 let currentSpeechRate = 1.0;
 
+// ============================================================
+// SYNC STORY SPRINT WITH DROPDOWN
+// ============================================================
+function syncStorySprint() {
+  const sprintSelect = document.getElementById("sprintSelect");
+  if (sprintSelect) {
+    const sprint = parseInt(sprintSelect.value);
+    if (!isNaN(sprint)) {
+      currentStorySprint = sprint;
+      console.log("🔄 Story sprint synced to:", sprint);
+    }
+  }
+}
+
+// Expose sync function globally
+window.syncStorySprint = syncStorySprint;
+
 const storyModal = document.getElementById("storyModal");
 const storyContentDiv = document.getElementById("storyContent");
 const storyJapaneseBlock = document.getElementById("storyJapaneseBlock");

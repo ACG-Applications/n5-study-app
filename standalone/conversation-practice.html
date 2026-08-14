@@ -32,6 +32,7 @@
           <label for="apiMode">
             <strong>🔑 Use DeepSeek API</strong>
             <span>AI-powered conversations with natural responses</span>
+            <span>The key looks like sk-960aBB84c5854P178c56P8cfSS08ccPf</span>
           </label>
           <div class="api-key-input active" id="apiKeyInputContainer">
             <div
@@ -43,16 +44,58 @@
               "
             >
               <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                <input
-                  type="password"
-                  id="setupApiKey"
-                  placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                  style="flex: 1; min-width: 180px"
-                />
+                <div
+                  style="
+                    flex: 1;
+                    min-width: 180px;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: white;
+                    border-radius: 8px;
+                    border: 1px solid #d4c9b8;
+                    padding-right: 4px;
+                  "
+                >
+                  <input
+                    type="password"
+                    id="setupApiKey"
+                    placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    style="
+                      flex: 1;
+                      min-width: 100px;
+                      border: none;
+                      padding: 10px 12px;
+                      border-radius: 8px;
+                      outline: none;
+                      background: transparent;
+                      font-family: inherit;
+                      font-size: 0.85rem;
+                    "
+                  />
+                  <button
+                    id="setupToggleKeyBtn"
+                    class="toggle-key-btn"
+                    style="
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                      font-size: 1rem;
+                      padding: 4px 8px;
+                      color: #8a7e6e;
+                      border-radius: 4px;
+                    "
+                    title="Show/Hide key"
+                  >
+                    👁️
+                  </button>
+                </div>
                 <button id="setupSaveKey" class="setup-save-key-btn">
                   💾 Save Key
                 </button>
               </div>
+
               <div
                 style="
                   font-size: 0.7rem;
@@ -90,6 +133,30 @@
         <button id="setupStartBtn" class="setup-start-btn">
           🚀 Start Practicing
         </button>
+
+        <!-- NEW: Back to Main Button -->
+        <div style="display: flex; gap: 12px; margin-top: 10px">
+          <button
+            id="setupExitBtn"
+            class="setup-exit-btn"
+            style="
+              flex: 1;
+              padding: 12px 20px;
+              background: transparent;
+              color: #8a7e6e;
+              border: 2px solid #d4c9b8;
+              border-radius: 40px;
+              font-size: 0.9rem;
+              font-weight: 600;
+              cursor: pointer;
+              font-family: inherit;
+              transition: all 0.2s ease;
+            "
+          >
+            🚪 Back to Main
+          </button>
+        </div>
+
         <p class="setup-note">
           💡 You can change your settings anytime using the ⚙️ button in the
           app.
@@ -260,12 +327,64 @@
           <div id="settingsApiSection" style="display: none">
             <div class="form-group">
               <label for="settingsApiKey">DeepSeek API Key:</label>
-              <input
-                type="password"
-                id="settingsApiKey"
-                placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-              />
-              <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <div
+                style="
+                  display: flex;
+                  gap: 8px;
+                  flex-wrap: wrap;
+                  align-items: center;
+                "
+              >
+                <div
+                  style="
+                    flex: 1;
+                    min-width: 180px;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    background: #f9f8f6;
+                    border-radius: 8px;
+                    border: 1px solid #d4c9b8;
+                    padding-right: 4px;
+                  "
+                >
+                  <input
+                    type="password"
+                    id="settingsApiKey"
+                    placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    style="
+                      flex: 1;
+                      min-width: 100px;
+                      border: none;
+                      padding: 10px 12px;
+                      border-radius: 8px;
+                      outline: none;
+                      background: transparent;
+                      font-family: inherit;
+                      font-size: 0.85rem;
+                      color: #2c241c;
+                    "
+                    autocomplete="off"
+                  />
+                  <button
+                    id="settingsToggleKeyBtn"
+                    class="toggle-key-btn"
+                    style="
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                      font-size: 1rem;
+                      padding: 4px 8px;
+                      color: #8a7e6e;
+                      border-radius: 4px;
+                      transition: background 0.2s;
+                      line-height: 1;
+                    "
+                    title="Show/Hide key"
+                  >
+                    👁️
+                  </button>
+                </div>
                 <button id="settingsSaveKeyBtn" class="save-btn">
                   💾 Save Key
                 </button>
@@ -290,7 +409,8 @@
                   platform.deepseek.com/api_keys
                 </a>
                 <br />
-                🔒 Your key is stored locally in your browser.
+                🔒 Your key is stored locally in your browser. Click the 👁️
+                button to see it.
               </div>
             </div>
           </div>
@@ -304,6 +424,46 @@
       </div>
     </div>
 
+    <!-- ============================================================
+    API KEY TOGGLE SCRIPTS
+    ============================================================ -->
+    <script>
+      // ============================================================
+      // API KEY TOGGLE (Show/Hide)
+      // ============================================================
+
+      // Setup screen toggle
+      const setupToggleBtn = document.getElementById("setupToggleKeyBtn");
+      const setupApiKeyInput = document.getElementById("setupApiKey");
+
+      if (setupToggleBtn && setupApiKeyInput) {
+        setupToggleBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const isPassword = setupApiKeyInput.type === "password";
+          setupApiKeyInput.type = isPassword ? "text" : "password";
+          this.textContent = isPassword ? "🙈" : "👁️";
+          this.title = isPassword ? "Hide key" : "Show key";
+          setupApiKeyInput.focus();
+        });
+      }
+
+      // Settings modal toggle
+      const settingsToggleBtn = document.getElementById("settingsToggleKeyBtn");
+      const settingsApiKeyInput = document.getElementById("settingsApiKey");
+
+      if (settingsToggleBtn && settingsApiKeyInput) {
+        settingsToggleBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const isPassword = settingsApiKeyInput.type === "password";
+          settingsApiKeyInput.type = isPassword ? "text" : "password";
+          this.textContent = isPassword ? "🙈" : "👁️";
+          this.title = isPassword ? "Hide key" : "Show key";
+          settingsApiKeyInput.focus();
+        });
+      }
+
+      console.log("✅ API key toggle buttons initialized");
+    </script>
     <!-- Scripts -->
     <script src="../js/data/sprints.js"></script>
     <script src="../js/data/sentences.js"></script>
