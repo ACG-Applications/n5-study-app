@@ -75,50 +75,40 @@ const PARTICLES = ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か'
 function getWordMeaning(word) {
   const dict = window.wordDict || null;
   if (!dict) return null;
-  
-  // Don't strip the word - keep it as-is
+
   let cleanWord = word.trim();
-  
-  // If the word is empty, return null
   if (!cleanWord) return null;
-  
+
   // ===== 1. EXACT MATCH =====
-  // Try exact match first (most reliable)
   if (dict[cleanWord]) {
     return dict[cleanWord].meaning;
   }
-  
+
   // ===== 2. REMOVE FURIGANA MARKERS =====
-  // Remove furigana markers like （ふりがな） or (furigana)
   let strippedWord = cleanWord.replace(/[（(][^）)]*[）)]/g, '').trim();
   if (strippedWord && dict[strippedWord]) {
     return dict[strippedWord].meaning;
   }
-  
+
   // ===== 3. CHECK IF IT'S A PARTICLE =====
-  // Particles are often at the end of words or standalone
   for (const particle of PARTICLES) {
     if (cleanWord === particle || strippedWord === particle) {
       if (dict[particle]) {
         return dict[particle].meaning;
       }
     }
-    // Check if word ends with a particle (like "会社に" -> "に")
     if (cleanWord.endsWith(particle) && cleanWord.length > particle.length) {
       const base = cleanWord.slice(0, -particle.length);
-      // Try to get meaning for the base word
       if (dict[base]) {
         return dict[base].meaning;
       }
-      // If base not found, maybe the whole word with particle is in dict
       if (dict[cleanWord]) {
         return dict[cleanWord].meaning;
       }
     }
   }
-  
+
   // ===== 4. CHECK FOR COMMON SUFFIXES =====
-  // Try removing common suffixes
   const suffixes = ['い', 'な', 'ます', 'です', 'した', 'て', 'た', 'る', 'う', 'く', 'む', 'ぶ', 'ぬ', 'ぐ', 'す'];
   for (const suffix of suffixes) {
     if (strippedWord.endsWith(suffix) && strippedWord.length > suffix.length) {
@@ -126,19 +116,16 @@ function getWordMeaning(word) {
       if (dict[base]) {
         return dict[base].meaning;
       }
-      // Try adding る to the base (for dictionary form)
       if (dict[base + 'る']) {
         return dict[base + 'る'].meaning;
       }
     }
   }
-  
+
   // ===== 5. CHECK FOR VERB STEMS =====
-  // Sometimes we have verb stems without the ます or る
   const verbStems = ['行き', '見', '食べ', '飲み', '読み', '書き', '聞き', '話し', '買い', '売り', '作り', '使い', '待ち', '持ち', '渡し', '曲がり', '止まり', '入り', '出', '上がり', '下がり', '寝', '起き', '浴び', '磨き', '洗い', '泳ぎ', '走り', '飛び', '立ち', '座り', '知り', '教え', '習い', '見せ', '弾き', '引き'];
   for (const stem of verbStems) {
     if (strippedWord === stem || cleanWord === stem) {
-      // Try to find the dictionary form
       if (dict[stem + 'る']) {
         return dict[stem + 'る'].meaning;
       }
@@ -150,50 +137,42 @@ function getWordMeaning(word) {
       }
     }
   }
-  
-  // ===== 6. PARTIAL MATCH =====
-  // Try to find any dictionary key that is a substring
+
+  // ===== 6. PREFIX / SUFFIX MATCH =====
+  // Only match a dictionary key if it sits at the START or END of the word.
+  // (Restricting to prefix/suffix prevents short keys like した from matching
+  // inside longer words like 働きました and returning nonsense meanings.)
   const sortedKeys = Object.keys(dict).sort((a, b) => b.length - a.length);
   for (const key of sortedKeys) {
-    if (key.length > 1 && (strippedWord.includes(key) || cleanWord.includes(key))) {
+    if (key.length > 1 &&
+        (strippedWord.startsWith(key) || strippedWord.endsWith(key) ||
+         cleanWord.startsWith(key) || cleanWord.endsWith(key))) {
       return dict[key].meaning;
     }
   }
-  
+
   // ===== 7. CHECK IF IT'S A NUMBER OR COUNTER =====
-  // Numbers are common in N5 sentences
   const numbers = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '百', '千', '万'];
   for (const num of numbers) {
     if (strippedWord === num || cleanWord === num) {
       if (dict[num]) return dict[num].meaning;
     }
   }
-  
+
   // ===== 8. CHECK IF IT'S A COMMON WORD WITH DIFFERENT FORM =====
   const commonVariations = {
-    '今日': '今日',
-    '昨日': '昨日',
-    '明日': '明日',
-    '毎日': '毎日',
-    '毎朝': '毎朝',
-    '毎晩': '毎晩',
-    '今週': '今週',
-    '先週': '先週',
-    '来週': '来週',
-    '今月': '今月',
-    '先月': '先月',
-    '来月': '来月',
-    '今年': '今年',
-    '去年': '去年',
-    '来年': '来年',
+    '今日': '今日', '昨日': '昨日', '明日': '明日',
+    '毎日': '毎日', '毎朝': '毎朝', '毎晩': '毎晩',
+    '今週': '今週', '先週': '先週', '来週': '来週',
+    '今月': '今月', '先月': '先月', '来月': '来月',
+    '今年': '今年', '去年': '去年', '来年': '来年',
   };
   for (const [key, value] of Object.entries(commonVariations)) {
     if (strippedWord === key || cleanWord === key) {
       if (dict[value]) return dict[value].meaning;
     }
   }
-  
-  // If nothing found, return null
+
   return null;
 }
 
@@ -203,7 +182,6 @@ function getWordMeaning(word) {
 function getWordMeaningsForSentence(sentence) {
   if (!sentence || !sentence.jp) return [];
   
-  // If sentence already has wordMeanings, use them
   if (sentence.wordMeanings && sentence.wordMeanings.length > 0) {
     return sentence.wordMeanings;
   }
@@ -216,13 +194,11 @@ function getWordMeaningsForSentence(sentence) {
     if (meaning) {
       meanings.push(meaning);
     } else {
-      // Try to get meaning from stripped version
       const stripped = part.replace(/[（(][^）)]*[）)]/g, '').trim();
       const strippedMeaning = getWordMeaning(stripped);
       if (strippedMeaning) {
         meanings.push(strippedMeaning);
       } else {
-        // Try to extract a single character
         const chars = stripped.split('');
         let found = false;
         for (const char of chars) {
@@ -245,55 +221,47 @@ function getWordMeaningsForSentence(sentence) {
 }
 
 /**
- * Wrap a word with tooltip HTML
+ * Wrap a word with tooltip HTML (Restored)
  */
 function wrapWordWithTooltip(word, meaning) {
-  // Build display with furigana
   let displayWord = word;
-  
-  // Handle furigana format: kanji（ふりがな）
-  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => 
+
+  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) =>
     `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
   );
-  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => 
+  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) =>
     `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
   );
-  
-  // Check if this word contains a particle at the end
+
   const cleanWord = word.replace(/[（(][^）)]*[）)]/g, '').trim();
   const particleMatch = cleanWord.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
-  
+
   if (particleMatch) {
     const before = particleMatch[1];
     const particle = particleMatch[2];
     let beforeHtml = before;
-    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => 
+    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) =>
       `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
     );
-    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => 
+    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) =>
       `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
     );
     return `<span class="word-tooltip">${beforeHtml}<span class="particle-highlight">${particle}</span><span class="tooltip-text">${meaning}</span></span>`;
   }
-  
+
   return `<span class="word-tooltip">${displayWord}<span class="tooltip-text">${meaning}</span></span>`;
 }
 
 /**
- * Create HTML with word tooltips
+ * Create HTML with word tooltips (Restored)
  */
 function createQuizWordTooltips(text, wordMeanings) {
   if (!text) return '';
   
-  // If no word meanings, just return text with furigana
   if (!wordMeanings || !wordMeanings.length) {
     let result = text;
-    result = result.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => 
-      `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-    );
-    result = result.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => 
-      `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-    );
+    result = result.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`);
+    result = result.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`);
     return result;
   }
   
@@ -307,14 +275,9 @@ function createQuizWordTooltips(text, wordMeanings) {
     if (meaning) {
       result += wrapWordWithTooltip(part, meaning);
     } else {
-      // No meaning found - just display with furigana
       let displayPart = part;
-      displayPart = displayPart.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => 
-        `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-      );
-      displayPart = displayPart.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => 
-        `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-      );
+      displayPart = displayPart.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`);
+      displayPart = displayPart.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`);
       result += displayPart;
     }
     

@@ -67,6 +67,7 @@ function getUnicodeHex(kanji) {
 }
 
 function getKanjiDefinition(kanji) {
+  // Uses the global getWordMeaning from helpers.js
   if (typeof getWordMeaning === "function") {
     const meaning = getWordMeaning(kanji);
     if (meaning) return meaning;
@@ -197,73 +198,9 @@ function resetFlashcardOrder() {
   if (flashIndices.length) showFlash(0);
 }
 
-function getWordMeaning(word) {
-  const dict = window.wordDict || null;
-  if (!dict) return null;
+// Note: getWordMeaning and wrapWordWithTooltip are provided globally by helpers.js
 
-  const cleanWord = word.replace(/[（(][^）)]*[）)]/g, "").trim();
-
-  if (dict[cleanWord]) {
-    return dict[cleanWord].meaning;
-  }
-  if (dict[word]) {
-    return dict[word].meaning;
-  }
-
-  const sortedKeys = Object.keys(dict).sort((a, b) => b.length - a.length);
-  for (const key of sortedKeys) {
-    if (key.length > 1 && cleanWord.includes(key)) {
-      return dict[key].meaning;
-    }
-  }
-
-  if (cleanWord.endsWith("い")) {
-    const base = cleanWord.slice(0, -1);
-    if (dict[base]) return dict[base].meaning;
-  }
-  if (cleanWord.endsWith("な")) {
-    const base = cleanWord.slice(0, -1);
-    if (dict[base]) return dict[base].meaning;
-  }
-
-  return null;
-}
-
-function wrapWordWithTooltip(word, meaning) {
-  let displayWord = word;
-
-  displayWord = displayWord.replace(
-    /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-    (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
-  );
-  displayWord = displayWord.replace(
-    /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
-    (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
-  );
-
-  const cleanWord = word.replace(/[（(][^）)]*[）)]/g, "").trim();
-  const particleMatch = cleanWord.match(
-    /^(.*?)([はがをにでへとかからまでのもよねや]{1,3})$/,
-  );
-
-  if (particleMatch) {
-    const before = particleMatch[1];
-    const particle = particleMatch[2];
-    let beforeHtml = before;
-    beforeHtml = beforeHtml.replace(
-      /([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g,
-      (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
-    );
-    beforeHtml = beforeHtml.replace(
-      /([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g,
-      (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
-    );
-    return `<span class="word-tooltip">${beforeHtml}<span class="particle-highlight">${particle}</span><span class="tooltip-text">${meaning}</span></span>`;
-  }
-
-  return `<span class="word-tooltip">${displayWord}<span class="tooltip-text">${meaning}</span></span>`;
-}
-
+// Restored to build tooltips for flashcards
 function wrapWordsWithTooltips(sentence) {
   if (!sentence || !sentence.jp) return "";
 
@@ -271,7 +208,7 @@ function wrapWordsWithTooltips(sentence) {
   let result = "";
 
   for (const part of parts) {
-    const meaning = getWordMeaning(part);
+    const meaning = typeof getWordMeaning === "function" ? getWordMeaning(part) : null;
 
     if (meaning) {
       result += wrapWordWithTooltip(part, meaning);
