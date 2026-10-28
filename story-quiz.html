@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>Story Quiz · N5 Japanese</title>
+
+    <!-- 1. VARIABLES -->
+    <link rel="stylesheet" href="css/variables.css" />
+
+    <!-- 2. GLOBAL STYLES -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- 3. SHARED COMPONENTS (NEW) -->
+    <link rel="stylesheet" href="css/components.css" />
+
+    <!-- 4. MODULE-SPECIFIC -->
+    <link rel="stylesheet" href="css/story-quiz.css" />
+
+    <!-- 5. HELPERS -->
+    <link rel="stylesheet" href="css/kana-helper.css" />
+    <link rel="stylesheet" href="css/kanji-helper.css" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1a73e8" />
+    <link rel="apple-touch-icon" href="images/icons/icon-192x19202.png" />
+
+    <!-- Global Search Styles -->
+    <style>
+      /* ===== GLOBAL SEARCH BAR STYLES - POPUP DROPDOWN ===== */
+      .global-search-wrapper {
+        display: flex;
+        align-items: center;
+        position: relative;
+        flex-shrink: 0;
+        padding-left: 0;
+      }
+      .global-search-wrapper input {
+        padding: 4px 12px;
+        border-radius: 40px;
+        border: 1px solid #d4c9b8;
+        background: rgba(255, 255, 255, 0.95);
+        font-family: inherit;
+        font-size: 0.8rem;
+        width: 160px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        transition:
+          width 0.2s ease,
+          box-shadow 0.2s ease;
+        color: #2c241c;
+        height: 28px;
+      }
+      .global-search-wrapper input:focus {
+        outline: none;
+        width: 200px;
+        box-shadow: 0 0 0 3px rgba(108, 139, 107, 0.25);
+      }
+      .global-search-wrapper input::placeholder {
+        color: #8a7e6e;
+        font-size: 0.75rem;
+      }
+      #globalSearchResults {
+        position: fixed;
+        top: 60px;
+        right: 20px;
+        width: 420px;
+        max-width: 90vw;
+        max-height: 70vh;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        display: none;
+        z-index: 9999;
+        border: 1px solid #e3dbd0;
+        overflow: hidden;
+      }
+      #globalSearchResults.active {
+        display: block;
+      }
+      #globalSearchResults .gs-results-inner {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      #globalSearchResults .gs-result-item {
+        padding: 10px 16px;
+        border-bottom: 1px solid #f0ebe3;
+        cursor: pointer;
+        transition: background 0.1s;
+      }
+      #globalSearchResults .gs-result-item:last-child {
+        border-bottom: none;
+      }
+      #globalSearchResults .gs-result-item:hover {
+        background: #f5f0eb;
+      }
+      #globalSearchResults .gs-word {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: #000000;
+      }
+      #globalSearchResults .gs-reading {
+        font-size: 0.8rem;
+        color: #8b0000;
+        margin-left: 6px;
+      }
+      #globalSearchResults .gs-meaning {
+        font-size: 0.85rem;
+        color: #5a5a5a;
+        margin-left: 10px;
+      }
+      #globalSearchResults .gs-root {
+        font-size: 0.75rem;
+        color: #6c8b6b;
+        margin-left: 10px;
+        font-style: italic;
+      }
+      #globalSearchResults .gs-empty {
+        padding: 16px;
+        text-align: center;
+        color: #999;
+        font-style: italic;
+      }
+      #globalSearchResults .gs-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 16px;
+        border-bottom: 1px solid #eee;
+        background: #faf8f5;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        border-radius: 16px 16px 0 0;
+      }
+      #globalSearchResults .gs-header span {
+        font-size: 0.8rem;
+        color: #8a7e6e;
+      }
+      #globalSearchResults .gs-close-btn-top {
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        color: #999;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 50%;
+        transition: background 0.15s;
+      }
+      #globalSearchResults .gs-close-btn-top:hover {
+        background: #eee;
+        color: #333;
+      }
+      #globalSearchResults .gs-jisho-link {
+        background: #f0f7f0;
+        border-top: 2px solid #6c8b6b;
+        padding: 10px 16px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #1a2b4c;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      #globalSearchResults .gs-jisho-link:hover {
+        background: #e0efe0;
+      }
+      #globalSearchResults .gs-jisho-link strong {
+        color: #6c8b6b;
+      }
+
+      /* Add to the existing styles */
+      .gs-speak-btn {
+        background: #4a8a6a !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 30px !important;
+        height: 30px !important;
+        color: white !important;
+        cursor: pointer !important;
+        font-size: 13px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition:
+          background 0.15s,
+          transform 0.1s !important;
+        flex-shrink: 0 !important;
+        margin-left: 8px !important;
+        font-family: inherit !important;
+        line-height: 1 !important;
+      }
+      .gs-speak-btn:hover {
+        background: #3a7a5a !important;
+        transform: scale(1.05) !important;
+      }
+      .gs-speak-btn:active {
+        transform: scale(0.95) !important;
+      }
+
+      /* Sticky header for quiz page */
+      .story-quiz-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #ffffff;
+        border-bottom: 2px solid #e8e0d5;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .story-quiz-header .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .story-quiz-header .header-left h1 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+      .story-quiz-header .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .story-quiz-header .back-button {
+        font-size: 0.8rem;
+        background: #e8e0d5;
+        padding: 4px 14px;
+        border-radius: 40px;
+        text-decoration: none;
+        color: #2c3e2f;
+        white-space: nowrap;
+      }
+      .story-quiz-header .back-button:hover {
+        background: #d4cbbc;
+      }
+
+      /* Compact control bar */
+      .story-quiz-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 12px;
+        padding: 8px 16px;
+        background: #faf8f5;
+        border-bottom: 1px solid #e8e0d5;
+        min-height: 44px;
+      }
+      .story-quiz-controls .control-group {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+      .story-quiz-controls .control-group label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #4a6741;
+      }
+      .story-quiz-controls .small-select {
+        padding: 4px 8px;
+        border-radius: 40px;
+        border: 1px solid #d4c9b8;
+        font-size: 0.8rem;
+        background: white;
+        font-family: inherit;
+      }
+      .story-quiz-controls .small-btn {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+        height: 26px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        background: #e8e0d5;
+        color: #2c3e2f;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+      .story-quiz-controls .small-btn.active {
+        background: #6c8b6b;
+        color: white;
+      }
+      .story-quiz-controls .small-btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(0.95);
+      }
+      .story-quiz-controls .progress-indicator {
+        font-size: 0.8rem;
+        color: #4a6741;
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      .story-quiz-controls .progress-indicator span {
+        font-weight: 700;
+        color: #6c8b6b;
+      }
+
+      @media (max-width: 700px) {
+        #globalSearchResults {
+          top: 55px;
+          right: 10px;
+          width: 90vw;
+          max-width: 90vw;
+        }
+        .global-search-wrapper input {
+          width: 110px;
+          font-size: 0.75rem;
+          height: 26px;
+          padding: 3px 10px;
+        }
+        .global-search-wrapper input:focus {
+          width: 150px;
+        }
+        .story-quiz-header .header-left h1 {
+          font-size: 1rem;
+        }
+        .story-quiz-controls {
+          gap: 4px 8px;
+          padding: 6px 12px;
+        }
+        .story-quiz-controls .control-group label {
+          font-size: 0.7rem;
+        }
+        .story-quiz-controls .small-btn {
+          font-size: 0.65rem;
+          padding: 3px 8px;
+          height: 22px;
+        }
+        .story-quiz-controls .small-select {
+          font-size: 0.7rem;
+          padding: 3px 6px;
+        }
+        .story-quiz-controls .progress-indicator {
+          font-size: 0.7rem;
+        }
+      }
+      @media (max-width: 480px) {
+        #globalSearchResults {
+          top: 50px;
+          right: 5px;
+          width: 95vw;
+          max-width: 95vw;
+        }
+        .story-quiz-header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 4px;
+        }
+        .story-quiz-header .header-left,
+        .story-quiz-header .header-right {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .global-search-wrapper input {
+          width: 100%;
+          max-width: 140px;
+          font-size: 0.7rem;
+          padding: 3px 8px;
+          height: 24px;
+        }
+        .global-search-wrapper input:focus {
+          width: 100%;
+          max-width: 160px;
+        }
+        .story-quiz-header .header-left h1 {
+          font-size: 0.9rem;
+        }
+        .story-quiz-controls {
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        .story-quiz-controls .control-group {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quiz-container">
+      <!-- Header with Global Search -->
+      <div class="story-quiz-header">
+        <div class="header-left">
+          <h1>📝 Story Quiz · N5 Japanese</h1>
+        </div>
+        <div class="header-right">
+          <!-- Global Search -->
+          <div class="global-search-wrapper">
+            <input
+              type="text"
+              id="globalSearchInput"
+              placeholder="🔍 Look up a word..."
+              autocomplete="off"
+            />
+            <div id="globalSearchResults"></div>
+          </div>
+          <a href="index.html" class="back-button">← Back</a>
+        </div>
+      </div>
+
+      <!-- Controls Bar (without global search) -->
+      <div class="story-quiz-controls">
+        <div class="control-group">
+          <label for="quizSprintSelect">📚 Sprint:</label>
+          <select id="quizSprintSelect" class="small-select"></select>
+        </div>
+        <div class="control-group">
+          <button id="quizFuriToggleBtn" class="small-btn">
+            🔤 Furigana Off
+          </button>
+        </div>
+        <div class="control-group">
+          <button id="quizTransToggleBtn" class="small-btn">
+            🌎 Translation Off
+          </button>
+        </div>
+        <div class="control-group">
+          <button
+            id="quizResetBtn"
+            class="small-btn"
+            style="background: #ffc107; color: #333"
+          >
+            🔄 Reset Progress
+          </button>
+        </div>
+        <div class="progress-indicator">
+          <span id="quizAnsweredCount">0</span>/<span id="quizTotalCount"
+            >0</span
+          >
+          answered · <span id="quizCorrectCount">0</span> correct
+        </div>
+      </div>
+
+      <!-- Main Quiz Area -->
+      <div class="quiz-main">
+            <div class="quiz-main">
+
+        <!-- Story Narration Audio Bar -->
+        <div id="quizAudioBar" class="quiz-audio-bar">
+          <span class="audio-label">🎧 Story narration</span>
+          <button id="quizAudioPlayBtn" class="nav-btn nav-btn-speak">▶ Play</button>
+          <button id="quizAudioStopBtn" class="nav-btn" disabled>⏹ Stop</button>
+          <span id="quizAudioTime" class="audio-time">0:00 / 0:00</span>
+          <audio id="quizAudioPlayer" preload="none"></audio>
+        </div>  
+        <!-- Question card -->
+        <div id="quizCard" class="quiz-card">
+          <div id="quizCardPlaceholder" class="quiz-placeholder">
+            <p>Select a sprint above to begin.</p>
+          </div>
+
+          <!-- Actual question content (hidden until data loads) -->
+          <div id="quizCardContent" style="display: none">
+            <!-- Question meta -->
+            <div class="quiz-meta">
+              <span id="quizSprintLabel" class="quiz-sprint-label"></span>
+              <span id="quizQuestionIndex" class="quiz-question-index"></span>
+            </div>
+
+            <!-- Question text (Japanese with furigana) -->
+            <div class="quiz-question-row">
+              <div id="quizQuestionJp" class="quiz-question-jp"></div>
+              <button
+                id="quizQuestionSpeakBtn"
+                class="quiz-speak-btn"
+                title="🔊 Listen to the question"
+              >
+                🔊
+              </button>
+            </div>
+
+            <!-- Options -->
+            <div id="quizOptions" class="quiz-options"></div>
+
+            <!-- Feedback area -->
+            <div id="quizFeedback" class="quiz-feedback" style="display: none">
+              <div id="quizFeedbackText"></div>
+            </div>
+
+            <!-- Composition note (author-facing; hidden by default) -->
+            <div id="quizCompositionNote" class="quiz-composition-note"></div>
+          </div>
+        </div>
+
+        <!-- Navigation + progress -->
+        <div class="quiz-nav">
+          <button id="quizPrevBtn" class="nav-btn" disabled>◀ Prev</button>
+          <button id="quizSpeakBtn" class="nav-btn nav-btn-speak">
+            🔊 Read Question
+          </button>
+          <button id="quizNextBtn" class="nav-btn" disabled>Next ▶</button>
+        </div>
+
+        <!-- Speed controls -->
+        <div class="quiz-speed-controls">
+          <span class="speed-label">TTS Speed:</span>
+          <button id="quizSpeed075Btn" class="speed-btn">🐢 0.75x</button>
+          <button id="quizSpeed100Btn" class="speed-btn speed-btn-active">
+            ⚡ 1.0x
+          </button>
+        </div>
+
+        <!-- Sprint completion panel (shown when all questions answered) -->
+        <div
+          id="quizCompletionPanel"
+          class="quiz-completion-panel"
+          style="display: none"
+        >
+          <h2>🎉 Sprint Complete!</h2>
+          <p id="quizCompletionText"></p>
+          <button id="quizRestartSprintBtn" class="nav-btn">
+            🔄 Try Again
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Data -->
+    <script src="js/data/sprints.js"></script>
+    <script src="js/data/sentences.js"></script>
+    <script src="js/data/wordDict.js"></script>
+    <script src="js/data/stories.js"></script>
+    <script src="js/data/storyQuizData.js"></script>
+
+    <!-- 2. Utilities -->
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/furigana.js"></script>
+    <script src="js/utils/kanaHelper.js"></script>
+
+    <!-- 3. Modules -->
+    <script src="js/modules/audio.js"></script>
+    <script src="js/modules/story-quiz.js"></script>
+    <script src="js/modules/kanji-stroke.js"></script>
+    <script src="js/modules/kanji-helper.js"></script>
+
+    <!-- 5. GLOBAL SEARCH BAR SCRIPT (JISHO) - WITH TTS BUTTONS -->
+    <script>
+      // ================================================================
+      // GLOBAL SEARCH - wordDict + Jisho.org fallback (WITH TTS)
+      // ================================================================
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("globalSearchInput");
+        const resultsContainer = document.getElementById("globalSearchResults");
+
+        if (!searchInput || !resultsContainer) {
+          console.warn("Global Search: Elements not found.");
+          return;
+        }
+
+        // Check if wordDict exists
+        if (typeof wordDict === "undefined") {
+          console.warn("Global Search: wordDict not found.");
+          // Still allow Jisho fallback
+        }
+
+        // TTS function for search
+        function speakSearchText(text, lang = "ja-JP") {
+          if (!text || text.trim() === "") return;
+          if (typeof speakText === "function") {
+            speakText(text, lang);
+          } else if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 0.85;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+          }
+        }
+
+        // Helper to create result HTML with TTS button
+        function createResultHTML(key, data) {
+          let displayText = `<span class="gs-word">${key}</span>`;
+          if (data.reading && data.reading !== key) {
+            displayText += ` <span class="gs-reading">(${data.reading})</span>`;
+          }
+          let meaningText = data.meaning || "";
+          let rootInfo = "";
+          if (data.is_conjugation && data.root) {
+            const rootData = wordDict ? wordDict[data.root] : null;
+            const rootMeaning = rootData ? rootData.meaning : "";
+            rootInfo = ` <span class="gs-root">← from ${data.root} (${rootMeaning})</span>`;
+          }
+
+          // Determine what to speak - use reading if available, otherwise the word itself
+          const speakText = data.reading || key;
+
+          return `
+            <div class="gs-result-item" data-word="${key}" data-speak="${speakText}">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="flex: 1;">
+                  ${displayText}
+                  <span class="gs-meaning">${meaningText}</span>
+                  ${rootInfo}
+                </div>
+                <button class="gs-speak-btn" data-speak="${speakText}" style="
+                  background: #4a8a6a;
+                  border: none;
+                  border-radius: 50%;
+                  width: 30px;
+                  height: 30px;
+                  color: white;
+                  cursor: pointer;
+                  font-size: 13px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  transition: background 0.15s, transform 0.1s;
+                  flex-shrink: 0;
+                  margin-left: 8px;
+                  font-family: inherit;
+                  line-height: 1;
+                " title="Listen to pronunciation">🔊</button>
+              </div>
+            </div>
+          `;
+        }
+
+        // Search function
+        searchInput.addEventListener("input", function () {
+          const query = this.value.trim().toLowerCase();
+          resultsContainer.innerHTML = "";
+
+          if (query.length === 0) {
+            resultsContainer.classList.remove("active");
+            return;
+          }
+
+          const matches = [];
+
+          // Search local wordDict if available
+          if (window.wordDict && typeof window.wordDict === "object") {
+            for (const [key, data] of Object.entries(window.wordDict)) {
+              if (key.startsWith("～")) continue;
+              const matchKey = key.toLowerCase();
+              const matchReading = (data.reading || "").toLowerCase();
+              const matchMeaning = (data.meaning || "").toLowerCase();
+              if (
+                matchKey.includes(query) ||
+                matchReading.includes(query) ||
+                matchMeaning.includes(query)
+              ) {
+                matches.push({ key, data, source: "local" });
+              }
+              if (matches.length >= 10) break;
+            }
+          }
+
+          // Build results HTML
+          let html = `
+            <div class="gs-header">
+              <span>🔍 ${matches.length} result${matches.length !== 1 ? "s" : ""}</span>
+              <button class="gs-close-btn-top" id="gsClosePopupBtn">✕</button>
+            </div>
+            <div class="gs-results-inner">
+          `;
+
+          if (matches.length === 0) {
+            // No local results - show Jisho option
+            html += `
+              <div class="gs-result-item" data-jisho="${query}" style="border-bottom: 2px solid #6c8b6b; background: #f0f7f0;">
+                <div>
+                  <span style="font-weight: 600; color: #6c8b6b;">🔍 "${query}" not found locally</span>
+                  <br>
+                  <span style="font-size: 0.85rem; color: #1a2b4c;">
+                    Click here to search on 
+                    <strong style="color: #6c8b6b;">Jisho.org</strong> 
+                    <span style="font-size: 0.7rem; color: #999;">(opens in new tab)</span>
+                  </span>
+                </div>
+              </div>
+            `;
+          } else {
+            // Show local results with TTS buttons
+            for (const match of matches) {
+              html += createResultHTML(match.key, match.data);
+            }
+
+            // Add Jisho option at the bottom
+            html += `
+              <div class="gs-result-item" data-jisho="${query}" style="border-top: 2px solid #e8e0d5; background: #faf8f5; margin-top: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+                  <span style="font-size: 0.85rem; color: #666;">
+                    🔍 Not finding what you need?
+                  </span>
+                  <span style="font-size: 0.8rem; color: #6c8b6b; font-weight: 500; cursor: pointer;">
+                    Search on Jisho.org →
+                  </span>
+                </div>
+              </div>
+            `;
+          }
+
+          html += `</div>`;
+          resultsContainer.innerHTML = html;
+          resultsContainer.classList.add("active");
+
+          // Close button
+          const closeBtn = document.getElementById("gsClosePopupBtn");
+          if (closeBtn) {
+            closeBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              resultsContainer.classList.remove("active");
+              searchInput.value = "";
+              searchInput.blur();
+            });
+          }
+
+          // TTS button click handler
+          document.querySelectorAll(".gs-speak-btn").forEach((btn) => {
+            btn.addEventListener("click", function (e) {
+              e.stopPropagation(); // Prevent triggering the result item click
+              const text = this.dataset.speak;
+              if (text) {
+                speakSearchText(text, "ja-JP");
+                // Visual feedback
+                this.style.transform = "scale(1.2)";
+                setTimeout(() => {
+                  this.style.transform = "scale(1)";
+                }, 200);
+              }
+            });
+          });
+
+          // Click handler for results (fill input)
+          document.querySelectorAll(".gs-result-item").forEach((item) => {
+            item.addEventListener("click", function (e) {
+              // Skip if the click was on the speaker button (handled separately)
+              if (e.target.closest(".gs-speak-btn")) return;
+
+              // Check if it's a Jisho link
+              const jishoQuery = this.dataset.jisho;
+              if (jishoQuery) {
+                // Open Jisho in new tab
+                const url = `https://jisho.org/search/${encodeURIComponent(jishoQuery)}`;
+                window.open(url, "_blank");
+                resultsContainer.classList.remove("active");
+                searchInput.value = "";
+                searchInput.blur();
+                return;
+              }
+
+              // Local result - fill the search input
+              const wordSpan = this.querySelector(".gs-word");
+              if (wordSpan) {
+                searchInput.value = wordSpan.textContent;
+                resultsContainer.classList.remove("active");
+              }
+            });
+          });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+          if (
+            !e.target.closest(".global-search-wrapper") &&
+            !e.target.closest("#globalSearchResults")
+          ) {
+            resultsContainer.classList.remove("active");
+          }
+        });
+
+        // Close dropdown with Escape key
+        searchInput.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            resultsContainer.classList.remove("active");
+            this.blur();
+          }
+          // Enter key - if results are shown
+          if (e.key === "Enter") {
+            const firstItem = resultsContainer.querySelector(".gs-result-item");
+            if (firstItem) {
+              // If it's a Jisho item, open Jisho
+              if (firstItem.dataset.jisho) {
+                const url = `https://jisho.org/search/${encodeURIComponent(firstItem.dataset.jisho)}`;
+                window.open(url, "_blank");
+                resultsContainer.classList.remove("active");
+                searchInput.value = "";
+                searchInput.blur();
+                return;
+              }
+              // Local result - fill input
+              const wordSpan = firstItem.querySelector(".gs-word");
+              if (wordSpan) {
+                searchInput.value = wordSpan.textContent;
+                resultsContainer.classList.remove("active");
+              }
+            }
+          }
+        });
+
+        // Optional: Focus on search with Ctrl+K or Cmd+K
+        document.addEventListener("keydown", function (e) {
+          if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+            e.preventDefault();
+            searchInput.focus();
+            searchInput.select();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -6485,6 +6485,277 @@ const wordDict = {
     category: "Grammar",
   },
   入口: { reading: "いりぐち", meaning: "entrance", category: "Place" },
+
+  // --- Sprint 01 quiz additions ---
+  台所: { reading: "だいどころ", meaning: "kitchen", category: "Place" },
+  テレビ: { reading: "てれび", meaning: "television / TV", category: "Noun" },
+  六時半: { reading: "ろくじはん", meaning: "6:30", category: "Time" },
+  二週間: { reading: "にしゅうかん", meaning: "two weeks", category: "Time" },
+  男の子: { reading: "おとこのこ", meaning: "boy", category: "People" },
+  鍋: {
+    reading: "なべ",
+    meaning: "pot / hot pot dish",
+    category: "Noun",
+    sub: "Food",
+  },
+
+  // --- Sprint 02 quiz additions (confirmed missing) ---
+  妹さん: {
+    reading: "いもうとさん",
+    meaning: "(someone's) younger sister",
+    category: "People",
+  },
+  工学: { reading: "こうがく", meaning: "engineering", category: "Noun" },
+  バイオリン: { reading: "ばいおりん", meaning: "violin", category: "Noun" },
+  高校: { reading: "こうこう", meaning: "high school", category: "Place" },
+  退職: {
+    reading: "たいしょく",
+    meaning: "retirement / resigning",
+    category: "Noun",
+  },
+  面倒: { reading: "めんどう", meaning: "care / trouble", category: "Noun" },
+  アドバイス: { reading: "あどばいす", meaning: "advice", category: "Noun" },
+  ウイルス: { reading: "ういるす", meaning: "virus", category: "Noun" },
+  同じ: {
+    reading: "おなじ",
+    meaning: "same",
+    category: "Adjective",
+    type: "na",
+  },
+  // --- Sprint 03 quiz additions ---
+  道順: {
+    reading: "みちじゅん",
+    meaning: "route / directions",
+    category: "Location",
+  },
+  目印: {
+    reading: "めじるし",
+    meaning: "landmark / marker",
+    category: "Location",
+  },
+  どのくらい: {
+    reading: "どのくらい",
+    meaning: "how long / how much",
+    category: "Question",
+  },
+  三駅: { reading: "さんえき", meaning: "three stations", category: "Number" },
+  五駅: { reading: "ごえき", meaning: "five stations", category: "Number" },
+  右側: { reading: "みぎがわ", meaning: "right side", category: "Location" },
+  しか: {
+    reading: "しか",
+    meaning: "only (with negative)",
+    category: "Particle",
+  },
+  なので: {
+    reading: "なので",
+    meaning: "because / since",
+    category: "Grammar",
+  },
+  // --- Sprint 04 quiz additions ---
+  お客さん: {
+    reading: "おきゃくさん",
+    meaning: "customer / guest",
+    category: "People",
+  },
+  について: {
+    reading: "について",
+    meaning: "about / regarding",
+    category: "Grammar",
+  },
+  どうか: { reading: "どうか", meaning: "whether or not", category: "Grammar" },
+  千円: { reading: "せんえん", meaning: "1,000 yen", category: "Number" },
+  百円: { reading: "ひゃくえん", meaning: "100 yen", category: "Number" },
+  払います: {
+    reading: "はらいます",
+    meaning: "pay",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "払う",
+  },
+  払う: { reading: "はらう", meaning: "pay", category: "Verb", group: "godan" },
+  注文: {
+    reading: "ちゅうもん",
+    meaning: "order (at a restaurant)",
+    category: "Noun",
+  },
+  注文しました: {
+    reading: "ちゅうもんしました",
+    meaning: "ordered",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "注文する",
+  },
+  支払い: { reading: "しはらい", meaning: "payment", category: "Noun" },
+  使えませんでした: {
+    reading: "つかえませんでした",
+    meaning: "could not use",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "使う",
+  },
+  // --- Sprint 05 quiz additions (confirmed missing) ---
+  何度: {
+    reading: "なんど",
+    meaning: "how many degrees / what temperature",
+    category: "Question",
+  },
+  三十度: {
+    reading: "さんじゅうど",
+    meaning: "30 degrees",
+    category: "Number",
+  },
+  十度: { reading: "じゅうど", meaning: "10 degrees", category: "Number" },
+  低い: {
+    reading: "ひくい",
+    meaning: "low / short",
+    category: "Adjective",
+    type: "i",
+  },
+  快適: {
+    reading: "かいてき",
+    meaning: "comfortable / pleasant",
+    category: "Adjective",
+    type: "na",
+  },
+  普通: {
+    reading: "ふつう",
+    meaning: "normal / ordinary",
+    category: "Adjective",
+    type: "na",
+  },
+  せい: {
+    reading: "せい",
+    meaning: "because of / due to",
+    category: "Grammar",
+  },
+  笑いました: {
+    reading: "わらいました",
+    meaning: "laughed",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "笑う",
+  },
+  笑う: {
+    reading: "わらう",
+    meaning: "laugh",
+    category: "Verb",
+    group: "godan",
+  },
+  寝てしまいました: {
+    reading: "ねて しまいました",
+    meaning: "ended up sleeping / fell asleep",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "寝る",
+  },
+  書いてない: {
+    reading: "かいて ない",
+    meaning: "is not written",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "書く",
+  },
+  // --- Sprint 06 quiz additions (confirmed missing) ---
+  楽器: { reading: "がっき", meaning: "musical instrument", category: "Noun" },
+  弾けます: {
+    reading: "ひけます",
+    meaning: "can play (instrument)",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "弾く",
+  },
+  詩: { reading: "し", meaning: "poem", category: "Noun" },
+  起こらなかった: {
+    reading: "おこらなかった",
+    meaning: "did not happen",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "起こる",
+  },
+  起こる: {
+    reading: "おこる",
+    meaning: "happen / occur",
+    category: "Verb",
+    group: "godan",
+  },
+  その前の週: {
+    reading: "その まえ の しゅう",
+    meaning: "the week before that",
+    category: "Time",
+  },
+  // --- Sprint 07 quiz additions (confirmed missing) ---
+  症状: {
+    reading: "しょうじょう",
+    meaning: "symptom",
+    category: "Noun",
+    sub: "Health",
+  },
+  最初: {
+    reading: "さいしょ",
+    meaning: "first / beginning",
+    category: "Adverb",
+  },
+  安静にする: {
+    reading: "あんせい に する",
+    meaning: "rest / stay quiet",
+    category: "Phrase",
+  },
+  パソコン: { reading: "ぱそこん", meaning: "computer / PC", category: "Noun" },
+  使いすぎた: {
+    reading: "つかいすぎた",
+    meaning: "used too much",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "使う",
+  },
+  呼びます: {
+    reading: "よびます",
+    meaning: "call",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "呼ぶ",
+  },
+  呼ぶ: { reading: "よぶ", meaning: "call", category: "Verb", group: "godan" },
+  // --- Sprint 08 quiz additions (confirmed missing) ---
+  お風呂: { reading: "おふろ", meaning: "bath", category: "Place" },
+  広くて: {
+    reading: "ひろくて",
+    meaning: "spacious (and...)",
+    category: "Adjective",
+    type: "i",
+  },
+  晴れた: {
+    reading: "はれた",
+    meaning: "was sunny / cleared up",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "晴れる",
+  },
+  正しくない: {
+    reading: "ただしく ない",
+    meaning: "is not correct",
+    category: "Adjective",
+    type: "i",
+  },
+  // --- Sprint 09 quiz additions (confirmed missing) ---
+  壊れました: {
+    reading: "こわれました",
+    meaning: "broke / was broken",
+    category: "Verb_Conjugation",
+    is_conjugation: true,
+    root: "壊れる",
+  },
+  壊れる: {
+    reading: "こわれる",
+    meaning: "break / be broken",
+    category: "Verb",
+    group: "ichidan",
+  },
+  もう一度: {
+    reading: "もういちど",
+    meaning: "one more time",
+    category: "Adverb",
+  },
 };
 
 // Make wordDict available globally
