@@ -1715,3 +1715,42 @@ button.action-btn {
   margin: 0 auto !important;
   min-height: 200px !important;
 }
+/* Modal header */
+/* Header Layout Adjustments */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* The invisible spacer that keeps the title perfectly centered */
+.app-header::after {
+  content: "";
+  width: 60px; /* Matches the logo width */
+  height: 1px;
+}
+
+/* The Logo Styling */
+.app-logo {
+  width: 60px;
+  height: auto;
+  mix-blend-mode: multiply; /* This removes the white background automatically! */
+  opacity: 0.85; /* Slight transparency to blend it nicely */
+}
+
+.app-header h1 {
+  margin: 0; /* Removes default margin so it centers perfectly */
+  text-align: center;
+  flex-grow: 1;
+}
+
+/* Adjust size for mobile screens */
+@media (max-width: 600px) {
+  .app-logo {
+    width: 40px;
+  }
+  .app-header::after {
+    width: 40px;
+  }
+}
