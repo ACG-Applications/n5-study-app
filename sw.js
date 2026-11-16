@@ -1,6 +1,6 @@
 // sw.js - Service Worker for N5 Study App
 
-const CACHE_NAME = "n5-study-app-v3";
+const CACHE_NAME = "n5-study-app-v5";
 
 const urlsToCache = [
   // ─── HTML pages ────────────────────────────────────────────
@@ -62,7 +62,6 @@ const urlsToCache = [
   "./js/data/particlesData.js",
   "./js/data/practiceTestData.js",
   "./js/data/verbsData.js",
-  "./js/data/video_list.js",
 
   // ─── JS Utils ───────────────────────────────────────────────
   "./js/utils/furigana.js",
@@ -105,7 +104,7 @@ self.addEventListener("install", (event) => {
         console.log("[SW] Pre-caching app shell");
         return cache.addAll(urlsToCache);
       })
-      .then(() => self.skipWaiting())
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -122,10 +121,10 @@ self.addEventListener("activate", (event) => {
               console.log("[SW] Deleting old cache:", cacheName);
               return caches.delete(cacheName);
             }
-          })
+          }),
         );
       })
-      .then(() => self.clients.claim())
+      .then(() => self.clients.claim()),
   );
 });
 
@@ -163,6 +162,6 @@ self.addEventListener("fetch", (event) => {
           // its default offline error for this resource.
           return new Response("", { status: 504, statusText: "Offline" });
         });
-    })
+    }),
   );
 });
