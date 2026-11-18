@@ -1628,7 +1628,7 @@ const storyQuizData = [
         type: "comprehension",
         questionJp: "先週（せんしゅう）、何（なに）がありましたか。",
         questionReading: "せんしゅう なに が ありました か",
-        optionsJp: ["試験（しけん）に合格（ごうかく）しました。", "課題（かだい）を提出（ていしゅつ）しました。", "休暇（きゅうか）を取りました。"],
+        optionsJp: ["試験（しけん）に合格（ごうかく）しました。", "課題（かだい）を提出（ていしゅつ）しました。", "休暇（きゅうか）を取（と）りました。"],
         optionsReading: ["しけん に ごうかく しました", "かだい を ていしゅつ しました", "きゅうか を とりました"],
         answerIndex: 0,
         evidenceSentenceIndex: 205,

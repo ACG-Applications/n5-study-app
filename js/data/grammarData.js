@@ -59,7 +59,7 @@ const grammarData = [
     explanation: "は marks the topic of the sentence.",
     examples: [
       {
-        sentence: "田中（たなか）さんはきのうどこかに出かけましたか",
+        sentence: "田中（たなか）さんはきのうどこかに出（で）かけましたか",
         reading: "たなかさんはきのうどこかにでかけましたか",
         english: "Did Tanaka-san go out somewhere yesterday?",
       },
@@ -119,22 +119,22 @@ const grammarData = [
   },
   {
     id: "q6",
-    pattern: "Person に 来てください",
-    meaning: "Please come to (person)",
-    explanation: "に marks the person being addressed or the destination.",
+    pattern: "Place に 来てください",
+    meaning: "Please come to (a place)",
+    explanation: "に marks the destination of 来（く）る. The destination is a place, not a person.",
     examples: [
       {
-        sentence: "田中（たなか）さんに来（き）てください",
-        reading: "たなかさんにきてください",
-        english: "Please come to Tanaka-san (Please come, Tanaka-san)",
+        sentence: "田中（たなか）さんの家（いえ）に来（き）てください",
+        reading: "たなかさんのいえにきてください",
+        english: "Please come to Tanaka-san's house.",
       },
     ],
     questions: [
       {
-        sentence: "田中（たなか）さん（ ）来（き）て ください",
+        sentence: "田中（たなか）さんの家（いえ）（ ）来（き）て ください",
         correctAnswer: "に",
-        options: ["に", "も", "や", "で"],
-        explanation: "に marks the person being addressed",
+        options: ["に", "を", "が", "で"],
+        explanation: "に marks the destination: 家（いえ）に来（き）てください = please come to the house.",
       },
     ],
   },
@@ -166,7 +166,7 @@ const grammarData = [
     explanation: "ぐらい indicates an approximate amount.",
     examples: [
       {
-        sentence: "1000円（えん）ぐらいです",
+        sentence: "千円（せんえん）ぐらいです",
         reading: "せんえんぐらいです",
         english: "It's about 1000 yen",
       },
@@ -243,7 +243,7 @@ const grammarData = [
     ],
     questions: [
       {
-        sentence: "手（て）を 洗（あら）いましょう（ ）",
+        sentence: "手（て）を 洗（あら）う（ ）",
         correctAnswer: "まえに",
         options: ["まえに", "のまえに", "あとに", "のあとに"],
         explanation: "まえに follows the verb to mean 'before doing'",
@@ -496,7 +496,7 @@ const grammarData = [
   },
 
   // ============================================================
-  // NEW: Additional N5 Grammar Points Added from JLPT N5 List
+  // NEW: Additional Grammar Points Added from JLPT N5 List
   // ============================================================
 
   {
@@ -559,16 +559,16 @@ const grammarData = [
     questions: [
       {
         sentence:
-          "休（やす）みの日（ひ）は、テレビを見（み）る（ ）本（ほん）を読（よ）む（ ）して過（す）ごします。",
+          "休（やす）みの日（ひ）は、テレビを見（み）る（ ）音楽（おんがく）を聞（き）きます。",
         correctAnswer: "とか",
-        options: ["とか", "や", "と", "も"],
+        options: ["とか", "の", "が", "を"],
         explanation: "〜とか～とか is used to list non-exhaustive examples.",
       },
       {
         sentence:
-          "彼（かれ）はサッカー（ ）バスケットボール（ ）が好（す）きです。",
+          "彼（かれ）はサッカー（ ）バスケットボールが好（す）きです。",
         correctAnswer: "とか",
-        options: ["とか", "や", "と", "の"],
+        options: ["とか", "の", "が", "を"],
         explanation:
           "〜とか is used to list multiple examples in a casual way.",
       },
@@ -595,7 +595,7 @@ const grammarData = [
     questions: [
       {
         sentence: "重（おも）いスーツケースです。私（わたし）が（ ）か。",
-        correctAnswer: "持ちましょう",
+        correctAnswer: "持（も）ちましょう",
         options: [
           "持（も）ちましょう",
           "持（も）ちます",
@@ -633,13 +633,13 @@ const grammarData = [
     ],
     questions: [
       {
-        sentence: "明日（あした）は試験（しけん）がある（ ）。",
+        sentence: "明日（あした）は試験（しけん）がある（ ）。 ／ There may be an exam tomorrow.",
         correctAnswer: "かもしれない",
         options: ["かもしれない", "でしょう", "にちがいない", "はずだ"],
         explanation: "〜かもしれない expresses possibility or uncertainty.",
       },
       {
-        sentence: "あのレストランはもう閉（し）まっている（ ）。",
+        sentence: "あのレストランはもう閉（し）まっている（ ）。 ／ That restaurant may already be closed.",
         correctAnswer: "かもしれない",
         options: ["かもしれない", "でしょう", "にちがいない", "はずだ"],
         explanation:
@@ -667,7 +667,7 @@ const grammarData = [
     ],
     questions: [
       {
-        sentence: "学生（がくせい）は規則（きそく）を守（まも）ら（ ）。",
+        sentence: "学生（がくせい）は規則（きそく）を守（まも）ら（ ）。 ／ Students must obey the rules.",
         correctAnswer: "なければならない",
         options: [
           "なければならない",
@@ -678,7 +678,7 @@ const grammarData = [
         explanation: "〜なければならない expresses obligation or necessity.",
       },
       {
-        sentence: "明日（あした）は早（はや）く起（お）き（ ）。",
+        sentence: "明日（あした）は早（はや）く起（お）き（ ）。 ／ I have to get up early tomorrow.",
         correctAnswer: "なければならない",
         options: [
           "なければならない",
@@ -710,13 +710,13 @@ const grammarData = [
     ],
     questions: [
       {
-        sentence: "このペンは書（か）き（ ）です。",
+        sentence: "このペンは書（か）き（ ）です。 ／ This pen is easy to write with.",
         correctAnswer: "やすい",
         options: ["やすい", "にくい", "づらい", "がち"],
         explanation: "〜やすい means 'easy to do'.",
       },
       {
-        sentence: "彼（かれ）は話（はな）し（ ）人（ひと）です。",
+        sentence: "彼（かれ）は話（はな）し（ ）人（ひと）です。 ／ He is a person who is hard to talk to.",
         correctAnswer: "にくい",
         options: ["やすい", "にくい", "づらい", "がち"],
         explanation: "〜にくい means 'difficult to do'.",
@@ -746,7 +746,7 @@ const grammarData = [
     questions: [
       {
         sentence:
-          "母（はは）は子供（こども）に野菜（やさい）を食（た）べ（ ）。",
+          "母（はは）は子供（こども）に野菜（やさい）を食（た）べ（ ）。 ／ My mother makes her child eat vegetables.",
         correctAnswer: "させる",
         options: ["させる", "られる", "てくれる", "てもらう"],
         explanation:
@@ -781,7 +781,7 @@ const grammarData = [
     ],
     questions: [
       {
-        sentence: "友達（ともだち）に笑（わら）われ（ ）。",
+        sentence: "友達（ともだち）に笑（わら）われ（ ）。 ／ My friends laughed at me (past).",
         correctAnswer: "た",
         options: ["た", "る", "ない", "て"],
         explanation: "〜られる passive form: 'was laughed at by friend'.",
@@ -983,7 +983,7 @@ const grammarData = [
     ],
   },
   // ============================================================
-  // Additional N5 Grammar Points - Complete List
+  // Additional Grammar Points - Complete List
   // ============================================================
 
   {
