@@ -39,7 +39,7 @@
       <div class="app-header">
         <div class="header-controls">
           <label for="sprintSelect">Sprint:</label>
-          <select id="sprintSelect">
+          <select id="sprintSelect" aria-label="Sprint">
             <option value="">Loading...</option>
           </select>
 
@@ -55,7 +55,7 @@
           <!-- Mastery Selector -->
           <div class="mastery-selector">
             <span class="mastery-label">Mastery:</span>
-            <select id="primaryModeSelect">
+            <select id="primaryModeSelect" aria-label="Primary practice mode">
               <option value="fill">📝 Fill</option>
               <option value="order">🔄 Order</option>
               <option value="select-order">🎯 Select</option>
@@ -205,10 +205,8 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        console.log("📚 N5 Sentence Builder starting...");
 
         // Debug: Check data sources
-        console.log("🔍 Checking data sources...");
         console.log(
           "sentencesData:",
           typeof sentencesData !== "undefined"
@@ -234,9 +232,7 @@
               const builder = new SentenceBuilder();
               builder.init();
               window.builder = builder;
-              console.log("✅ Sentence Builder initialized successfully!");
             } catch (e) {
-              console.error("❌ Error initializing SentenceBuilder:", e);
             }
           } else {
             console.error(
@@ -260,7 +256,6 @@
               );
             })
             .catch((error) => {
-              console.log("❌ Service Worker registration failed:", error);
             });
         });
       }

@@ -71,6 +71,19 @@ function getPlainJapanese(sentence) {
   return sentence.jp.replace(/[（(][^）)]*[）)]/g, '').trim();
 }
 
+// Escape user-supplied text before putting it into innerHTML. The global search
+// interpolated the raw query into result markup and a data- attribute on every
+// page, so typing markup executed it in page context (self-XSS) and a double
+// quote broke the attribute.
+function escapeHtml(str) {
+  return String(str == null ? "" : str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // Replace the first occurrence of `word` in a furigana-annotated sentence
 // (`漢字（よみ）` form) with a blank, so quiz sentences blank the word that is
 // actually there instead of looking for the un-annotated dictionary form.

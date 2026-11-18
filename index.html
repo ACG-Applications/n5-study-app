@@ -22,8 +22,9 @@
     <!-- 2️⃣ Main styles -->
     <link rel="stylesheet" href="css/style.css" />
     <!-- 3️⃣ Page-specific styles -->
-    <link rel="stylesheet" href="css/listening.css" />
-    <link rel="stylesheet" href="css/story-quiz.css" />
+    <!-- css/listening.css and css/story-quiz.css are intentionally NOT loaded here:
+         they redefine .action-btn / .control-group / .small-btn and silently
+         restyled every button on this page. No index.html class depends on them. -->
     <link rel="stylesheet" href="css/kana-helper.css" />
     <link rel="stylesheet" href="css/kanji-helper.css" />
     <!-- PWA Manifest -->
@@ -799,7 +800,7 @@
       <div class="control-panel">
         <div class="control-group">
           <label>Sprint:</label>
-          <select id="sprintSelect"></select>
+          <select id="sprintSelect" aria-label="Sprint"></select>
         </div>
 
         <div class="control-group">
@@ -815,7 +816,7 @@
         <div class="global-search-wrapper">
           <input
             type="text"
-            id="globalSearchInput"
+            id="globalSearchInput" aria-label="Search all words"
             placeholder="🔍 Look up a word..."
             autocomplete="off"
           />
@@ -1885,7 +1886,7 @@
               >
                 <input
                   type="checkbox"
-                  id="includeKanjiStrokes"
+                  id="includeKanjiStrokes" aria-label="Include kanji stroke order pages"
                   style="
                     width: 16px;
                     height: 16px;
@@ -1939,7 +1940,7 @@
               >
                 <input
                   type="checkbox"
-                  id="includeBlankWritingPaper"
+                  id="includeBlankWritingPaper" aria-label="Include blank kanji writing paper"
                   style="
                     width: 16px;
                     height: 16px;
@@ -2167,7 +2168,6 @@
 
         if (loadedCount >= window.dataLoading.total) {
           window.dataLoading.complete = true;
-          console.log("✅ All data loaded successfully!");
           window.dataLoading.callbacks.forEach((cb) => cb());
           window.dataLoading.callbacks = [];
         }
@@ -2186,99 +2186,68 @@
     <script
       src="js/data/sprints.js"
       onload="markDataLoaded('sprints')"
-      onerror="console.error('❌ Failed to load sprints.js')"
     ></script>
     <script
       src="js/data/mastered.js"
       onload="markDataLoaded('mastered')"
-      onerror="console.error('❌ Failed to load mastered.js')"
     ></script>
     <script
       src="js/data/wordDict.js"
       onload="markDataLoaded('wordDict')"
-      onerror="console.error('❌ Failed to load wordDict.js')"
     ></script>
     <script
       src="js/data/sentences.js"
       onload="markDataLoaded('sentences')"
-      onerror="console.error('❌ Failed to load sentences.js')"
     ></script>
     <script
       src="js/data/stories.js"
       onload="markDataLoaded('stories')"
-      onerror="console.error('❌ Failed to load stories.js')"
     ></script>
     <!-- Needed by print.js' kanji reference table and kanji-helper.js -->
     <script
       src="js/data/kanjiData.js"
-      onload="console.log('✅ kanjiData.js loaded')"
-      onerror="console.error('❌ Failed to load kanjiData.js')"
     ></script>
 
     <!-- Utilities -->
     <script
       src="js/utils/furigana.js"
-      onload="console.log('✅ furigana.js loaded')"
-      onerror="console.error('❌ Failed to load furigana.js')"
     ></script>
     <script
       src="js/utils/helpers.js"
-      onload="console.log('✅ helpers.js loaded')"
-      onerror="console.error('❌ Failed to load helpers.js')"
     ></script>
     <script
       src="js/utils/kanaHelper.js"
-      onload="console.log('✅ kanaHelper.js loaded')"
-      onerror="console.error('❌ Failed to load kanaHelper.js')"
     ></script>
 
     <!-- Managers -->
     <script
       src="js/managers/masteryManager.js"
-      onload="console.log('✅ masteryManager.js loaded')"
-      onerror="console.error('❌ Failed to load masteryManager.js')"
     ></script>
 
     <!-- Feature Modules -->
     <script
       src="js/modules/audio.js"
-      onload="console.log('✅ audio.js loaded')"
-      onerror="console.error('❌ Failed to load audio.js')"
     ></script>
     <script
       src="js/modules/kanji-stroke.js"
-      onload="console.log('✅ kanji-stroke.js loaded')"
-      onerror="console.error('❌ Failed to load kanji-stroke.js')"
     ></script>
     <script
       src="js/modules/kanji-helper.js"
-      onload="console.log('✅ kanji-helper.js loaded')"
-      onerror="console.error('❌ Failed to load kanji-helper.js')"
     ></script>
     <script
       src="js/modules/flashcards.js"
-      onload="console.log('✅ flashcards.js loaded')"
-      onerror="console.error('❌ Failed to load flashcards.js')"
     ></script>
     <script
       src="js/modules/vocab.js"
-      onload="console.log('✅ vocab.js loaded')"
-      onerror="console.error('❌ Failed to load vocab.js')"
     ></script>
     <script
       src="js/modules/storyMode.js"
-      onload="console.log('✅ storyMode.js loaded')"
-      onerror="console.error('❌ Failed to load storyMode.js')"
     ></script>
     <script
       src="js/modules/print.js"
-      onload="console.log('✅ print.js loaded')"
-      onerror="console.error('❌ Failed to load print.js')"
     ></script>
     <script
       src="js/modules/ui.js"
-      onload="console.log('✅ ui.js loaded')"
-      onerror="console.error('❌ Failed to load ui.js')"
     ></script>
 
     <!-- 4. WORD SEARCH MODULE ✅ -->
@@ -2481,7 +2450,6 @@
               });
             }
           }
-          console.log("📚 Word pool built:", pool.length, "entries");
           pool.sort((a, b) => b.word.length - a.word.length);
           return pool;
         }
@@ -2525,7 +2493,6 @@
                     sentence: sentence.translation || "",
                     fullSentence: originalJp,
                   });
-                  console.log("✅ Added word:", cleanWord);
                 }
               }
             }
@@ -2538,7 +2505,6 @@
         let wordPool = buildWordPool();
         let sentencePool = buildSentencePool();
 
-        console.log("📚 Word pool final:", wordPool.length, "entries");
         console.log("📖 Sentence pool final:", sentencePool.length, "entries");
 
         // ============================================================
@@ -3135,7 +3101,6 @@
           }
           if (currentMode === "words") {
             wordPool = buildWordPool();
-            console.log("📚 Word pool rebuilt:", wordPool.length, "entries");
           }
 
           generatePuzzle();
@@ -3217,13 +3182,11 @@
         // ============================================================
         wordPool = buildWordPool();
         sentencePool = buildSentencePool();
-        console.log("📚 Word pool init:", wordPool.length, "entries");
         console.log("📖 Sentence pool init:", sentencePool.length, "entries");
 
         const dict = getWordDict();
         const sentences = getSentencesData();
         console.log("📖 Total sentences available:", sentences.length);
-        console.log("📚 Total wordDict entries:", Object.keys(dict).length);
 
         if (wordPool.length > 0) {
           generatePuzzle();
@@ -3366,9 +3329,9 @@
           if (matches.length === 0) {
             // No local results - show Jisho option
             html += `
-              <div class="gs-result-item" data-jisho="${query}" style="border-bottom: 2px solid #6c8b6b; background: #f0f7f0;">
+              <div class="gs-result-item" data-jisho="${escapeHtml(query)}" style="border-bottom: 2px solid #6c8b6b; background: #f0f7f0;">
                 <div>
-                  <span style="font-weight: 600; color: #6c8b6b;">🔍 "${query}" not found locally</span>
+                  <span style="font-weight: 600; color: #6c8b6b;">🔍 "${escapeHtml(query)}" not found locally</span>
                   <br>
                   <span style="font-size: 0.85rem; color: #1a2b4c;">
                     Click here to search on 
@@ -3386,7 +3349,7 @@
 
             // Add Jisho option at the bottom
             html += `
-              <div class="gs-result-item" data-jisho="${query}" style="border-top: 2px solid #e8e0d5; background: #faf8f5; margin-top: 4px;">
+              <div class="gs-result-item" data-jisho="${escapeHtml(query)}" style="border-top: 2px solid #e8e0d5; background: #faf8f5; margin-top: 4px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
                   <span style="font-size: 0.85rem; color: #666;">
                     🔍 Not finding what you need?

@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=yes"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1a73e8" />
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png" />
     <title>Adverbs Guide · N5 Japanese</title>
 
     <!-- 1. VARIABLES -->
@@ -400,7 +400,7 @@
           <div class="global-search-wrapper">
             <input
               type="text"
-              id="globalSearchInput"
+              id="globalSearchInput" aria-label="Search all words"
               placeholder="🔍 Look up a word..."
               autocomplete="off"
             />
@@ -416,7 +416,7 @@
           <label>Search:</label>
           <input
             type="text"
-            id="adverbSearchInput"
+            id="adverbSearchInput" aria-label="Search adverbs"
             placeholder="Search adverb..."
           />
         </div>
@@ -543,7 +543,7 @@
               </div>
               <div class="quiz-count-selector">
                 <label>Questions:</label>
-                <select id="quizCountSelect">
+                <select id="quizCountSelect" aria-label="Number of quiz questions">
                   <option value="5">5 questions</option>
                   <option value="10" selected>10 questions</option>
                   <option value="15">15 questions</option>
@@ -725,9 +725,9 @@
           if (matches.length === 0) {
             // No local results - show Jisho option
             html += `
-              <div class="gs-result-item" data-jisho="${query}" style="border-bottom: 2px solid #6c8b6b; background: #f0f7f0;">
+              <div class="gs-result-item" data-jisho="${escapeHtml(query)}" style="border-bottom: 2px solid #6c8b6b; background: #f0f7f0;">
                 <div>
-                  <span style="font-weight: 600; color: #6c8b6b;">🔍 "${query}" not found locally</span>
+                  <span style="font-weight: 600; color: #6c8b6b;">🔍 "${escapeHtml(query)}" not found locally</span>
                   <br>
                   <span style="font-size: 0.85rem; color: #1a2b4c;">
                     Click here to search on 
@@ -745,7 +745,7 @@
 
             // Add Jisho option at the bottom
             html += `
-              <div class="gs-result-item" data-jisho="${query}" style="border-top: 2px solid #e8e0d5; background: #faf8f5; margin-top: 4px;">
+              <div class="gs-result-item" data-jisho="${escapeHtml(query)}" style="border-top: 2px solid #e8e0d5; background: #faf8f5; margin-top: 4px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
                   <span style="font-size: 0.85rem; color: #666;">
                     🔍 Not finding what you need?
