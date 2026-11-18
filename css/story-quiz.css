@@ -196,7 +196,7 @@
 
 .quiz-question-jp ruby rt,
 .quiz-question-jp rt {
-  font-size: 0.65rem !important;
+  font-size: 0.7rem !important;
   color: #8b0000 !important;
   font-weight: 600 !important;
 }
@@ -313,7 +313,7 @@
 
 .quiz-option .opt-text ruby rt,
 .quiz-option .opt-text rt {
-  font-size: 0.6rem !important;
+  font-size: 0.7rem !important;
   color: #8b0000 !important;
   font-weight: 600 !important;
 }
@@ -556,7 +556,7 @@ body.author-mode .quiz-composition-note {
 
   .quiz-question-jp ruby rt,
   .quiz-question-jp rt {
-    font-size: 0.55rem !important;
+    font-size: 0.7rem !important;
   }
 
   .quiz-option {
@@ -566,7 +566,7 @@ body.author-mode .quiz-composition-note {
 
   .quiz-option .opt-text ruby rt,
   .quiz-option .opt-text rt {
-    font-size: 0.5rem !important;
+    font-size: 0.7rem !important;
   }
 
   .nav-btn {

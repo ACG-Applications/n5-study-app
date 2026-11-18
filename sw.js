@@ -1,6 +1,6 @@
 // sw.js - Service Worker for N5 Study App
 
-const CACHE_NAME = "n5-study-app-v6";
+const CACHE_NAME = "n5-study-app-v7";
 
 const urlsToCache = [
   // ─── HTML pages ────────────────────────────────────────────
@@ -45,6 +45,7 @@ const urlsToCache = [
   "./css/practice-test.css",
   "./css/kana-helper.css",
   "./css/kanji-helper.css",
+  "./css/mobile.css",
   "./css/kanji-stroke.css",
 
   // ─── JS Data ────────────────────────────────────────────────
