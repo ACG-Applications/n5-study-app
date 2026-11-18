@@ -80,7 +80,7 @@ const kanjiData = [
     { id: "migi", kanji: "右", onyomi: "ウ、ユウ", kunyomi: "みぎ", meaning: "right (direction)", examples: [{ sentence: "右（みぎ） に 曲（ま）がって ください", reading: "みぎ に まがって ください", english: "Please turn right" }, { sentence: "右手（みぎて） で 書（か）きます", reading: "みぎて で かきます", english: "I write with my right hand" }] },
     { id: "yomu", kanji: "読", onyomi: "ドク、トク", kunyomi: "よ（む）", meaning: "to read", examples: [{ sentence: "本（ほん） を 読（よ）みます", reading: "ほん を よみます", english: "I read a book" }, { sentence: "新聞（しんぶん） を 読（よ）んでいます", reading: "しんぶん を よんでいます", english: "I am reading a newspaper" }] },
     { id: "tomo", kanji: "友", onyomi: "ユウ", kunyomi: "とも", meaning: "friend", examples: [{ sentence: "友達（ともだち） と 遊（あそ）びます", reading: "ともだち と あそびます", english: "I play with my friend" }, { sentence: "親友（しんゆう） に 会（あ）いました", reading: "しんゆう に あいました", english: "I met my best friend" }] },
-    { id: "hidari", kanji: "左", onyomi: "サ、シャ", kunyomi: "ひだり", meaning: "left (direction)", examples: [{ sentence: "左（ひだり） に 曲（ま）がって ください", reading: "ひだり に まがって ください", english: "Please turn left" }, { sentence: "左手（ひだりて） に 時計（とけい） を しています", reading: "ひだりて に どけい を しています", english: "I wear a watch on my left hand" }] },
+    { id: "hidari", kanji: "左", onyomi: "サ、シャ", kunyomi: "ひだり", meaning: "left (direction)", examples: [{ sentence: "左（ひだり） に 曲（ま）がって ください", reading: "ひだり に まがって ください", english: "Please turn left" }, { sentence: "左手（ひだりて） に 時計（とけい） を しています", reading: "ひだりて に とけい を しています", english: "I wear a watch on my left hand" }] },
     { id: "yasumu", kanji: "休", onyomi: "キュウ", kunyomi: "やす（む）", meaning: "rest, day off", examples: [{ sentence: "日曜日（にちようび） は 休（やす）みます", reading: "にちようび は やすみます", english: "I rest on Sunday" }, { sentence: "夏休（なつやす）み に 旅行（りょこう） します", reading: "なつやすみ に りょこう します", english: "I travel during summer vacation" }] },
     { id: "chichi", kanji: "父", onyomi: "フ", kunyomi: "ちち", meaning: "father", examples: [{ sentence: "父（ちち） は 会社員（かいしゃいん） です", reading: "ちち は かいしゃいん です", english: "My father is a company employee" }, { sentence: "お父（とう）さん、お元気（げんき） です か", reading: "おとうさん、おげんき です か", english: "How are you, Dad?" }] },
     { id: "ame", kanji: "雨", onyomi: "ウ", kunyomi: "あめ、あま", meaning: "rain", examples: [{ sentence: "雨（あめ） が 降（ふ）っています", reading: "あめ が ふっています", english: "It is raining" }, { sentence: "雨（あめ） の 日（ひ） は 家（いえ） で 過（す）ごします", reading: "あめ の ひ は いえ で すごします", english: "I spend rainy days at home" }] },
@@ -132,7 +132,7 @@ const kanjiData = [
     { id: "akarui", kanji: "明", onyomi: "メイ、ミョウ", kunyomi: "あか（るい）", meaning: "bright, clear", examples: [{ sentence: "明（あか）るい 部屋（へや）", reading: "あかるい へや", english: "Bright room" }, { sentence: "明日（あした） は 明（あか）るい です ね", reading: "あした は あかるい です ね", english: "Tomorrow is bright, isn't it?" }] },
     { id: "kurai", kanji: "暗", onyomi: "アン", kunyomi: "くら（い）", meaning: "dark", examples: [{ sentence: "暗（くら）い 部屋（へや）", reading: "くらい へや", english: "Dark room" }, { sentence: "外（そと） は 暗（くら）い です", reading: "そと は くらい です", english: "It's dark outside" }] },
     { id: "atatakai", kanji: "温", onyomi: "オン", kunyomi: "あたた（かい）", meaning: "warm", examples: [{ sentence: "温（あたた）かい お茶（ちゃ）", reading: "あたたかい おちゃ", english: "Warm tea" }, { sentence: "今日（きょう） は 温（あたた）かい です ね", reading: "きょう は あたたかい です ね", english: "Today is warm, isn't it?" }] },
-    { id: "tsumetai", kanji: "冷", onyomi: "レイ", kunyomi: "つめ（たい）", meaning: "cold (to touch)", examples: [{ sentence: "冷（つめ）たい 飲（の）み物（もの）", reading: "つめたい のみもの", english: "Cold drink" }, { sentence: "夏（なつ） は 冷（つめ）たい アイスクリーム が 一番（いちばん） 好（す）き です", reading: "なつ は つめたい あいすくりーむ が いちばん すき です", english: "In summer, I like cold ice cream the most" }] },
+    { id: "tsumetai", kanji: "冷", onyomi: "レイ", kunyomi: "つめ（たい）、ひ（える）", meaning: "cold (to touch)", examples: [{ sentence: "冷（つめ）たい 飲（の）み物（もの）", reading: "つめたい のみもの", english: "Cold drink" }, { sentence: "夏（なつ） は 冷（つめ）たい アイスクリーム が 一番（いちばん） 好（す）き です", reading: "なつ は つめたい あいすくりーむ が いちばん すき です", english: "In summer, I like cold ice cream the most" }] },
     { id: "samui", kanji: "寒", onyomi: "カン", kunyomi: "さむ（い）", meaning: "cold (weather)", examples: [{ sentence: "今日（きょう） は 寒（さむ）い です", reading: "きょう は さむい です", english: "Today is cold" }, { sentence: "冬（ふゆ） は 寒（さむ）い です", reading: "ふゆ は さむい です", english: "Winter is cold" }] },
     { id: "omoshiroi", kanji: "面", onyomi: "メン", kunyomi: "おも、つら", meaning: "face, surface", examples: [{ sentence: "面白（おもしろ）い 映画（えいが）", reading: "おもしろい えいが", english: "Interesting movie" }, { sentence: "面白（おもしろ）い 本（ほん） を 読（よ）みました", reading: "おもしろい ほん を よみました", english: "I read an interesting book" }] },
     { id: "nigiyaka", kanji: "賑", onyomi: "シン", kunyomi: "にぎ（わう）", meaning: "bustling", examples: [{ sentence: "賑（にぎ）やかな 街（まち）", reading: "にぎやかな まち", english: "Lively town" }, { sentence: "東京（とうきょう） は 賑（にぎ）やかな 街（まち） です", reading: "とうきょう は にぎやかな まち です", english: "Tokyo is a lively city" }] },
@@ -141,12 +141,10 @@ const kanjiData = [
     { id: "shinsetsu", kanji: "親", onyomi: "シン", kunyomi: "おや、した（しい）", meaning: "parent, intimate", examples: [{ sentence: "親切（しんせつ）な 人（ひと）", reading: "しんせつな ひと", english: "Kind person" }, { sentence: "店員（てんいん）さん は 親切（しんせつ）でした", reading: "てんいんさん は しんせつでした", english: "The clerk was kind" }] },
     { id: "benri", kanji: "便", onyomi: "ベン、ビン", kunyomi: "たよ（り）", meaning: "convenience", examples: [{ sentence: "便利（べんり）な 電車（でんしゃ）", reading: "べんりな でんしゃ", english: "Convenient train" }, { sentence: "この アプリ は 便利（べんり） です", reading: "この あぷり は べんり です", english: "This app is convenient" }] },
     { id: "fuben", kanji: "不", onyomi: "フ、ブ", kunyomi: null, meaning: "not, un-", examples: [{ sentence: "不便（ふべん）な 場所（ばしょ）", reading: "ふべんな ばしょ", english: "Inconvenient place" }, { sentence: "田舎（いなか） は 不便（ふべん） です", reading: "いなか は ふべん です", english: "The countryside is inconvenient" }] },
-    { id: "taisetsu", kanji: "大", onyomi: "ダイ、タイ", kunyomi: "おお（きい）", meaning: "large, important", examples: [{ sentence: "大切（たいせつ）な 人（ひと）", reading: "たいせつな ひと", english: "Important person" }, { sentence: "よく 寝（ね）る こと が 大切（たいせつ） です", reading: "よく ねる こと が たいせつ です", english: "Getting enough sleep is important" }] },
     { id: "hitsuyou", kanji: "必", onyomi: "ヒツ", kunyomi: "かなら（ず）", meaning: "certainly, necessarily", examples: [{ sentence: "必要（ひつよう）な もの", reading: "ひつような もの", english: "Necessary thing" }, { sentence: "手術（しゅじゅつ） が 必要（ひつよう） です", reading: "しゅじゅつ が ひつよう です", english: "Surgery is necessary" }] },
     { id: "jiyuu", kanji: "自", onyomi: "ジ、シ", kunyomi: "みずか（ら）", meaning: "self", examples: [{ sentence: "自由（じゆう）な 時間（じかん）", reading: "じゆうな じかん", english: "Free time" }, { sentence: "自由（じゆう）に 使（つか）えます", reading: "じゆうに つかえます", english: "You can use it freely" }] },
     { id: "shiawase", kanji: "幸", onyomi: "コウ", kunyomi: "さいわ（い）", meaning: "happiness", examples: [{ sentence: "幸（しあわ）せな 生活（せいかつ）", reading: "しあわせな せいかつ", english: "Happy life" }, { sentence: "幸（しあわ）せ です か", reading: "しあわせ です か", english: "Are you happy?" }] },
     { id: "joubu", kanji: "丈", onyomi: "ジョウ", kunyomi: "たけ", meaning: "height, length", examples: [{ sentence: "丈夫（じょうぶ）な 鞄（かばん）", reading: "じょうぶな かばん", english: "Durable bag" }, { sentence: "この 鞄（かばん） は 丈夫（じょうぶ） です", reading: "この かばん は じょうぶ です", english: "This bag is durable" }] },
-    { id: "majime", kanji: "真", onyomi: "シン", kunyomi: "ま", meaning: "true, reality", examples: [{ sentence: "真面目（まじめ）な 人（ひと）", reading: "まじめな ひと", english: "Serious person" }, { sentence: "彼（かれ） は 真面目（まじめ）な 人間（にんげん） です", reading: "かれ は まじめな にんげん です", english: "He is a serious person" }] },
 
     // ========== NEWLY ADDED MISSING KANJI ==========
     // From wordDict, sentences, and other app data
@@ -197,10 +195,9 @@ const kanjiData = [
     { id: "unten", kanji: "運", onyomi: "ウン", kunyomi: "はこ（ぶ）", meaning: "carry, transport", examples: [{ sentence: "運転（うんてん） します", reading: "うんてん します", english: "I drive" }, { sentence: "車（くるま） を 運転（うんてん） します", reading: "くるま を うんてん します", english: "I drive a car" }] },
     
     // Turn (rotate)
-    { id: "ten", kanji: "転", onyomi: "テン", kunyomi: "ころ（がる）", meaning: "turn, revolve", examples: [{ sentence: "転（ころ）びました", reading: "ころびました", english: "I fell over" }, { sentence: "事故（じこ） で 転（ころ）びました", reading: "じこ で ころびました", english: "I fell in the accident" }] },
+    { id: "ten_koro", kanji: "転", onyomi: "テン", kunyomi: "ころ（がる）", meaning: "turn, revolve", examples: [{ sentence: "転（ころ）びました", reading: "ころびました", english: "I fell over" }, { sentence: "事故（じこ） で 転（ころ）びました", reading: "じこ で ころびました", english: "I fell in the accident" }] },
     
     // Phone/talk
-    { id: "wa", kanji: "話", onyomi: "ワ", kunyomi: "はな（す）", meaning: "talk, speak", examples: [{ sentence: "電話（でんわ） を します", reading: "でんわ を します", english: "I make a phone call" }, { sentence: "日本語（にほんご） を 話（はな）します", reading: "にほんご を はなします", english: "I speak Japanese" }] },
     
     // Promise
     { id: "yakusoku", kanji: "約", onyomi: "ヤク", kunyomi: "つづ（まる）", meaning: "promise, approximately", examples: [{ sentence: "約束（やくそく） します", reading: "やくそく します", english: "I promise" }, { sentence: "約束（やくそく） を 守（まも）ります", reading: "やくそく を まもります", english: "I keep a promise" }] },
@@ -209,7 +206,7 @@ const kanjiData = [
     { id: "soku", kanji: "束", onyomi: "ソク", kunyomi: "たば", meaning: "bundle, bind", examples: [{ sentence: "約束（やくそく） を します", reading: "やくそく を します", english: "I promise" }, { sentence: "束（たば）ねます", reading: "たばねます", english: "I bundle" }] },
     
     // Counter for flat objects
-    { id: "mai", kanji: "枚", onyomi: "マイ", kunyomi: null, meaning: "counter for flat objects", examples: [{ sentence: "五枚（ごまい） ください", reading: "ごまい ください", english: "Please give me five (flat objects)" }, { sentence: "紙（かみ） を 一枚（いちまい） ください", reading: "かみ を いちまい ください", english: "Please give me one sheet of paper" }] },
+    { id: "mai_mai", kanji: "枚", onyomi: "マイ", kunyomi: null, meaning: "counter for flat objects", examples: [{ sentence: "五枚（ごまい） ください", reading: "ごまい ください", english: "Please give me five (flat objects)" }, { sentence: "紙（かみ） を 一枚（いちまい） ください", reading: "かみ を いちまい ください", english: "Please give me one sheet of paper" }] },
     
     // Counter for cups
     { id: "hai", kanji: "杯", onyomi: "ハイ", kunyomi: "さかずき", meaning: "counter for cups/glasses", examples: [{ sentence: "コーヒー を 二杯（にはい） 飲（の）みます", reading: "こーひー を にはい のみます", english: "I drink two cups of coffee" }, { sentence: "一杯（いっぱい） ください", reading: "いっぱい ください", english: "Please give me one cup" }] },
@@ -263,13 +260,12 @@ const kanjiData = [
     { id: "netsu", kanji: "熱", onyomi: "ネツ", kunyomi: "あつ（い）", meaning: "heat, fever", examples: [{ sentence: "熱（ねつ） が あります", reading: "ねつ が あります", english: "I have a fever" }, { sentence: "熱（ねつ） が 下（さ）がりました", reading: "ねつ が さがりました", english: "The fever went down" }] },
     
     // Rescue
-    { id: "kyuu", kanji: "救", onyomi: "キュウ", kunyomi: "すく（う）", meaning: "rescue, save", examples: [{ sentence: "救急車（きゅうきゅうしゃ） を 呼（よ）びます", reading: "きゅうきゅうしゃ を よびます", english: "I call an ambulance" }, { sentence: "命（いのち） を 救（すく）いました", reading: "いのち を すくいました", english: "I saved a life" }] },
+    { id: "kyuu_suku", kanji: "救", onyomi: "キュウ", kunyomi: "すく（う）", meaning: "rescue, save", examples: [{ sentence: "救急車（きゅうきゅうしゃ） を 呼（よ）びます", reading: "きゅうきゅうしゃ を よびます", english: "I call an ambulance" }, { sentence: "命（いのち） を 救（すく）いました", reading: "いのち を すくいました", english: "I saved a life" }] },
     
     // Emergency
     { id: "kyuu2", kanji: "急", onyomi: "キュウ", kunyomi: "いそ（ぐ）", meaning: "urgent, sudden", examples: [{ sentence: "救急車（きゅうきゅうしゃ）", reading: "きゅうきゅうしゃ", english: "Ambulance" }, { sentence: "急（いそ）いで ください", reading: "いそいで ください", english: "Please hurry" }] },
     
     // Washer
-    { id: "sen", kanji: "洗", onyomi: "セン", kunyomi: "あら（う）", meaning: "wash", examples: [{ sentence: "洗濯機（せんたくき） を 回（まわ）します", reading: "せんたくき を まわします", english: "I run the washing machine" }, { sentence: "洗濯（せんたく） を します", reading: "せんたく を します", english: "I do laundry" }] },
     
     // Wash (rinse)
     { id: "taku", kanji: "濯", onyomi: "タク", kunyomi: "すすぐ", meaning: "rinse, wash", examples: [{ sentence: "洗濯（せんたく） を します", reading: "せんたく を します", english: "I do laundry" }, { sentence: "洗濯機（せんたくき）", reading: "せんたくき", english: "Washing machine" }] },
@@ -281,7 +277,6 @@ const kanjiData = [
     { id: "jo", kanji: "除", onyomi: "ジョ", kunyomi: "のぞ（く）", meaning: "remove, exclude", examples: [{ sentence: "掃除機（そうじき）", reading: "そうじき", english: "Vacuum cleaner" }, { sentence: "邪魔（じゃま） を 除（のぞ）きます", reading: "じゃま を のぞきます", english: "I remove the obstacle" }] },
     
     // Refrigerator (cold)
-    { id: "rei", kanji: "冷", onyomi: "レイ", kunyomi: "つめ（たい）、ひ（える）", meaning: "cold, cool", examples: [{ sentence: "冷蔵庫（れいぞうこ） に 牛乳（ぎゅうにゅう） が あります", reading: "れいぞうこ に ぎゅうにゅう が あります", english: "There is milk in the refrigerator" }, { sentence: "冷（つめ）たい 飲（の）み物（もの）", reading: "つめたい のみもの", english: "Cold drink" }] },
     
     // Store/warehouse
     { id: "souko", kanji: "蔵", onyomi: "ゾウ", kunyomi: "くら", meaning: "storehouse, warehouse", examples: [{ sentence: "冷蔵庫（れいぞうこ）", reading: "れいぞうこ", english: "Refrigerator" }, { sentence: "蔵（くら） に 保管（ほかん） します", reading: "くら に ほかん します", english: "I store it in the warehouse" }] },
@@ -320,16 +315,16 @@ const kanjiData = [
     { id: "makeru", kanji: "負", onyomi: "フ", kunyomi: "ま（ける）", meaning: "lose, negative", examples: [{ sentence: "ゲーム に 負（ま）けました", reading: "げーむ に まけました", english: "I lost the game" }, { sentence: "負（ま）けないで ください", reading: "まけないで ください", english: "Please don't give up" }] },
     
     // Examine
-    { id: "shin", kanji: "診", onyomi: "シン", kunyomi: "み（る）", meaning: "diagnose, examine", examples: [{ sentence: "診察（しんさつ） を 受けます", reading: "しんさつ を うけます", english: "I receive a medical examination" }, { sentence: "医者（いしゃ） に 診（み）てもらいました", reading: "いしゃ に みてもらいました", english: "I had a doctor examine me" }] },
+    { id: "shin_miru", kanji: "診", onyomi: "シン", kunyomi: "み（る）", meaning: "diagnose, examine", examples: [{ sentence: "診察（しんさつ） を 受（う）けます", reading: "しんさつ を うけます", english: "I receive a medical examination" }, { sentence: "医者（いしゃ） に 診（み）てもらいました", reading: "いしゃ に みてもらいました", english: "I had a doctor examine me" }] },
     
     // Injection
-    { id: "shin", kanji: "針", onyomi: "シン", kunyomi: "はり", meaning: "needle", examples: [{ sentence: "注射（ちゅうしゃ） を します", reading: "ちゅうしゃ を します", english: "I get an injection" }, { sentence: "針（はり） が 痛（いた）い", reading: "はり が いたい", english: "The needle hurts" }] },
+    { id: "shin_hari", kanji: "針", onyomi: "シン", kunyomi: "はり", meaning: "needle", examples: [{ sentence: "注射（ちゅうしゃ） を します", reading: "ちゅうしゃ を します", english: "I get an injection" }, { sentence: "針（はり） が 痛（いた）い", reading: "はり が いたい", english: "The needle hurts" }] },
     
     // Shoot
     { id: "sha2", kanji: "射", onyomi: "シャ", kunyomi: "い（る）", meaning: "shoot", examples: [{ sentence: "注射（ちゅうしゃ） を します", reading: "ちゅうしゃ を します", english: "I get an injection" }, { sentence: "矢（や） を 射（い）ます", reading: "や を います", english: "I shoot an arrow" }] },
     
     // Health
-    { id: "kou", kanji: "康", onyomi: "コウ", kunyomi: null, meaning: "healthy", examples: [{ sentence: "健康（けんこう） の ため に 運動（うんどう） します", reading: "けんこう の ため に うんどう します", english: "I exercise for my health" }, { sentence: "健康（けんこう） が 一番（いちばん） です", reading: "けんこう が いちばん です", english: "Health is the most important" }] },
+    { id: "kou_kou", kanji: "康", onyomi: "コウ", kunyomi: null, meaning: "healthy", examples: [{ sentence: "健康（けんこう） の ため に 運動（うんどう） します", reading: "けんこう の ため に うんどう します", english: "I exercise for my health" }, { sentence: "健康（けんこう） が 一番（いちばん） です", reading: "けんこう が いちばん です", english: "Health is the most important" }] },
     
     // Suitable
     { id: "teki", kanji: "適", onyomi: "テキ", kunyomi: "かな（う）", meaning: "suitable, appropriate", examples: [{ sentence: "適当（てきとう）な 例（れい）", reading: "てきとうな れい", english: "Appropriate example" }, { sentence: "適切（てきせつ）な 言葉（ことば）", reading: "てきせつな ことば", english: "Appropriate words" }] },
@@ -365,7 +360,6 @@ const kanjiData = [
     { id: "shi", kanji: "資", onyomi: "シ", kunyomi: null, meaning: "resources, capital", examples: [{ sentence: "資料（しりょう） を 準備（じゅんび） します", reading: "しりょう を じゅんび します", english: "I prepare the materials" }, { sentence: "資金（しきん） が 足（た）りません", reading: "しきん が たりません", english: "I don't have enough funds" }] },
     
     // Material/fee
-    { id: "ryou", kanji: "料", onyomi: "リョウ", kunyomi: null, meaning: "fee, materials", examples: [{ sentence: "資料（しりょう） を 準備（じゅんび） します", reading: "しりょう を じゅんび します", english: "I prepare the materials" }, { sentence: "入場料（にゅうじょうりょう） を 払（はら）います", reading: "にゅうじょうりょう を はらいます", english: "I pay the entrance fee" }] },
     
     // Prepare
     { id: "junbi", kanji: "準", onyomi: "ジュン", kunyomi: null, meaning: "standard, semi-", examples: [{ sentence: "準備（じゅんび） します", reading: "じゅんび します", english: "I prepare" }, { sentence: "準備（じゅんび） が できました", reading: "じゅんび が できました", english: "Preparation is complete" }] },
@@ -389,7 +383,7 @@ const kanjiData = [
     { id: "gou", kanji: "合", onyomi: "ゴウ", kunyomi: "あ（う）", meaning: "join, fit, pass", examples: [{ sentence: "試験（しけん） に 合格（ごうかく） しました", reading: "しけん に ごうかく しました", english: "I passed the exam" }, { sentence: "サイズ が 合（あ）います", reading: "さいず が あいます", english: "The size fits" }] },
     
     // Pass (rank)
-    { id: "kaku", kanji: "格", onyomi: "カク", kunyomi: null, meaning: "status, rank", examples: [{ sentence: "合格（ごうかく） しました", reading: "ごうかく しました", english: "I passed" }, { sentence: "格（かく） が 違（ちが）います", reading: "かく が ちがいます", english: "The status is different" }] },
+    { id: "kaku_kaku", kanji: "格", onyomi: "カク", kunyomi: null, meaning: "status, rank", examples: [{ sentence: "合格（ごうかく） しました", reading: "ごうかく しました", english: "I passed" }, { sentence: "格（かく） が 違（ちが）います", reading: "かく が ちがいます", english: "The status is different" }] },
     
     // Submit
     { id: "teishutsu", kanji: "提", onyomi: "テイ", kunyomi: "さ（げる）", meaning: "propose, submit", examples: [{ sentence: "提出（ていしゅつ） します", reading: "ていしゅつ します", english: "I submit" }, { sentence: "課題（かだい） を 提出（ていしゅつ） します", reading: "かだい を ていしゅつ します", english: "I submit the assignment" }] },

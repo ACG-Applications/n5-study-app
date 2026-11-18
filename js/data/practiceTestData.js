@@ -10,7 +10,7 @@ const practiceTestData = {
             type: "reading",
             question: "けさ しゃわーを あびました。",
             image: null,
-            options: ["1 シャワー", "2 シャウー", "3 シャワー", "4 シャウー"],
+            options: ["1 シャワー", "2 シャウー", "3 シャワ", "4 シヤワー"],
             correctAnswer: "1",
             explanation: "シャワー = shower",
             furigana: "けさ シャワーを あびました"
@@ -22,7 +22,7 @@ const practiceTestData = {
             type: "kanji",
             question: "コーヒーを のみました。",
             image: null,
-            options: ["1 飯みました", "2 飲みました", "3 飲みました", "4 飲みました"],
+            options: ["1 飯みました", "2 飲みました", "3 餌みました", "4 飲ました"],
             correctAnswer: "2",
             explanation: "飲む (のむ) = to drink",
             furigana: "コーヒーを 飲(の)みました"
@@ -34,7 +34,7 @@ const practiceTestData = {
             type: "kanji",
             question: "あたらしい くるまを かいました。",
             image: null,
-            options: ["1 卓", "2 車", "3 車", "4 車"],
+            options: ["1 卓", "2 車", "3 軍", "4 連"],
             correctAnswer: "2",
             explanation: "車 (くるま) = car",
             furigana: "新(あたら)しい 車(くるま)を 買(か)いました"
@@ -58,7 +58,7 @@ const practiceTestData = {
             type: "kanji",
             question: "しゅくだいが はんぶん おわりました。",
             image: null,
-            options: ["1 羊分", "2 半分", "3 羊分", "4 半分"],
+            options: ["1 羊分", "2 半分", "3 半文", "4 羊文"],
             correctAnswer: "2",
             explanation: "半分 (はんぶん) = half",
             furigana: "宿題(しゅくだい)が 半分(はんぶん) 終(お)わりました"
@@ -70,7 +70,7 @@ const practiceTestData = {
             type: "kanji",
             question: "わたしの うちに きませんか。",
             image: null,
-            options: ["1 来ませんか", "2 来ませんか", "3 木ませんか", "4 未ませんか"],
+            options: ["1 来ませんか", "2 木ませんか", "3 未ませんか", "4 米ませんか"],
             correctAnswer: "1",
             explanation: "来る (くる) = to come",
             furigana: "私(わたし)の 家(うち)に 来(き)ませんか"
@@ -94,7 +94,7 @@ const practiceTestData = {
             type: "kanji",
             question: "いもうとと おなじ ふくを かいました。",
             image: null,
-            options: ["1 同じ", "2 同じ", "3 同じ", "4 同じ"],
+            options: ["1 同じ", "2 司じ", "3 向じ", "4 伺じ"],
             correctAnswer: "1",
             explanation: "同じ (おなじ) = same",
             furigana: "妹(いもうと)と 同(おな)じ 服(ふく)を 買(か)いました"

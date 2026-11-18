@@ -308,7 +308,7 @@ const adjectivesData = [
             adverbial: "遅（おそ）く"
         },
         examples: [
-            { sentence: "電車（でんしゃ） が 遅（おそ）れ ています", reading: "でんしゃ が おくれ ています", english: "The train is late." }
+            { sentence: "電車（でんしゃ） が 遅（おく）れ ています", reading: "でんしゃ が おくれ ています", english: "The train is late." }
         ]
     },
     {
