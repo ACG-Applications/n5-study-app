@@ -976,7 +976,7 @@
           >
             <span class="app-icon">🧘</span>
             <span class="app-name">Zen Listening N5-N1</span>
-            <span class="app-desc">Zen Listening N5-N1></span>
+            <span class="app-desc">Zen Listening N5-N1</span>
             <span class="app-badge pwa">PWA</span>
           </a>
 
@@ -1060,6 +1060,7 @@
           <a
             href="https://support.google.com/chrome/answer/9658361"
             target="_blank"
+            rel="noopener noreferrer"
           >
             Install as PWA
           </a>
@@ -2206,6 +2207,12 @@
       src="js/data/stories.js"
       onload="markDataLoaded('stories')"
       onerror="console.error('❌ Failed to load stories.js')"
+    ></script>
+    <!-- Needed by print.js' kanji reference table and kanji-helper.js -->
+    <script
+      src="js/data/kanjiData.js"
+      onload="console.log('✅ kanjiData.js loaded')"
+      onerror="console.error('❌ Failed to load kanjiData.js')"
     ></script>
 
     <!-- Utilities -->

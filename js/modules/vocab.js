@@ -119,9 +119,18 @@ function buildVocabFuriganaHTML(word, reading) {
 
   if (kanjiIndices.length === 1) {
     const idx = kanjiIndices[0];
+    // Characters after the kanji are okurigana: strip them from the reading so
+    // the ruby shows only the kanji's reading. 食べる -> 食(たべ)べる, not
+    // 食(たべる)べる; 行く -> 行(い)く, not 行(いく)く.
+    const okurigana = word.slice(idx + 1);
+    let kanjiReading = reading;
+    if (okurigana && kanjiReading.endsWith(okurigana)) {
+      kanjiReading = kanjiReading.slice(0, okurigana.length * -1);
+    }
+    if (!kanjiReading) kanjiReading = reading;
     for (let i = 0; i < chars.length; i++) {
       if (i === idx) {
-        result += `<ruby>${chars[i]}<rt>${reading}</rt></ruby>`;
+        result += `<ruby>${chars[i]}<rt>${kanjiReading}</rt></ruby>`;
       } else {
         result += chars[i];
       }

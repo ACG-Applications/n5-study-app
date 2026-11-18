@@ -399,7 +399,7 @@ rt {
 /* But keep furigana red */
 .example-jp ruby rt,
 .example-jp rt {
-  color: #8b0000 !important !important; /* ← Keep furigana red */
+  color: #8b0000 !important; /* keep furigana red */
 }
 
 /* ─── EXAMPLE ITEM CONTAINER ──────────────────────────────────── */
