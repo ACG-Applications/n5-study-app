@@ -245,14 +245,20 @@ function buildSentenceBySentenceHTML(sprintIndex) {
     if (sentenceIndex < sentences.length)
       originalSentence = sentences[sentenceIndex];
 
-    let displayText = storySentence;
-    if (
+    // Only swap in the tooltip-rendered version when the pool sentence really is
+    // this story line. Previously the pool sentence was always substituted, so
+    // the Japanese shown belonged to a different sentence than the English
+    // translation printed underneath it.
+    const poolMatches =
       originalSentence &&
       originalSentence.splitWords &&
-      originalSentence.wordMeanings
-    ) {
-      displayText = wrapWordsWithTooltips(originalSentence);
-    }
+      originalSentence.wordMeanings &&
+      typeof getPlainJapanese === "function" &&
+      getPlainJapanese(originalSentence) === getPlainJapanese({ jp: storySentence });
+
+    const displayText = poolMatches
+      ? wrapWordsWithTooltips(originalSentence)
+      : storySentence;
 
     html += `<div class="story-sentence" data-sentence-index="${sentenceIndex}"><div class="jp-line">${displayText}</div>`;
 

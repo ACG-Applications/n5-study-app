@@ -1153,7 +1153,13 @@ function renderQuizQuestion() {
 
 function normalizeForCompare(str) {
   if (!str) return "";
-  return str.replace(/\s+/g, "").trim();
+  // Strip furigana annotations (漢字（よみ） -> 漢字) as well as whitespace:
+  // option labels are annotated while some `correctAnswer` values are not,
+  // which made those questions impossible to answer.
+  return String(str)
+    .replace(/[（(][^）)]*[）)]/g, "")
+    .replace(/\s+/g, "")
+    .trim();
 }
 
 function checkAnswer() {

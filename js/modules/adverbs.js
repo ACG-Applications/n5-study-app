@@ -800,15 +800,10 @@ function generateQuiz() {
     const example = adv.examples[0];
     if (!example) continue;
 
-    let sentenceWithBlank = example.sentence;
-    const advInSentence = adv.dictionary;
-
-    if (sentenceWithBlank.includes(advInSentence)) {
-      sentenceWithBlank = sentenceWithBlank.replace(advInSentence, "______");
-    } else {
-      const cleanAdv = adv.dictionary.replace(/[（(][^）)]*[）)]/g, "");
-      sentenceWithBlank = sentenceWithBlank.replace(cleanAdv, "______");
-    }
+    // Blank the adverb as it actually appears (furigana-annotated) in the
+    // sentence; the old code only matched the un-annotated dictionary form and
+    // therefore left e.g. `______（ちょうど）`, giving the answer away.
+    const sentenceWithBlank = blankOutWord(example.sentence, adv.dictionary);
 
     const options = [adv.display];
     const otherAdverbs = availableAdverbs.filter((a) => a.id !== adv.id);

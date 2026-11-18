@@ -1280,7 +1280,9 @@ function findAllParticlesInSentence(sentenceText) {
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
     for (const particle of allParticles) {
-      if (word === particle || word.endsWith(particle)) {
+      // Only an exact token is a particle. `word.endsWith(particle)` wrongly
+      // classified もっと→と, この→の, とても→も, ので→で.
+      if (word === particle) {
         particles.push({
           particle: particle,
           position: i,
@@ -1426,8 +1428,18 @@ function createHardDisplayText(sentence, particles) {
   return displayText;
 }
 
+// Points are awarded per particle blank, not per question, so the score
+// denominator must be the number of blanks (a 10-question hard quiz can have
+// 25 blanks; dividing by 10 produced scores like "25.0 / 10 (250%)").
+function getTotalPossiblePoints() {
+  return currentQuiz.reduce(
+    (sum, q) => sum + (q && Array.isArray(q.particles) && q.particles.length ? q.particles.length : 1),
+    0,
+  );
+}
+
 function updateQuizStatsDisplay() {
-  const totalPossible = currentQuiz.length;
+  const totalPossible = getTotalPossiblePoints();
   const scoreEl = document.getElementById("quizRunningScore");
   const totalEl = document.getElementById("quizTotalPossible");
   if (scoreEl) scoreEl.innerText = quizScore.toFixed(1);
@@ -1552,6 +1564,11 @@ function renderQuizQuestion() {
             <option value="から" ${selectedValue === "から" ? "selected" : ""}>から (from)</option>
             <option value="まで" ${selectedValue === "まで" ? "selected" : ""}>まで (until/to)</option>
             <option value="の" ${selectedValue === "の" ? "selected" : ""}>の (possession)</option>
+            <option value="も" ${selectedValue === "も" ? "selected" : ""}>も (also/too)</option>
+            <option value="か" ${selectedValue === "か" ? "selected" : ""}>か (question)</option>
+            <option value="よ" ${selectedValue === "よ" ? "selected" : ""}>よ (emphasis)</option>
+            <option value="ね" ${selectedValue === "ね" ? "selected" : ""}>ね (agreement)</option>
+            <option value="や" ${selectedValue === "や" ? "selected" : ""}>や (and; non-exhaustive)</option>
           </select>
         </div>
       `;
@@ -1666,11 +1683,12 @@ function stopQuiz() {
 
   const resultsDiv = document.getElementById("quizResults");
   if (resultsDiv) {
-    const percent = Math.round((quizScore / currentQuiz.length) * 100);
+    const totalPossible = getTotalPossiblePoints();
+    const percent = totalPossible ? Math.round((quizScore / totalPossible) * 100) : 0;
     resultsDiv.style.display = "block";
     resultsDiv.innerHTML = `
-      <div class="quiz-score">${quizScore.toFixed(1)} / ${currentQuiz.length} (${percent}%)</div>
-      <p>Quiz stopped early. You answered ${quizScore.toFixed(1)} out of ${currentQuiz.length} points.</p>
+      <div class="quiz-score">${quizScore.toFixed(1)} / ${totalPossible} (${percent}%)</div>
+      <p>Quiz stopped early. You answered ${quizScore.toFixed(1)} out of ${totalPossible} points.</p>
       <div class="stats-explanation" style="margin-top: 15px;">
         <h4>📖 How Scoring Worked</h4>
         <ul>
@@ -2014,13 +2032,14 @@ function showQuizResults() {
   quizActive = false;
   setModeButtonsEnabled(true);
 
-  const percent = Math.round((quizScore / currentQuiz.length) * 100);
+  const totalPossible = getTotalPossiblePoints();
+  const percent = totalPossible ? Math.round((quizScore / totalPossible) * 100) : 0;
   const resultsDiv = document.getElementById("quizResults");
   if (!resultsDiv) return;
 
   resultsDiv.style.display = "block";
   resultsDiv.innerHTML = `
-    <div class="quiz-score">${quizScore.toFixed(1)} / ${currentQuiz.length} (${percent}%)</div>
+    <div class="quiz-score">${quizScore.toFixed(1)} / ${totalPossible} (${percent}%)</div>
     <p>${percent >= 80 ? "🎉 Excellent! You know your particles well!" : percent >= 60 ? "👍 Good job! Keep practicing!" : "📚 Keep studying! Review the particles and try again."}</p>
     <div class="stats-explanation" style="margin-top: 15px;">
       <h4>📖 How Scoring Worked</h4>

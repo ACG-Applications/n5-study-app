@@ -2343,6 +2343,15 @@ class SentenceBuilder {
     const stats = this.mastery.getStats();
     const modeStatus = this.mastery.getModeStatus();
 
+    // `modeLabels` is only declared locally in other methods, so referencing it
+    // here threw "ReferenceError: modeLabels is not defined" as soon as a
+    // sprint was started (progress.isLocked === true).
+    const modeLabels = {
+      fill: "📝 Fill",
+      order: "🔄 Order",
+      "select-order": "🎯 Select",
+    };
+
     // Update progress bar
     this.elements.progressBar.style.width = `${progress.progress}%`;
 
