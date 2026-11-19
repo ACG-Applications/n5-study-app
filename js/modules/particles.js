@@ -1109,6 +1109,21 @@ function populateParticleReference() {
     { char: "よ", id: "yo" },
     { char: "ね", id: "ne" },
     { char: "や", id: "ya" },
+    { char: "より", id: "yori" },
+    { char: "くらい", id: "kurai" },
+    { char: "ごろ", id: "goro" },
+    { char: "だけ", id: "dake" },
+    { char: "ほど", id: "hodo" },
+    { char: "には", id: "niwa" },
+    { char: "ので", id: "node" },
+    { char: "ながら", id: "nagara" },
+    { char: "のに", id: "noni" },
+    { char: "など", id: "nado" },
+    { char: "しか", id: "shika" },
+    { char: "ばかり", id: "bakari" },
+    { char: "って", id: "tte" },
+    { char: "さえ", id: "sae" },
+    { char: "こそ", id: "koso" },
   ];
 
   for (const p of particles) {
