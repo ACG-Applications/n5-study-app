@@ -209,7 +209,7 @@ const adverbsData = [
         reading: "まっすぐ",
         meaning: "straight ahead",
         examples: [
-            { sentence: "真っ直（まっす）ぐ 行（い）って ください", reading: "まっすぐ いって ください", english: "Please go straight" }
+            { sentence: "真（ま）っ直（す）ぐ 行（い）って ください", reading: "まっすぐ いって ください", english: "Please go straight" }
         ]
     },
     {

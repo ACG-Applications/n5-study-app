@@ -22,7 +22,7 @@ const sprintStories = [
   {
     title: "Finding My Way Around Town",
     storyJp:
-      "私（わたし）の 家（いえ）は 駅（えき）の 近（ちか）くに あります。駅（えき）の 前（まえ）に 大（おお）きい スーパーが あります。郵便局（ゆうびんきょく）は スーパーの 隣（となり）です。学校（がっこう）までは、バスで 十五分（じゅうごふん）ぐらい かかります。バス停（ばすてい）は 家（いえ）から 歩（ある）いて 五分（ごふん）です。雨（あめ）の 日（ひ）は タクシーで 行（い）きます。駅（えき）の 中（なか）に 小（ちい）さい 本屋（ほんや）が あります。",
+      "私（わたし）の 家（いえ）は 駅（えき）の 近（ちか）くに あります。駅（えき）の 前（まえ）に 大（おお）きい スーパーが あります。郵便局（ゆうびんきょく）は スーパーの 隣（となり）です。学校（がっこう）までは、バスで 十五分（じゅうごふん）ぐらい かかります。バス停（てい）は 家（いえ）から 歩（ある）いて 五分（ごふん）です。雨（あめ）の 日（ひ）は タクシーで 行（い）きます。駅（えき）の 中（なか）に 小（ちい）さい 本屋（ほんや）が あります。",
     storyEn:
       "My house is near the station. In front of the station there is a big supermarket. The post office is next to the supermarket. It takes about fifteen minutes by bus to school. The bus stop is a five-minute walk from my house. On rainy days I go by taxi. Inside the station there is a small bookshop.",
   },

@@ -47,7 +47,7 @@ const videoList = [
         file: "videos/n5_video_02.mp4",
         thumbnail: "videos/thumbnails/video_02_icon.png",
         watched: false,
-        formattedTranscript: `**👨‍🏫 Narrator:** これから音（おと）を聞（き）いてください。2021年第2回（だいにかい）日本語能力試験（にほんごのうりょくしけん）公会（こうかい）N5（エヌゴ）。これからN5（エヌゴ）の聴解（ちょうかい）試験（しけん）を始（はじ）めます。
+        formattedTranscript: `**👨‍🏫 Narrator:** これから音（おと）を聞（き）いてください。2021年（ねん）第（だい）2回（かい）日本語能力試験（にほんごのうりょくしけん）公会（こうかい）N5（エヌゴ）。これからN5（エヌゴ）の聴解（ちょうかい）試験（しけん）を始（はじ）めます。
 
 **👨‍🏫 Narrator:** 問題（もんだい）1では初（はじ）めに質問（しつもん）を聞（き）いてください。それから話（はなし）を聞（き）いて、問題用紙（もんだいようし）の1から4の中（なか）から1番（ばん）いいものを1つ選（えら）んでください。`,
         questions: [
@@ -66,7 +66,7 @@ const videoList = [
         file: "videos/n5_video_03.mp4",
         thumbnail: "videos/thumbnails/video_03_icon.png",
         watched: false,
-        formattedTranscript: `**👨‍🏫 Narrator:** 日本語能力試験完全模試（にほんごのうりょくしけんかんぜんもし）N5（エヌゴ）第2回（だいにかい）。これからN5（エヌゴ）の聴解（ちょうかい）試験（しけん）を始（はじ）めます。メモを取（と）ってもいいです。問題用紙（もんだいようし）を開（あ）けてください。`,
+        formattedTranscript: `**👨‍🏫 Narrator:** 日本語能力試験完全模試（にほんごのうりょくしけんかんぜんもし）N5（エヌゴ）第（だい）2回（かい）。これからN5（エヌゴ）の聴解（ちょうかい）試験（しけん）を始（はじ）めます。メモを取（と）ってもいいです。問題用紙（もんだいようし）を開（あ）けてください。`,
         questions: [
             { timestamp: "00:00", question: "Where is the man going?", answer: "Restroom" },
             { timestamp: "04:04", question: "Which page should the student open first?", answer: "Page 1" },
@@ -83,7 +83,7 @@ const videoList = [
         file: "videos/n5_video_04.mp4",
         thumbnail: "videos/thumbnails/video_04_icon.png",
         watched: false,
-        formattedTranscript: `**👨‍🏫 Narrator:** 日本語能力試験完全模試（にほんごのうりょくしけんかんぜんもし）N5（エヌゴ）第1回（だいいっかい）。これからN5（エヌゴ）の聴解（ちょうかい）試験（しけん）を始（はじ）めます。メモを取（と）ってもいいです。問題用紙（もんだいようし）を開（あ）けてください。`,
+        formattedTranscript: `**👨‍🏫 Narrator:** 日本語能力試験完全模試（にほんごのうりょくしけんかんぜんもし）N5（エヌゴ）第（だい）1回（かい）。これからN5（エヌゴ）の聴解（ちょうかい）試験（しけん）を始（はじ）めます。メモを取（と）ってもいいです。問題用紙（もんだいようし）を開（あ）けてください。`,
         questions: [
             { timestamp: "00:00", question: "What will the students do first on the trip?", answer: "Take a photo" },
             { timestamp: "04:03", question: "Which floor will the man go to?", answer: "6th floor" },

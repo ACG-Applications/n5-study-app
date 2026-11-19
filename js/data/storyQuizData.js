@@ -243,7 +243,7 @@ const storyQuizData = [
       },
       {
         type: "comprehension",
-        questionJp: "バス停（ばすてい）まで 歩（ある）いて どのくらい かかりますか。",
+        questionJp: "バス停（てい）まで 歩（ある）いて どのくらい かかりますか。",
         questionReading: "ばすていまで あるいて どのくらい かかりますか。",
         optionsJp: [
           "五分（ごふん）",
@@ -809,7 +809,7 @@ const storyQuizData = [
         ],
         optionsReading: [
           "えあこん",
-          "き",
+          "こぴーき",
           "ぱそこん",
         ],
         answerIndex: 1,

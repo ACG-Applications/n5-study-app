@@ -251,7 +251,7 @@ const practiceTestData = {
             ],
             correctAnswer: "3",
             explanation: "たんじょうび = birthday → the day you were born",
-            furigana: "誕生日(たんじょうび)は 6月15日(ろくがつじゅうごにち)です"
+            furigana: "誕生日(たんじょうび)は 6月(ろくがつ)15日(じゅうごにち)です"
         },
         // Question 33: Time expression - two years ago
         {

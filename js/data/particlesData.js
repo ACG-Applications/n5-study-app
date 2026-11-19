@@ -22,7 +22,7 @@ const particlesData = {
       "Defines the doer of the action. Emphasizes information BEFORE が.",
     position: "Subject + が + Predicate",
     usageNote:
-      "Used to mark new information, the subject of existence (ある/いる), and with likes/dislikes (好き/嫌い/欲しい).",
+      "Used to mark new information, the subject of existence (ある/いる), and with likes/dislikes (好（す）き/嫌（きら）い/欲（ほ）しい).",
     confusingWith: "は",
     category: "core",
     supplementaryExample: {
@@ -51,7 +51,7 @@ const particlesData = {
       "Indicates a specific point in time, direction of movement, or location of existence.",
     position: "Time/Place + に + Verb",
     usageNote:
-      "Used with specific times (3時, 日曜日), destinations (学校に行く), and existence location (公園にある).",
+      "Used with specific times (3時（じ）, 日曜日（にちようび）), destinations (学校（がっこう）に行（い）く), and existence location (公園（こうえん）にある).",
     confusingWith: "で",
     category: "core",
     supplementaryExample: {
@@ -66,7 +66,7 @@ const particlesData = {
       "Indicates where an action takes place or the means by which something is done.",
     position: "Place/Means + で + Action Verb",
     usageNote:
-      "Used for action locations (公園で遊ぶ) and methods/instruments (電車で行く, ペンで書く).",
+      "Used for action locations (公園（こうえん）で遊（あそ）ぶ) and methods/instruments (電車（でんしゃ）で行（い）く, ペンで書（か）く).",
     confusingWith: "に",
     category: "core",
     supplementaryExample: {
@@ -94,7 +94,7 @@ const particlesData = {
     function: "Connects nouns (and) or indicates accompaniment (with).",
     position: "Noun A + と + Noun B  OR  Person + と + Verb",
     usageNote:
-      "Used to list items (犬と猫) or indicate doing something with someone (友達と行く). Also used for quoting (と言う).",
+      "Used to list items (犬（いぬ）と猫（ねこ）) or indicate doing something with someone (友達（ともだち）と行（い）く). Also used for quoting (と言（い）う).",
     confusingWith: null,
     category: "core",
     supplementaryExample: {
@@ -108,7 +108,7 @@ const particlesData = {
     function: "Indicates origin, starting point in time or space.",
     position: "Origin + から + Verb",
     usageNote:
-      "Can be used for time (10時から) and place (東京から). Also means 'because' when used after a clause.",
+      "Can be used for time (10時（じ）から) and place (東京（とうきょう）から). Also means 'because' when used after a clause.",
     confusingWith: "まで",
     category: "core",
     supplementaryExample: {
@@ -122,7 +122,7 @@ const particlesData = {
     function: "Indicates an end point in time or space.",
     position: "End Point + まで + Verb",
     usageNote:
-      "Used with time (5時まで) or place (大阪まで). Often paired with から (from...to).",
+      "Used with time (5時（じ）まで) or place (大阪（おおさか）まで). Often paired with から (from...to).",
     confusingWith: "から",
     category: "core",
     supplementaryExample: {
@@ -137,7 +137,7 @@ const particlesData = {
       "Connects nouns to show possession, description, or relationship.",
     position: "Noun A + の + Noun B",
     usageNote:
-      "Shows possession (私の本), describes attributes (日本語の授業), or indicates origin (東京の友達). Also nominalizes verbs (食べるの).",
+      "Shows possession (私（わたし）の本（ほん）), describes attributes (日本語（にほんご）の授業（じゅぎょう）), or indicates origin (東京（とうきょう）の友達（ともだち）). Also nominalizes verbs (食（た）べるの).",
     confusingWith: null,
     category: "core",
     supplementaryExample: {
@@ -229,7 +229,7 @@ const particlesData = {
     example2:
       "私（わたし）が 学生（がくせい）です → I am the student (emphasis on 'me', not someone else)",
     additionalNote:
-      "が is also used with existence verbs (ある/いる) and with likes/dislikes (好き/嫌い).",
+      "が is also used with existence verbs (ある/いる) and with likes/dislikes (好（す）き/嫌（きら）い).",
     category: "pair",
   },
   pair_ni_de: {
@@ -241,7 +241,7 @@ const particlesData = {
       "公園（こうえん）に 犬（いぬ）がいます → There is a dog in the park (existence)",
     example2: "公園（こうえん）で 遊（あそ）びます → Play in the park (action)",
     additionalNote:
-      "に can also indicate destination (学校に行く) while で indicates means (電車で行く).",
+      "に can also indicate destination (学校（がっこう）に行（い）く) while で indicates means (電車（でんしゃ）で行（い）く).",
     category: "pair",
   },
   pair_ni_e: {
@@ -255,7 +255,7 @@ const particlesData = {
     example2:
       "東京（とうきょう）へ 行（い）きます → Go TOWARD Tokyo (direction focused, journey matters more)",
     additionalNote:
-      "へ can be used even if you don't have a specific destination (e.g., 右へ曲がる - turn to the right).",
+      "へ can be used even if you don't have a specific destination (e.g., 右（みぎ）へ曲（ま）がる - turn to the right).",
     category: "pair",
   },
 };

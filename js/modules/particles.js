@@ -833,7 +833,7 @@ function renderParticleDetails() {
         <div class="particle-function">${data.function}</div>
         <div class="particle-position">Position: ${data.position}</div>
         <div class="usage-note">
-          <strong>📖 Usage Note:</strong> ${data.usageNote}
+          <strong>📖 Usage Note:</strong> ${addFuriganaToText(data.usageNote)}
         </div>
         ${data.confusingWith ? `<div class="usage-note"><strong>⚠️ Confusing with:</strong> ${data.confusingWith}</div>` : ""}
         <div class="example-section">
@@ -955,7 +955,7 @@ function renderPairDetails() {
         <div class="pair-example">
           <strong>✅ </strong> ${example2Html}
         </div>
-        ${data.additionalNote ? `<div class="usage-note">💡 ${data.additionalNote}</div>` : ""}
+        ${data.additionalNote ? `<div class="usage-note">💡 ${addFuriganaToText(data.additionalNote)}</div>` : ""}
       </div>
     `;
   }

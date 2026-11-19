@@ -256,9 +256,19 @@ function buildSentenceBySentenceHTML(sprintIndex) {
       typeof getPlainJapanese === "function" &&
       getPlainJapanese(originalSentence) === getPlainJapanese({ jp: storySentence });
 
-    const displayText = poolMatches
-      ? wrapWordsWithTooltips(originalSentence)
-      : storySentence;
+    let displayText;
+    if (poolMatches) {
+      displayText = wrapWordsWithTooltips(originalSentence);
+    } else if (typeof buildRubyHTML === "function") {
+      // The story line is our own text, so its （よみ） annotations must be
+      // turned into <ruby> here - otherwise the raw parentheses are printed.
+      displayText = buildRubyHTML(storySentence);
+    } else {
+      displayText = storySentence.replace(
+        /([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g,
+        (_, kanji, furigana) => `<ruby>${kanji}<rt>${furigana}</rt></ruby>`,
+      );
+    }
 
     html += `<div class="story-sentence" data-sentence-index="${sentenceIndex}"><div class="jp-line">${displayText}</div>`;
 
