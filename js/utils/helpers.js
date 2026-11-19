@@ -110,8 +110,16 @@ function blankOutWord(sentence, word) {
 
 // ==================== DICTIONARY LOOKUP ====================
 
-// List of all particles for quick detection
-const PARTICLES = ['は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'の', 'には', 'や'];
+// List of all particles for quick detection.
+// Single-character particles plus the compound / multi-character particles used in
+// the N5 sentence data (から まで より くらい ごろ だけ ほど には ので ながら のに など
+// しか ばかり って さえ こそ). Kept in one place so that getWordMeaning() and
+// wrapWordWithTooltip() can never disagree about what counts as a particle.
+const PARTICLES = [
+  'は', 'が', 'を', 'に', 'へ', 'で', 'と', 'も', 'か', 'よ', 'ね', 'や', 'の',
+  'から', 'まで', 'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'には',
+  'ので', 'ながら', 'のに', 'など', 'しか', 'ばかり', 'って', 'さえ', 'こそ',
+];
 
 /**
  * Get meaning for a word from wordDict
@@ -269,32 +277,28 @@ function getWordMeaningsForSentence(sentence) {
  * Wrap a word with tooltip HTML (Restored)
  */
 function wrapWordWithTooltip(word, meaning) {
-  let displayWord = word;
-
-  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) =>
-    `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-  );
-  displayWord = displayWord.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) =>
-    `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-  );
+  const toRuby = (text) =>
+    String(text)
+      .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g, (_, kanji, furigana) =>
+        `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+      )
+      .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)\(([^()]+)\)/g, (_, kanji, furigana) =>
+        `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
+      );
 
   const cleanWord = word.replace(/[（(][^）)]*[）)]/g, '').trim();
-  const particleMatch = cleanWord.match(/^(.*?)([はがをにでへとかからまでのもよねや])$/);
 
-  if (particleMatch) {
-    const before = particleMatch[1];
-    const particle = particleMatch[2];
-    let beforeHtml = before;
-    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)（([^（）]+)）/g, (_, kanji, furigana) =>
-      `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-    );
-    beforeHtml = beforeHtml.replace(/([\u4e00-\u9faf\u3400-\u4dbf]+)\(([^()]+)\)/g, (_, kanji, furigana) =>
-      `<ruby>${kanji}<rt>${furigana}</rt></ruby>`
-    );
-    return `<span class="word-tooltip">${beforeHtml}<span class="particle-highlight">${particle}</span><span class="tooltip-text">${meaning}</span></span>`;
+  // Only a standalone particle token is highlighted. Splitting a trailing
+  // "particle" character off anything else mis-read ordinary word endings
+  // (降（ふ）ったら -> ら, 待（ま）たないで -> で, 静（しず）か -> か) AND dropped
+  // that word's furigana, because the left-hand side was taken from the
+  // annotation-stripped string and had nothing left to convert to <ruby>.
+  // Uses the shared PARTICLES list above (single + compound particles).
+  if (PARTICLES.includes(cleanWord)) {
+    return `<span class="word-tooltip"><span class="particle-highlight">${cleanWord}</span><span class="tooltip-text">${meaning}</span></span>`;
   }
 
-  return `<span class="word-tooltip">${displayWord}<span class="tooltip-text">${meaning}</span></span>`;
+  return `<span class="word-tooltip">${toRuby(word)}<span class="tooltip-text">${meaning}</span></span>`;
 }
 
 /**
