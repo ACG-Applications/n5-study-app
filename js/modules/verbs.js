@@ -42,6 +42,15 @@ function printLesson() {
 }
 
 // Add furigana to text based on toggle state
+// Turn furigana-annotated text into plain kana, so TTS reads exactly the
+// intended reading instead of guessing at the kanji.
+function toSpeakableKana(text) {
+  if (!text) return "";
+  return String(text)
+    .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g, "$2")
+    .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)\(([^()]+)\)/g, "$2")
+    .trim();
+}
 function addFuriganaToText(text) {
   if (!text) return "";
   if (furiganaHidden) {
@@ -876,31 +885,31 @@ function renderVerbsList() {
                 </div>
                 
                 <div class="conjugation-table" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 12px;">
-                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                    <div class="conj-item conj-speak" data-reading="${toSpeakableKana(verb.conjugations.masu)}" role="button" tabindex="0" title="🔊 Click to hear" style="padding: 8px; background: #f9fcff; border-radius: 8px; cursor: pointer;">
                         <div class="conj-label" style="font-size: 0.65rem; color: #666;">Present</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.masu)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                    <div class="conj-item conj-speak" data-reading="${toSpeakableKana(verb.conjugations.nai)}" role="button" tabindex="0" title="🔊 Click to hear" style="padding: 8px; background: #f9fcff; border-radius: 8px; cursor: pointer;">
                         <div class="conj-label" style="font-size: 0.65rem; color: #666;">Negative</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.nai)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                    <div class="conj-item conj-speak" data-reading="${toSpeakableKana(verb.conjugations.te)}" role="button" tabindex="0" title="🔊 Click to hear" style="padding: 8px; background: #f9fcff; border-radius: 8px; cursor: pointer;">
                         <div class="conj-label" style="font-size: 0.65rem; color: #666;">Te-form</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.te)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                    <div class="conj-item conj-speak" data-reading="${toSpeakableKana(verb.conjugations.ta)}" role="button" tabindex="0" title="🔊 Click to hear" style="padding: 8px; background: #f9fcff; border-radius: 8px; cursor: pointer;">
                         <div class="conj-label" style="font-size: 0.65rem; color: #666;">Past</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.ta)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                    <div class="conj-item conj-speak" data-reading="${toSpeakableKana(verb.conjugations.potential)}" role="button" tabindex="0" title="🔊 Click to hear" style="padding: 8px; background: #f9fcff; border-radius: 8px; cursor: pointer;">
                         <div class="conj-label" style="font-size: 0.65rem; color: #666;">Potential</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.potential)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                    <div class="conj-item conj-speak" data-reading="${toSpeakableKana(verb.conjugations.volitional)}" role="button" tabindex="0" title="🔊 Click to hear" style="padding: 8px; background: #f9fcff; border-radius: 8px; cursor: pointer;">
                         <div class="conj-label" style="font-size: 0.65rem; color: #666;">Volitional</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.volitional)}</div>
                     </div>
-                    <div class="conj-item" style="padding: 8px; background: #f9fcff; border-radius: 8px;">
+                    <div class="conj-item conj-speak" data-reading="${toSpeakableKana(verb.conjugations.conditional)}" role="button" tabindex="0" title="🔊 Click to hear" style="padding: 8px; background: #f9fcff; border-radius: 8px; cursor: pointer;">
                         <div class="conj-label" style="font-size: 0.65rem; color: #666;">Conditional</div>
                         <div class="conj-value" style="font-size: 0.95rem;">${addFuriganaToText(verb.conjugations.conditional)}</div>
                     </div>
@@ -949,6 +958,26 @@ function renderVerbsList() {
         });
       }
     }
+  });
+
+  // Conjugation pills: click (or Enter/Space) to hear the form.
+  document.querySelectorAll(".conj-speak").forEach((el) => {
+    const say = () => {
+      const reading = el.dataset.reading;
+      if (!reading) return;
+      if (typeof speakText === "function") {
+        speakText(reading);
+      } else if (typeof window.speakText === "function") {
+        window.speakText(reading);
+      }
+    };
+    el.addEventListener("click", say);
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        say();
+      }
+    });
   });
 
   document.querySelectorAll(".mark-mastered-btn").forEach((btn) => {
