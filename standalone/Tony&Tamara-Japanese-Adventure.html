@@ -11,7 +11,11 @@ h1, h2, h3 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.3e
 .jp:hover { background-color: #f0f8ff; } 
 .jp.playing { background-color: #e1f5fe; } 
 .en { margin-top: 0; margin-bottom: 1.5em; padding-left: 1em; color: #555; border-left: 3px solid #bdc3c7; } 
-rt { font-size: 0.6em; } 
+rt { font-size: 0.55em; line-height: 1.2; }
+  /* Furigana sits above the base text, so wrapped Japanese lines need
+     extra line-height or the ruby of line 2 collides with line 1. */
+  .jp { line-height: 2.6; }
+  .jp ruby { line-height: 1.15; } 
 ruby { ruby-position: over; } 
 button { background-color: #3498db; color: white; border: none; padding: 10px 20px; font-size: 1em; border-radius: 5px; cursor: pointer; margin-bottom: 20px; margin-right: 10px; } 
 button:hover { background-color: #2980b9; } 
@@ -107,11 +111,24 @@ button:hover { background-color: #2980b9; }
     padding-top: 15px; 
     border-top: 1px dashed #ccc; 
 }
+
+  /* Brand mark (top right) */
+  .antonio-signature {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+    align-self: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+  .brand-row { display: flex; justify-content: flex-end; margin: 0 0 4px; }
 </style> 
   <link rel="stylesheet" href="../css/mobile.css" />
 </head> 
 <body> 
-<h1>Tony and Tamara's Japanese Adventure -- Basic Japanese</h1> 
+<div class="brand-row"><img class="antonio-signature" src="Antonio.png" alt="ACG Applications" width="34" height="34" /></div>
+    <h1>Tony and Tamara's Japanese Adventure -- Basic Japanese</h1> 
 <p class="jp"><ruby>トニー<rt>とにー</rt></ruby> と <ruby>タマラ<rt>たまら</rt></ruby> の <ruby>日本<rt>にほん</rt></ruby> <ruby>冒険記<rt>ぼうけんき</rt></ruby> -- <ruby>基礎<rt>きそ</rt></ruby><br><ruby>日本語<rt>にほんご</rt></ruby></p> 
 <p class="en">Tony and Tamara's Japanese Adventure -- Basic Japanese</p>
 

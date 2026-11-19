@@ -22,6 +22,7 @@
     ============================================================ -->
     <div id="setupScreen" class="setup-screen">
       <div class="setup-card">
+        <img class="antonio-signature setup-brand" src="Antonio.png" alt="ACG Applications" width="34" height="34" />
         <div class="setup-header">
           <h2>👋 Welcome to N5 Conversation Practice!</h2>
           <p>Choose how you'd like to practice speaking Japanese.</p>
@@ -33,7 +34,7 @@
           <label for="apiMode">
             <strong>🔑 Use DeepSeek API</strong>
             <span>AI-powered conversations with natural responses</span>
-            <span>The key looks like sk-960aBB84c5854P178c56P8cfSS08ccPf</span>
+            <span>The key looks like sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
           </label>
           <div class="api-key-input active" id="apiKeyInputContainer">
             <div
@@ -181,6 +182,7 @@
             ⚙️
           </button>
         </div>
+              <img class="antonio-signature" src="Antonio.png" alt="ACG Applications" width="34" height="34" />
       </header>
 
       <!-- Sprint & Topic Selection -->
@@ -473,3 +475,22 @@
     <script src="js/conversation-app.js"></script>
   </body>
 </html>
+  /* Brand mark (top right) */
+  .antonio-signature {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+    align-self: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Brand mark on the setup screen (top right of the card) */
+  .setup-card { position: relative; }
+  .setup-brand {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+

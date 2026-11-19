@@ -458,13 +458,36 @@
           display: none;
         }
       }
-    </style>
+    
+  /* Brand mark (top right) */
+  .antonio-signature {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+    align-self: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+  .ebook-header { position: relative; }
+  .ebook-header .antonio-signature {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+  }
+  @media (max-width: 640px) {
+    .ebook-header .antonio-signature { width: 32px; height: 32px; }
+  }
+</style>
     <link rel="stylesheet" href="../css/mobile.css" />
 </head>
   <body>
     <div class="container">
       <!-- ===== HEADER ===== -->
       <div class="ebook-header">
+      <img class="antonio-signature" src="Antonio.png" alt="ACG Applications" width="34" height="34" />
         <h1>漢字</h1>
         <div class="subtitle">N5 KANJI · JAPANESE CHARACTERS</div>
         <div class="meta">Sourced from LingualabJP · 2025</div>
