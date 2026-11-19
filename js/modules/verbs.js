@@ -42,14 +42,69 @@ function printLesson() {
 }
 
 // Add furigana to text based on toggle state
-// Turn furigana-annotated text into plain kana, so TTS reads exactly the
-// intended reading instead of guessing at the kanji.
+// Read the kana of a rendered cell: <ruby> supplies its <rt>, <br> becomes a
+// pause, everything else comes from the text nodes.
+function cellKana(node) {
+  let out = "";
+  (function walk(n) {
+    if (n.nodeType === 3) { out += n.nodeValue; return; }
+    if (n.nodeName === "RUBY") {
+      const rt = n.querySelector("rt");
+      out += rt ? rt.textContent : n.textContent;
+      return;
+    }
+    if (n.nodeName === "BR") { out += " "; return; }
+    if (n.nodeName === "RT" || n.nodeName === "RP") return;
+    Array.prototype.forEach.call(n.childNodes, walk);
+  })(node);
+  return out.replace(/\s+/g, " ").trim();
+}
+
+// Turn furigana-annotated text into something worth speaking: kana only, with
+// arrows and slashes read as pauses and decoration marks dropped.
 function toSpeakableKana(text) {
   if (!text) return "";
   return String(text)
     .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g, "$2")
     .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)\(([^()]+)\)/g, "$2")
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, " ")
+    .replace(/\s*[\u2192\u2190\/]\s*/g, "\u3001")
+    .replace(/\u3001{2,}/g, "\u3001")
+    .replace(/\s+/g, " ")
+    .replace(/^[\s\u3001]+|[\s\u3001]+$/g, "")
     .trim();
+}
+
+// Make the Japanese cells of the learn tables tappable. English cells, and cells
+// that already carry an inline onclick, are left alone.
+function makeTableCellsSpeakable(root) {
+  if (!root) return;
+  root.querySelectorAll("td").forEach((td) => {
+    if (td.dataset.speak) return;
+    if (td.hasAttribute("onclick")) return;
+    const kana = toSpeakableKana(cellKana(td));
+    if (!kana || /[A-Za-z]/.test(kana)) return;
+    if (!/[\u3040-\u30FF\u4E00-\u9FFF]/.test(kana)) return;
+    td.dataset.speak = kana;
+    td.setAttribute("role", "button");
+    td.setAttribute("tabindex", "0");
+    td.title = "🔊 Click to hear";
+    td.style.cursor = "pointer";
+    const say = () => {
+      if (typeof speakText === "function") {
+        speakText(kana);
+      } else if (typeof window.speakText === "function") {
+        window.speakText(kana);
+      }
+    };
+    td.addEventListener("click", say);
+    td.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        say();
+      }
+    });
+  });
 }
 function addFuriganaToText(text) {
   if (!text) return "";
@@ -694,6 +749,9 @@ function renderLearnTab() {
     `;
 
   container.innerHTML = wrapFuriganaInHTML(content);
+
+  // Make the Japanese cells in the learn tables tappable
+  makeTableCellsSpeakable(container);
 
   // Add TTS click listeners to all example elements
   document.querySelectorAll(".example-box, .example-click").forEach((el) => {
