@@ -79,6 +79,8 @@ function toSpeakableKana(text) {
   return String(text)
     .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g, "$2")
     .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)\(([^()]+)\)/g, "$2")
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 

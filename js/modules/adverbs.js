@@ -64,6 +64,8 @@ function toSpeakableKana(text) {
   return String(text)
     .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g, "$2")
     .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)\(([^()]+)\)/g, "$2")
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -73,6 +75,7 @@ function makeTableCellsSpeakable(root) {
   if (!root) return;
   root.querySelectorAll("td").forEach((td) => {
     if (td.dataset.speak) return;
+    if (td.hasAttribute("onclick")) return;
     const kana = toSpeakableKana(cellKana(td));
     if (!kana || /[A-Za-z]/.test(kana)) return;
     if (!/[\u3040-\u30FF\u4E00-\u9FFF]/.test(kana)) return;
