@@ -46,6 +46,15 @@ function printLesson() {
 
 // Helper function to add furigana
 const furiganaCache = new Map();
+// Turn furigana-annotated text into plain kana, so TTS reads exactly the
+// intended reading instead of guessing at the kanji.
+function toSpeakableKana(text) {
+  if (!text) return "";
+  return String(text)
+    .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g, "$2")
+    .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)\(([^()]+)\)/g, "$2")
+    .trim();
+}
 function addFuriganaToText(text) {
   if (!text) return "";
 
@@ -739,7 +748,7 @@ function renderAdjectivesList() {
       if (conjValue) {
         const parenText = conjParentheses[conjType] || "";
         html += `
-      <div class="conj-item">
+      <div class="conj-item conj-speak" data-reading="${toSpeakableKana(conjValue)}" role="button" tabindex="0" title="🔊 Click to hear" style="cursor: pointer;">
         <div class="conj-label">
           <span class="conj-name">${conjugationDisplayNames[conjType]}</span>
           ${parenText ? `<span class="conj-paren">(${parenText})</span>` : ""}
@@ -771,6 +780,26 @@ function renderAdjectivesList() {
   }
 
   container.innerHTML = html;
+
+  // Conjugation pills: click (or Enter/Space) to hear the form.
+  document.querySelectorAll(".conj-speak").forEach((el) => {
+    const say = () => {
+      const reading = el.dataset.reading;
+      if (!reading) return;
+      if (typeof speakText === "function") {
+        speakText(reading);
+      } else if (typeof window.speakText === "function") {
+        window.speakText(reading);
+      }
+    };
+    el.addEventListener("click", say);
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        say();
+      }
+    });
+  });
 
   // TTS SUPPORT
   document.querySelectorAll(".example-item").forEach((el) => {
