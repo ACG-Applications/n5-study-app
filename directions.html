@@ -2,7 +2,10 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1a73e8" />
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png" />
 
     <!-- ============================================================
          FONTS - Match app fonts
@@ -789,7 +792,8 @@
         }
       }
     </style>
-  </head>
+    <link rel="stylesheet" href="css/mobile.css" />
+</head>
   <body>
     <div class="directions-container">
       <!-- ==========================================================
@@ -2009,7 +2013,6 @@
           `📚 ${PHRASES.length} フレーズ, 💬 ${CONVERSATIONS.length} 会話, 🌟 ${EXPRESSIONS.length} 表現 loaded`,
         );
         console.log("⌨️ ショートカット: ← → (前/次), Space (次), Enter (音声)");
-        console.log("🎨 スタイルは components.css から継承");
       })();
     </script>
   </body>

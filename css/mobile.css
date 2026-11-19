@@ -1,0 +1,83 @@
+/* ================================================================
+   MOBILE / TOUCH HARDENING  —  loaded LAST on every page
+   ----------------------------------------------------------------
+   Font-size floors are NOT set here: they are applied in place in the
+   page stylesheets with a raise-only rule, so a later !important here
+   can never shrink a larger desktop size that happens to share the
+   same specificity. This layer only adds behaviour that no existing
+   rule expresses.
+   ================================================================ */
+
+/* 1 ── Stop mobile browsers rescaling type on rotate ------------- */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 2 ── Touch targets: 44x44 minimum on touch devices only --------
+   .small-btn is 28px tall and the story-quiz compact variants are
+   22-26px, which is hard to hit with a thumb. Desktop is untouched.  */
+@media (pointer: coarse) {
+  .small-btn,
+  .quiz-option-btn,
+  .tab-btn,
+  .nav-btn,
+  .quiz-speak-btn,
+  .quiz-tts-btn,
+  .blank-select,
+  button,
+  select,
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+  }
+
+  /* icon-only controls need width as well as height */
+  .quiz-speak-btn,
+  .quiz-tts-btn,
+  .tab-btn {
+    min-width: 44px;
+  }
+
+  /* once the buttons grow, let dense rows wrap instead of clipping */
+  .control-group {
+    flex-wrap: wrap;
+  }
+}
+
+/* 3 ── Respect the OS "reduce motion" setting -------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 4 ── Notch / rounded-corner safety for edge-to-edge panels -----
+   Pairs with viewport-fit=cover in the viewport meta. max() preserves
+   each panel's existing inset where the device reports none.         */
+.stroke-modal,
+.kana-helper-panel,
+.kanji-helper-panel,
+.kana-helper-modal {
+  padding-top: max(0px, env(safe-area-inset-top));
+  padding-bottom: max(0px, env(safe-area-inset-bottom));
+  padding-left: max(0px, env(safe-area-inset-left));
+  padding-right: max(0px, env(safe-area-inset-right));
+}
+
+.toast {
+  margin-top: max(12px, env(safe-area-inset-top));
+}
+
+/* 5 ── Dynamic viewport height: avoids the URL-bar jump/clip ----- */
+@supports (height: 100dvh) {
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}

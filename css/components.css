@@ -73,7 +73,7 @@ rt {
 .mastered-verb-dict rt,
 .mastered-adverb-dict ruby rt,
 .mastered-adverb-dict rt {
-  font-size: 0.6rem !important; /* ← FONT SIZE */
+  font-size: 0.7rem !important; /* ← FONT SIZE */
   font-weight: 700 !important; /* ← FONT WEIGHT */
   color: #290101 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
@@ -92,7 +92,7 @@ rt {
 
 .example-jp ruby rt,
 .example-jp rt {
-  font-size: 0.65rem !important; /* ← FONT SIZE */
+  font-size: 0.7rem !important; /* ← FONT SIZE */
   font-weight: 600 !important; /* ← FONT WEIGHT */
   color: #8b0001 !important; /* ← FONT COLOR */
   text-align: center !important; /* ← TEXT ALIGN */
@@ -159,7 +159,7 @@ rt {
 
 #storyJapaneseBlock .highlight-sentence ruby rt,
 #storyJapaneseBlock .highlight-sentence rt {
-  font-size: 0.65rem !important;
+  font-size: 0.7rem !important;
   padding: 0 0 1px 0 !important;
   line-height: 1 !important;
 }
@@ -181,7 +181,7 @@ rt {
 
 .story-sentence .jp-line ruby rt,
 .story-sentence .jp-line rt {
-  font-size: 0.65rem !important;
+  font-size: 0.7rem !important;
   padding: 0 0 1px 0 !important;
   line-height: 1 !important;
 }
@@ -202,7 +202,7 @@ rt {
 .active-sentence ruby rt,
 .highlight-sentence-active rt,
 .active-sentence rt {
-  font-size: 0.65rem !important;
+  font-size: 0.7rem !important;
   padding: 0 0 1px 0 !important;
   line-height: 1 !important;
 }
@@ -254,7 +254,7 @@ rt {
   .story-japanese-block rt,
   .story-sentence .jp-line ruby rt,
   .story-sentence .jp-line rt {
-    font-size: 0.6rem !important;
+    font-size: 0.7rem !important;
     padding: 0 0 1px 0 !important;
   }
 
@@ -266,7 +266,7 @@ rt {
 
 @media (max-width: 400px) {
   .story-japanese-block {
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
     line-height: 2.2 !important;
   }
 
@@ -278,7 +278,7 @@ rt {
   .story-japanese-block rt,
   .story-sentence .jp-line ruby rt,
   .story-sentence .jp-line rt {
-    font-size: 0.55rem !important;
+    font-size: 0.7rem !important;
     padding: 0 0 1px 0 !important;
   }
 }
@@ -399,7 +399,7 @@ rt {
 /* But keep furigana red */
 .example-jp ruby rt,
 .example-jp rt {
-  color: #8b0000 !important !important; /* ← Keep furigana red */
+  color: #8b0000 !important; /* keep furigana red */
 }
 
 /* ─── EXAMPLE ITEM CONTAINER ──────────────────────────────────── */
@@ -505,7 +505,7 @@ rt {
 }
 
 .conj-paren {
-  font-size: 0.6rem !important; /* ← PAREN SIZE */
+  font-size: 0.65rem !important; /* ← PAREN SIZE */
   font-weight: 500 !important; /* ← PAREN WEIGHT */
   color: #999 !important; /* ← PAREN COLOR */
   display: block;

@@ -904,28 +904,18 @@ function generateQuiz() {
   for (const adj of availableAdjs) {
     if (allQuestions.length >= questionCount) break;
 
-    const randomConj =
-      conjugationTypes[Math.floor(Math.random() * conjugationTypes.length)];
+    // Only offer conjugations this adjective actually has.
+    const usableConjs = conjugationTypes.filter((c) => adj.conjugations && adj.conjugations[c]);
+    if (!usableConjs.length) continue;
+
+    const randomConj = usableConjs[Math.floor(Math.random() * usableConjs.length)];
     const correctForm = adj.conjugations[randomConj];
     const example = adj.examples[0];
     if (!example) continue;
 
-    // Create sentence with blank - replace the adjective with _______
-    let sentenceWithBlank = example.sentence;
-    const adjFormInSentence =
-      adj.type === "i" ? `${adj.dictionary}い` : adj.dictionary;
-
-    if (sentenceWithBlank.includes(adjFormInSentence)) {
-      sentenceWithBlank = sentenceWithBlank.replace(
-        adjFormInSentence,
-        "______",
-      );
-    } else if (sentenceWithBlank.includes(adj.dictionary)) {
-      sentenceWithBlank = sentenceWithBlank.replace(adj.dictionary, "______");
-    } else {
-      const cleanAdj = adj.dictionary.replace(/[（(][^）)]*[）)]/g, "");
-      sentenceWithBlank = sentenceWithBlank.replace(cleanAdj, "______");
-    }
+    // Blank the adjective as it actually appears (furigana-annotated) in the
+    // sentence. The old code looked for `${dictionary}い`, which never matched.
+    const sentenceWithBlank = blankOutWord(example.sentence, adj.dictionary);
 
     // Generate options for easy mode
     const easyOptions = [correctForm];
@@ -1081,6 +1071,9 @@ function renderQuizQuestion() {
 
   if (quizMode === "easy") {
     html += `
+      <div style="text-align: center; margin: 8px 0 4px 0;">
+        <span style="font-size: 0.85rem; color: #666;">Which is the <strong>${q.conjugationDisplay}</strong> of ${q.adjDict}?</span>
+      </div>
       <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0;">
     `;
     for (const opt of q.easyOptions) {
@@ -1135,7 +1128,7 @@ function renderQuizQuestion() {
 
     html += `
       <div style="text-align: center; margin: 8px 0 4px 0;">
-        <span style="font-size: 0.85rem; color: #666;">Select the correct form:</span>
+        <span style="font-size: 0.85rem; color: #666;">Select the <strong>${q.conjugationDisplay}</strong> of ${q.adjDict}:</span>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0;">
     `;

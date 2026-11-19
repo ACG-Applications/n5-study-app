@@ -9,5 +9,5 @@ const sprints = [
   { name: "Sprint 07", displayName: "🏥 Health & Body", start: 155, end: 174 },
   { name: "Sprint 08", displayName: "🏠 House & Objects", start: 175, end: 194 },
   { name: "Sprint 09", displayName: "💼 Work & School", start: 195, end: 214 },
-  { name: "Sprint 10", displayName: "🎯 Mixed Review", start: 215, end: 249 }
+  { name: "Sprint 10", displayName: "🎯 Mixed Review", start: 215, end: 243 }
 ];

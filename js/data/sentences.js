@@ -179,7 +179,7 @@ const sentencesData = [
     jp: "この レストラン は 値段（ねだん） が 高（たか）い です が とても 人気（にんき） です",
     reading: "この れすとらん は ねだん が たかい です が とても にんき です",
     translation: "This restaurant is expensive but very popular.",
-    grammarHint: "🎯 が + adjective"
+    grammarHint: "🎯 〜が、〜 = but (contrast)",
   },
 
   // ========== SPRINT 02: Family & People (31-55) ==========
@@ -202,8 +202,8 @@ const sentencesData = [
     grammarHint: "📘 〜ています = currently doing"
   },
   {
-    jp: "妹（いもうと） は 小（ちい）さい 時（とき） から ピアノ を 弾（ひ）きます",
-    reading: "いもうと は ちいさい とき から ぴあの を ひきます",
+    jp: "妹（いもうと） は 小（ちい）さい 時（とき） から ピアノ を 弾（ひ）いています",
+    reading: "いもうと は ちいさい とき から ぴあの を ひいています",
     translation: "My younger sister has played piano since she was small.",
     grammarHint: "🎯 〜から = since"
   },
@@ -214,8 +214,8 @@ const sentencesData = [
     grammarHint: "📘 AとB = A and B"
   },
   {
-    jp: "叔父（おじ）さん は 車（くるま） で 会社（かいしゃ） へ 行（い）きます",
-    reading: "おじさん は くるま で かいしゃ へ いきます",
+    jp: "叔父（おじ） は 車（くるま） で 会社（かいしゃ） へ 行（い）きます",
+    reading: "おじ は くるま で かいしゃ へ いきます",
     translation: "My uncle goes to the office by car.",
     grammarHint: "🎯 で = means"
   },
@@ -432,8 +432,8 @@ const sentencesData = [
     grammarHint: "📘 で = location of stopping"
   },
   {
-    jp: "次（つぎ） の 角（かど） を 左（ひだり） です",
-    reading: "つぎ の かど を ひだり です",
+    jp: "次（つぎ） の 角（かど） を 左（ひだり） に 曲（ま）がって ください",
+    reading: "つぎ の かど を ひだり に まがって ください",
     translation: "At the next corner, it's on the left.",
     grammarHint: "🎯 の = linking"
   },
@@ -629,7 +629,7 @@ const sentencesData = [
     jp: "次（つぎ）、どうぞ",
     reading: "つぎ どうぞ",
     translation: "Next, please.",
-    grammarHint: "📘 どうぞ = here you go"
+    grammarHint: "🎯 次（つぎ）、どうぞ = next, please",
   },
 
   // ========== SPRINT 05: Weather, Adjectives, Feelings (106-130) ==========
@@ -652,8 +652,8 @@ const sentencesData = [
     grammarHint: "🎯 〜くなる = become"
   },
   {
-    jp: "天気予報（てんきよほう） に よると 雨（あめ） が 降（ふ）ります",
-    reading: "てんきよほう に よると あめ が ふります",
+    jp: "天気予報（てんきよほう） に よると 雨（あめ） が 降（ふ）る そう です",
+    reading: "てんきよほう に よると あめ が ふる そう です",
     translation: "According to the weather forecast, it will rain.",
     grammarHint: "📘 〜によると = according to"
   },
@@ -926,7 +926,7 @@ const sentencesData = [
   {
     jp: "百科事典（ひゃっかじてん） を 引（ひ）きました",
     reading: "ひゃっかじてん を ひきました",
-    translation: "I looked up the encyclopedia.",
+    translation: "I looked it up in the encyclopedia.",
     grammarHint: "🎯 を引く = look up"
   },
   {
@@ -1105,7 +1105,7 @@ const sentencesData = [
     jp: "窓（まど） を 開（あ）けて 空気（くうき） を 入（い）れます",
     reading: "まど を あけて くうき を いれます",
     translation: "I open the window to let in air.",
-    grammarHint: "📘 〜て + verb = sequence"
+    grammarHint: "📘 〜て = means / manner",
   },
   {
     jp: "カーテン を 閉（し）めます",
@@ -1126,7 +1126,7 @@ const sentencesData = [
     grammarHint: "🎯 に〜がない = lack"
   },
   {
-    jp: "電子レンジ で 温（あたた）めます",
+    jp: "電子（でんし）レンジ で 温（あたた）めます",
     reading: "でんしれんじ で あたためます",
     translation: "I heat it in the microwave.",
     grammarHint: "📘 で = means"
@@ -1135,7 +1135,7 @@ const sentencesData = [
     jp: "掃除機（そうじき） を かけて ください",
     reading: "そうじき を かけて ください",
     translation: "Please vacuum.",
-    grammarHint: "🎯 をかける = apply"
+    grammarHint: "🎯 掃除機（そうじき）をかける = to vacuum",
   },
   {
     jp: "洗濯機（せんたくき） を 回（まわ）します",
@@ -1218,7 +1218,7 @@ const sentencesData = [
     grammarHint: "📘 を準備 = prepare"
   },
   {
-    jp: "コピー機（こぴーき） が 故障（こしょう）しました",
+    jp: "コピー機（き） が 故障（こしょう）しました",
     reading: "こぴーき が こしょうしました",
     translation: "The copier broke down.",
     grammarHint: "🎯 が故障 = breakdown"
@@ -1302,7 +1302,7 @@ const sentencesData = [
     grammarHint: "📘 〜ていただけませんか = very polite"
   },
 
-  // ========== SPRINT 10: Mixed Review + N4 Bridges (216-250) ==========
+  // ========== SPRINT 10: Mixed Review + N4 Bridges (216-244) ==========
   {
     jp: "もし 時間（じかん） が あれば 行（い）きます",
     reading: "もし じかん が あれば いきます",

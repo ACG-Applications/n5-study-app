@@ -13,7 +13,9 @@ function loadVoices() {
 }
 
 // Speak Japanese text
-function speakText(text) {
+// lang / rate are optional: story-quiz.js and sentenceBuilder.js pass them to
+// drive their 0.75x / 1.0x / 1.25x speed controls (previously ignored).
+function speakText(text, lang = 'ja-JP', rate = 0.85) {
     if (!text) return;
     
     // Check if speech synthesis is available
@@ -29,8 +31,8 @@ function speakText(text) {
     
     // Create utterance
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ja-JP';
-    utterance.rate = 0.85;
+    utterance.lang = lang;
+    utterance.rate = typeof rate === 'number' && rate > 0 ? rate : 0.85;
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
     

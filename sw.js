@@ -1,6 +1,6 @@
 // sw.js - Service Worker for N5 Study App
 
-const CACHE_NAME = "n5-study-app-v5";
+const CACHE_NAME = "n5-study-app-v7";
 
 const urlsToCache = [
   // ─── HTML pages ────────────────────────────────────────────
@@ -8,7 +8,6 @@ const urlsToCache = [
   "./index.html",
   "./sentence-builder.html",
   "./story-quiz.html",
-  "./word-search.html",
   "./directions.html",
   "./particles.html",
   "./verbs.html",
@@ -46,6 +45,7 @@ const urlsToCache = [
   "./css/practice-test.css",
   "./css/kana-helper.css",
   "./css/kanji-helper.css",
+  "./css/mobile.css",
   "./css/kanji-stroke.css",
 
   // ─── JS Data ────────────────────────────────────────────────
@@ -62,6 +62,7 @@ const urlsToCache = [
   "./js/data/particlesData.js",
   "./js/data/practiceTestData.js",
   "./js/data/verbsData.js",
+  "./js/data/video_list.js",
 
   // ─── JS Utils ───────────────────────────────────────────────
   "./js/utils/furigana.js",
@@ -82,7 +83,6 @@ const urlsToCache = [
   "./js/modules/story-quiz.js",
   "./js/modules/print.js",
   "./js/modules/ui.js",
-  "./js/modules/mastered.js",
   "./js/modules/kanji-stroke.js",
   "./js/modules/kanji-helper.js",
   "./js/modules/adjectives.js",

@@ -1094,6 +1094,15 @@ function checkKanjiQuizAnswer(selectedAnswer) {
     scoreText.textContent = `Score: ${kanjiQuizState.score.toFixed(1)}`;
   }
 
+  // The stats panel declares #quizRunningScore / #quizTotalPossible but nothing
+  // ever wrote them, so it showed "0.0 / 0" for the whole quiz.
+  const runningScoreEl = document.getElementById("quizRunningScore");
+  const totalPossibleEl = document.getElementById("quizTotalPossible");
+  if (runningScoreEl) runningScoreEl.innerText = kanjiQuizState.score.toFixed(1);
+  if (totalPossibleEl) {
+    totalPossibleEl.innerText = kanjiQuizState.totalCount || kanjiQuizState.questions.length;
+  }
+
   setTimeout(() => {
     if (feedback) {
       feedback.innerHTML += `
@@ -1332,11 +1341,29 @@ function applyFuriganaHide() {
     kanjiQuizState.isActive &&
     kanjiQuizState.questions.length > 0
   ) {
-    renderKanjiQuizQuestion();
+    rerenderKanjiQuizQuestionIfUnanswered();
   }
 }
 
 // ===== switchTab function =====
+// Re-render the quiz question, but never resurrect one that has already been
+// answered. The feedback panel and its "Next Question" button exist only in the
+// DOM built by checkKanjiQuizAnswer(), so re-rendering after an answer left the
+// quiz stuck on a question where every option click was ignored.
+function rerenderKanjiQuizQuestionIfUnanswered() {
+  if (
+    typeof kanjiQuizState === "undefined" ||
+    !kanjiQuizState.isActive ||
+    !kanjiQuizState.questions ||
+    kanjiQuizState.questions.length === 0
+  ) {
+    return;
+  }
+  const q = kanjiQuizState.questions[kanjiQuizState.currentIndex];
+  if (q && q.answered) return;
+  renderKanjiQuizQuestion();
+}
+
 function switchTab(tabId) {
   currentKanjiTab = tabId;
 
@@ -1383,7 +1410,7 @@ function switchTab(tabId) {
       kanjiQuizState.isActive &&
       kanjiQuizState.questions.length > 0
     ) {
-      renderKanjiQuizQuestion();
+      rerenderKanjiQuizQuestionIfUnanswered();
     }
   }
 }

@@ -373,6 +373,21 @@ function renderQuizQuestion() {
     document.getElementById('quizStopBtn')?.addEventListener('click', () => stopQuiz());
 }
 
+// Resolve a correctAnswer key ("1") back to the full option label ("1 シャワー")
+// so the feedback panels show the actual answer instead of a bare number.
+function displayAnswerText(q) {
+    if (!q) return '';
+    const key = q.correctAnswer == null ? '' : String(q.correctAnswer).trim();
+    if (Array.isArray(q.options)) {
+        const hit = q.options.find((opt) => {
+            const m = String(opt).match(/^\s*(\d+)/);
+            return (m ? m[1] : String(opt).trim()) === key;
+        });
+        if (hit) return hit;
+    }
+    return key;
+}
+
 function checkAnswer() {
     const q = currentQuiz[currentQuizIndex];
     const userAnswer = quizAnswers[currentQuizIndex];
@@ -388,7 +403,14 @@ function checkAnswer() {
         return;
     }
     
-    const isCorrect = userChoice === q.correctAnswer;
+    // Option labels are numbered ("1 シャワー") while correctAnswer is the bare
+    // number ("1"), so compare the leading option number on both sides.
+    const answerKey = (v) => {
+        const s = v == null ? '' : String(v);
+        const m = s.match(/^\s*(\d+)/);
+        return m ? m[1] : s.trim();
+    };
+    const isCorrect = answerKey(userChoice) === answerKey(q.correctAnswer);
     
     if (isCorrect) {
         if (isFirstAttempt) {
@@ -418,7 +440,7 @@ function checkAnswer() {
                     ${q.passage ? `<div class="reading-passage">${q.passage}</div>` : ''}
                     <div class="answer-row">
                         <span class="answer-label">📖 Answer:</span>
-                        <span class="answer-value">${q.correctAnswer}</span>
+                        <span class="answer-value">${displayAnswerText(q)}</span>
                     </div>
                     <div class="quiz-explanation">${q.explanation || 'Well done!'}</div>
                 </div>
@@ -464,7 +486,7 @@ function checkAnswer() {
                         ${q.passage ? `<div class="reading-passage">${q.passage}</div>` : ''}
                         <div class="answer-row">
                             <span class="answer-label">📖 Answer:</span>
-                            <span class="answer-value">${q.correctAnswer}</span>
+                            <span class="answer-value">${displayAnswerText(q)}</span>
                         </div>
                         <div class="quiz-explanation">${q.explanation || 'Review this topic.'}</div>
                     </div>
@@ -496,7 +518,7 @@ function showAnswer() {
                 ${q.passage ? `<div class="reading-passage">${q.passage}</div>` : ''}
                 <div class="answer-row">
                     <span class="answer-label">📖 Answer:</span>
-                    <span class="answer-value">${q.correctAnswer}</span>
+                    <span class="answer-value">${displayAnswerText(q)}</span>
                 </div>
                 <div class="quiz-explanation">${q.explanation || 'No explanation available.'}</div>
                 <div class="no-points-note">⚠️ No points awarded for using "Show Answer"</div>

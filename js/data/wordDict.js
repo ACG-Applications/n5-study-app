@@ -317,15 +317,9 @@ const wordDict = {
   },
   一人: { reading: "ひとり", meaning: "one person", category: "Number" },
   二人: { reading: "ふたり", meaning: "two people", category: "Number" },
-  人: { reading: "にん", meaning: "(counter for people)", category: "Number" },
   枚: {
     reading: "まい",
     meaning: "(counter for thin objects)",
-    category: "Number",
-  },
-  本: {
-    reading: "ほん",
-    meaning: "(counter for long objects)",
     category: "Number",
   },
   杯: {
@@ -549,7 +543,6 @@ const wordDict = {
   今年: { reading: "ことし", meaning: "this year", category: "Time" },
   来年: { reading: "らいねん", meaning: "next year", category: "Time" },
   先日: { reading: "せんじつ", meaning: "the other day", category: "Time" },
-  明日: { reading: "あす", meaning: "tomorrow (formal)", category: "Time" },
   今晩: { reading: "こんばん", meaning: "tonight", category: "Time" },
   週末: { reading: "しゅうまつ", meaning: "weekend", category: "Time" },
   六時: { reading: "ろくじ", meaning: "6 o'clock", category: "Time" },
@@ -737,9 +730,9 @@ const wordDict = {
     category: "People",
   },
   教師: { reading: "きょうし", meaning: "teacher", category: "People" },
-  笑顔: { reading: "えがお", meaning: "smiling face", category: "People" },
-  話: { reading: "はなし", meaning: "talk / story", category: "People" },
-  犬: { reading: "いぬ", meaning: "dog", category: "People" },
+  笑顔: { reading: "えがお", meaning: "smiling face", category: "Noun" },
+  話: { reading: "はなし", meaning: "talk / story", category: "Noun" },
+  犬: { reading: "いぬ", meaning: "dog", category: "Noun" },
   おかあさん: {
     reading: "おかあさん",
     meaning: "(someone's) mother",
@@ -1485,7 +1478,7 @@ const wordDict = {
     meaning: "submitted / handed in",
     category: "Verb_Conjugation",
     is_conjugation: true,
-    root: "出る",
+    root: "出す",
   },
 
   上がる: {
@@ -1833,7 +1826,7 @@ const wordDict = {
   },
   引きます: {
     reading: "ひきます",
-    meaning: "pull / play (instrument)",
+    meaning: "pull / draw",
     category: "Verb_Conjugation",
     is_conjugation: true,
     root: "引く",
@@ -2557,13 +2550,6 @@ const wordDict = {
     is_conjugation: true,
     root: "塗る",
   },
-  はいたります: {
-    reading: "はいります",
-    meaning: "enter",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "入る",
-  },
   はきます: {
     reading: "はきます",
     meaning: "put on (shoes)",
@@ -2581,20 +2567,6 @@ const wordDict = {
   はたらきます: {
     reading: "はたらきます",
     meaning: "work",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "働く",
-  },
-  はたらきます: {
-    reading: "はたらきます",
-    meaning: "work",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "働く",
-  },
-  働きました: {
-    reading: "はたらきました",
-    meaning: "worked",
     category: "Verb_Conjugation",
     is_conjugation: true,
     root: "働く",
@@ -2629,7 +2601,7 @@ const wordDict = {
   },
   ひきます: {
     reading: "ひきます",
-    meaning: "pull / play (instrument)",
+    meaning: "pull / draw",
     category: "Verb_Conjugation",
     is_conjugation: true,
     root: "引く",
@@ -2920,7 +2892,7 @@ const wordDict = {
 
   取る: {
     reading: "とる",
-    meaning: "take / pass",
+    meaning: "take / get",
     category: "Verb",
     group: "godan",
   },
@@ -3225,7 +3197,7 @@ const wordDict = {
     meaning: "need, be necessary",
     category: "Verb_Conjugation",
     is_conjugation: true,
-    root: "いる",
+    root: "要る",
   },
 
   なる: {
@@ -3251,7 +3223,7 @@ const wordDict = {
   },
 
   開いています: {
-    reading: "あいています",
+    reading: "ひらいています",
     meaning: "is open",
     category: "Verb_Conjugation",
     is_conjugation: true,
@@ -3364,20 +3336,6 @@ const wordDict = {
     is_conjugation: true,
     root: "飲む",
   },
-  はたらきます: {
-    reading: "はたらきます",
-    meaning: "work",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "働く",
-  },
-  ひきます: {
-    reading: "ひきます",
-    meaning: "play (instrument)",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "引く",
-  },
   まちます: {
     reading: "まちます",
     meaning: "wait",
@@ -3405,20 +3363,6 @@ const wordDict = {
     category: "Verb_Conjugation",
     is_conjugation: true,
     root: "持つ",
-  },
-  もらいます: {
-    reading: "もらいます",
-    meaning: "receive",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "もらう",
-  },
-  やすみます: {
-    reading: "やすみます",
-    meaning: "rest, be absent",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "休む",
   },
 
   // ============================================================
@@ -4144,13 +4088,6 @@ const wordDict = {
     category: "Verb",
     group: "godan",
   },
-  やります: {
-    reading: "やります",
-    meaning: "do / perform",
-    category: "Verb_Conjugation",
-    is_conjugation: true,
-    root: "やる",
-  },
 
   コピーします: {
     reading: "コピーします",
@@ -4458,7 +4395,7 @@ const wordDict = {
     category: "Adjective",
     type: "i",
   },
-  くらい: {
+  暗い: {
     reading: "くらい",
     meaning: "dark",
     category: "Adjective",
@@ -5806,15 +5743,15 @@ const wordDict = {
   限り: {
     reading: "かぎり",
     meaning: "as long as / to the extent of",
-    category: "Adverb",
+    category: "Noun",
   },
   よう: {
     reading: "よう",
     meaning: "seems like / appears to be",
-    category: "Adverb",
+    category: "Grammar",
   },
-  辺: { reading: "へん", meaning: "area / vicinity", category: "Adverb" },
-  件: { reading: "けん", meaning: "matter / case", category: "Adverb" },
+  辺: { reading: "へん", meaning: "area / vicinity", category: "Noun" },
+  件: { reading: "けん", meaning: "matter / case", category: "Noun" },
   機会: {
     reading: "きかい",
     meaning: "opportunity / chance",
@@ -5918,7 +5855,7 @@ const wordDict = {
     category: "Location",
   },
   ここ: { reading: "ここ", meaning: "here", category: "Location" },
-  それ: { reading: "それ", meaning: "that", category: "Location" },
+  それ: { reading: "それ", meaning: "that", category: "Grammar" },
   手前: {
     reading: "てまえ",
     meaning: "in front of / before / this side",
@@ -6120,11 +6057,11 @@ const wordDict = {
     meaning: "all-you-can-drink",
     category: "Phrase",
   },
-  予約: { reading: "よやく", meaning: "reservation", category: "Phrase" },
+  予約: { reading: "よやく", meaning: "reservation", category: "Noun" },
   満席: {
     reading: "まんせき",
     meaning: "full / no seats available",
-    category: "Phrase",
+    category: "Noun",
   },
   違います: {
     reading: "ちがいます",
@@ -6143,18 +6080,13 @@ const wordDict = {
     meaning: "is nervous",
     category: "Phrase",
   },
-  震えて: {
-    reading: "ふるえて",
-    meaning: "shivering / trembling",
-    category: "Phrase",
-  },
   疲れました: {
     reading: "つかれました",
     meaning: "got tired",
     category: "Phrase",
   },
   疲れた: { reading: "つかれた", meaning: "tired", category: "Phrase" },
-  事故: { reading: "じこ", meaning: "accident", category: "Phrase" },
+  事故: { reading: "じこ", meaning: "accident", category: "Noun" },
   遭いました: {
     reading: "あいました",
     meaning: "encountered / met",
@@ -6163,9 +6095,9 @@ const wordDict = {
   中止: {
     reading: "ちゅうし",
     meaning: "cancellation / suspension",
-    category: "Phrase",
+    category: "Noun",
   },
-  かいもの: { reading: "かいもの", meaning: "shopping", category: "Phrase" },
+  かいもの: { reading: "かいもの", meaning: "shopping", category: "Noun" },
 
   // ============================================================
   // SECTION 29: -TE FORM COMBINATIONS (っぱなし patterns)
@@ -6642,14 +6574,14 @@ const wordDict = {
     group: "godan",
   },
   寝てしまいました: {
-    reading: "ねて しまいました",
+    reading: "ねてしまいました",
     meaning: "ended up sleeping / fell asleep",
     category: "Verb_Conjugation",
     is_conjugation: true,
     root: "寝る",
   },
   書いてない: {
-    reading: "かいて ない",
+    reading: "かいてない",
     meaning: "is not written",
     category: "Verb_Conjugation",
     is_conjugation: true,
@@ -6679,7 +6611,7 @@ const wordDict = {
     group: "godan",
   },
   その前の週: {
-    reading: "その まえ の しゅう",
+    reading: "そのまえのしゅう",
     meaning: "the week before that",
     category: "Time",
   },
@@ -6696,7 +6628,7 @@ const wordDict = {
     category: "Adverb",
   },
   安静にする: {
-    reading: "あんせい に する",
+    reading: "あんせいにする",
     meaning: "rest / stay quiet",
     category: "Phrase",
   },
@@ -6732,7 +6664,7 @@ const wordDict = {
     root: "晴れる",
   },
   正しくない: {
-    reading: "ただしく ない",
+    reading: "ただしくない",
     meaning: "is not correct",
     category: "Adjective",
     type: "i",

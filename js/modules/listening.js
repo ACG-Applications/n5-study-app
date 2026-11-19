@@ -453,9 +453,14 @@ function initListening() {
         if (furiToggleBtn) furiToggleBtn.innerText = '🔤 Furigana Off';
     }
     
-    // Update counters
-    if (watchedCountSpan) watchedCountSpan.innerText = '0';
-    if (totalCountSpan) totalCountSpan.innerText = videoList.length;
+    // Update counters (loadWatchedStatus() in video_list.js has already restored
+    // the saved flags, so report the real count instead of assuming zero)
+    if (typeof updateProgressCounters === 'function') {
+        updateProgressCounters();
+    } else {
+        if (watchedCountSpan) watchedCountSpan.innerText = typeof getWatchedCount === 'function' ? getWatchedCount() : '0';
+        if (totalCountSpan) totalCountSpan.innerText = videoList.length;
+    }
     
     console.log('Listening module initialized - waiting for user selection');
 }

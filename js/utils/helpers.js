@@ -12,22 +12,30 @@ function saveMastered() {
   updateStats();
 }
 
+// `renderSentences` is not defined anywhere in the app, so the previous guard
+// made toggleMastered()/resetMastered() silent no-ops and the "Reset" button
+// did nothing. Refresh whichever views actually exist instead.
+function refreshMasteryViews() {
+  if (typeof updateProgressDisplay === 'function') updateProgressDisplay();
+  if (typeof updateFlashcardsForSprint === 'function') updateFlashcardsForSprint();
+}
+
 function toggleMastered(idx) {
-  if (typeof masteredSet === 'undefined' || typeof renderSentences !== 'function') return;
+  if (typeof masteredSet === 'undefined') return;
   if (masteredSet.has(idx)) {
     masteredSet.delete(idx);
   } else {
     masteredSet.add(idx);
   }
   saveMastered();
-  renderSentences();
+  refreshMasteryViews();
 }
 
 function resetMastered() {
-  if (typeof masteredSet === 'undefined' || typeof renderSentences !== 'function') return;
+  if (typeof masteredSet === 'undefined') return;
   masteredSet.clear();
   saveMastered();
-  renderSentences();
+  refreshMasteryViews();
 }
 
 function updateStats() {
@@ -61,6 +69,43 @@ function getSprintName() {
 function getPlainJapanese(sentence) {
   if (!sentence || !sentence.jp) return "";
   return sentence.jp.replace(/[（(][^）)]*[）)]/g, '').trim();
+}
+
+// Escape user-supplied text before putting it into innerHTML. The global search
+// interpolated the raw query into result markup and a data- attribute on every
+// page, so typing markup executed it in page context (self-XSS) and a double
+// quote broke the attribute.
+function escapeHtml(str) {
+  return String(str == null ? "" : str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Replace the first occurrence of `word` in a furigana-annotated sentence
+// (`漢字（よみ）` form) with a blank, so quiz sentences blank the word that is
+// actually there instead of looking for the un-annotated dictionary form.
+function blankOutWord(sentence, word) {
+  if (!sentence || !word) return sentence || "";
+  const esc = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const kanjiOnly = (String(word).match(/[\u4e00-\u9faf\u3400-\u4dbf\u3005]/g) || []).join("");
+  if (kanjiOnly) {
+    // annotated form: 漢字 run + （reading） + trailing okurigana
+    const annotated = new RegExp(
+      esc(kanjiOnly) + "[^\\s]*?（[^）]+）[\\u3040-\\u30ff]*",
+    );
+    if (annotated.test(sentence)) return sentence.replace(annotated, "______");
+    // plain form
+    const plain = new RegExp(esc(kanjiOnly) + "[\\u3040-\\u30ff]*");
+    if (plain.test(sentence)) return sentence.replace(plain, "______");
+  }
+  const bare = String(word).replace(/[（(][^）)]*[）)]/g, "");
+  if (bare && sentence.includes(bare)) {
+    return sentence.replace(bare, "______");
+  }
+  return sentence;
 }
 
 // ==================== DICTIONARY LOOKUP ====================

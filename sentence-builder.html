@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover"
     />
     <title>N5 Sentence Builder</title>
     <link rel="manifest" href="manifest.json" />
@@ -14,7 +14,7 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <link rel="apple-touch-icon" href="images/icons/icon-192x19202.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png" />
 
     <!-- ===== STYLES ===== -->
     <link rel="stylesheet" href="css/sentenceBuilder.css" />
@@ -26,7 +26,8 @@
     <script src="js/modules/audio.js"></script>
     <script src="js/managers/masteryManager.js"></script>
     <script src="js/modules/sentenceBuilder.js"></script>
-  </head>
+    <link rel="stylesheet" href="css/mobile.css" />
+</head>
   <body>
     <div class="app-container" id="app">
       <!-- Header with Back Button (matches adjectives.css style) -->
@@ -39,7 +40,7 @@
       <div class="app-header">
         <div class="header-controls">
           <label for="sprintSelect">Sprint:</label>
-          <select id="sprintSelect">
+          <select id="sprintSelect" aria-label="Sprint">
             <option value="">Loading...</option>
           </select>
 
@@ -55,7 +56,7 @@
           <!-- Mastery Selector -->
           <div class="mastery-selector">
             <span class="mastery-label">Mastery:</span>
-            <select id="primaryModeSelect">
+            <select id="primaryModeSelect" aria-label="Primary practice mode">
               <option value="fill">📝 Fill</option>
               <option value="order">🔄 Order</option>
               <option value="select-order">🎯 Select</option>
@@ -205,10 +206,8 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        console.log("📚 N5 Sentence Builder starting...");
 
         // Debug: Check data sources
-        console.log("🔍 Checking data sources...");
         console.log(
           "sentencesData:",
           typeof sentencesData !== "undefined"
@@ -234,9 +233,7 @@
               const builder = new SentenceBuilder();
               builder.init();
               window.builder = builder;
-              console.log("✅ Sentence Builder initialized successfully!");
             } catch (e) {
-              console.error("❌ Error initializing SentenceBuilder:", e);
             }
           } else {
             console.error(
@@ -260,7 +257,6 @@
               );
             })
             .catch((error) => {
-              console.log("❌ Service Worker registration failed:", error);
             });
         });
       }

@@ -48,7 +48,8 @@ const kanaPairs = [
     { hiragana: 'ろ', katakana: 'ロ', romaji: 'ro' },
     { hiragana: 'わ', katakana: 'ワ', romaji: 'wa' },
     { hiragana: 'を', katakana: 'ヲ', romaji: 'wo' },
-    { hiragana: 'ん', katakana: 'ン', romaji: 'n' }
+    { hiragana: 'ん', katakana: 'ン', romaji: 'n' },
+    { hiragana: 'っ', katakana: 'ッ', romaji: '(small) tsu — doubles the next consonant' }
 ];
 
 const dakutenPairs = [

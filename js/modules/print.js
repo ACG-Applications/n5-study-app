@@ -416,7 +416,11 @@ function generateGenkouyoushiHTML(sprintIndex, options) {
     }
 
     const allKanji = extractAllKanji(sentences);
-    const showTranslation = options.sentenceMode === 'translation';
+    // Honour both translation modes; previously 'furigana_translation' silently
+    // dropped the translation as well as the furigana.
+    const showTranslation =
+        options.sentenceMode === 'translation' ||
+        options.sentenceMode === 'furigana_translation';
 
     let printHtml = `<!DOCTYPE html>
         <html><head><meta charset="UTF-8"><title>N5 Japanese - ${title}</title>
@@ -980,29 +984,33 @@ function updatePrintUI() {
     // In Western: All options available
     const furiganaOption = document.getElementById('furiganaOption');
     if (furiganaOption) {
-        const furiganaRadio = furiganaOption.querySelector('input[type="radio"]');
+        // There are two radios in this group ("Furigana" and "+ All"); disabling
+        // only the first left "+ All" selectable in Genkouyoushi mode even though
+        // the genkou grid cannot render furigana.
+        const furiganaRadios = furiganaOption.querySelectorAll('input[type="radio"]');
         if (isGenkouyoushi) {
-            // Disable Furigana in Genkouyoushi mode
             furiganaOption.style.opacity = '0.4';
             furiganaOption.style.cursor = 'not-allowed';
-            if (furiganaRadio) {
-                furiganaRadio.disabled = true;
-                // If Furigana was selected, switch to Kanji Only
-                if (furiganaRadio.checked) {
-                    const kanjiRadio = document.querySelector('input[name="sentenceMode"][value="kanji"]');
-                    if (kanjiRadio) {
-                        kanjiRadio.checked = true;
-                        printOptions.sentenceMode = 'kanji';
-                    }
+            let wasChecked = false;
+            furiganaRadios.forEach((radio) => {
+                radio.disabled = true;
+                if (radio.checked) wasChecked = true;
+            });
+            // If a furigana mode was selected, switch to Kanji Only
+            if (wasChecked) {
+                const kanjiRadio = document.querySelector('input[name="sentenceMode"][value="kanji"]');
+                if (kanjiRadio) {
+                    kanjiRadio.checked = true;
+                    printOptions.sentenceMode = 'kanji';
                 }
             }
         } else {
             // Enable Furigana in Western mode
             furiganaOption.style.opacity = '1';
             furiganaOption.style.cursor = 'pointer';
-            if (furiganaRadio) {
-                furiganaRadio.disabled = false;
-            }
+            furiganaRadios.forEach((radio) => {
+                radio.disabled = false;
+            });
         }
     }
 }
