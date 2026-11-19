@@ -123,6 +123,19 @@ button:hover { background-color: #2980b9; }
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   }
   .brand-row { display: flex; justify-content: flex-end; margin: 0 0 4px; }
+
+  /* Phone: tighter type and padding so a week fits without horizontal squeeze */
+  @media (max-width: 600px) {
+    body { padding: 14px; }
+    h1 { font-size: 1.45rem; line-height: 1.35; }
+    h2 { font-size: 1.15rem; }
+    h3 { font-size: 1rem; }
+    .jp { font-size: 1.1em; padding: 4px; }
+    .week-nav { padding: 10px; }
+    .week-nav button { width: 100%; margin: 0 0 8px; }
+    button { padding: 8px 14px; font-size: 0.9em; }
+    .speed-slider { width: 110px; }
+  }
 </style> 
   <link rel="stylesheet" href="../css/mobile.css" />
 </head> 

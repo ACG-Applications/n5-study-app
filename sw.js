@@ -1,6 +1,6 @@
 // sw.js - Service Worker for N5 Study App
 
-const CACHE_NAME = "n5-study-app-v16";
+const CACHE_NAME = "n5-study-app-v17";
 
 const urlsToCache = [
   // ─── HTML pages ────────────────────────────────────────────
@@ -93,7 +93,16 @@ const urlsToCache = [
   "./js/modules/particles.js",
   "./js/modules/practiceTest.js",
   "./js/modules/verbs.js",
-];
+
+    // ─── Standalone apps ────────────────────────────────────────
+    "./standalone/Antonio.png",
+    "./standalone/Dr-Wes-Robertson-Japanese.html",
+    "./standalone/Tony&Tamara-Japanese-Adventure.html",
+    "./standalone/conversation-practice.html",
+    "./standalone/css/conversation.css",
+    "./standalone/js/conversation-app.js",
+    "./standalone/n5-Kanji-reference.html",
+  ];
 
 // ─── Install ─────────────────────────────────────────────────
 self.addEventListener("install", (event) => {

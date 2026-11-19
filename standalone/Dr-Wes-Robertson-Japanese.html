@@ -908,6 +908,15 @@
     align-self: center;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   }
+
+  /* Pin the badge to the top-right corner of the header on wide screens;
+     on phones fall back to the end of the controls row so it cannot overlap the title. */
+  .top-bar { position: relative; padding-right: 46px; }
+  .antonio-signature { position: absolute; top: 0; right: 0; align-self: auto; }
+  @media (max-width: 600px) {
+    .top-bar { padding-right: 0; }
+    .antonio-signature { position: static; margin-left: auto; }
+  }
 </style>
   <link rel="stylesheet" href="../css/mobile.css" />
 </head>
