@@ -112,9 +112,9 @@ const particlesData = {
     confusingWith: "まで",
     category: "core",
     supplementaryExample: {
-      jp: "3時（さんじ）から 起（お）きます",
-      reading: "さんじからおきます",
-      translation: "I wake up from 3 o'clock.",
+      jp: "授業（じゅぎょう）は 九時（くじ）から 始（はじ）まります",
+      reading: "じゅぎょうはくじからはじまります",
+      translation: "Class starts at nine.",
     },
   },
   まで: {
@@ -217,6 +217,232 @@ const particlesData = {
     },
   },
 
+  // Additional particles (single-token and compound) - these match the shared
+  // PARTICLES list in helpers.js, so anything highlighted in the flashcards also
+  // has a reference entry here.
+  より: {
+    name: "yori (than / from)",
+    function:
+      "Marks the standard in a comparison (B より A のほうが = A is more ... than B). Also marks a starting point, more formally than から.",
+    position: "B + より + A + のほうが + Adjective",
+    usageNote:
+      "Comparison: 電車（でんしゃ）より バス の ほうが 安（やす）い です (the bus is cheaper than the train).",
+    confusingWith: "から",
+    category: "additional",
+    supplementaryExample: {
+      jp: "電車（でんしゃ）より バス の ほうが 安（やす）い です",
+      reading: "でんしゃよりばすのほうがやすいです",
+      translation: "The bus is cheaper than the train.",
+    },
+  },
+  くらい: {
+    name: "kurai / gurai (about, approximately)",
+    function:
+      "Shows an approximate amount, time or extent. Written ぐらい after some nouns.",
+    position: "Amount/Time + くらい",
+    usageNote:
+      "About an amount: 十分（じゅっぷん）ぐらい かかります (it takes about ten minutes). くらい and ぐらい are interchangeable.",
+    confusingWith: "ごろ",
+    category: "additional",
+    supplementaryExample: {
+      jp: "駅（えき）まで 十分（じゅっぷん）ぐらい かかります",
+      reading: "えきまでじゅっぷんぐらいかかります",
+      translation: "It takes about ten minutes to the station.",
+    },
+  },
+  ごろ: {
+    name: "goro (around a time)",
+    function: "Shows an approximate point in time - a clock time or a day.",
+    position: "Time + ごろ",
+    usageNote:
+      "Around a time: 七時（しちじ）ごろ 起（お）きます (I get up around seven). Use くらい for amounts and ごろ for points in time.",
+    confusingWith: "くらい",
+    category: "additional",
+    supplementaryExample: {
+      jp: "七時（しちじ）ごろ 起（お）きます",
+      reading: "しちじごろおきます",
+      translation: "I get up around seven.",
+    },
+  },
+  だけ: {
+    name: "dake (only, just)",
+    function: "Limits the preceding word: 'only that, nothing else'.",
+    position: "Noun + だけ",
+    usageNote:
+      "水（みず）だけ 飲（の）みました (I drank only water). Can take で: 一人（ひとり）だけで (all alone).",
+    confusingWith: "しか",
+    category: "additional",
+    supplementaryExample: {
+      jp: "水（みず）だけ 飲（の）みました",
+      reading: "みずだけのみました",
+      translation: "I drank only water.",
+    },
+  },
+  ほど: {
+    name: "hodo (extent, about)",
+    function:
+      "Shows extent or an approximate amount. 〜ほど〜ない = not as ... as ...",
+    position: "Amount + ほど",
+    usageNote:
+      "一時間（いちじかん）ほど 待（ま）ちました (I waited about an hour). 今年（ことし）は 去年（きょねん）ほど 暑（あつ）くない (this year is not as hot as last year).",
+    confusingWith: "くらい",
+    category: "additional",
+    supplementaryExample: {
+      jp: "一時間（いちじかん）ほど 待（ま）ちました",
+      reading: "いちじかんほどまちました",
+      translation: "I waited about an hour.",
+    },
+  },
+  には: {
+    name: "ni wa (location/target + topic)",
+    function:
+      "に (location, direction or target) plus the topic marker は, adding contrast or emphasis. 〜には also means 'for (someone)'.",
+    position: "Place/Person + には",
+    usageNote:
+      "駅（えき）の 前（まえ）には 銀行（ぎんこう）が あります (there is a bank in front of the station). 私（わたし）には 難（むずか）しい です (it is difficult for me).",
+    confusingWith: "に",
+    category: "additional",
+    supplementaryExample: {
+      jp: "駅（えき）の 前（まえ）には 銀行（ぎんこう）が あります",
+      reading: "えきのまえにはぎんこうがあります",
+      translation: "There is a bank in front of the station.",
+    },
+  },
+  ので: {
+    name: "node (because - objective)",
+    function:
+      "Gives an objective reason or cause. Softer and more factual than から.",
+    position: "Plain form + ので",
+    usageNote:
+      "寒（さむ）い ので 窓（まど）を 閉（し）めます (because it is cold, I will close the window). ので is politer than から when giving a reason.",
+    confusingWith: "から",
+    category: "additional",
+    supplementaryExample: {
+      jp: "寒（さむ）い ので 窓（まど）を 閉（し）めます",
+      reading: "さむいのでまどをしめます",
+      translation: "Because it is cold, I will close the window.",
+    },
+  },
+  ながら: {
+    name: "nagara (while doing)",
+    function:
+      "Two actions by the same person at the same time. The main action is the last verb.",
+    position: "Verb stem + ながら + main verb",
+    usageNote:
+      "音楽（おんがく）を 聞（き）きながら 勉強（べんきょう）します (I study while listening to music).",
+    confusingWith: "あいだ",
+    category: "additional",
+    supplementaryExample: {
+      jp: "音楽（おんがく）を 聞（き）きながら 勉強（べんきょう）します",
+      reading: "おんがくをききながらべんきょうします",
+      translation: "I study while listening to music.",
+    },
+  },
+  のに: {
+    name: "noni (although)",
+    function:
+      "Marks contrast: 'although / even though'. Often expresses surprise or dissatisfaction.",
+    position: "Plain form + のに",
+    usageNote:
+      "雨（あめ）が 降（ふ）っている のに 出（で）かけました (although it was raining, I went out).",
+    confusingWith: "が",
+    category: "additional",
+    supplementaryExample: {
+      jp: "雨（あめ）が 降（ふ）っている のに 出（で）かけました",
+      reading: "あめがふっているのにでかけました",
+      translation: "Although it was raining, I went out.",
+    },
+  },
+  など: {
+    name: "nado (etc., such as)",
+    function: "Lists something as one example among others.",
+    position: "Noun + など",
+    usageNote:
+      "りんご や みかん など を 買（か）いました (I bought things like apples and oranges).",
+    confusingWith: "や",
+    category: "additional",
+    supplementaryExample: {
+      jp: "りんご や みかん など を 買（か）いました",
+      reading: "りんごやみかんなどをかいました",
+      translation: "I bought things like apples and oranges.",
+    },
+  },
+  しか: {
+    name: "shika (only - with a negative verb)",
+    function:
+      "Means 'only', but always with a negative verb. Stronger than だけ.",
+    position: "Noun + しか + negative verb",
+    usageNote:
+      "百円（ひゃくえん）しか ありません (I only have 100 yen). しか needs a negative ending; だけ does not.",
+    confusingWith: "だけ",
+    category: "additional",
+    supplementaryExample: {
+      jp: "百円（ひゃくえん）しか ありません",
+      reading: "ひゃくえんしかありません",
+      translation: "I only have 100 yen.",
+    },
+  },
+  ばかり: {
+    name: "bakari (only, nothing but)",
+    function:
+      "Shows that something keeps happening, or that there is nothing but that. Often carries a complaint.",
+    position: "Verb て-form / Noun + ばかり",
+    usageNote:
+      "遊（あそ）んで ばかり います (he does nothing but play). ばかり can imply criticism.",
+    confusingWith: "だけ",
+    category: "additional",
+    supplementaryExample: {
+      jp: "遊（あそ）んで ばかり います",
+      reading: "あそんでばかりいます",
+      translation: "He does nothing but play.",
+    },
+  },
+  って: {
+    name: "tte (casual と / は)",
+    function:
+      "Casual spoken form of the quotation particle と, and of the topic marker は in conversation.",
+    position: "Quote/Topic + って",
+    usageNote:
+      "明日（あした） 来（く）る って 言（い）いました (he said he would come tomorrow). 田中（たなか）さん って 誰（だれ）ですか (who is Tanaka?). Used in speech, not in formal writing.",
+    confusingWith: "と",
+    category: "additional",
+    supplementaryExample: {
+      jp: "田中（たなか）さん って 誰（だれ） です か",
+      reading: "たなかさんってだれですか",
+      translation: "Who is Tanaka-san? (casual topic marker)",
+    },
+  },
+  さえ: {
+    name: "sae (even)",
+    function:
+      "Shows an extreme example: 'even that', implying others are more likely.",
+    position: "Noun + さえ",
+    usageNote:
+      "子供（こども）さえ 知（し）っています (even a child knows). さえ emphasises how surprising the example is.",
+    confusingWith: "も",
+    category: "additional",
+    supplementaryExample: {
+      jp: "子供（こども）さえ 知（し）っています",
+      reading: "こどもさえしっています",
+      translation: "Even a child knows.",
+    },
+  },
+  こそ: {
+    name: "koso (emphasis: precisely this)",
+    function:
+      "Emphasises the preceding word: 'this is exactly the one'. Adds emphasis, not a new meaning.",
+    position: "Noun + こそ",
+    usageNote:
+      "これ こそ 私（わたし）が 欲（ほ）しかった 物（もの）です (this is exactly what I wanted).",
+    confusingWith: "は",
+    category: "additional",
+    supplementaryExample: {
+      jp: "これ こそ 私（わたし）が 欲（ほ）しかった 物（もの）です",
+      reading: "これこそわたしがほしかったものです",
+      translation: "This is exactly what I wanted.",
+    },
+  },
+
   // Confusing Pairs
   pair_wa_ga: {
     name: "は vs が",
@@ -277,6 +503,21 @@ const particleOrder = [
   "よ",
   "ね",
   "や",
+  "より",
+  "くらい",
+  "ごろ",
+  "だけ",
+  "ほど",
+  "には",
+  "ので",
+  "ながら",
+  "のに",
+  "など",
+  "しか",
+  "ばかり",
+  "って",
+  "さえ",
+  "こそ",
 ];
 
 // Particle pair order for display

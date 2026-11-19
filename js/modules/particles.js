@@ -1255,25 +1255,28 @@ function populateParticleReference() {
 
 // ==================== QUIZ FUNCTIONS ====================
 
+// Particles the quiz can scan, blank and test. Deliberately mirrors particleOrder
+// so the reference guide, the flashcard highlighting and the quiz all cover the
+// exact same set - a narrower quiz list left blanks that had no matching option.
+const QUIZ_PARTICLES = [
+  'は', 'が', 'を', 'に', 'で', 'へ', 'と', 'から', 'まで', 'の', 'も', 'か', 'よ', 'ね', 'や',
+  'より', 'くらい', 'ごろ', 'だけ', 'ほど', 'には', 'ので', 'ながら', 'のに', 'など', 'しか',
+  'ばかり', 'って', 'さえ', 'こそ',
+];
+
+const PARTICLE_GLOSS = {
+  は: 'topic', が: 'subject', を: 'object', に: 'time/direction/location', で: 'location/means',
+  へ: 'direction', と: 'and/with', から: 'from / because', まで: 'until/to', の: 'possession',
+  も: 'also/too', か: 'question', よ: 'emphasis', ね: 'agreement', や: 'and; non-exhaustive',
+  より: 'than / from', くらい: 'about (amount)', ごろ: 'around (time)', だけ: 'only',
+  ほど: 'extent / about', には: 'location + topic', ので: 'because', ながら: 'while',
+  のに: 'although', など: 'etc.', しか: 'only (+ negative)', ばかり: 'nothing but',
+  って: 'casual と / は', さえ: 'even', こそ: 'emphasis',
+};
+
 function findAllParticlesInSentence(sentenceText) {
   const particles = [];
-  const allParticles = [
-    "は",
-    "が",
-    "を",
-    "に",
-    "で",
-    "へ",
-    "と",
-    "から",
-    "まで",
-    "の",
-    "も",
-    "か",
-    "よ",
-    "ね",
-    "や",
-  ];
+  const allParticles = QUIZ_PARTICLES;
 
   const words = sentenceText.split(/\s+/);
 
@@ -1373,18 +1376,7 @@ function generateQuiz() {
 }
 
 function generateOptions(correctParticle) {
-  const allParticles = [
-    "は",
-    "が",
-    "を",
-    "に",
-    "で",
-    "へ",
-    "と",
-    "から",
-    "まで",
-    "の",
-  ];
+  const allParticles = QUIZ_PARTICLES;
   const options = [correctParticle];
   const available = allParticles.filter((p) => p !== correctParticle);
   while (options.length < 4 && available.length > 0) {
@@ -1554,21 +1546,10 @@ function renderQuizQuestion() {
           <label class="blank-label">Blank [${blankNum}]:</label>
           <select class="blank-select" data-blank="${blankNum}">
             <option value="">-- Select particle --</option>
-            <option value="は" ${selectedValue === "は" ? "selected" : ""}>は (topic)</option>
-            <option value="が" ${selectedValue === "が" ? "selected" : ""}>が (subject)</option>
-            <option value="を" ${selectedValue === "を" ? "selected" : ""}>を (object)</option>
-            <option value="に" ${selectedValue === "に" ? "selected" : ""}>に (time/direction/location)</option>
-            <option value="で" ${selectedValue === "で" ? "selected" : ""}>で (location/means)</option>
-            <option value="へ" ${selectedValue === "へ" ? "selected" : ""}>へ (direction)</option>
-            <option value="と" ${selectedValue === "と" ? "selected" : ""}>と (and/with)</option>
-            <option value="から" ${selectedValue === "から" ? "selected" : ""}>から (from)</option>
-            <option value="まで" ${selectedValue === "まで" ? "selected" : ""}>まで (until/to)</option>
-            <option value="の" ${selectedValue === "の" ? "selected" : ""}>の (possession)</option>
-            <option value="も" ${selectedValue === "も" ? "selected" : ""}>も (also/too)</option>
-            <option value="か" ${selectedValue === "か" ? "selected" : ""}>か (question)</option>
-            <option value="よ" ${selectedValue === "よ" ? "selected" : ""}>よ (emphasis)</option>
-            <option value="ね" ${selectedValue === "ね" ? "selected" : ""}>ね (agreement)</option>
-            <option value="や" ${selectedValue === "や" ? "selected" : ""}>や (and; non-exhaustive)</option>
+            ${QUIZ_PARTICLES.map(
+              (p) =>
+                `<option value="${p}" ${selectedValue === p ? "selected" : ""}>${p} (${PARTICLE_GLOSS[p] || ""})</option>`,
+            ).join("")}
           </select>
         </div>
       `;
@@ -2189,7 +2170,7 @@ function initParticles() {
   renderLearnTab();
   switchTab("structure");
 
-  const totalParticles = particleOrder.length;
+  const totalParticles = QUIZ_PARTICLES.length;
   const totalEls = document.querySelectorAll(
     "#quizTotalParticles, #quizTotalParticles2",
   );
