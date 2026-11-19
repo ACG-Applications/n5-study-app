@@ -1,6 +1,6 @@
 // sw.js - Service Worker for N5 Study App
 
-const CACHE_NAME = "n5-study-app-v11";
+const CACHE_NAME = "n5-study-app-v12";
 
 const urlsToCache = [
   // ─── HTML pages ────────────────────────────────────────────

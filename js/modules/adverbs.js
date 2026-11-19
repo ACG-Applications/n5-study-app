@@ -41,6 +41,62 @@ function printLesson() {
 
 // Add furigana to text based on toggle state
 const furiganaCache = new Map();
+// Read the kana of a rendered cell: <ruby> supplies its <rt>, everything else
+// is taken from the text nodes. 早（はや）い -> はやい, 早（はや）<strong>く</strong> -> はやく.
+function cellKana(node) {
+  let out = "";
+  (function walk(n) {
+    if (n.nodeType === 3) { out += n.nodeValue; return; }
+    if (n.nodeName === "RUBY") {
+      const rt = n.querySelector("rt");
+      out += rt ? rt.textContent : n.textContent;
+      return;
+    }
+    if (n.nodeName === "RT" || n.nodeName === "RP") return;
+    Array.prototype.forEach.call(n.childNodes, walk);
+  })(node);
+  return out.replace(/\s+/g, " ").trim();
+}
+
+// Turn furigana-annotated text into plain kana for TTS.
+function toSpeakableKana(text) {
+  if (!text) return "";
+  return String(text)
+    .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)（([^（）]+)）/g, "$2")
+    .replace(/([\u4e00-\u9faf\u3400-\u4dbf\u3005]+)\(([^()]+)\)/g, "$2")
+    .trim();
+}
+
+// Make the Japanese cells of the comparison tables tappable. English cells are
+// left alone (any cell containing Latin letters is skipped).
+function makeTableCellsSpeakable(root) {
+  if (!root) return;
+  root.querySelectorAll("td").forEach((td) => {
+    if (td.dataset.speak) return;
+    const kana = toSpeakableKana(cellKana(td));
+    if (!kana || /[A-Za-z]/.test(kana)) return;
+    if (!/[\u3040-\u30FF\u4E00-\u9FFF]/.test(kana)) return;
+    td.dataset.speak = kana;
+    td.setAttribute("role", "button");
+    td.setAttribute("tabindex", "0");
+    td.title = "🔊 Click to hear";
+    td.style.cursor = "pointer";
+    const say = () => {
+      if (typeof speakText === "function") {
+        speakText(kana);
+      } else if (typeof window.speakText === "function") {
+        window.speakText(kana);
+      }
+    };
+    td.addEventListener("click", say);
+    td.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        say();
+      }
+    });
+  });
+}
 function addFuriganaToText(text) {
   if (!text) return "";
 
@@ -491,6 +547,9 @@ function renderLearnTab() {
 
   // Apply furigana to all Japanese text in the content
   container.innerHTML = wrapFuriganaInHTML(content);
+
+  // Make the Japanese cells in the comparison tables tappable
+  makeTableCellsSpeakable(container);
 
   // Add TTS click listeners to all example elements
   document.querySelectorAll(".example-box, .example-click").forEach((el) => {
